@@ -1,0 +1,164 @@
+{
+  "countryCode": "BF",
+  "name": "Burkina Faso",
+  "native": {
+    "name": "Burkina Faso",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nBurkina Faso",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Nom Complet",
+        "placeholder": "Ibrahim Traoré",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Adresse / BP",
+        "placeholder": "01 BP 123",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Ville",
+        "placeholder": "Ouagadougou",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nBurkina Faso",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Full Name",
+        "placeholder": "Ibrahim Traoré",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street Address / PO Box",
+        "placeholder": "01 PO Box 123",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Ouagadougou",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": null,
+    "source": "Postal metadata from AGID regional table; no free OSS source configured"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "fr",
+        "name": "French"
+      }
+    ],
+    "nativeOrder": [
+      "region",
+      "province",
+      "department",
+      "commune",
+      "village",
+      "street",
+      "country"
+    ],
+    "englishOrder": [
+      "region",
+      "province",
+      "department",
+      "commune",
+      "village",
+      "street",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "region",
+      "province"
+    ],
+    "postalCode": {
+      "label": "5 digits used",
+      "required": false,
+      "usage": "used"
+    },
+    "deliveryLanguages": [
+      {
+        "code": "fr",
+        "name": "French"
+      }
+    ],
+    "openSourceIds": [
+      "hot-osm-west-africa",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "hot-osm-africa",
+      "openstreetmap-wiki-africa",
+      "humdata-africa",
+      "openaerialmap",
+      "digital-earth-africa-dem",
+      "digital-earth-africa-coastlines",
+      "digital-earth-africa-waterbodies",
+      "digital-earth-africa-wofs",
+      "digital-earth-africa-fractional-cover",
+      "digital-earth-africa-geomad",
+      "fao-wapor",
+      "esa-worldcover",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "global-mangrove-watch",
+      "allen-coral-atlas",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "rcmrd-gmes-africa-geoportal"
+    ]
+  },
+  "openSourceIds": [
+    "hot-osm-west-africa",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "hot-osm-africa",
+    "openstreetmap-wiki-africa",
+    "humdata-africa",
+    "openaerialmap",
+    "digital-earth-africa-dem",
+    "digital-earth-africa-coastlines",
+    "digital-earth-africa-waterbodies",
+    "digital-earth-africa-wofs",
+    "digital-earth-africa-fractional-cover",
+    "digital-earth-africa-geomad",
+    "fao-wapor",
+    "esa-worldcover",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "global-mangrove-watch",
+    "allen-coral-atlas",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "rcmrd-gmes-africa-geoportal"
+  ]
+}

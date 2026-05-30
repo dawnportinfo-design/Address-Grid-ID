@@ -1,0 +1,184 @@
+{
+  "countryCode": "GF",
+  "name": "French Guiana",
+  "native": {
+    "name": "Guyane",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{postcode}} {{city}}\nGuyane",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Destinataire",
+        "placeholder": "Nom complet",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Numéro + Rue",
+        "placeholder": "Numéro et nom de la rue",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Code postal",
+        "placeholder": "973xx",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Ville",
+        "placeholder": "ex. Cayenne",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{postcode}} {{city}}\nFrench Guiana",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full Name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street Number + Street",
+        "placeholder": "Number and street name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "973xx",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "e.g. Cayenne",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "973NN",
+    "regex": "^973\\d{2}$",
+    "api": null,
+    "source": "La Poste"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "fr",
+        "name": "French"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "neighborhood",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "overseasDepartment",
+      "commune"
+    ],
+    "postalCode": {
+      "label": "973xx overseas department postcode",
+      "required": true,
+      "usage": "required"
+    },
+    "deliveryLanguages": [
+      {
+        "code": "fr",
+        "name": "French"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "openSourceIds": [
+      "la-poste-fr-overseas",
+      "data-gouv-fr-postcodes",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "noaa-etopo",
+      "geobc-global-multi-resolution-topography",
+      "hydrosheds",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "esa-worldcover",
+      "usgs-3dep",
+      "nrcan-geospatial",
+      "conabio-geoportal",
+      "ibge-geosciences",
+      "inpe-terrabrasilis",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "la-poste-fr-overseas",
+    "data-gouv-fr-postcodes",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "noaa-etopo",
+    "geobc-global-multi-resolution-topography",
+    "hydrosheds",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "esa-worldcover",
+    "usgs-3dep",
+    "nrcan-geospatial",
+    "conabio-geoportal",
+    "ibge-geosciences",
+    "inpe-terrabrasilis",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

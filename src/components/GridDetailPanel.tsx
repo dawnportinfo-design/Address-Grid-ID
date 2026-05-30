@@ -24,6 +24,17 @@ import { cn } from '../lib/utils';
 import { QRCodeCanvas } from 'qrcode.react';
 import { LANGUAGES, COUNTRY_LANGUAGES, generateInternationalShippingLabel } from '../lib/addressUtils';
 import { AddressRenderer, createCanonicalAddress } from '../lib/addressRendering';
+import {
+  getAgidAddressDisplayTabs,
+  getAgidAddressTabLanguages,
+  getEnglishAddressCircle,
+  isEnglishAddressCountry,
+  isInternationalShippingEnglishTab,
+} from '../lib/languageTabs';
+import { getAddressLanguageTabLabel } from '../lib/languageLabels';
+import { getAddressFormat, type AddressFormat } from '../data/address_formats';
+import { validateAddressWithOpenSourceRules } from '../lib/addressValidation';
+import { formatAddressDisplayText, shouldPreserveAddressDisplayLines } from '../lib/addressDisplay';
 
 interface GridDetailPanelProps {
   clickedAgid: any;
@@ -115,6 +126,7 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
   t
 }) => {
   const [shippingLabel, setShippingLabel] = React.useState<string>("");
+  const [addressFormat, setAddressFormat] = React.useState<AddressFormat | null>(null);
 
   // Move derived constants and hooks to the top to satisfy Rules of Hooks
   const countryCodeFromPrefix = (clickedAgid?.prefix || "").toLowerCase();
@@ -123,36 +135,45 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
   const countryCode = countryCodeFromPrefix || countryCodeFromDetails || countryCodeFromId || "";
   
   const officialLangs = React.useMemo(() => {
-    const rawLangs = [...(COUNTRY_LANGUAGES[countryCode] || ['en'])];
-    if ((countryCode === 'jp' || countryCodeFromDetails === 'jp') && !rawLangs.includes('ja')) {
-      rawLangs.unshift('ja');
-    }
-    
-    // Deduplicate by base language to avoid multiple "English" tabs
-    const seenBase = new Set<string>();
-    const uniqueLangs: string[] = [];
-    
-    for (const code of rawLangs) {
-      const base = code.startsWith('en') ? 'en' : code;
-      if (!seenBase.has(base)) {
-        seenBase.add(base);
-        uniqueLangs.push(code);
-      }
-    }
-    
-    return uniqueLangs;
+    return getAgidAddressTabLanguages({
+      countryCode: countryCode || countryCodeFromDetails,
+      countryLanguages: COUNTRY_LANGUAGES[countryCode] || ['en'],
+      knownLanguageCodes: LANGUAGES.map(lang => lang.code),
+    });
   }, [countryCode, countryCodeFromDetails]);
 
   const displayTabs = React.useMemo(() => {
-    const tabs = [...officialLangs];
-    
-    // Always add 'carrier' as the shipping-optimized English tab
-    if (!tabs.includes('carrier')) {
-      tabs.push('carrier');
-    }
-    
-    return Array.from(new Set(tabs));
+    return getAgidAddressDisplayTabs(officialLangs);
   }, [officialLangs]);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    if (!countryCode) {
+      setAddressFormat(null);
+      return;
+    }
+
+    getAddressFormat(countryCode).then(format => {
+      if (!cancelled) setAddressFormat(format);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [countryCode]);
+
+  const addressValidation = React.useMemo(() => {
+    if (!clickedAddressDetails) return null;
+    const canonical = createCanonicalAddress(clickedAddressDetails);
+    return validateAddressWithOpenSourceRules(
+      canonical,
+      addressFormat,
+      clickedAddressDetails?.address_analysis?.sources || [],
+      {
+        referenceMatches: clickedAddressDetails?.address_analysis?.referenceMatches || clickedAddressDetails?.openaddresses_matches || [],
+      }
+    );
+  }, [clickedAddressDetails, addressFormat]);
 
   React.useEffect(() => {
     if (clickedAddressTab === 'shipping_label' && clickedAddressDetails) {
@@ -164,7 +185,7 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
   React.useEffect(() => {
     if (!clickedAgid) return;
     if (clickedAddressTab === 'local' || !displayTabs.includes(clickedAddressTab)) {
-      if (displayTabs.length > 0 && clickedAddressTab !== 'carrier' && clickedAddressTab !== 'intl_en' && clickedAddressTab !== 'shipping_label') {
+      if (displayTabs.length > 0 && !isInternationalShippingEnglishTab(clickedAddressTab) && clickedAddressTab !== 'shipping_label') {
         setClickedAddressTab(displayTabs[0]);
       }
     }
@@ -179,11 +200,14 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
 
     if (clickedAddressDetails) {
       const canonical = createCanonicalAddress(clickedAddressDetails);
-      if (clickedAddressTab === 'intl_en') {
-        return AddressRenderer.render('intl_en', canonical);
+      if (isInternationalShippingEnglishTab(clickedAddressTab)) {
+        return AddressRenderer.renderInternationalShippingEnglish(canonical);
       }
-      if (clickedAddressTab === 'carrier') {
-        return AddressRenderer.renderCarrier(canonical);
+      if (clickedAddressTab === 'en') {
+        return AddressRenderer.render('en', canonical);
+      }
+      if (!clickedAddressTab.startsWith('en') && addressValidation?.displays.native) {
+        return addressValidation.displays.native;
       }
       return AddressRenderer.render(clickedAddressTab, canonical);
     }
@@ -194,20 +218,23 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
   };
 
   const getTabLabel = (langCode: string) => {
-    if (langCode === 'intl_en') return "English (Intl)";
-    if (langCode.startsWith('en')) return "English";
-    
-    // For carrier tab, label it as English for international/shipping use
-    if (langCode === 'carrier') {
-      const hasOtherEnglish = officialLangs.some(l => l.startsWith('en'));
-      return hasOtherEnglish ? "English (Intl)" : "English";
-    }
-    
     const lang = LANGUAGES.find(l => l.code === langCode);
-    if (lang) return lang.name;
-    
-    return langCode.toUpperCase();
+    const englishCircle =
+      langCode === 'en_domestic' && isEnglishAddressCountry(countryCode)
+        ? getEnglishAddressCircle(countryCode)
+        : undefined;
+    return getAddressLanguageTabLabel(langCode, lang?.name, {
+      englishMode: isInternationalShippingEnglishTab(langCode)
+        ? 'international'
+        : langCode === 'en_domestic'
+          ? 'domestic'
+          : 'plain',
+      englishCircle,
+    });
   };
+
+  const addressDisplayText = formatAddressDisplayText(getAddressDisplay(), { tab: clickedAddressTab });
+  const preserveAddressDisplayLines = shouldPreserveAddressDisplayLines(clickedAddressTab);
 
   return (
     <motion.div 
@@ -404,12 +431,12 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
                         <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
                           {/* Intelligent Language Tabs */}
                           {displayTabs.map((langCode) => {
-                            const isIntlEn = langCode === 'intl_en';
+                            const isIntlEn = isInternationalShippingEnglishTab(langCode);
                             const isActive = clickedAddressTab === langCode;
                             
                             let label = getTabLabel(langCode);
                             let icon = isIntlEn ? <Globe className="w-2.5 h-2.5" /> : <MapPin className="w-2.5 h-2.5" />;
-                            if (langCode === 'carrier') icon = <Truck className="w-2.5 h-2.5" />;
+                            if (isIntlEn) icon = <Truck className="w-2.5 h-2.5" />;
 
                             return (
                               <button
@@ -418,7 +445,7 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
                                   setClickedAddressTab(langCode);
                                 }}
                                 className={cn(
-                                  "px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all whitespace-nowrap flex items-center gap-1.5",
+                                  "px-2.5 py-1 rounded-lg text-[8px] font-black tracking-normal transition-all whitespace-nowrap flex items-center gap-1.5",
                                   isActive
                                     ? "bg-white text-slate-900 shadow-lg"
                                     : "bg-white/5 text-slate-500 hover:bg-white/10"
@@ -434,11 +461,38 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
 
                       <div className="text-[11px] font-medium text-slate-200 leading-snug min-h-[2.5em] space-y-2">
                          <div className={cn(
-                           "p-2 rounded-lg border border-white/5 font-mono text-[10px] whitespace-pre-line leading-relaxed",
-                           (clickedAddressTab === 'carrier' || clickedAddressTab === 'ascii' || clickedAddressTab === 'shipping_label') ? "bg-slate-800/80 uppercase" : "bg-white/5"
+                           "p-2 rounded-lg border border-white/5 font-mono text-[10px] leading-relaxed",
+                           preserveAddressDisplayLines ? "whitespace-pre-line" : "whitespace-normal",
+                           (isInternationalShippingEnglishTab(clickedAddressTab) || clickedAddressTab === 'ascii' || clickedAddressTab === 'shipping_label') ? "bg-slate-800/80 uppercase" : "bg-white/5"
                          )}>
-                           {getAddressDisplay()}
+                           {addressDisplayText}
                          </div>
+                         {addressValidation && (
+                           <div className="flex flex-wrap items-center gap-1.5 text-[8px] font-black uppercase tracking-wider text-slate-400">
+                             <span className={cn(
+                               "px-2 py-0.5 rounded-full border",
+                               addressValidation.status === 'verified'
+                                 ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+                                 : "bg-amber-500/10 text-amber-300 border-amber-500/20"
+                             )}>
+                               {addressValidation.status === 'verified' ? 'Verified format' : 'Partial format'}
+                             </span>
+                             <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/5">
+                               Score {Math.round(addressValidation.score * 100)}%
+                             </span>
+                             {addressValidation.postalCodeValid === true && (
+                               <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/5">Postcode OK</span>
+                             )}
+                             {addressValidation.checkedWith.slice(0, 3).map(source => (
+                               <span key={source} className="px-2 py-0.5 rounded-full bg-white/5 border border-white/5 normal-case tracking-normal">
+                                 {source}
+                               </span>
+                             ))}
+                             {addressValidation.warnings.slice(0, 1).map(warning => (
+                               <span key={warning} className="text-amber-300/80 normal-case tracking-normal">{warning}</span>
+                             ))}
+                           </div>
+                         )}
                       </div>
 
                      <div className="flex items-center gap-2.5 mt-2 pt-2 border-t border-white/5 overflow-x-auto no-scrollbar">

@@ -1,0 +1,174 @@
+{
+  "countryCode": "KASH",
+  "name": "Kashmir",
+  "native": {
+    "name": "Kashmir",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\n{{region}}\nKashmir",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street / Local address",
+        "placeholder": "Street, block, village, or landmark",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Locality",
+        "placeholder": "City or locality",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "region",
+        "label": "Region / Territory",
+        "placeholder": "Region",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "Postal code if used",
+        "required": false,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\n{{region}}\nKashmir",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street / Local address",
+        "placeholder": "Street, block, village, or landmark",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Locality",
+        "placeholder": "City or locality",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "region",
+        "label": "Region / Territory",
+        "placeholder": "Region",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "Postal code if used",
+        "required": false,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": null,
+    "regex": "^\\d{5,6}$",
+    "api": null,
+    "source": "Special/disputed territory metadata; validate with OSM/Nominatim, GeoNames, local postal authority, or parent postal operator when available"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "ur",
+        "name": "Urdu"
+      },
+      {
+        "code": "hi",
+        "name": "Hindi"
+      },
+      {
+        "code": "ks",
+        "name": "Kashmiri"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "street",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "recipient",
+      "street",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "village",
+      "tehsil",
+      "district",
+      "state/territory"
+    ],
+    "postalCode": {
+      "label": "Not separately standardized",
+      "required": false,
+      "usage": "limited"
+    },
+    "openSourceIds": [
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "nasa-srtm",
+      "jaxa-aw3d30",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "hydrosheds",
+      "esa-worldcover",
+      "protected-planet-wdpa",
+      "gbif-occurrence"
+    ]
+  },
+  "openSourceIds": [
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "nasa-srtm",
+    "jaxa-aw3d30",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "hydrosheds",
+    "esa-worldcover",
+    "protected-planet-wdpa",
+    "gbif-occurrence"
+  ]
+}

@@ -1,0 +1,151 @@
+countryCode: SJ
+name: Svalbard
+native:
+  name: Svalbard
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    Svalbard
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Navn
+      placeholder: Fullt navn
+      required: true
+      type: text
+    - key: street
+      label: Gate/Bygning
+      placeholder: Gatenavn eller bygning
+      required: true
+      type: text
+    - key: houseNumber
+      label: Husnummer
+      placeholder: Nr
+      required: true
+      type: text
+    - key: postcode
+      label: Postnummer
+      placeholder: "9170"
+      required: true
+      type: text
+    - key: city
+      label: Poststed
+      placeholder: Longyearbyen
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    Svalbard
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Name
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street / Building
+      placeholder: Street or building name
+      required: true
+      type: text
+    - key: houseNumber
+      label: House No
+      placeholder: No
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "9170"
+      required: true
+      type: text
+    - key: city
+      label: City/Town
+      placeholder: Longyearbyen
+      required: true
+      type: text
+postalCode:
+  format: 9170-9179
+  regex: ^917[0-9]$
+  source: Territory postal format metadata / local postal operator guidance
+addressRules:
+  languages:
+    - code: no
+      name: Norwegian Bokmal / Nynorsk
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - cityOrTown
+  postalCode:
+    label: 9170-9179 Svalbard postcode
+    required: true
+    usage: required
+  openSourceIds:
+    - posten-norway-svalbard
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+    - arcticdem
+    - ibcao-arctic-ocean
+    - glims-glacier-db
+    - npolar-data-centre
+    - nsidc-polar-data
+    - gebco-bathymetry
+    - gmrt-topography
+    - marine-regions
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - obis-marine-biodiversity
+openSourceIds:
+  - posten-norway-svalbard
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils
+  - arcticdem
+  - ibcao-arctic-ocean
+  - glims-glacier-db
+  - npolar-data-centre
+  - nsidc-polar-data
+  - gebco-bathymetry
+  - gmrt-topography
+  - marine-regions
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - obis-marine-biodiversity

@@ -1,0 +1,202 @@
+{
+  "countryCode": "SJ",
+  "name": "Svalbard and Jan Mayen",
+  "native": {
+    "name": "Svalbard og Jan Mayen",
+    "addressFormat": "{{recipient}}\n{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nSvalbard og Jan Mayen",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "organization",
+        "label": "Organization / Station",
+        "placeholder": "Organization, station, or facility",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street / Local address",
+        "placeholder": "Street, road, sector, or locality",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House / Unit No.",
+        "placeholder": "Number",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "Postal code if used",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Locality",
+        "placeholder": "City, island, base, or locality",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{recipient}}\n{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nSVALBARD AND JAN MAYEN",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "organization",
+        "label": "Organization / Station",
+        "placeholder": "Organization, station, or facility",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street / Local address",
+        "placeholder": "Street, road, sector, or locality",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House / Unit No.",
+        "placeholder": "Number",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "Postal code if used",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Locality",
+        "placeholder": "City, island, base, or locality",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "9170-9179 / JM-###",
+    "regex": "^(917[0-9]|JM-?\\d{3})$",
+    "api": null,
+    "source": "Posten Norway territory postal metadata / GeoNames / OSM"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "no",
+        "name": "Norwegian Bokmal / Nynorsk"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "organization",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "territory"
+    ],
+    "englishOrder": [
+      "recipient",
+      "organization",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "territory"
+    ],
+    "regionalHierarchy": [
+      "islandOrSettlement"
+    ],
+    "postalCode": {
+      "label": "9170-9179 / JM-### postal format",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "arcticdem",
+      "ibcao-arctic-ocean",
+      "glims-glacier-db",
+      "npolar-data-centre",
+      "nsidc-polar-data",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "marine-regions",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "obis-marine-biodiversity",
+      "posten-norway-svalbard",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "arcticdem",
+    "ibcao-arctic-ocean",
+    "glims-glacier-db",
+    "npolar-data-centre",
+    "nsidc-polar-data",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "marine-regions",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "obis-marine-biodiversity",
+    "posten-norway-svalbard",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

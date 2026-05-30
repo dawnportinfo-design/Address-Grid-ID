@@ -1,0 +1,137 @@
+countryCode: GM
+name: Gambia
+native:
+  name: Gambia
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Gambia
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: Adama Barrow
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: 123 Banjul Rd
+      required: true
+      type: text
+    - key: city
+      label: City / Town
+      placeholder: Banjul
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Gambia
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: Adama Barrow
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: 123 Banjul Rd
+      required: true
+      type: text
+    - key: city
+      label: City / Town
+      placeholder: Banjul
+      required: true
+      type: text
+postalCode:
+  format: NNN
+  regex: ^\d{3}$
+  api: null
+  source: Postal metadata from AGID regional table; no free OSS source configured
+addressRules:
+  languages:
+    - code: en
+      name: English
+  nativeOrder:
+    - region
+    - district
+    - town
+    - street
+    - houseNumber
+    - country
+  englishOrder:
+    - region
+    - district
+    - town
+    - street
+    - houseNumber
+    - country
+  regionalHierarchy:
+    - region
+  postalCode:
+    label: 3 digits used
+    required: false
+    usage: used
+  deliveryLanguages:
+    - code: en
+      name: English
+  openSourceIds:
+    - hot-osm-west-africa
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+openSourceIds:
+  - hot-osm-west-africa
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal

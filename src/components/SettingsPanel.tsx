@@ -39,13 +39,19 @@ import {
   Compass
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { LANGUAGES } from '../lib/addressUtils';
-import { TRANSLATIONS } from '../constants/translations';
+import {
+  ADDRESS_LANGUAGES,
+  APP_LANGUAGES,
+  LanguageOption,
+  groupLanguageOptions,
+} from '../lib/languageSettings';
 import { MAJOR_CATEGORIES, MAP_STYLES } from '../constants/appConstants';
 import { ExportService, ExportData } from '../services/ExportService';
 import { saveAs } from 'file-saver';
 import maplibregl from 'maplibre-gl';
 import { LAND_REGIONS, SEA_REGIONS, COUNTRY_REGIONS } from '../lib/regions';
+import { AGID_MAP_ENGINES } from '../lib/mapEngine';
+import { getHelpCenterContent } from '../lib/helpFaq';
 
 interface SettingsPanelProps {
   show: boolean;
@@ -174,103 +180,57 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     return !!r.isSea || !COUNTRY_REGIONS.some(c => c.id === r.id || c.code === (r.id || r.code));
   }
 
-  const [selectedBaseLang, setSelectedBaseLang] = React.useState<string | null>(null);
+  const [selectedAppBaseLang, setSelectedAppBaseLang] = React.useState<string | null>(null);
+  const [selectedAddressBaseLang, setSelectedAddressBaseLang] = React.useState<string | null>(null);
 
-  // Group languages by base code (e.g. 'en', 'es', 'ar')
-  const groupedLanguages = React.useMemo(() => {
-    const groups: Record<string, typeof LANGUAGES> = {};
-    const indianLangs = ['hi', 'bn', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'pa', 'ur'];
-    const saLangs = ['af', 'zu', 'xh'];
-    const deLangs = ['de', 'de-AT', 'de-CH', 'nds', 'hsb', 'dsb'];
-    const esRegionalLangs = ['ca', 'gl', 'eu'];
-    const itRegionalLangs = ['sc', 'fur', 'co'];
-    const euRegionalLangs = ['cy', 'gd', 'lb', 'rm', 'br', 'oc', 'wa', 'fy', 'ga', 'is', 'vls', 'li'];
-    const hispanosphereEs = ['es', 'es-MX', 'es-AR', 'es-CO', 'es-PE', 'es-VE', 'es-CL', 'es-EC', 'es-BO', 'es-PY', 'es-UY', 'es-PA', 'es-CR', 'es-NI', 'es-HN', 'es-SV', 'es-GT', 'es-DO', 'es-PR', 'es-CU', 'es-GQ'];
-    const lusospherePt = ['pt', 'pt-PT', 'pt-BR', 'pt-AO', 'pt-MZ', 'pt-CV', 'pt-GW', 'pt-ST'];
-    const arabicGlobal = [
-      'ar', 'ar-SA', 'ar-EG', 'ar-AE', 'ar-KW', 'ar-QA', 'ar-OM', 'ar-BH', 'ar-JO', 'ar-LB', 'ar-SY', 'ar-IQ', 'ar-YE', 
-      'ar-MA', 'ar-DZ', 'ar-TN', 'ar-LY', 'ar-SD', 'ar-PS', 'ar-MR', 'ar-SO', 'ar-DJ', 'ar-KM'
-    ];
-    const menaOther = ['fa', 'he', 'ps', 'ku', 'az'];
+  const appGroupedLanguages = React.useMemo(() => groupLanguageOptions(APP_LANGUAGES), []);
+  const addressGroupedLanguages = React.useMemo(() => groupLanguageOptions(ADDRESS_LANGUAGES), []);
 
-    LANGUAGES.forEach(lang => {
-      let groupKey;
-      if (indianLangs.includes(lang.code)) {
-        groupKey = 'in-regional';
-      } else if (saLangs.includes(lang.code)) {
-        groupKey = 'za-regional';
-      } else if (deLangs.includes(lang.code)) {
-        groupKey = 'de-regional';
-      } else if (euRegionalLangs.includes(lang.code)) {
-        groupKey = 'eu-regional';
-      } else if (esRegionalLangs.includes(lang.code)) {
-        groupKey = 'es-regional';
-      } else if (itRegionalLangs.includes(lang.code)) {
-        groupKey = 'it-regional';
-      } else if (hispanosphereEs.includes(lang.code)) {
-        groupKey = 'hispanosphere';
-      } else if (lusospherePt.includes(lang.code)) {
-        groupKey = 'lusosphere';
-      } else if (arabicGlobal.includes(lang.code)) {
-        groupKey = 'arabic-global';
-      } else if (menaOther.includes(lang.code)) {
-        groupKey = 'mena-other';
-      } else if (lang.code.startsWith('zh-Hans')) {
-        groupKey = 'zh-Hans';
-      } else if (lang.code.startsWith('zh-Hant')) {
-        groupKey = 'zh-Hant';
-      } else {
-        groupKey = lang.code.split('-')[0];
-      }
+  const appLanguageGroupLabels: Record<string, { name: string; flag: string }> = {
+    'in-regional': { name: 'Indic languages', flag: '🇮🇳' },
+    'za-regional': { name: 'South African languages', flag: '🇿🇦' },
+    'africa-native': { name: 'African native languages', flag: '🌍' },
+    'de-regional': { name: 'Germanic regional languages', flag: '🇩🇪' },
+    'eu-regional': { name: 'European regional languages', flag: '🇪🇺' },
+    'es-regional': { name: 'Lenguas de España', flag: '🇪🇸' },
+    'it-regional': { name: 'Lingue d’Italia', flag: '🇮🇹' },
+    'hispanosphere': { name: 'Español global', flag: '🌎' },
+    'lusosphere': { name: 'Português global', flag: '🌍' },
+    'arabic-global': { name: 'العربية العالمية', flag: '☪️' },
+    'mena-other': { name: 'MENA languages', flag: '🕌' },
+    'zh-Hans': { name: '简体中文', flag: '🇨🇳' },
+    'zh-Hant': { name: '繁體中文', flag: '🇭🇰' },
+  };
 
-      if (!groups[groupKey]) groups[groupKey] = [];
-      groups[groupKey].push(lang);
-    });
-    return groups;
-  }, []);
+  const addressLanguageGroupLabels = React.useCallback((base: string) => {
+    switch (base) {
+      case 'in-regional': return { name: t('tab_indian_langs' as any) || 'Indian Languages', flag: '🇮🇳' };
+      case 'za-regional': return { name: t('tab_sa_langs' as any) || 'South African Languages', flag: '🇿🇦' };
+      case 'africa-native': return { name: t('tab_africa_native_langs' as any) || 'African Native Languages', flag: '🌍' };
+      case 'de-regional': return { name: t('tab_de_langs' as any) || 'Germanic Languages', flag: '🇩🇪' };
+      case 'eu-regional': return { name: t('tab_regional_langs' as any) || 'Regional Languages', flag: '🇪🇺' };
+      case 'es-regional': return { name: t('tab_es_regional' as any) || 'Spain Regions', flag: '🇪🇸' };
+      case 'it-regional': return { name: t('tab_it_regional' as any) || 'Italy Regions', flag: '🇮🇹' };
+      case 'hispanosphere': return { name: t('tab_latam_es' as any) || 'Español (Global)', flag: '🌎' };
+      case 'lusosphere': return { name: t('tab_lusosphere' as any) || 'Português (Global)', flag: '🌍' };
+      case 'arabic-global': return { name: t('tab_arabic_global' as any) || 'Arabic (Global)', flag: '☪️' };
+      case 'mena-other': return { name: t('tab_mena_langs' as any) || 'MENA (Other)', flag: '🕌' };
+      case 'zh-Hans': return { name: '简体中文', flag: '🇨🇳' };
+      case 'zh-Hant': return { name: '繁體中文', flag: '🇭🇰' };
+      default: return null;
+    }
+  }, [t]);
 
-  const baseLanguages = React.useMemo(() => {
-    return Object.keys(groupedLanguages).map(base => {
-      const group = groupedLanguages[base];
-      
-      let name, flag;
-      if (base === 'in-regional') {
-        name = t('tab_indian_langs' as any) || 'Indian Languages';
-        flag = '🇮🇳';
-      } else if (base === 'za-regional') {
-        name = t('tab_sa_langs' as any) || 'South African Languages';
-        flag = '🇿🇦';
-      } else if (base === 'de-regional') {
-        name = t('tab_de_langs' as any) || 'Germanic Languages';
-        flag = '🇩🇪';
-      } else if (base === 'eu-regional') {
-        name = t('tab_regional_langs' as any) || 'Regional Languages';
-        flag = '🇪🇺';
-      } else if (base === 'es-regional') {
-        name = t('tab_es_regional' as any) || 'Spain Regions';
-        flag = '🇪🇸';
-      } else if (base === 'it-regional') {
-        name = t('tab_it_regional' as any) || 'Italy Regions';
-        flag = '🇮🇹';
-      } else if (base === 'hispanosphere') {
-        name = t('tab_latam_es' as any) || 'Español (Global)';
-        flag = '🌎';
-      } else if (base === 'lusosphere') {
-        name = t('tab_lusosphere' as any) || 'Português (Global)';
-        flag = '🌍';
-      } else if (base === 'arabic-global') {
-        name = t('tab_arabic_global' as any) || 'Arabic (Global)';
-        flag = '☪️';
-      } else if (base === 'mena-other') {
-        name = t('tab_mena_langs' as any) || 'MENA (Other)';
-        flag = '🕌';
-      } else if (base === 'zh-Hans') {
-        name = '简体中文';
-        flag = '🇨🇳';
-      } else if (base === 'zh-Hant') {
-        name = '繁體中文';
-        flag = '🇭🇰';
-      } else {
+  const buildBaseLanguages = React.useCallback((groups: Record<string, LanguageOption[]>, scope: 'app' | 'address') => {
+    return Object.keys(groups).map(base => {
+      const group = groups[base];
+      const fixedGroup = scope === 'app'
+        ? appLanguageGroupLabels[base]
+        : addressLanguageGroupLabels(base);
+
+      let name = fixedGroup?.name;
+      let flag = fixedGroup?.flag;
+      if (!fixedGroup) {
         // Special case for English: prefer UK name/flag for the group
         if (base === 'en') {
           const uk = group.find(l => l.code === 'en-GB');
@@ -292,7 +252,17 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         variants: group
       };
     }).sort((a, b) => a.name.localeCompare(b.name));
-  }, [groupedLanguages, t]);
+  }, [addressLanguageGroupLabels]);
+
+  const appBaseLanguages = React.useMemo(
+    () => buildBaseLanguages(appGroupedLanguages, 'app'),
+    [appGroupedLanguages, buildBaseLanguages]
+  );
+  const addressBaseLanguages = React.useMemo(
+    () => buildBaseLanguages(addressGroupedLanguages, 'address'),
+    [addressGroupedLanguages, buildBaseLanguages]
+  );
+  const helpContent = React.useMemo(() => getHelpCenterContent(appLanguage), [appLanguage]);
 
   return (
     <AnimatePresence>
@@ -410,7 +380,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                         </div>
                         <div className="flex items-center gap-2">
                            <span className="text-[10px] font-black text-rose-600 bg-rose-50 px-2 py-1 rounded-lg">
-                             {LANGUAGES.find(l => l.code === appLanguage)?.name || appLanguage}
+                             {APP_LANGUAGES.find(l => l.code === appLanguage)?.name || appLanguage}
                            </span>
                            <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
                         </div>
@@ -752,7 +722,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             </div>
                             <div className="flex items-center gap-3">
                               <span className="text-xs font-black text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
-                                {LANGUAGES.find(l => l.code === appLanguage)?.name || appLanguage}
+                                {APP_LANGUAGES.find(l => l.code === appLanguage)?.name || appLanguage}
                               </span>
                               <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-blue-400 transition-colors" />
                             </div>
@@ -768,7 +738,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             </div>
                             <div className="flex items-center gap-3">
                               <span className="text-xs font-black text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
-                                {addressLanguage === 'local' ? t('local_lang') : (LANGUAGES.find(l => l.code === addressLanguage)?.name || addressLanguage)}
+                                {addressLanguage === 'local' ? t('local_lang') : (ADDRESS_LANGUAGES.find(l => l.code === addressLanguage)?.name || addressLanguage)}
                               </span>
                               <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-blue-400 transition-colors" />
                             </div>
@@ -905,6 +875,26 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                               <option value="https://tiles.openfreemap.org/styles/dark">Dark</option>
                               <option value="satellite">Satellite</option>
                             </select>
+                          </div>
+
+                          <div className="p-4 md:p-6 bg-white border border-slate-100 rounded-2xl space-y-3">
+                            <div className="flex items-center gap-2">
+                              <MapIcon className="w-4 h-4 text-slate-500" />
+                              <p className="text-sm font-bold text-slate-700">Open Source Map Engines</p>
+                            </div>
+                            <div className="grid gap-2 md:grid-cols-2">
+                              {AGID_MAP_ENGINES.map(engine => (
+                                <div key={engine.id} className="border border-slate-100 rounded-xl p-3 bg-slate-50">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <span className="text-xs font-black text-slate-700 uppercase">{engine.name}</span>
+                                    <span className="text-[9px] font-black text-slate-400 uppercase">{engine.license}</span>
+                                  </div>
+                                  <p className="mt-1 text-[10px] font-bold text-slate-400">
+                                    {engine.id === 'maplibre-gl' ? 'Active 3D/vector engine' : 'Installed 2D/OGC fallback'}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                           
                           <div className="p-4 md:p-6 bg-slate-50 rounded-2xl border border-slate-100 md:col-span-1">
@@ -1093,74 +1083,98 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       exit={{ x: 20, opacity: 0 }}
                       className="p-5 md:p-6"
                     >
-                       <div className="space-y-4">
+                       <div className="space-y-5">
                           <div className="p-5 bg-blue-50 rounded-3xl border border-blue-100">
-                            <h4 className="text-sm font-black text-blue-900 mb-2 uppercase tracking-widest">{t('how_to_use_agid')}</h4>
-                            <p className="text-xs text-blue-800/70 leading-relaxed">
-                              {appLanguage === 'ja' 
-                                ? 'AGIDは階層型グリッドシステムを使用して、地球上のあらゆる場所を人間が読める10文字のコードに解決します。' 
-                                : 'AGID utilizes a hierarchical grid system to resolve any location on Earth into a human-readable 10-character code.'}
-                            </p>
+                            <div className="flex items-start gap-3">
+                              <div className="w-10 h-10 bg-white text-blue-600 rounded-2xl flex items-center justify-center shrink-0 shadow-sm">
+                                <Info className="w-5 h-5" />
+                              </div>
+                              <div>
+                                <h4 className="text-sm font-black text-blue-900 mb-2 uppercase tracking-widest">{helpContent.title}</h4>
+                                <p className="text-xs text-blue-800/75 leading-relaxed">{helpContent.intro}</p>
+                              </div>
+                            </div>
                           </div>
+
+                          <section className="space-y-3">
+                            <div className="flex items-center gap-2 px-1">
+                              <Check className="w-4 h-4 text-emerald-500" />
+                              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">{helpContent.selfServiceTitle}</h4>
+                            </div>
+                            <div className="grid gap-3 md:grid-cols-2">
+                              {helpContent.selfServiceSections.map((section) => (
+                                <div key={section.id} className="p-4 bg-white rounded-2xl border border-slate-100">
+                                  <p className="text-xs font-black text-slate-800 mb-3">{section.title}</p>
+                                  <ol className="space-y-2">
+                                    {section.steps.map((step, index) => (
+                                      <li key={step} className="flex gap-2 text-xs text-slate-500 leading-relaxed">
+                                        <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-[10px] font-black shrink-0">
+                                          {index + 1}
+                                        </span>
+                                        <span>{step}</span>
+                                      </li>
+                                    ))}
+                                  </ol>
+                                </div>
+                              ))}
+                            </div>
+                          </section>
                           
-                          <div className="grid gap-3">
-                            <details className="group bg-white rounded-2xl border border-slate-100 overflow-hidden transition-all">
-                              <summary className="p-4 list-none cursor-pointer flex items-center justify-between group-hover:bg-slate-50">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-600 group-open:text-blue-600">{t('common_questions')}</span>
-                                <BookOpen className="w-4 h-4 text-slate-300 group-open:text-blue-500 group-open:rotate-12 transition-all" />
-                              </summary>
-                              <div className="p-4 pt-0 text-xs text-slate-500 space-y-3 leading-relaxed border-t border-slate-50 mt-2">
-                                <div className="space-y-1">
-                                  <p className="font-bold text-slate-700">Q: AGIDとは何ですか？</p>
-                                  <p>A: 地球上の3m×3mの区画に割り当てられた一意の番地システムです。住所がない場所でも正確に位置を特定できます。</p>
-                                </div>
-                                <div className="space-y-1">
-                                  <p className="font-bold text-slate-700">Q: オフラインで使用できますか？</p>
-                                  <p>A: 地図の表示にはインターネットが必要ですが、一度読み込んだエリアや保存済みの地点はキャッシュされます。Pro版ではオフラインマップが提供される予定です。</p>
-                                </div>
-                                <div className="space-y-1">
-                                  <p className="font-bold text-slate-700">Q: 精度はどのくらいですか？</p>
-                                  <p>A: 世界中で数センチメートル単位の計算精度を持ち、グリッド表示は3m四方（AGID-Standard）で提供されます。</p>
-                                </div>
-                              </div>
-                            </details>
+                          <section className="grid gap-3">
+                            <div className="flex items-center gap-2 px-1">
+                              <BookOpen className="w-4 h-4 text-blue-500" />
+                              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">{helpContent.faqTitle}</h4>
+                            </div>
+                            {helpContent.faqItems.map((item) => (
+                              <details key={item.id} className="group bg-white rounded-2xl border border-slate-100 overflow-hidden transition-all">
+                                <summary className="p-4 list-none cursor-pointer flex items-center justify-between gap-4 group-hover:bg-slate-50">
+                                  <span className="text-xs font-black text-slate-700 group-open:text-blue-600">{item.question}</span>
+                                  <ChevronRight className="w-4 h-4 text-slate-300 group-open:text-blue-500 group-open:rotate-90 transition-all shrink-0" />
+                                </summary>
+                                <p className="px-4 pb-4 text-xs text-slate-500 leading-relaxed border-t border-slate-50 pt-3">{item.answer}</p>
+                              </details>
+                            ))}
+                          </section>
 
-                            <details className="group bg-white rounded-2xl border border-slate-100 overflow-hidden transition-all">
-                              <summary className="p-4 list-none cursor-pointer flex items-center justify-between group-hover:bg-slate-50">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-600 group-open:text-emerald-600">{t('system_status')}</span>
-                                <Activity className="w-4 h-4 text-slate-300 group-open:text-emerald-500 group-open:animate-pulse transition-all" />
-                              </summary>
-                              <div className="p-4 pt-0 text-xs text-slate-500 space-y-3 leading-relaxed border-t border-slate-50 mt-2">
-                                <div className="flex items-center justify-between">
-                                  <span className="font-bold">Core API</span>
-                                  <span className="text-emerald-500 font-black">OPERATIONAL</span>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                  <span className="font-bold">Tile Engine</span>
-                                  <span className="text-emerald-500 font-black">99.9% UP</span>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                  <span className="font-bold">Grid Resolver</span>
-                                  <span className="text-emerald-500 font-black">STABLE</span>
-                                </div>
-                                <div className="pt-2">
-                                  <button 
-                                    onClick={fetchQualityReport}
-                                    className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
-                                  >
-                                    View Data Quality Report
-                                  </button>
-                                </div>
-                              </div>
-                            </details>
+                          <details className="group bg-white rounded-2xl border border-slate-100 overflow-hidden transition-all">
+                            <summary className="p-4 list-none cursor-pointer flex items-center justify-between group-hover:bg-slate-50">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-slate-600 group-open:text-emerald-600">{helpContent.factCheckedTitle}</span>
+                              <Database className="w-4 h-4 text-slate-300 group-open:text-emerald-500 transition-all" />
+                            </summary>
+                            <div className="p-4 pt-0 text-xs text-slate-500 space-y-3 leading-relaxed border-t border-slate-50 mt-2">
+                              {helpContent.sourceNotes.map((note) => (
+                                <a
+                                  key={note.id}
+                                  href={note.url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="block p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors"
+                                >
+                                  <span className="flex items-center justify-between gap-3">
+                                    <span className="font-black text-slate-700">{note.label}</span>
+                                    <ArrowRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                                  </span>
+                                  <span className="block mt-1 text-slate-500">{note.summary}</span>
+                                </a>
+                              ))}
+                            </div>
+                          </details>
 
-                            <a 
-                              href="mailto:support@agid-geospatial.example"
-                              className="p-4 bg-white rounded-2xl border border-slate-100 text-left flex items-center justify-between group hover:bg-slate-900 hover:border-slate-900 transition-all"
+                          <div className="p-4 bg-white rounded-2xl border border-slate-100">
+                            <div className="flex items-start justify-between gap-4">
+                              <div>
+                                <p className="text-xs font-black text-slate-800 mb-1">{helpContent.qualityTitle}</p>
+                                <p className="text-xs text-slate-500 leading-relaxed">{helpContent.qualityBody}</p>
+                              </div>
+                              <Activity className="w-5 h-5 text-emerald-500 shrink-0" />
+                            </div>
+                            <button 
+                              onClick={fetchQualityReport}
+                              disabled={isQualityLoading}
+                              className="mt-4 w-full px-4 py-3 rounded-2xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 disabled:opacity-50 transition-all"
                             >
-                               <span className="text-[10px] font-black uppercase tracking-widest text-slate-600 group-hover:text-white">{t('contact_support')}</span>
-                               <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-white group-hover:translate-x-1 transition-all" />
-                            </a>
+                              {isQualityLoading ? t('loading') : 'View Data Quality Report'}
+                            </button>
                           </div>
                        </div>
                     </motion.div>
@@ -1175,7 +1189,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       className="p-5 md:p-6"
                     >
                       <AnimatePresence mode="wait">
-                        {!selectedBaseLang ? (
+                        {!selectedAppBaseLang ? (
                           <motion.div 
                             key="bases"
                             initial={{ x: -10, opacity: 0 }}
@@ -1183,12 +1197,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             exit={{ x: -10, opacity: 0 }}
                             className="grid gap-2"
                           >
-                            {baseLanguages.filter(bl => bl.variants.some(l => Object.keys(TRANSLATIONS).includes(l.code))).map((bl) => (
+                            {appBaseLanguages.map((bl) => (
                               <button
                                 key={bl.base}
                                 onClick={() => {
                                   if (bl.count > 1) {
-                                    setSelectedBaseLang(bl.base);
+                                    setSelectedAppBaseLang(bl.base);
                                   } else {
                                     setAppLanguage(bl.variants[0].code);
                                     setSettingsTab('main');
@@ -1211,7 +1225,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                                   )}
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  {appLanguage.startsWith(bl.base) && !selectedBaseLang && <Check className="w-4 h-4 text-blue-600" />}
+                                  {appLanguage.startsWith(bl.base) && !selectedAppBaseLang && <Check className="w-4 h-4 text-blue-600" />}
                                   {bl.count > 1 && <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors" />}
                                 </div>
                               </button>
@@ -1226,7 +1240,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             className="space-y-4"
                           >
                             <button 
-                              onClick={() => setSelectedBaseLang(null)}
+                              onClick={() => setSelectedAppBaseLang(null)}
                               className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors mb-4"
                             >
                               <ChevronRight className="w-3 h-3 rotate-180" />
@@ -1234,13 +1248,13 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             </button>
                             
                             <div className="grid gap-2">
-                              {groupedLanguages[selectedBaseLang].filter(l => Object.keys(TRANSLATIONS).includes(l.code)).map((lang) => (
+                              {appGroupedLanguages[selectedAppBaseLang].map((lang) => (
                                 <button
                                   key={lang.code}
                                   onClick={() => {
                                     setAppLanguage(lang.code);
                                     setSettingsTab('main');
-                                    setSelectedBaseLang(null);
+                                    setSelectedAppBaseLang(null);
                                   }}
                                   className={cn(
                                     "w-full p-4 rounded-2xl border flex items-center justify-between transition-all",
@@ -1277,7 +1291,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       className="p-5 md:p-6"
                     >
                       <AnimatePresence mode="wait">
-                        {!selectedBaseLang ? (
+                        {!selectedAddressBaseLang ? (
                           <motion.div 
                             key="bases"
                             initial={{ x: -10, opacity: 0 }}
@@ -1304,12 +1318,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                               {addressLanguage === 'local' && <Check className="w-4 h-4 text-emerald-600" />}
                             </button>
 
-                            {baseLanguages.map((bl) => (
+                            {addressBaseLanguages.map((bl) => (
                               <button
                                 key={bl.base}
                                 onClick={() => {
                                   if (bl.count > 1) {
-                                    setSelectedBaseLang(bl.base);
+                                    setSelectedAddressBaseLang(bl.base);
                                   } else {
                                     setAddressLanguage(bl.variants[0].code);
                                     setSettingsTab('main');
@@ -1332,7 +1346,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                                   )}
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  {addressLanguage.startsWith(bl.base) && !selectedBaseLang && <Check className="w-4 h-4 text-blue-600" />}
+                                  {addressLanguage.startsWith(bl.base) && !selectedAddressBaseLang && <Check className="w-4 h-4 text-blue-600" />}
                                   {bl.count > 1 && <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors" />}
                                 </div>
                               </button>
@@ -1347,7 +1361,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             className="space-y-4"
                           >
                             <button 
-                              onClick={() => setSelectedBaseLang(null)}
+                              onClick={() => setSelectedAddressBaseLang(null)}
                               className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors mb-4"
                             >
                               <ChevronRight className="w-3 h-3 rotate-180" />
@@ -1355,13 +1369,13 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             </button>
                             
                             <div className="grid gap-2">
-                              {groupedLanguages[selectedBaseLang].map((lang) => (
+                              {addressGroupedLanguages[selectedAddressBaseLang].map((lang) => (
                                 <button
                                   key={lang.code}
                                   onClick={() => {
                                     setAddressLanguage(lang.code);
                                     setSettingsTab('main');
-                                    setSelectedBaseLang(null);
+                                    setSelectedAddressBaseLang(null);
                                   }}
                                   className={cn(
                                     "w-full p-4 rounded-2xl border flex items-center justify-between transition-all",

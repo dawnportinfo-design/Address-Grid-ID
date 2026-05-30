@@ -1,0 +1,180 @@
+{
+  "countryCode": "TC",
+  "name": "Turks and Caicos Islands",
+  "native": {
+    "name": "Turks and Caicos Islands",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{suburb}}\n{{state}}\n{{postcode}}\nTurks and Caicos Islands",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full Name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "House number and street name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "suburb",
+        "label": "Locality",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "state",
+        "label": "Island",
+        "placeholder": "e.g. Providenciales",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "TKCA 1ZZ",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{suburb}}\n{{state}}\n{{postcode}}\nTurks and Caicos Islands",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full Name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "House number and street name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "suburb",
+        "label": "Locality",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "state",
+        "label": "Island",
+        "placeholder": "e.g. Providenciales",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "TKCA 1ZZ",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "TKCA 1ZZ",
+    "regex": "^TKCA\\s?1ZZ$",
+    "api": null,
+    "source": "Turks and Caicos Islands Post Office"
+  },
+  "openSourceIds": [
+    "british-overseas-postal-reference",
+    "turks-caicos-post",
+    "turks-caicos-gis",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "noaa-etopo",
+    "geobc-global-multi-resolution-topography",
+    "hydrosheds",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "esa-worldcover",
+    "usgs-3dep",
+    "nrcan-geospatial",
+    "conabio-geoportal",
+    "ibge-geosciences",
+    "inpe-terrabrasilis"
+  ],
+  "addressRules": {
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "deliveryLanguages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "region",
+      "city"
+    ],
+    "postalCode": {
+      "label": "TKCA 1ZZ",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "british-overseas-postal-reference",
+      "turks-caicos-post",
+      "turks-caicos-gis",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "noaa-etopo",
+      "geobc-global-multi-resolution-topography",
+      "hydrosheds",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "esa-worldcover",
+      "usgs-3dep",
+      "nrcan-geospatial",
+      "conabio-geoportal",
+      "ibge-geosciences",
+      "inpe-terrabrasilis"
+    ]
+  }
+}

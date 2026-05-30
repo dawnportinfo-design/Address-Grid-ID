@@ -1,0 +1,125 @@
+countryCode: PHIS
+name: Pheasant Island
+native:
+  name: Ile des Faisans / Isla de los Faisanes
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    {{region}}
+    Ile des Faisans / Isla de los Faisanes
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full name
+      required: true
+      type: text
+    - key: street
+      label: Street / Local address
+      placeholder: Street, block, village, or landmark
+      required: true
+      type: text
+    - key: city
+      label: City / Locality
+      placeholder: City or locality
+      required: true
+      type: text
+    - key: region
+      label: Region / Territory
+      placeholder: Region
+      required: false
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: Postal code if used
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    {{region}}
+    Pheasant Island
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full name
+      required: true
+      type: text
+    - key: street
+      label: Street / Local address
+      placeholder: Street, block, village, or landmark
+      required: true
+      type: text
+    - key: city
+      label: City / Locality
+      placeholder: City or locality
+      required: true
+      type: text
+    - key: region
+      label: Region / Territory
+      placeholder: Region
+      required: false
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: Postal code if used
+      required: false
+      type: text
+postalCode:
+  format: null
+  regex: null
+  api: null
+  source: Special/disputed territory metadata; validate with OSM/Nominatim, GeoNames, local postal authority, or parent postal operator when available
+addressRules:
+  languages:
+    - code: fr
+      name: French
+    - code: es
+      name: Spanish
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  regionalHierarchy:
+    - island
+    - condominium
+  postalCode:
+    label: Not separately standardized
+    required: false
+    usage: limited
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - natural-earth-admin
+    - whosonfirst
+    - upu-addressing
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - natural-earth-admin
+  - whosonfirst
+  - upu-addressing

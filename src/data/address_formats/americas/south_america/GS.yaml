@@ -1,0 +1,190 @@
+countryCode: GS
+name: South Georgia and the South Sandwich Islands
+native:
+  name: South Georgia and the South Sandwich Islands
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{organization}}
+    {{postcode}}
+    South Georgia and the South Sandwich Islands
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: organization
+      label: Research Station
+      placeholder: e.g. King Edward Point
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: SIQQ 1ZZ
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{organization}}
+    {{postcode}}
+    South Georgia and the South Sandwich Islands
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: organization
+      label: Research Station
+      placeholder: e.g. King Edward Point
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: SIQQ 1ZZ
+      required: true
+      type: text
+postalCode:
+  format: SIQQ 1ZZ
+  regex: ^SIQQ\s?1ZZ$
+  api: null
+  source: South Georgia Post Office
+openSourceIds:
+  - british-overseas-postal-reference
+  - south-georgia-gis
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils
+  - scar-add
+  - scar-cga
+  - quantarctica
+  - rema-antarctica
+  - bedmap3-antarctica
+  - ibcso-southern-ocean
+  - measures-antarctic-grounding-line
+  - ats-antarctic-protected-areas
+  - nsidc-polar-data
+  - gebco-bathymetry
+  - gmrt-topography
+  - marine-regions
+  - obis-marine-biodiversity
+addressRules:
+  languages:
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - street
+    - locality
+    - researchStation
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - locality
+    - researchStation
+    - postcode
+    - country
+  regionalHierarchy:
+    - island
+    - researchStation
+  postalCode:
+    label: SIQQ 1ZZ required
+    required: true
+    usage: required
+  openSourceIds:
+    - british-overseas-postal-reference
+    - south-georgia-gis
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+    - scar-add
+    - scar-cga
+    - quantarctica
+    - rema-antarctica
+    - bedmap3-antarctica
+    - ibcso-southern-ocean
+    - measures-antarctic-grounding-line
+    - ats-antarctic-protected-areas
+    - nsidc-polar-data
+    - gebco-bathymetry
+    - gmrt-topography
+    - marine-regions
+    - obis-marine-biodiversity

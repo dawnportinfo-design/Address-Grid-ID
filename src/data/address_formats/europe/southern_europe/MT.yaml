@@ -1,0 +1,127 @@
+countryCode: MT
+name: Malta
+native:
+  name: Malti
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}} {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Kumpanija
+      placeholder: ""
+    - key: houseNumber
+      label: Numru tad-dar
+      placeholder: "1"
+    - key: street
+      label: Triq
+      placeholder: Triq ir-Repubblika
+    - key: city
+      label: Belt/Lokalità
+      placeholder: Valletta
+    - key: postcode
+      label: Kodiċi Postali
+      placeholder: VLT 1117
+domestic:
+  en:
+    name: English
+    addressFormat: |-
+      {{organization}}
+      {{houseNumber}} {{street}}
+      {{city}} {{postcode}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Company
+        placeholder: ""
+      - key: houseNumber
+        label: House No.
+        placeholder: "1"
+      - key: street
+        label: Street
+        placeholder: Republic St
+      - key: city
+        label: City/Locality
+        placeholder: Valletta
+      - key: postcode
+        label: Postal Code
+        placeholder: VLT 1117
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}} {{postcode}}
+    MALTA
+  ordering: small-to-big
+  fields: []
+postalCode:
+  format: AAA NNNN
+  regex: ^[A-Z]{3}\s?\d{4}$
+  api: https://ec.europa.eu/eurostat/web/gisco/geodata/administrative-units/postal-codes
+  source: Eurostat GISCO postal codes
+addressRules:
+  languages:
+    - code: mt
+      name: Maltese
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - city
+    - postcode
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - city
+    - postcode
+    - country
+  regionalHierarchy:
+    - city
+  postalCode:
+    label: 3 letters plus 4 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - eurostat-gisco-postcodes
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - pa-malta-geoserver
+    - nso-malta-geodata
+    - identity-malta-addressing
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - eurostat-gisco-postcodes
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - pa-malta-geoserver
+  - nso-malta-geodata
+  - identity-malta-addressing
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

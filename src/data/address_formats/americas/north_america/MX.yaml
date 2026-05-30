@@ -1,0 +1,197 @@
+countryCode: MX
+name: Mexico
+native:
+  name: Español
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{subdistrict}}
+    {{postcode}} {{city}}, {{state}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Empresa
+      placeholder: ""
+    - key: street
+      label: Calle
+      placeholder: Avenida Reforma
+      required: true
+    - key: houseNumber
+      label: Número Ext/Int
+      placeholder: "123"
+      required: true
+    - key: subdistrict
+      label: Colonia
+      placeholder: Centro
+      required: true
+    - key: postcode
+      label: Código Postal
+      placeholder: "06000"
+      required: true
+    - key: city
+      label: Ciudad/Delegación
+      placeholder: Ciudad de México
+      required: true
+    - key: state
+      label: Estado
+      placeholder: CDMX
+      required: true
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{subdistrict}}
+    {{postcode}} {{city}}, {{state}}
+    MEXICO
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Co./Org.
+      placeholder: ""
+    - key: street
+      label: Street Address (Latin)
+      placeholder: Av. Reforma
+      required: true
+    - key: houseNumber
+      label: Ext. No.
+      placeholder: "123"
+      required: true
+    - key: subdistrict
+      label: Neighborhood
+      placeholder: Centro
+      required: true
+    - key: postcode
+      label: Postcode
+      placeholder: "06000"
+      required: true
+    - key: city
+      label: City/Town
+      placeholder: Mexico City
+      required: true
+    - key: state
+      label: State Code
+      placeholder: CDMX
+      required: true
+international:
+  es:
+    name: Español (Internacional)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{subdistrict}}
+      {{postcode}} {{city}}, {{state}}
+      MÉXICO
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Empresa (Latín)
+        placeholder: ""
+      - key: street
+        label: Calle/Via (Latín)
+        placeholder: Av. Reforma
+        required: true
+      - key: houseNumber
+        label: Nº Ext.
+        placeholder: "123"
+        required: true
+      - key: subdistrict
+        label: Colonia
+        placeholder: Centro
+        required: true
+      - key: postcode
+        label: C.P. (Latin)
+        placeholder: "06000"
+        required: true
+      - key: city
+        label: Ciudad/Del.
+        placeholder: CDMX
+        required: true
+      - key: state
+        label: Edo. (Sigla)
+        placeholder: CDMX
+        required: true
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  source: Correos de Mexico
+  api: https://www.correosdemexico.gob.mx/SSLServicios/ConsultaCP/Descarga.aspx
+openSourceIds:
+  - correos-mexico
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis
+addressRules:
+  languages:
+    - code: es
+      name: Spanish
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: es
+      name: Spanish
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - neighborhood
+    - city
+    - departmentOrProvince
+    - postcode
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - neighborhood
+    - city
+    - region
+    - postcode
+    - country
+  regionalHierarchy:
+    - state
+    - municipality
+    - colonia
+  postalCode:
+    label: NNNNN
+    required: true
+    usage: required
+  openSourceIds:
+    - correos-mexico
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis

@@ -1,0 +1,113 @@
+countryCode: JM
+name: Jamaica
+native:
+  name: English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{subdistrict}}
+    {{city}}
+    {{state}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Building/Company
+      placeholder: ""
+    - key: houseNumber
+      label: House/Lot No.
+      placeholder: "10"
+    - key: street
+      label: Street
+      placeholder: Knutsford Blvd
+    - key: subdistrict
+      label: Area/Locality
+      placeholder: New Kingston
+    - key: city
+      label: Town/City
+      placeholder: Kingston
+    - key: state
+      label: Parish
+      placeholder: St. Andrew
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{subdistrict}}
+    {{city}}, {{state}}
+    JAMAICA
+  ordering: small-to-big
+  fields: []
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis
+postalCode:
+  format: country specific or not used
+  regex: null
+  api: null
+  source: GeoNames / UPU
+addressRules:
+  languages:
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  englishOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  regionalHierarchy:
+    - region
+    - city
+  postalCode:
+    label: country specific or not used
+    required: false
+    usage: optional
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis

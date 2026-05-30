@@ -1,0 +1,152 @@
+countryCode: AI
+name: Anguilla
+native:
+  name: Anguilla
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{district}}
+    {{postcode}}
+    Anguilla
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: district
+      label: District
+      placeholder: e.g. The Valley
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: AI-2640
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{district}}
+    {{postcode}}
+    Anguilla
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: district
+      label: District
+      placeholder: e.g. The Valley
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: AI-2640
+      required: true
+      type: text
+postalCode:
+  format: AI-2640
+  regex: ^AI-2640$
+  api: null
+  source: Anguilla Post Office
+openSourceIds:
+  - british-overseas-postal-reference
+  - anguilla-post
+  - anguilla-gov-gis
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis
+addressRules:
+  languages:
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  englishOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  regionalHierarchy:
+    - region
+    - city
+  postalCode:
+    label: AI-2640
+    required: true
+    usage: required
+  openSourceIds:
+    - british-overseas-postal-reference
+    - anguilla-post
+    - anguilla-gov-gis
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis

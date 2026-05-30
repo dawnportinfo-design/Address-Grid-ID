@@ -1,0 +1,165 @@
+{
+  "countryCode": "GR",
+  "name": "Greece",
+  "native": {
+    "name": "Ελλάδα",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Εταιρεία/Οργανισμός",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Οδός",
+        "placeholder": "Ερμού",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Αριθμός",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Ταχυδρομικός Κώδικας",
+        "placeholder": "105 63",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Πόλη",
+        "placeholder": "Αθήνα",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{postcode}} {{city}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company/Organization",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Ermou St",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "105 63",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Athens",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNN NN",
+    "regex": "^\\d{3}\\s?\\d{2}$",
+    "api": "https://itemsearch.elta.gr/en-GB/",
+    "source": "ELTA item/postcode search"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "el",
+        "name": "Greek"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "city"
+    ],
+    "postalCode": {
+      "label": "5 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "elta-gr",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "ktimatologio-greece",
+      "geodata-gov-gr",
+      "okxe-greece",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "elta-gr",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "ktimatologio-greece",
+    "geodata-gov-gr",
+    "okxe-greece",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

@@ -1,0 +1,126 @@
+countryCode: DONB
+name: Donbas
+native:
+  name: Donbas
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    {{region}}
+    Donbas
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full name
+      required: true
+      type: text
+    - key: street
+      label: Street / Local address
+      placeholder: Street, block, village, or landmark
+      required: true
+      type: text
+    - key: city
+      label: City / Locality
+      placeholder: City or locality
+      required: true
+      type: text
+    - key: region
+      label: Region / Territory
+      placeholder: Region
+      required: false
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: Postal code if used
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    {{region}}
+    Donbas
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full name
+      required: true
+      type: text
+    - key: street
+      label: Street / Local address
+      placeholder: Street, block, village, or landmark
+      required: true
+      type: text
+    - key: city
+      label: City / Locality
+      placeholder: City or locality
+      required: true
+      type: text
+    - key: region
+      label: Region / Territory
+      placeholder: Region
+      required: false
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: Postal code if used
+      required: false
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5,6}$
+  api: null
+  source: Special/disputed territory metadata; validate with OSM/Nominatim, GeoNames, local postal authority, or parent postal operator when available
+addressRules:
+  languages:
+    - code: uk
+      name: Ukrainian
+    - code: ru
+      name: Russian
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  regionalHierarchy:
+    - city
+    - district
+    - oblast
+  postalCode:
+    label: NNNNN
+    required: false
+    usage: used
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - natural-earth-admin
+    - whosonfirst
+    - upu-addressing
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - natural-earth-admin
+  - whosonfirst
+  - upu-addressing

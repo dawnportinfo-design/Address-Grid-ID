@@ -21,6 +21,19 @@ import { fetchSeaContext, SeaContext } from './SeaService';
 import { fetchHeritageContext, HeritageContext } from './HeritageService';
 import { fetchJapaneseGeoContext, JapaneseGeoContext } from './JapaneseGeoService';
 import { latLonToOSGrid } from '../lib/osgrid';
+import { analyzeAddress } from '../lib/addressIntelligence';
+import { parseAddressWithOptionalLibpostal } from '../lib/libpostalGateway';
+import { expandSearchQuery, normalizeSearchText, scoreSearchCandidate } from '../lib/searchQuery';
+import {
+  AdvancedSearchOptions,
+  buildNominatimSearchUrl,
+  matchesAdvancedSearchCategory,
+  matchesAdvancedSearchLocation,
+  normalizeAdvancedSearchOptions,
+} from '../lib/advancedSearch';
+import { rankAddressCandidatesByMorphism, type AddressMorphismCandidate } from '../lib/addressMorphism';
+import { buildMorphismCandidateFromSources, detectNaturalAddressContext } from '../lib/addressMorphismSources';
+import { getAddressFormat } from '../data/address_formats';
 
 // --- Types ---
 
@@ -41,6 +54,32 @@ export interface OSMPlace {
 import { calculateMountainClass, calculateConsensusMetrics } from '../lib/agid';
 
 import { fetchGlobalContext, GlobalWeather, LocalTimeInfo, fetchGlobalPostcodeDetails, fetchPlusCode } from './GlobalContextService';
+
+async function enrichAnalysisWithOptionalLibpostal(analysis: ReturnType<typeof analyzeAddress>, displayName?: string, countryCode?: string) {
+  if (!displayName) return analysis;
+
+  const parsed = await parseAddressWithOptionalLibpostal({
+    text: displayName,
+    countryCode,
+    endpoint: '/api/address/parse',
+  });
+
+  if (!parsed.available) return analysis;
+
+  return {
+    ...analysis,
+    parsed: {
+      ...analysis.parsed,
+      ...parsed.canonical,
+    },
+    canonical: {
+      ...parsed.canonical,
+      ...analysis.canonical,
+    },
+    sources: Array.from(new Set([...analysis.sources, 'libpostal'])),
+    confidence: Math.max(analysis.confidence, 0.9),
+  };
+}
 
 export interface ParsedAddress {
   houseNumber?: string;
@@ -109,56 +148,7 @@ export const db = new PlaceDatabase();
  * Normalizes address text by standardizing common abbreviations and formatting.
  */
 export function normalizeAddress(text: string): string {
-  if (!text) return "";
-  
-  let normalized = text.toLowerCase();
-  
-  // Remove punctuation
-  normalized = normalized.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, " ");
-  
-  // Standardize abbreviations (English)
-  const abbreviations: Record<string, string> = {
-    "st": "street",
-    "rd": "road",
-    "ave": "avenue",
-    "blvd": "boulevard",
-    "dr": "drive",
-    "ln": "lane",
-    "ct": "court",
-    "pl": "place",
-    "sq": "square",
-    "apt": "apartment",
-    "ste": "suite",
-    "n": "north",
-    "s": "south",
-    "e": "east",
-    "w": "west",
-    "ne": "northeast",
-    "nw": "northwest",
-    "se": "southeast",
-    "sw": "southwest",
-    // Spanish Abbreviations (libpostal/GeoNames style)
-    "cl": "calle",
-    "av": "avenida",
-    "pza": "plaza",
-    "cra": "carrera",
-    "diag": "diagonal",
-    "tv": "transversal",
-    "urb": "urbanización",
-    "cond": "condominio",
-    "col": "colonia",
-    "barr": "barrio",
-    "esq": "esquina",
-    "dto": "departamento",
-    "piso": "piso",
-    "nro": "número",
-    "no": "número"
-  };
-
-  const words = normalized.split(/\s+/);
-  const mappedWords = words.map(word => abbreviations[word] || word);
-  
-  return mappedWords.join(" ").trim();
+  return normalizeSearchText(text);
 }
 
 /**
@@ -166,28 +156,17 @@ export function normalizeAddress(text: string): string {
  * This is a rule-based parser as a lightweight alternative to libpostal.
  */
 export function parseAddress(text: string): ParsedAddress {
-  const normalized = normalizeAddress(text);
-  const parts: ParsedAddress = {};
-  
-  // Simple regex-based extraction for common patterns
-  // Note: Real libpostal uses a statistical model; this is a high-quality heuristic.
-  
-  // Postcode (Common formats)
-  const postcodeMatch = text.match(/\b\d{3}-\d{4}\b|\b\d{5}(-\d{4})?\b|\b[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}\b/i);
-  if (postcodeMatch) {
-    parts.postcode = postcodeMatch[0];
-  }
-  
-  // House number (usually at start or near road)
-  const houseMatch = text.match(/^\d+([a-zA-Z])?\b/);
-  if (houseMatch) {
-    parts.houseNumber = houseMatch[0];
-  }
-  
-  // This is a simplified parser. In a real app, we'd use more complex logic or a library.
-  // For now, we'll rely on Nominatim's structured output when possible.
-  
-  return parts;
+  const parsed = analyzeAddress({ displayName: text, sources: ['parser'] }).canonical;
+  return {
+    houseNumber: parsed.house_number,
+    road: parsed.road,
+    suburb: parsed.suburb || parsed.subdistrict,
+    city: parsed.city,
+    state: parsed.state,
+    postcode: parsed.postcode,
+    country: parsed.country,
+    poi: parsed.poi,
+  };
 }
 
 // --- OSM Data (Overpass API) ---
@@ -329,40 +308,143 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 /**
  * Searches for a place using local DB first, then Nominatim.
  */
-export async function smartSearch(query: string, lat?: number, lon?: number): Promise<any[]> {
-  const normalizedQuery = normalizeAddress(query);
+export async function smartSearch(query: string, lat?: number, lon?: number, options?: Partial<AdvancedSearchOptions>): Promise<any[]> {
+  const queryCandidates = expandSearchQuery(query).slice(0, 6);
+  const normalizedQuery = normalizeAddress(queryCandidates[0] || query);
+  const advancedOptions = normalizeAdvancedSearchOptions(options);
   
   // 1. Search Local DB
   const localResults = await db.places
-    .filter(place => 
-      normalizeAddress(place.name).includes(normalizedQuery) || 
-      (place.nameEn && normalizeAddress(place.nameEn).includes(normalizedQuery))
-    )
-    .limit(5)
+    .filter(place => {
+      const labels = [place.name, place.nameEn, place.tags?.['name:local'], place.tags?.['name:es'], place.tags?.['name:ja']]
+        .filter(Boolean)
+        .join(' ');
+      const countryCode = place.address?.country_code || place.tags?.['addr:country'];
+      const matchesCountry = !advancedOptions.countryCodes || (
+        typeof countryCode === 'string' &&
+        advancedOptions.countryCodes.split(',').includes(countryCode.toLowerCase())
+      );
+      return matchesCountry &&
+        matchesAdvancedSearchCategory(place, advancedOptions) &&
+        matchesAdvancedSearchLocation(place, lat, lon, advancedOptions) &&
+        (scoreSearchCandidate(labels, queryCandidates) >= 0.6 || normalizeAddress(labels).includes(normalizedQuery));
+    })
+    .limit(Math.max(20, advancedOptions.limit * 2))
     .toArray();
     
-  const formattedLocal = localResults.map(p => ({
-    display_name: `${p.name} (${p.category})`,
-    lat: p.lat.toString(),
-    lon: p.lon.toString(),
-    source: 'local_db',
-    type: p.category
-  }));
+  const formattedLocal = localResults
+    .map(p => ({
+      display_name: `${p.nameEn || p.name} (${p.category})`,
+      lat: p.lat.toString(),
+      lon: p.lon.toString(),
+      source: 'local_db',
+      type: p.category,
+      confidence: scoreSearchCandidate(`${p.name} ${p.nameEn || ''}`, queryCandidates),
+      matched_query: queryCandidates.find(candidate => scoreSearchCandidate(`${p.name} ${p.nameEn || ''}`, [candidate]) >= 0.6) || query,
+    }))
+    .sort((a, b) => b.confidence - a.confidence)
+    .slice(0, Math.min(8, advancedOptions.limit));
   
   // 2. Search Nominatim via Proxy
   let nominatimResults: any[] = [];
   try {
-    const biasParam = lat && lon ? `&viewbox=${lon-0.1},${lat+0.1},${lon+0.1},${lat-0.1}&bounded=0` : '';
-    const res = await fetchWithRetry(`/api/osm-search?q=${encodeURIComponent(query)}${biasParam}&limit=10`);
-    if (res.ok) {
-      nominatimResults = await res.json();
+    for (const candidate of queryCandidates) {
+      const res = await fetchWithRetry(buildNominatimSearchUrl(candidate, lat, lon, advancedOptions));
+      if (res.ok) {
+        const results = await res.json();
+        nominatimResults.push(
+          ...results
+            .filter((result: any) =>
+              matchesAdvancedSearchCategory(result, advancedOptions) &&
+              matchesAdvancedSearchLocation(result, lat, lon, advancedOptions)
+            )
+            .map((result: any) => ({
+              ...result,
+              source: result.source || 'osm_nominatim',
+              matched_query: candidate,
+              confidence: scoreSearchCandidate(result.display_name || '', queryCandidates),
+            })),
+        );
+      }
+      if (nominatimResults.length >= advancedOptions.limit) break;
     }
   } catch (e) {
     console.error('Nominatim search error:', e);
   }
   
-// Combine and deduplicate
-  return [...formattedLocal, ...nominatimResults];
+  const deduped = new Map<string, any>();
+  for (const result of [...formattedLocal, ...nominatimResults]) {
+    const key = [
+      Number.parseFloat(result.lat).toFixed(5),
+      Number.parseFloat(result.lon).toFixed(5),
+      normalizeAddress(result.display_name || ''),
+    ].join('|');
+    const existing = deduped.get(key);
+    if (!existing || (result.confidence ?? 0) > (existing.confidence ?? 0)) {
+      deduped.set(key, result);
+    }
+  }
+
+  const dedupedResults = Array.from(deduped.values());
+  const addressFormatCache = new Map<string, Awaited<ReturnType<typeof getAddressFormat>>>();
+  const loadAddressFormat = async (countryCode?: string) => {
+    const code = String(countryCode || '').trim().toUpperCase();
+    if (!code) return null;
+    if (!addressFormatCache.has(code)) {
+      addressFormatCache.set(code, await getAddressFormat(code));
+    }
+    return addressFormatCache.get(code) || null;
+  };
+
+  const morphismCandidates: AddressMorphismCandidate[] = await Promise.all(dedupedResults.map(async (result, index) => {
+    const analysis = analyzeAddress({
+      apiAddress: result.address || {},
+      displayName: result.display_name || result.name || '',
+      sources: [result.source || 'search'],
+    });
+    const countryCode = analysis.canonical.country_code || advancedOptions.countryCodes.split(',')[0];
+    const addressFormat = await loadAddressFormat(countryCode);
+    return buildMorphismCandidateFromSources({
+      id: result.place_id ? String(result.place_id) : `${result.source || 'search'}-${index}`,
+      label: result.display_name || result.name || '',
+      canonical: analysis.canonical,
+      lat: Number(result.lat),
+      lon: Number(result.lon),
+      sources: analysis.sources.length ? analysis.sources : [result.source || 'search'],
+      confidence: Math.max(result.confidence ?? 0, analysis.confidence),
+      addressFormat,
+      naturalContext: detectNaturalAddressContext({
+        tags: result.tags || {},
+        category: result.category || result.class,
+        type: result.type_name || result.type,
+        displayName: result.display_name || result.name || '',
+      }),
+    });
+  }));
+  const rankedByMorphism = rankAddressCandidatesByMorphism(
+    query,
+    morphismCandidates,
+    { lat, lon, countryCode: advancedOptions.countryCodes.split(',')[0] || undefined },
+  );
+  const morphismById = new Map(rankedByMorphism.map(candidate => [candidate.id, candidate]));
+
+  return dedupedResults
+    .map((result, index) => {
+      const id = result.place_id ? String(result.place_id) : `${result.source || 'search'}-${index}`;
+      const morphism = morphismById.get(id);
+      return {
+        ...result,
+        morphism_energy: morphism?.morphism_energy,
+        morphism_status: morphism?.morphism_status,
+        morphism_pid: morphism?.morphism_pid,
+      };
+    })
+    .sort((a, b) => {
+      const energyDiff = (a.morphism_energy ?? Number.POSITIVE_INFINITY) - (b.morphism_energy ?? Number.POSITIVE_INFINITY);
+      if (energyDiff !== 0) return energyDiff;
+      return (b.confidence ?? 0) - (a.confidence ?? 0);
+    })
+    .slice(0, advancedOptions.limit);
 }
 
 // --- Regional Geocoding ---
@@ -1071,6 +1153,27 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
         }
       }
     }
+
+    const addressSources = [
+      'nominatim',
+      localData?.postalCode ? 'geonames-postal' : '',
+      zippoData ? 'zippopotam' : '',
+      europeanPostalData ? 'regional-open-data' : '',
+      asiaOceaniaData ? 'asia-oceania-open-data' : '',
+      nordicContext?.addressDetails ? 'nordic-open-data' : '',
+      officialRegionalData ? 'official-regional-api' : '',
+      usCensusData ? 'us-census' : '',
+      japaneseGeoContext ? 'japanese-open-data' : '',
+    ].filter(Boolean) as string[];
+    nominatimData.address_analysis = await enrichAnalysisWithOptionalLibpostal(analyzeAddress({
+      apiAddress: nominatimData.address,
+      displayName: nominatimData.display_name,
+      sources: addressSources,
+    }), nominatimData.display_name, cc);
+    nominatimData.address = {
+      ...nominatimData.address,
+      ...nominatimData.address_analysis.canonical,
+    };
     
     return nominatimData;
   }
@@ -1079,6 +1182,19 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
   if (localData && localData.postalCode) {
     const finalOfficialData = officialRegionalData || {};
     if (elevationData) finalOfficialData.elevation_source = elevationData.source;
+    const address = {
+      country_code: localData.countryCode.toLowerCase(),
+      country: localData.countryCode,
+      state: localData.adminName1,
+      city: localData.adminName2 || localData.placeName,
+      suburb: localData.adminName3 || (localData.adminName2 ? localData.placeName : ''),
+      postcode: localData.postalCode
+    };
+    const addressAnalysis = await enrichAnalysisWithOptionalLibpostal(analyzeAddress({
+      apiAddress: address,
+      displayName: [address.postcode, address.suburb, address.city, address.state, address.country].filter(Boolean).join(', '),
+      sources: ['geonames-postal'],
+    }), [address.postcode, address.suburb, address.city, address.state, address.country].filter(Boolean).join(', '), localData.countryCode);
 
     return {
       elevation: elevationData?.elevation,
@@ -1112,19 +1228,17 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
       nature_context: natureContext,
       sea_context: seaContext,
       heritage_context: heritageContext,
+      address_analysis: addressAnalysis,
       address: {
-        country_code: localData.countryCode.toLowerCase(),
-        country: localData.countryCode,
-        state: localData.adminName1,
-        city: localData.adminName2 || localData.placeName,
-        suburb: localData.adminName3 || (localData.adminName2 ? localData.placeName : ''),
-        postcode: localData.postalCode
+        ...address,
+        ...addressAnalysis.canonical,
       }
     };
   }
 
-  // If all address APIs failed but we have elevation/water risk, at least return that
-  if (elevationData || waterData) {
+  // If all address APIs failed but we have physical-geography context, return a
+  // natural address shell so seas, mountains, and waterfront areas can still be displayed.
+  if (elevationData || waterData || natureContext || seaContext) {
     return {
       elevation: elevationData?.elevation,
       delivery_difficulty: deliveryDifficulty,
@@ -1134,6 +1248,8 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
       landslide_risk: geoRiskData?.risks?.landslide,
       seismic_risk: geoRiskData?.risks?.seismic,
       land_cover: geoRiskData?.land_cover,
+      nature_context: natureContext,
+      sea_context: seaContext,
       address: {}
     };
   }

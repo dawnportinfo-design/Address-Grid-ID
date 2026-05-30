@@ -1,0 +1,164 @@
+countryCode: SN
+name: Senegal
+native:
+  name: Sénégal
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{postcode}} {{city}}
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Nom Complet
+      placeholder: Moussa Diop
+      required: true
+      type: text
+    - key: street
+      label: Adresse
+      placeholder: 12 Rue de Dakar
+      required: true
+      type: text
+    - key: postcode
+      label: Code Postal
+      placeholder: "12500"
+      required: false
+      type: text
+    - key: city
+      label: Ville
+      placeholder: Dakar
+      required: true
+      type: text
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{street}}
+    {{postcode}} {{city}}
+    SENEGAL
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Company/Organization
+      placeholder: ""
+    - key: street
+      label: Street Address
+      placeholder: 12 Rue de Dakar
+    - key: postcode
+      label: Postal Code
+      placeholder: "12500"
+    - key: city
+      label: City/Town
+      placeholder: Dakar
+international:
+  fr:
+    name: Français (International)
+    addressFormat: |-
+      {{organization}}
+      {{street}}
+      {{postcode}} {{city}}
+      SÉNÉGAL
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Société/Organisation
+        placeholder: ""
+      - key: street
+        label: Adresse
+        placeholder: 12 Rue de Dakar
+      - key: postcode
+        label: Code Postal
+        placeholder: "12500"
+      - key: city
+        label: Ville
+        placeholder: Dakar
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: null
+  source: Postal metadata from AGID regional table; no free OSS source configured
+addressRules:
+  languages:
+    - code: fr
+      name: French
+  nativeOrder:
+    - region
+    - department
+    - commune
+    - locality
+    - street
+    - houseNumber
+    - country
+  englishOrder:
+    - region
+    - department
+    - commune
+    - locality
+    - street
+    - houseNumber
+    - country
+  regionalHierarchy:
+    - region
+    - department
+  postalCode:
+    label: 5 digits used
+    required: false
+    usage: used
+  deliveryLanguages:
+    - code: fr
+      name: French
+  openSourceIds:
+    - hot-osm-west-africa
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+openSourceIds:
+  - hot-osm-west-africa
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal

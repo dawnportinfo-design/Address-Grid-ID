@@ -1,0 +1,168 @@
+{
+  "countryCode": "XD",
+  "name": "Dhekelia",
+  "native": {
+    "name": "Dhekelia Sovereign Base Area",
+    "addressFormat": "{{recipient}}\n{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nDhekelia Sovereign Base Area",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "organization",
+        "label": "Organization / Station",
+        "placeholder": "Organization, station, or facility",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street / Local address",
+        "placeholder": "Street, road, sector, or locality",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House / Unit No.",
+        "placeholder": "Number",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "Postal code if used",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Locality",
+        "placeholder": "City, island, base, or locality",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{recipient}}\n{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nDHEKELIA",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "organization",
+        "label": "Organization / Station",
+        "placeholder": "Organization, station, or facility",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street / Local address",
+        "placeholder": "Street, road, sector, or locality",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House / Unit No.",
+        "placeholder": "Number",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "Postal code if used",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Locality",
+        "placeholder": "City, island, base, or locality",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "BFPO NNN",
+    "regex": "^BFPO\\s?\\d{1,4}$",
+    "api": null,
+    "source": "BFPO / OSM / GeoNames"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      },
+      {
+        "code": "el",
+        "name": "Greek"
+      },
+      {
+        "code": "tr",
+        "name": "Turkish"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "organization",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "territory"
+    ],
+    "englishOrder": [
+      "recipient",
+      "organization",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "territory"
+    ],
+    "regionalHierarchy": [
+      "sovereignBaseArea"
+    ],
+    "postalCode": {
+      "label": "BFPO NNN postal format",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing"
+    ]
+  },
+  "openSourceIds": [
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing"
+  ]
+}

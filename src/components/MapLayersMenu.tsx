@@ -338,8 +338,8 @@ export const MapLayersMenu: React.FC<MapLayersMenuProps> = ({
                       <div className="flex-1 px-1">
                          <div className="flex justify-between mb-2 items-center">
                            <div className="flex flex-col">
-                             <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">DETAIL LEVEL</span>
-                             <span className="text-[9px] font-black text-slate-900 leading-none">RESOLUTION: ~4.4m (UNIFORM)</span>
+                             <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">GRID LINES</span>
+                             <span className="text-[9px] font-black text-slate-900 leading-none">LINE VISIBILITY</span>
                            </div>
                            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-lg text-[9px] font-black tracking-tighter">{gridOpacityLevel}x</span>
                          </div>

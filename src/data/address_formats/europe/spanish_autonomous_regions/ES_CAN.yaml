@@ -1,0 +1,146 @@
+countryCode: ES
+name: Canary Islands
+native:
+  name: Islas Canarias
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{state}}
+    España
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Nombre
+      placeholder: Nombre completo
+      required: true
+      type: text
+    - key: street
+      label: Calle
+      placeholder: Nombre de la calle
+      required: true
+      type: text
+    - key: houseNumber
+      label: Número
+      placeholder: Nr
+      required: true
+      type: text
+    - key: postcode
+      label: Código Postal
+      placeholder: "35001"
+      required: true
+      type: text
+    - key: city
+      label: Localidad
+      placeholder: Las Palmas
+      required: true
+      type: text
+    - key: state
+      label: Provincia
+      placeholder: Las Palmas
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{state}}
+    Spain
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Name
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: Street name
+      required: true
+      type: text
+    - key: houseNumber
+      label: House No
+      placeholder: No
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "35001"
+      required: true
+      type: text
+    - key: city
+      label: City/Town
+      placeholder: Las Palmas
+      required: true
+      type: text
+    - key: state
+      label: Province
+      placeholder: Las Palmas
+      required: true
+      type: text
+postalCode:
+  format: 35NNN or 38NNN
+  regex: ^(35|38)\d{3}$
+  source: Territory postal format metadata / local postal operator guidance
+addressRules:
+  languages:
+    - code: es
+      name: Spanish
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - province
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - province
+    - country
+  regionalHierarchy:
+    - cityOrTown
+    - province
+  postalCode:
+    label: 35xxx or 38xxx Canary Islands postcode
+    required: true
+    usage: required
+  openSourceIds:
+    - correos-spain
+    - eurostat-gisco-postcodes
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - correos-spain
+  - eurostat-gisco-postcodes
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

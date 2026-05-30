@@ -1,0 +1,165 @@
+{
+  "countryCode": "HR",
+  "name": "Croatia",
+  "native": {
+    "name": "Hrvatska",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Tvrtka/Organizacija",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Ulica",
+        "placeholder": "Ilica",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Kućni broj",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Poštanski broj",
+        "placeholder": "10000",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Grad",
+        "placeholder": "Zagreb",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company/Organization",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Ilica",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "10000",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Zagreb",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": "https://www.posta.hr/pretrazivanje-postanskih-ureda/263",
+    "source": "Hrvatska pošta"
+  },
+  "openSourceIds": [
+    "posta-hr",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "dgu-croatia-geoportal",
+    "croatia-cadastre",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ],
+  "addressRules": {
+    "languages": [
+      {
+        "code": "hr",
+        "name": "Croatian"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "county",
+      "cityOrMunicipality",
+      "settlement"
+    ],
+    "postalCode": {
+      "label": "5 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "posta-hr",
+      "dgu-croatia-geoportal",
+      "croatia-cadastre",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  }
+}

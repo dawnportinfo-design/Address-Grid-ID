@@ -1,6 +1,13 @@
 
 import { transliterate } from './transliteration';
 import { applyShippingAbbreviations } from './addressUtils';
+import {
+  normalizeEnglishAddressBuildingName,
+  normalizeEnglishAddressPart,
+  renderDomesticEnglishPostalAddress,
+  renderEnglishPostalAddress,
+} from './addressEnglish';
+import { isEnglishAddressCountry } from './languageTabs';
 import { 
   renderDomesticCN, 
   renderInternationalCN, 
@@ -42,19 +49,22 @@ export function normalizeUnicode(text: string): string {
  * Creates a Canonical Address object from raw API details
  */
 export function createCanonicalAddress(details: any): CanonicalAddress {
+  const source = details?.address_analysis?.canonical
+    ? { ...details, ...details.address_analysis.canonical }
+    : details;
   const parts = {
-    poi: details.amenity || details.shop || details.office || details.tourism || details.leisure || details.railway || details.aeroway || details.historic || details.station || details.healthcare || "",
-    country: details.country || "",
-    country_code: (details.country_code || "").toUpperCase(),
-    postcode: details.postcode || "",
-    state: details.state || details.province || details.region || details.department || details.governorate || details.emirate || "",
-    city: details.city || details.town || details.village || details.municipality || "",
-    district: details.city_district || details.district || details.county || details.subdivision || "",
-    subdistrict: details.subdistrict || details.suburb || details.neighbourhood || details.quarter || details.colonia || details.bairro || details.hamlet || "",
-    suburb: details.suburb || details.hamlet || details.colonia || details.bairro || "",
-    road: details.road || details.street || details.square || details.avenue || details.place || "",
-    house_number: details.house_number || details.houseNumber || "",
-    building: details.building || details.organization || details.flats || ""
+    poi: source.amenity || source.shop || source.office || source.tourism || source.leisure || source.railway || source.aeroway || source.historic || source.station || source.healthcare || source.poi || "",
+    country: source.country || "",
+    country_code: (source.country_code || "").toUpperCase(),
+    postcode: source.postcode || "",
+    state: source.state || source.province || source.region || source.department || source.governorate || source.emirate || "",
+    city: source.city || source.town || source.village || source.municipality || "",
+    district: source.city_district || source.district || source.county || source.subdivision || "",
+    subdistrict: source.subdistrict || source.suburb || source.neighbourhood || source.quarter || source.colonia || source.bairro || source.hamlet || "",
+    suburb: source.suburb || source.hamlet || source.colonia || source.bairro || "",
+    road: source.road || source.street || source.square || source.avenue || source.place || "",
+    house_number: source.house_number || source.houseNumber || "",
+    building: source.building || source.organization || source.flats || ""
   };
 
   return {
@@ -121,6 +131,10 @@ export class AddressRenderer {
       return renderTW(data, lang);
     }
     
+    if (c === 'HK' && isEnglish && lang === 'en_domestic') {
+      return this.renderDomesticEnglish(data);
+    }
+
     if (c === 'HK') {
       return renderHK(data, lang);
     }
@@ -134,15 +148,14 @@ export class AddressRenderer {
       return this.renderLATAM(c, data, lang);
     }
 
+    if (isEnglish && !isEnglishAddressCountry(c)) {
+      return this.renderInternationalEnglish(data);
+    }
+
     const isEastAsian = ['JP', 'KR', 'KP', 'VN', 'HU'].includes(c);
     
-    // If it's English domestic (inside an English-speaking country)
-    const anglosphere = [
-      'US', 'GB', 'CA', 'AU', 'NZ', 'IE', 'ZA', 'IN', 'SG', 'PH', 
-      'JM', 'BS', 'BB', 'GY', 'TT', 'NG', 'GH', 'KE', 'BZ', 'MY', 
-      'PK', 'BD', 'LK', 'NP', 'MV', 'AG', 'KN', 'LC', 'VC', 'GD'
-    ];
-    if (isEnglish && anglosphere.includes(c)) {
+    // If it's English domestic inside an Inner/Outer Circle English address market.
+    if (isEnglish && isEnglishAddressCountry(c)) {
       return this.renderDomesticEnglish(data);
     }
 
@@ -162,14 +175,15 @@ export class AddressRenderer {
     } else {
       // Small-to-Big for others
       const isRoadFirst = ['DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'SE', 'NO', 'DK', 'FI'].includes(data.country_code);
-      const t = (val: string) => isEnglish ? (val ? transliterate(val, data.country_code.toLowerCase()) : "") : val;
+      const t = (val: string) => isEnglish ? normalizeEnglishAddressPart(val, data.country_code) : val;
+      const tb = (val: string) => isEnglish ? normalizeEnglishAddressBuildingName(val, data.country_code) : val;
 
       const line1 = isRoadFirst 
         ? `${t(data.road)} ${t(data.house_number)}`.trim()
         : `${t(data.house_number)} ${t(data.road)}`.trim();
 
       const parts = [
-        t(data.building),
+        tb(data.building),
         line1,
         t(data.subdistrict),
         t(data.city),
@@ -187,7 +201,8 @@ export class AddressRenderer {
    */
   private static renderLATAM(country: string, data: CanonicalAddress, lang: string): string {
     const isEnglish = lang.startsWith('en') || lang === 'international' || lang === 'romaji';
-    const t = (val: string) => isEnglish ? (val ? transliterate(val, country.toLowerCase()) : "") : val;
+    const t = (val: string) => isEnglish ? normalizeEnglishAddressPart(val, country) : val;
+    const tb = (val: string) => isEnglish ? normalizeEnglishAddressBuildingName(val, country) : val;
 
     let housePart = t(data.house_number);
     let roadPart = t(data.road);
@@ -203,7 +218,7 @@ export class AddressRenderer {
     const neighborhood = t(data.subdistrict || data.suburb);
     
     const parts = [
-      t(data.building),
+      tb(data.building),
       line1,
       neighborhood,
       t(data.city),
@@ -219,42 +234,24 @@ export class AddressRenderer {
    * Standard English formatting for domestic use
    */
   private static renderDomesticEnglish(data: CanonicalAddress): string {
-    const t = (val: string) => val ? transliterate(val, data.country_code.toLowerCase()) : "";
-    const parts = [
-      t(data.building),
-      `${t(data.house_number)} ${t(data.road)}`.trim(),
-      t(data.subdistrict),
-      t(data.city),
-      t(data.state),
-      data.postcode
-    ].filter(Boolean);
-    return parts.join(", ");
+    return renderDomesticEnglishPostalAddress(data);
   }
 
   /**
    * International standard English (Small-to-Big, ASCII, Capitalized Country)
    */
   private static renderInternationalEnglish(data: CanonicalAddress): string {
-    const t = (val: string) => val ? transliterate(val, data.country_code.toLowerCase()) : "";
-    const parts = [
-      t(data.building),
-      `${t(data.house_number)} ${t(data.road)}`.trim(),
-      t(data.subdistrict),
-      t(data.city),
-      t(data.state),
-      data.postcode,
-      data.country.toUpperCase()
-    ].filter(Boolean);
-
-    let text = parts.join(", ").replace(/,\s*,/g, ',');
-    // Strip non-ASCII for international compliance
-    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\x00-\x7F]/g, "");
+    return renderEnglishPostalAddress(data);
   }
 
-  static renderCarrier(data: CanonicalAddress): string {
+  static renderInternationalShippingEnglish(data: CanonicalAddress): string {
     const canonical = this.normalizeCanonical(data);
     let text = this.renderInternationalEnglish(canonical);
     text = applyShippingAbbreviations(text);
     return text.toUpperCase();
+  }
+
+  static renderCarrier(data: CanonicalAddress): string {
+    return this.renderInternationalShippingEnglish(data);
   }
 }

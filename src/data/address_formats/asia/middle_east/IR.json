@@ -1,0 +1,171 @@
+{
+  "countryCode": "IR",
+  "name": "Iran",
+  "native": {
+    "name": "ایران",
+    "addressFormat": "{{state}}، {{city}}\n{{street}}، {{houseNumber}}\n{{postcode}}",
+    "ordering": "big-to-small",
+    "fields": [
+      {
+        "key": "state",
+        "label": "استان",
+        "placeholder": "تهران",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "شهر",
+        "placeholder": "تهران",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "خیابان/کوچه",
+        "placeholder": "خیابان ولیعصر",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "پلاک/واحد",
+        "placeholder": "پلاک ۱",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "کد پستی",
+        "placeholder": "۱۱۱۱۱۱۱۱۱۱",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{houseNumber}} {{street}}\n{{city}}, {{state}}\n{{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "houseNumber",
+        "label": "House/Unit No.",
+        "placeholder": "No. 1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Valiasr St",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Tehran",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "state",
+        "label": "Province",
+        "placeholder": "Tehran",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "1111111111",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNNNNNNN",
+    "regex": "^\\d{10}$",
+    "api": "https://gavahi.post.ir/",
+    "source": "Iran Post"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "fa",
+        "name": "Persian"
+      }
+    ],
+    "nativeOrder": [
+      "postcode",
+      "province",
+      "city",
+      "district",
+      "street",
+      "houseNumber",
+      "name"
+    ],
+    "englishOrder": [
+      "postcode",
+      "province",
+      "city",
+      "district",
+      "street",
+      "houseNumber",
+      "name"
+    ],
+    "regionalHierarchy": [
+      "province",
+      "city",
+      "district"
+    ],
+    "postalCode": {
+      "label": "10 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "gavahi-post-ir",
+      "iran-nsdi",
+      "iran-open-data",
+      "osm-iran",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "nasa-srtm",
+      "jaxa-aw3d30",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "hydrosheds",
+      "esa-worldcover",
+      "protected-planet-wdpa",
+      "gbif-occurrence"
+    ]
+  },
+  "openSourceIds": [
+    "gavahi-post-ir",
+    "iran-nsdi",
+    "iran-open-data",
+    "osm-iran",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "nasa-srtm",
+    "jaxa-aw3d30",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "hydrosheds",
+    "esa-worldcover",
+    "protected-planet-wdpa",
+    "gbif-occurrence"
+  ]
+}

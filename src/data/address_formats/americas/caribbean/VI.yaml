@@ -1,0 +1,114 @@
+countryCode: VI
+name: U.S. Virgin Islands
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis
+native:
+  name: English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}, {{state}} {{postcode}}
+    U.S. Virgin Islands
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Organization
+      placeholder: ""
+    - key: street
+      label: Street
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: ""
+    - key: subdistrict
+      label: Neighborhood
+      placeholder: ""
+    - key: city
+      label: City
+      placeholder: ""
+    - key: state
+      label: State / Region
+      placeholder: ""
+    - key: postcode
+      label: Postcode
+      placeholder: ""
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}, {{state}} {{postcode}}
+    U.S. VIRGIN ISLANDS
+  ordering: small-to-big
+  fields: []
+postalCode:
+  format: NNNNN[-NNNN]
+  regex: ^\d{5}(-\d{4})?$
+  api: https://tools.usps.com/go/ZipLookupAction_input
+  source: USPS
+addressRules:
+  languages:
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  englishOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  regionalHierarchy:
+    - district
+    - island
+  postalCode:
+    label: NNNNN[-NNNN]
+    required: true
+    usage: required
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis

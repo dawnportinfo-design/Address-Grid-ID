@@ -1,0 +1,135 @@
+countryCode: MR
+name: Mauritania
+native:
+  name: Mauritanie
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Mauritanie
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Nom Complet
+      placeholder: Mohamed Ould Ghazouani
+      required: true
+      type: text
+    - key: street
+      label: Adresse / BP
+      placeholder: BP 123
+      required: true
+      type: text
+    - key: city
+      label: Ville
+      placeholder: Nouakchott
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Mauritania
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: Mohamed Ould Ghazouani
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 123
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Nouakchott
+      required: true
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: null
+  source: No free postal OSS source configured
+addressRules:
+  languages:
+    - code: ar
+      name: Arabic
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - wilaya
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - wilaya
+    - country
+  regionalHierarchy:
+    - commune
+    - wilaya
+  postalCode:
+    label: 5 digits used
+    required: false
+    usage: used
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal

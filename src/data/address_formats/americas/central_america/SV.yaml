@@ -1,0 +1,137 @@
+countryCode: SV
+name: El Salvador
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis
+native:
+  name: Spanish
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{subdistrict}}
+    {{city}}, {{state}}
+    {{postcode}}
+    El Salvador
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Organization
+      placeholder: ""
+    - key: street
+      label: Calle / Avenida
+      placeholder: ""
+    - key: houseNumber
+      label: Numero
+      placeholder: ""
+    - key: subdistrict
+      label: Barrio / Colonia
+      placeholder: ""
+    - key: city
+      label: Ciudad / Municipio
+      placeholder: ""
+    - key: state
+      label: Departamento / Provincia
+      placeholder: ""
+    - key: postcode
+      label: Codigo Postal
+      placeholder: ""
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}, {{state}} {{postcode}}
+    EL SALVADOR
+  ordering: small-to-big
+  fields: []
+international:
+  es:
+    name: Español (Internacional)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{subdistrict}}
+      {{city}}, {{state}}
+      {{postcode}}
+      El Salvador
+    ordering: small-to-big
+    fields: []
+postalCode:
+  format: NNNN
+  regex: ^\d{4}$
+  api: null
+  source: GeoNames
+addressRules:
+  languages:
+    - code: es
+      name: Spanish
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: es
+      name: Spanish
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - neighborhood
+    - city
+    - departmentOrProvince
+    - postcode
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - neighborhood
+    - city
+    - region
+    - postcode
+    - country
+  regionalHierarchy:
+    - department
+    - municipality
+    - colonia
+  postalCode:
+    label: NNNN
+    required: true
+    usage: required
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis

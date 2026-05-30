@@ -5,7 +5,7 @@
 
 import { SEA_REGIONS, LAND_REGIONS, COUNTRY_REGIONS } from './regions';
 import { COUNTRIES } from '../constants/countries';
-import { getAgidWasmCore } from './agidWasm';
+import { combineWasmU32Pair, getAgidWasmCore } from './agidWasm';
 export { SEA_REGIONS, LAND_REGIONS, COUNTRY_REGIONS };
 
 const BASE32_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
@@ -270,7 +270,7 @@ function encodeHilbert(n: number, x: number, y: number): bigint {
   if (wasmCore && n === K) {
     const hi = wasmCore.agid_encode_hilbert_hi(x, y);
     const lo = wasmCore.agid_encode_hilbert_lo(x, y);
-    return (BigInt(hi) << 32n) | BigInt(lo);
+    return combineWasmU32Pair(hi, lo);
   }
 
   let d = 0n;
@@ -389,6 +389,10 @@ export interface AGIDResult {
   regionName: string;
   regionPolygon?: number[][];
   face: number;
+  quantX: number;
+  quantY: number;
+  qx: number;
+  qy: number;
   lat: number;
   lon: number;
   bounds: {
@@ -433,6 +437,10 @@ export function encodeAGID(lat: number, lon: number): AGIDResult {
     regionName: region.name,
     regionPolygon: region.polygon,
     face,
+    quantX: qx,
+    quantY: qy,
+    qx,
+    qy,
     lat,
     lon,
     bounds: getCellBounds(face, qx, qy),
@@ -668,8 +676,14 @@ export function getRegionInfo(lat: number, lon: number): { prefix: string, isSea
   let countryMinArea = Infinity;
 
   // 4. LAND CHECK (Countries) - Strict Polygon Check
-  // [PRIORITIZE JAPAN & DISPUTED]
-  const HIGH_PRIORITY_CODES = ["JP", "EH", "BT_T", "CRIM", "DONB", "KASH", "SCSD", "EEBD", "TRNC", "SLND", "PMR", "PHIS", "BAAR", "CYGL"];
+  // [PRIORITIZE JAPAN, DISPUTED AREAS, OVERSEAS TERRITORIES & AUTONOMOUS REGIONS]
+  const HIGH_PRIORITY_CODES = [
+    "JP",
+    "EH", "BT_T", "CRIM", "DONB", "KASH", "SCSD", "EEBD", "TRNC", "SLND", "PMR",
+    "PHIS", "BAAR", "CYGL", "JP_NT", "JP_TK", "JP_SK",
+    "AX", "GL", "FO", "SJ_SVA", "SJ_JAN", "BQ", "GG", "JE", "IM", "GI", "XK",
+    "SH", "AC", "TA", "PM",
+  ];
   const prioritized = cell.countries.filter(c => HIGH_PRIORITY_CODES.includes(c.code));
   const others = cell.countries.filter(c => !HIGH_PRIORITY_CODES.includes(c.code));
 

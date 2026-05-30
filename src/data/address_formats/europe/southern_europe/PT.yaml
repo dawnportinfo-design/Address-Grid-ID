@@ -1,0 +1,167 @@
+countryCode: PT
+name: Portugal
+native:
+  name: Portugal
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{state}}
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Nome
+      placeholder: Nome completo
+      required: true
+      type: text
+    - key: street
+      label: Rua
+      placeholder: Nome da rua
+      required: true
+      type: text
+    - key: houseNumber
+      label: Número
+      placeholder: Nr
+      required: true
+      type: text
+    - key: postcode
+      label: Código Postal
+      placeholder: 1000-001
+      required: true
+      type: text
+    - key: city
+      label: Localidade
+      placeholder: Lisboa
+      required: true
+      type: text
+    - key: state
+      label: Distrito
+      placeholder: Lisboa
+      required: true
+      type: text
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{state}}
+    PORTUGAL
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Company
+      placeholder: ""
+    - key: street
+      label: Street Address
+      placeholder: Nome da rua
+    - key: houseNumber
+      label: House/Building No.
+      placeholder: Nr
+    - key: postcode
+      label: Postal Code
+      placeholder: 1000-001
+    - key: city
+      label: City/Town
+      placeholder: Lisboa
+    - key: state
+      label: District
+      placeholder: Lisboa
+international:
+  pt:
+    name: Português (Internacional)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+      {{state}}
+      PORTUGAL
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Empresa
+        placeholder: ""
+      - key: street
+        label: Rua
+        placeholder: Nome da rua
+      - key: houseNumber
+        label: Número
+        placeholder: Nr
+      - key: postcode
+        label: Código Postal
+        placeholder: 1000-001
+      - key: city
+        label: Localidade
+        placeholder: Lisboa
+      - key: state
+        label: Distrito
+        placeholder: Lisboa
+postalCode:
+  format: NNNN-NNN
+  regex: ^\d{4}-\d{3}$
+  api: https://ec.europa.eu/eurostat/web/gisco/geodata/administrative-units/postal-codes
+  source: Eurostat GISCO postal codes
+addressRules:
+  languages:
+    - code: pt
+      name: Portuguese
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - locality
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - locality
+    - country
+  regionalHierarchy:
+    - cityOrLocality
+  postalCode:
+    label: 4 digits plus 3 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - eurostat-gisco-postcodes
+    - ctt-portugal
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - dgterritorio-portugal
+    - snig-portugal
+    - bupi-portugal
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - eurostat-gisco-postcodes
+  - ctt-portugal
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - dgterritorio-portugal
+  - snig-portugal
+  - bupi-portugal
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

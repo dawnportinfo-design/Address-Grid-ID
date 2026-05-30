@@ -1,0 +1,162 @@
+{
+  "countryCode": "AQ",
+  "name": "Australian Antarctic Territory",
+  "native": {
+    "name": "English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Building/Company"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No."
+      },
+      {
+        "key": "street",
+        "label": "Street"
+      },
+      {
+        "key": "city",
+        "label": "City/Station"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Building/Company"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No."
+      },
+      {
+        "key": "street",
+        "label": "Street"
+      },
+      {
+        "key": "city",
+        "label": "City/Station"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": null,
+    "source": "Territory postal handling"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "stationOrBase",
+      "australianAntarcticTerritory",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "recipient",
+      "stationOrBase",
+      "australianAntarcticTerritory",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "stationOrBase"
+    ],
+    "postalCode": {
+      "label": "7151 for Australian Antarctic Territory",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "auspost-territories",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "jaxa-aw3d30",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "hydrosheds",
+      "esa-worldcover",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "global-mangrove-watch",
+      "allen-coral-atlas",
+      "pacific-data-hub",
+      "digital-earth-pacific",
+      "pacioos",
+      "scar-add",
+      "scar-cga",
+      "quantarctica",
+      "rema-antarctica",
+      "bedmap3-antarctica",
+      "ibcso-southern-ocean",
+      "measures-antarctic-grounding-line",
+      "ats-antarctic-protected-areas",
+      "nsidc-polar-data",
+      "marine-regions",
+      "obis-marine-biodiversity"
+    ]
+  },
+  "openSourceIds": [
+    "auspost-territories",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "jaxa-aw3d30",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "hydrosheds",
+    "esa-worldcover",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "global-mangrove-watch",
+    "allen-coral-atlas",
+    "pacific-data-hub",
+    "digital-earth-pacific",
+    "pacioos",
+    "scar-add",
+    "scar-cga",
+    "quantarctica",
+    "rema-antarctica",
+    "bedmap3-antarctica",
+    "ibcso-southern-ocean",
+    "measures-antarctic-grounding-line",
+    "ats-antarctic-protected-areas",
+    "nsidc-polar-data",
+    "marine-regions",
+    "obis-marine-biodiversity"
+  ]
+}

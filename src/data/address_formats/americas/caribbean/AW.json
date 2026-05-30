@@ -1,0 +1,184 @@
+{
+  "countryCode": "AW",
+  "name": "Aruba",
+  "native": {
+    "name": "Aruba",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{city}}\nAruba",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Naam",
+        "placeholder": "Volledige naam",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Straat",
+        "placeholder": "Straatnaam",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Huisnummer",
+        "placeholder": "Nr",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Stad",
+        "placeholder": "Oranjestad",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{city}}\nAruba",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Name",
+        "placeholder": "Full Name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Street name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No",
+        "placeholder": "No",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Oranjestad",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "A1A-style optional carrier/local code",
+    "regex": "^[A-Z]\\d[A-Z]$",
+    "source": "Territory postal format metadata / local postal operator guidance"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "nl",
+        "name": "Dutch"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "city",
+      "district",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "neighborhood",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "region",
+      "city"
+    ],
+    "postalCode": {
+      "label": "No national postcode; A1A-style carrier/local code may be used",
+      "required": false,
+      "usage": "optional"
+    },
+    "deliveryLanguages": [
+      {
+        "code": "nl",
+        "name": "Dutch"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "openSourceIds": [
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "noaa-etopo",
+      "geobc-global-multi-resolution-topography",
+      "hydrosheds",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "esa-worldcover",
+      "usgs-3dep",
+      "nrcan-geospatial",
+      "conabio-geoportal",
+      "ibge-geosciences",
+      "inpe-terrabrasilis",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "noaa-etopo",
+    "geobc-global-multi-resolution-topography",
+    "hydrosheds",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "esa-worldcover",
+    "usgs-3dep",
+    "nrcan-geospatial",
+    "conabio-geoportal",
+    "ibge-geosciences",
+    "inpe-terrabrasilis",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

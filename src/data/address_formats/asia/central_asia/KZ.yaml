@@ -1,0 +1,160 @@
+countryCode: KZ
+name: Kazakhstan
+native:
+  name: Қазақстан
+  addressFormat: |-
+    {{postcode}}
+    {{state}}, {{city}}
+    {{street}}, {{houseNumber}}
+    {{organization}}
+  ordering: big-to-small
+  fields:
+    - key: postcode
+      label: Пошта индексі
+      placeholder: "010000"
+      required: true
+      type: text
+    - key: state
+      label: Облыс
+      placeholder: Ақмола облысы
+      required: true
+      type: text
+    - key: city
+      label: Қала
+      placeholder: Астана
+      required: true
+      type: text
+    - key: street
+      label: Көше
+      placeholder: Мәңгілік Ел даңғылы
+      required: true
+      type: text
+    - key: houseNumber
+      label: Үй/Пәтер
+      placeholder: "8"
+      required: true
+      type: text
+    - key: organization
+      label: Ғимарат/Кеңсе
+      placeholder: Ақорда
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}, {{state}}
+    {{postcode}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Building/Office
+      placeholder: Ak Orda
+      required: false
+      type: text
+    - key: houseNumber
+      label: House/Apt No.
+      placeholder: "8"
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: Mangilik El Ave
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Astana
+      required: true
+      type: text
+    - key: state
+      label: Province
+      placeholder: Akmola Region
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "010000"
+      required: true
+      type: text
+postalCode:
+  format: NNNNNN
+  regex: ^\d{6}$
+  api: https://open.post.kz/services/details/26
+  source: Kazpost / QazPost Open API / Kazakhstan NSDI
+addressRules:
+  languages:
+    - code: kk
+      name: Kazakh
+    - code: ru
+      name: Russian
+  nativeOrder:
+    - recipient
+    - streetOrQuarter
+    - houseOrBuilding
+    - city
+    - oblast
+    - postcode
+  englishOrder:
+    - recipient
+    - streetOrBlock
+    - houseOrBuilding
+    - city
+    - region
+    - postcode
+  russianOrder:
+    - recipient
+    - streetOrQuarter
+    - houseOrBuilding
+    - city
+    - oblast
+    - postcode
+  regionalHierarchy:
+    - oblast
+  postalCode:
+    label: 6 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - post-kz
+    - datahub-postal-kz
+    - kazakhstan-nsdi
+    - qazpost-open-api
+    - osm-kazakhstan
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+openSourceIds:
+  - post-kz
+  - datahub-postal-kz
+  - kazakhstan-nsdi
+  - qazpost-open-api
+  - osm-kazakhstan
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

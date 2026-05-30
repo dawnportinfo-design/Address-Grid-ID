@@ -1,0 +1,190 @@
+{
+  "countryCode": "CL-JF",
+  "name": "Juan Fernandez Islands",
+  "native": {
+    "name": "Archipiélago Juan Fernández",
+    "addressFormat": "{{recipient}}\n{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nJuan Fernández, Chile",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "organization",
+        "label": "Organization / Station",
+        "placeholder": "Organization, station, or facility",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street / Local address",
+        "placeholder": "Street, road, sector, or locality",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House / Unit No.",
+        "placeholder": "Number",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "Postal code if used",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Locality",
+        "placeholder": "City, island, base, or locality",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{recipient}}\n{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nJUAN FERNANDEZ ISLANDS",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "organization",
+        "label": "Organization / Station",
+        "placeholder": "Organization, station, or facility",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street / Local address",
+        "placeholder": "Street, road, sector, or locality",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House / Unit No.",
+        "placeholder": "Number",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "Postal code if used",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Locality",
+        "placeholder": "City, island, base, or locality",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNNNN",
+    "regex": "^\\d{7}$",
+    "api": null,
+    "source": "CorreosChile / GeoNames / OSM"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "es",
+        "name": "Spanish"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "organization",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "territory"
+    ],
+    "englishOrder": [
+      "recipient",
+      "organization",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "territory"
+    ],
+    "regionalHierarchy": [
+      "island",
+      "commune",
+      "region"
+    ],
+    "postalCode": {
+      "label": "NNNNNNN postal format",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "noaa-etopo",
+      "geobc-global-multi-resolution-topography",
+      "hydrosheds",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "esa-worldcover",
+      "usgs-3dep",
+      "nrcan-geospatial",
+      "conabio-geoportal",
+      "ibge-geosciences",
+      "inpe-terrabrasilis"
+    ]
+  },
+  "openSourceIds": [
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "noaa-etopo",
+    "geobc-global-multi-resolution-topography",
+    "hydrosheds",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "esa-worldcover",
+    "usgs-3dep",
+    "nrcan-geospatial",
+    "conabio-geoportal",
+    "ibge-geosciences",
+    "inpe-terrabrasilis"
+  ]
+}

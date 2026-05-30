@@ -1,0 +1,152 @@
+countryCode: IO
+name: British Indian Ocean Territory
+native:
+  name: British Indian Ocean Territory
+  addressFormat: |-
+    {{recipient}}
+    {{organization}}
+    {{city}}
+    {{postcode}}
+    British Indian Ocean Territory
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: organization
+      label: Unit
+      placeholder: e.g. US Navy Support Facility
+      required: true
+      type: text
+    - key: city
+      label: Military Base
+      placeholder: Diego Garcia
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: BBND 1ZZ
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{organization}}
+    {{city}}
+    {{postcode}}
+    British Indian Ocean Territory
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: organization
+      label: Unit
+      placeholder: e.g. US Navy Support Facility
+      required: true
+      type: text
+    - key: city
+      label: Military Base
+      placeholder: Diego Garcia
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: BBND 1ZZ
+      required: true
+      type: text
+postalCode:
+  format: BBND 1ZZ
+  regex: ^BBND\s?1ZZ$
+  api: null
+  source: BIOT Post Office
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal
+  - british-overseas-postal-reference
+  - saint-helena-gov
+  - biot-gov
+addressRules:
+  languages:
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - unit
+    - militaryBase
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - unit
+    - militaryBase
+    - postcode
+    - country
+  regionalHierarchy:
+    - island
+    - militaryBase
+  postalCode:
+    label: BBND 1ZZ required
+    required: true
+    usage: required
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+    - british-overseas-postal-reference
+    - saint-helena-gov
+    - biot-gov

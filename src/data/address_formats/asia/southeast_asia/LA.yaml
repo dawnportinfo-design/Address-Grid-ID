@@ -1,0 +1,155 @@
+countryCode: LA
+name: Laos
+native:
+  name: ລາວ
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{subdistrict}}, {{district}}
+    {{city}} {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: ຊື່ຕຶກ/ບໍລິສັດ
+      placeholder: Patuxai
+      required: false
+      type: text
+    - key: houseNumber
+      label: ເລກທີບ້ານ
+      placeholder: "1"
+      required: false
+      type: text
+    - key: street
+      label: ຖະໜົນ
+      placeholder: ຖະໜົນລ້ານຊ້າງ
+      required: true
+      type: text
+    - key: subdistrict
+      label: ບ້าน
+      placeholder: ບ້ານຊຽງຍືນ
+      required: true
+      type: text
+    - key: district
+      label: ເມືອງ
+      placeholder: ເມືອງຈັນທະບູລີ
+      required: true
+      type: text
+    - key: city
+      label: ແຂວງ
+      placeholder: ນະຄອນຫຼວງວຽງຈັນ
+      required: true
+      type: text
+    - key: postcode
+      label: ລະຫັດໄປສະນີ
+      placeholder: "01000"
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{subdistrict}}, {{district}}
+    {{city}} {{postcode}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Building/Company
+      placeholder: Patuxai
+      required: false
+      type: text
+    - key: houseNumber
+      label: House No.
+      placeholder: "1"
+      required: false
+      type: text
+    - key: street
+      label: Street
+      placeholder: Lane Xang Ave
+      required: true
+      type: text
+    - key: subdistrict
+      label: Village
+      placeholder: Ban Xieng Ngueun
+      required: true
+      type: text
+    - key: district
+      label: District
+      placeholder: Chanthabuly
+      required: true
+      type: text
+    - key: city
+      label: Province/City
+      placeholder: Vientiane
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "01000"
+      required: false
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: http://www.laopost.com.la/
+  source: Lao Post
+addressRules:
+  languages:
+    - code: lo
+      name: Lao
+  nativeOrder:
+    - postcode
+    - province
+    - district
+    - village
+    - street
+    - houseNumber
+    - name
+  englishOrder:
+    - postcode
+    - province
+    - district
+    - village
+    - street
+    - houseNumber
+    - name
+  regionalHierarchy:
+    - province
+    - district
+    - village
+  postalCode:
+    label: 5 digits used
+    required: false
+    usage: used
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

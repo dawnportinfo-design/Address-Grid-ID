@@ -1,0 +1,170 @@
+{
+  "countryCode": "AU",
+  "name": "Australia",
+  "native": {
+    "name": "English (Australia)",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}} {{state}} {{postcode}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": "2"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Opera Quays"
+      },
+      {
+        "key": "suburb",
+        "label": "Suburb/City",
+        "placeholder": "Sydney"
+      },
+      {
+        "key": "state",
+        "label": "State",
+        "placeholder": "NSW"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "2000"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}} {{state}} {{postcode}}\nAUSTRALIA",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Co./Org.",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "No.",
+        "placeholder": "2"
+      },
+      {
+        "key": "street",
+        "label": "St./Rd./Ave. (Latin)",
+        "placeholder": "Opera Quays"
+      },
+      {
+        "key": "suburb",
+        "label": "Suburb/City",
+        "placeholder": "Sydney"
+      },
+      {
+        "key": "state",
+        "label": "State Code",
+        "placeholder": "NSW"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "2000"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": "https://auspost.com.au/postcode",
+    "source": "Australia Post"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "street",
+      "suburb",
+      "state",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "recipient",
+      "street",
+      "suburb",
+      "state",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "stateOrTerritory"
+    ],
+    "postalCode": {
+      "label": "4 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "auspost-postcode",
+      "digital-earth-australia-coastlines",
+      "digital-earth-australia-wofs",
+      "digital-earth-australia-fractional-cover",
+      "geoscience-australia-elvis",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "jaxa-aw3d30",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "hydrosheds",
+      "esa-worldcover",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "global-mangrove-watch",
+      "allen-coral-atlas",
+      "pacific-data-hub",
+      "digital-earth-pacific",
+      "pacioos"
+    ]
+  },
+  "openSourceIds": [
+    "auspost-postcode",
+    "digital-earth-australia-coastlines",
+    "digital-earth-australia-wofs",
+    "digital-earth-australia-fractional-cover",
+    "geoscience-australia-elvis",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "jaxa-aw3d30",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "hydrosheds",
+    "esa-worldcover",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "global-mangrove-watch",
+    "allen-coral-atlas",
+    "pacific-data-hub",
+    "digital-earth-pacific",
+    "pacioos"
+  ]
+}

@@ -1,0 +1,127 @@
+countryCode: ST
+name: Sao Tome and Principe
+native:
+  name: São Tomé e Príncipe
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    São Tomé e Príncipe
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Nome Completo
+      placeholder: Carlos Vila Nova
+      required: true
+      type: text
+    - key: street
+      label: Endereço
+      placeholder: Rua de São Tomé, 123
+      required: true
+      type: text
+    - key: city
+      label: Cidade / Ilha
+      placeholder: São Tomé
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Sao Tome and Principe
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: Carlos Vila Nova
+      required: true
+      type: text
+    - key: street
+      label: Street Address
+      placeholder: 123 Sao Tome St
+      required: true
+      type: text
+    - key: city
+      label: City / Island
+      placeholder: Sao Tome
+      required: true
+      type: text
+postalCode:
+  format: null
+  regex: null
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal
+addressRules:
+  languages:
+    - code: pt
+      name: Portuguese
+  deliveryLanguages:
+    - code: pt
+      name: Portuguese
+  nativeOrder:
+    - recipient
+    - street
+    - city
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - city
+    - country
+  regionalHierarchy:
+    - district
+    - cityOrIsland
+  postalCode: null
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal

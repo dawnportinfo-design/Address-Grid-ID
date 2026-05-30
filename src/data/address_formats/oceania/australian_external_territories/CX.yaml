@@ -1,0 +1,139 @@
+countryCode: CX
+name: Christmas Island
+native:
+  name: Christmas Island
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}} {{state}} {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: John Doe
+      required: true
+      type: text
+    - key: street
+      label: Street Address
+      placeholder: 123 George St
+      required: true
+      type: text
+    - key: city
+      label: Suburb/City
+      placeholder: Christmas Island
+      required: true
+      type: text
+    - key: state
+      label: State
+      placeholder: WA
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: "6798"
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}} {{state}} {{postcode}}
+    Christmas Island
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Name
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street Address
+      placeholder: 123 George St
+      required: true
+      type: text
+    - key: city
+      label: Suburb/City
+      placeholder: Christmas Island
+      required: true
+      type: text
+    - key: state
+      label: State
+      placeholder: WA
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: "6798"
+      required: true
+      type: text
+postalCode:
+  format: "6798"
+  regex: ^6798$
+addressRules:
+  languages:
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - street
+    - locality
+    - christmasIsland
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - locality
+    - christmasIsland
+    - postcode
+    - country
+  regionalHierarchy:
+    - island
+  postalCode:
+    label: 6798 for Christmas Island
+    required: true
+    usage: required
+  openSourceIds:
+    - auspost-territories
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - pacific-data-hub
+    - digital-earth-pacific
+    - pacioos
+openSourceIds:
+  - auspost-territories
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - pacific-data-hub
+  - digital-earth-pacific
+  - pacioos

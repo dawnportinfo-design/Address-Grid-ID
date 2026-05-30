@@ -1,5 +1,17 @@
 const K: u32 = 2_097_152; // 2^21
 const M: u32 = 2_097_151; // 2^21 - 1
+const MAX_GRID_CELLS: usize = 12_000;
+const GRID_VALUES_PER_CELL: usize = 8;
+
+static mut GRID_BUFFER: [f64; MAX_GRID_CELLS * GRID_VALUES_PER_CELL] =
+    [0.0; MAX_GRID_CELLS * GRID_VALUES_PER_CELL];
+static mut GRID_COUNT: u32 = 0;
+static mut GRID_FACE: u32 = 0;
+static mut GRID_START_QX: u32 = 0;
+static mut GRID_START_QY: u32 = 0;
+static mut GRID_END_QX: u32 = 0;
+static mut GRID_END_QY: u32 = 0;
+static mut GRID_STEP: u32 = 1;
 
 #[inline]
 fn apply_equal_area(val: f64) -> f64 {
@@ -179,4 +191,144 @@ pub extern "C" fn agid_get_lat(face: u32, qx: u32, qy: u32) -> f64 {
 pub extern "C" fn agid_get_lon(face: u32, qx: u32, qy: u32) -> f64 {
     let (_, lon) = get_from_quantized(face, qx.min(M), qy.min(M));
     lon
+}
+
+fn grid_step_for_zoom(zoom: f64) -> u32 {
+    let exponent = (18.5 - zoom).floor().max(0.0);
+    let ideal_step = 2.0_f64.powf(exponent);
+    let mut final_step = 1u32;
+    while (final_step * 2) as f64 <= ideal_step && final_step < 131_072 {
+        final_step *= 2;
+    }
+    final_step
+}
+
+fn write_cell_to_grid_buffer(index: usize, face: u32, x: u32, y: u32, step: u32) {
+    let p1 = get_from_quantized(face, x, y);
+    let p2 = get_from_quantized(face, x.saturating_add(step).min(M), y);
+    let p3 = get_from_quantized(face, x.saturating_add(step).min(M), y.saturating_add(step).min(M));
+    let p4 = get_from_quantized(face, x, y.saturating_add(step).min(M));
+    let points = [p1, p2, p3, p4];
+    let ref_lon = p1.1;
+    let base = index * GRID_VALUES_PER_CELL;
+
+    for (point_index, (lat, lon)) in points.iter().enumerate() {
+        let mut shifted_lon = *lon;
+        if shifted_lon - ref_lon > 180.0 {
+            shifted_lon -= 360.0;
+        } else if shifted_lon - ref_lon < -180.0 {
+            shifted_lon += 360.0;
+        }
+
+        unsafe {
+            GRID_BUFFER[base + point_index * 2] = shifted_lon;
+            GRID_BUFFER[base + point_index * 2 + 1] = *lat;
+        }
+    }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn agid_generate_grid_cells(lat: f64, lon: f64, zoom: f64, range_cells: u32) -> u32 {
+    let (face, qx, qy) = get_quantized(lat, lon);
+    let step = grid_step_for_zoom(zoom);
+    let range = range_cells.max(1).min(100);
+    let half = range / 2;
+    let start_qx = qx.saturating_sub(step.saturating_mul(half));
+    let start_qy = qy.saturating_sub(step.saturating_mul(half));
+    let max_count = MAX_GRID_CELLS as u32;
+
+    let mut count = 0u32;
+    for row in 0..range {
+        for col in 0..range {
+            if count >= max_count {
+                break;
+            }
+            let x = start_qx.saturating_add(col.saturating_mul(step)).min(M);
+            let y = start_qy.saturating_add(row.saturating_mul(step)).min(M);
+            write_cell_to_grid_buffer(count as usize, face, x, y, step);
+            count += 1;
+        }
+    }
+
+    unsafe {
+        GRID_COUNT = count;
+        GRID_FACE = face;
+        GRID_START_QX = start_qx;
+        GRID_START_QY = start_qy;
+        GRID_END_QX = start_qx.saturating_add(range.saturating_mul(step)).min(M);
+        GRID_END_QY = start_qy.saturating_add(range.saturating_mul(step)).min(M);
+        GRID_STEP = step;
+    }
+
+    count
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn agid_grid_buffer_ptr() -> *const f64 {
+    unsafe { GRID_BUFFER.as_ptr() }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn agid_grid_buffer_len() -> u32 {
+    unsafe { GRID_COUNT * GRID_VALUES_PER_CELL as u32 }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn agid_grid_face() -> u32 {
+    unsafe { GRID_FACE }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn agid_grid_start_qx() -> u32 {
+    unsafe { GRID_START_QX }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn agid_grid_start_qy() -> u32 {
+    unsafe { GRID_START_QY }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn agid_grid_end_qx() -> u32 {
+    unsafe { GRID_END_QX }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn agid_grid_end_qy() -> u32 {
+    unsafe { GRID_END_QY }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn agid_grid_step() -> u32 {
+    unsafe { GRID_STEP }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn grid_generation_reports_count_and_layout() {
+        let count = agid_generate_grid_cells(35.0, 139.0, 18.0, 4);
+
+        assert_eq!(count, 16);
+        assert_eq!(agid_grid_buffer_len(), 16 * 8);
+        assert!(agid_grid_step() >= 1);
+        assert!(agid_grid_start_qx() <= agid_grid_end_qx());
+        assert!(agid_grid_start_qy() <= agid_grid_end_qy());
+    }
+
+    #[test]
+    fn grid_generation_writes_finite_lon_lat_pairs() {
+        let count = agid_generate_grid_cells(35.0, 139.0, 18.0, 2);
+        let ptr = agid_grid_buffer_ptr();
+        let values = unsafe { std::slice::from_raw_parts(ptr, count as usize * 8) };
+
+        for pair in values.chunks_exact(2) {
+            assert!(pair[0].is_finite());
+            assert!(pair[1].is_finite());
+            assert!(pair[0] >= -540.0 && pair[0] <= 540.0);
+            assert!(pair[1] >= -90.0 && pair[1] <= 90.0);
+        }
+    }
 }

@@ -1,0 +1,127 @@
+countryCode: FJ
+name: Fiji
+native:
+  name: English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Company
+      placeholder: ""
+    - key: houseNumber
+      label: House/Floor No.
+      placeholder: "123"
+    - key: street
+      label: Street/PO Box
+      placeholder: Victoria Parade
+    - key: city
+      label: City/Town
+      placeholder: Suva
+domestic:
+  fj:
+    name: Vosa Vakaviti
+    addressFormat: |-
+      {{organization}}
+      {{houseNumber}} {{street}}
+      {{city}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Kumpani
+        placeholder: ""
+      - key: houseNumber
+        label: Namba ni Vale
+        placeholder: "123"
+      - key: street
+        label: Gaunisala
+        placeholder: Victoria Parade
+      - key: city
+        label: Koro/Tauni
+        placeholder: Suva
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}
+    FIJI
+  ordering: small-to-big
+  fields: []
+postalCode:
+  format: null
+  regex: null
+addressRules:
+  languages:
+    - code: en
+      name: English
+    - code: fj
+      name: Fijian
+    - code: hi
+      name: Hindi
+  nativeOrder:
+    - recipient
+    - street
+    - suburb
+    - city
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - suburb
+    - city
+    - postcode
+    - country
+  regionalHierarchy:
+    - cityOrIsland
+  postalCode:
+    label: 3 digits used
+    required: false
+    usage: used
+  openSourceIds:
+    - post-fiji
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - pacific-data-hub
+    - digital-earth-pacific
+    - pacioos
+openSourceIds:
+  - post-fiji
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - pacific-data-hub
+  - digital-earth-pacific
+  - pacioos

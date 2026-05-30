@@ -1,0 +1,139 @@
+countryCode: MV
+name: Maldives
+native:
+  name: ދިވެހިރާއްޖެ
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}} {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Building/House Name
+      placeholder: H. Mulee-aage
+      required: false
+      type: text
+    - key: houseNumber
+      label: Floor/Apartment
+      placeholder: 3rd Floor
+      required: false
+      type: text
+    - key: street
+      label: Street
+      placeholder: Medhuziyaaraiy Magu
+      required: true
+      type: text
+    - key: city
+      label: Island/City
+      placeholder: Male'
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "20002"
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}} {{postcode}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Building/House Name
+      placeholder: H. Mulee-aage
+      required: false
+      type: text
+    - key: houseNumber
+      label: Floor/Apartment
+      placeholder: 3rd Floor
+      required: false
+      type: text
+    - key: street
+      label: Street
+      placeholder: Medhuziyaaraiy Magu
+      required: true
+      type: text
+    - key: city
+      label: Island/City
+      placeholder: Male'
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "20002"
+      required: true
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: https://www.maldivespost.com/postcode-finder
+  source: Maldives Post / Maldives Land and Survey Authority / OneMap Maldives
+addressRules:
+  languages:
+    - code: dv
+      name: Dhivehi
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - houseOrStreet
+    - islandOrAtoll
+    - city
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - houseOrStreet
+    - islandOrAtoll
+    - city
+    - postcode
+    - country
+  regionalHierarchy:
+    - islandOrAtoll
+  postalCode:
+    label: 5 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - maldives-post
+    - mlsa-maldives
+    - onemap-maldives
+    - osm-maldives
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+openSourceIds:
+  - maldives-post
+  - mlsa-maldives
+  - onemap-maldives
+  - osm-maldives
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

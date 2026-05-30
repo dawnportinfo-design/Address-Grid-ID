@@ -1,0 +1,184 @@
+{
+  "countryCode": "FR",
+  "name": "France",
+  "native": {
+    "name": "France",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{postcode}} {{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Société/Organisation",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Numéro",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Rue/Avenue",
+        "placeholder": "Rue de Rivoli",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Code Postal",
+        "placeholder": "75001",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Ville",
+        "placeholder": "Paris",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{postcode}} {{city}}\nFRANCE",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Co./Org.",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "No.",
+        "placeholder": "1"
+      },
+      {
+        "key": "street",
+        "label": "Street (Latin)",
+        "placeholder": "Rue de Rivoli"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "75001"
+      },
+      {
+        "key": "city",
+        "label": "City/Town",
+        "placeholder": "Paris"
+      }
+    ]
+  },
+  "international": {
+    "fr": {
+      "name": "Français (International)",
+      "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{postcode}} {{city}}\nFRANCE",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Société/Org.",
+          "placeholder": ""
+        },
+        {
+          "key": "houseNumber",
+          "label": "Nº",
+          "placeholder": "1"
+        },
+        {
+          "key": "street",
+          "label": "Rue (Latín)",
+          "placeholder": "Rue de Rivoli"
+        },
+        {
+          "key": "postcode",
+          "label": "Code Postal",
+          "placeholder": "75001"
+        },
+        {
+          "key": "city",
+          "label": "Ville",
+          "placeholder": "Paris"
+        }
+      ]
+    }
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": "https://www.data.gouv.fr/datasets/api-codes-postaux",
+    "source": "data.gouv.fr / La Poste"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "fr",
+        "name": "French"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "houseNumber",
+      "street",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "city"
+    ],
+    "postalCode": {
+      "label": "5 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "data-gouv-fr-postcodes",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "data-gouv-fr-postcodes",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

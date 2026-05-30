@@ -1,0 +1,188 @@
+{
+  "countryCode": "SZ",
+  "name": "Eswatini",
+  "native": {
+    "name": "Eswatini",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\n{{postcode}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Full Name",
+        "placeholder": "Mswati III",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street Address / PO Box",
+        "placeholder": "PO Box 123",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Town",
+        "placeholder": "Mbabane",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "H100",
+        "required": false,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\n{{postcode}}\nEswatini",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Full Name",
+        "placeholder": "Mswati III",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street Address / PO Box",
+        "placeholder": "PO Box 123",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Town",
+        "placeholder": "Mbabane",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "H100",
+        "required": false,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "A NNN",
+    "regex": "^[A-Z]\\s?\\d{3}$",
+    "api": null,
+    "source": "Postal metadata from AGID Southern Africa and Indian Ocean regional table; open OSS source not configured"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      },
+      {
+        "code": "ss",
+        "name": "siSwati"
+      }
+    ],
+    "deliveryLanguages": [
+      {
+        "code": "en",
+        "name": "English"
+      },
+      {
+        "code": "ss",
+        "name": "siSwati"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "region",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "region",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "region",
+      "chiefdom"
+    ],
+    "postalCode": {
+      "label": "Letter plus 3 digits used",
+      "required": false,
+      "usage": "used"
+    },
+    "openSourceIds": [
+      "rcmrd-geoportal",
+      "hot-osm-east-southern-africa",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "hot-osm-africa",
+      "openstreetmap-wiki-africa",
+      "humdata-africa",
+      "openaerialmap",
+      "digital-earth-africa-dem",
+      "digital-earth-africa-coastlines",
+      "digital-earth-africa-waterbodies",
+      "digital-earth-africa-wofs",
+      "digital-earth-africa-fractional-cover",
+      "digital-earth-africa-geomad",
+      "fao-wapor",
+      "esa-worldcover",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "global-mangrove-watch",
+      "allen-coral-atlas",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "rcmrd-gmes-africa-geoportal"
+    ]
+  },
+  "openSourceIds": [
+    "rcmrd-geoportal",
+    "hot-osm-east-southern-africa",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "hot-osm-africa",
+    "openstreetmap-wiki-africa",
+    "humdata-africa",
+    "openaerialmap",
+    "digital-earth-africa-dem",
+    "digital-earth-africa-coastlines",
+    "digital-earth-africa-waterbodies",
+    "digital-earth-africa-wofs",
+    "digital-earth-africa-fractional-cover",
+    "digital-earth-africa-geomad",
+    "fao-wapor",
+    "esa-worldcover",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "global-mangrove-watch",
+    "allen-coral-atlas",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "rcmrd-gmes-africa-geoportal"
+  ]
+}

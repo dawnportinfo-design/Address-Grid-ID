@@ -1,0 +1,188 @@
+{
+  "countryCode": "VA",
+  "name": "Vatican City",
+  "native": {
+    "name": "Città del Vaticano",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Ufficio/Organizzazione",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Via/Piazza",
+        "placeholder": "Piazza San Pietro",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Numero civico",
+        "placeholder": "1",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "CAP",
+        "placeholder": "00120",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Città",
+        "placeholder": "Città del Vaticano",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nVATICAN CITY",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Co./Org.",
+        "placeholder": ""
+      },
+      {
+        "key": "street",
+        "label": "Street (Latin)",
+        "placeholder": "St. Peter's Square"
+      },
+      {
+        "key": "houseNumber",
+        "label": "No.",
+        "placeholder": "1"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "00120"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Vatican City"
+      }
+    ]
+  },
+  "international": {
+    "it": {
+      "name": "Italiano (Internazionale)",
+      "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nSTATO DELLA CITTÀ DEL VATICANO",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Soc./Org.",
+          "placeholder": ""
+        },
+        {
+          "key": "street",
+          "label": "Via/Piazza (Latín)",
+          "placeholder": "Piazza San Pietro"
+        },
+        {
+          "key": "houseNumber",
+          "label": "Nº",
+          "placeholder": "1"
+        },
+        {
+          "key": "postcode",
+          "label": "CAP",
+          "placeholder": "00120"
+        },
+        {
+          "key": "city",
+          "label": "Città",
+          "placeholder": "Città del Vaticano"
+        }
+      ]
+    }
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^00120$",
+    "api": "https://github.com/zauberware/postal-codes-json-xml-csv",
+    "source": "zauberware postal-codes-json-xml-csv / eu-postal-code"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "it",
+        "name": "Italian"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "cityState"
+    ],
+    "postalCode": {
+      "label": "00120 Vatican City postcode",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "zauberware-postal-codes",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "vatican-city-state",
+      "openstreetmap-vatican",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "zauberware-postal-codes",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "vatican-city-state",
+    "openstreetmap-vatican",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

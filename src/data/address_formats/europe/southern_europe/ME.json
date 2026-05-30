@@ -1,0 +1,163 @@
+{
+  "countryCode": "ME",
+  "name": "Montenegro",
+  "native": {
+    "name": "Crna Gora",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Preduzeće/Organizacija",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Ulica",
+        "placeholder": "Slobode",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Kućni broj",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Poštanski broj",
+        "placeholder": "81000",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Grad",
+        "placeholder": "Podgorica",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company/Organization",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Slobode",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "81000",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Podgorica",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": "https://ec.europa.eu/eurostat/web/gisco/geodata/administrative-units/postal-codes",
+    "source": "Eurostat GISCO postal code geodata"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "cnr",
+        "name": "Montenegrin"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "city"
+    ],
+    "postalCode": {
+      "label": "5 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "eurostat-gisco-postcodes",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "geoportal-montenegro",
+      "montenegro-cadastre",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "eurostat-gisco-postcodes",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "geoportal-montenegro",
+    "montenegro-cadastre",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

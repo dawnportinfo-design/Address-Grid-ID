@@ -1,0 +1,467 @@
+{
+  "continent": "antarctica",
+  "name": "Antarctica",
+  "subregions": {
+    "antarctica": {
+      "id": "antarctica",
+      "name": "Antarctica",
+      "countries": [
+        {
+          "code": "AQ",
+          "name": "Australian Antarctic Territory",
+          "type": "special",
+          "addressFormatPath": "src/data/address_formats/antarctica/antarctica/AQ.json",
+          "addressFormat": {
+            "countryCode": "AQ",
+            "name": "Australian Antarctic Territory",
+            "native": {
+              "name": "English",
+              "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Building/Company"
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "House No."
+                },
+                {
+                  "key": "street",
+                  "label": "Street"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Station"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode"
+                }
+              ]
+            },
+            "english": {
+              "name": "International English",
+              "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}\n{{country}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Building/Company"
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "House No."
+                },
+                {
+                  "key": "street",
+                  "label": "Street"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Station"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "NNNN",
+              "regex": "^\\d{4}$",
+              "api": null,
+              "source": "Territory postal handling"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "stationOrBase",
+                "australianAntarcticTerritory",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "stationOrBase",
+                "australianAntarcticTerritory",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "stationOrBase"
+              ],
+              "postalCode": {
+                "label": "7151 for Australian Antarctic Territory",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "auspost-territories",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos",
+                "scar-add",
+                "scar-cga",
+                "quantarctica",
+                "rema-antarctica",
+                "bedmap3-antarctica",
+                "ibcso-southern-ocean",
+                "measures-antarctic-grounding-line",
+                "ats-antarctic-protected-areas",
+                "nsidc-polar-data",
+                "marine-regions",
+                "obis-marine-biodiversity"
+              ]
+            },
+            "openSourceIds": [
+              "auspost-territories",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos",
+              "scar-add",
+              "scar-cga",
+              "quantarctica",
+              "rema-antarctica",
+              "bedmap3-antarctica",
+              "ibcso-southern-ocean",
+              "measures-antarctic-grounding-line",
+              "ats-antarctic-protected-areas",
+              "nsidc-polar-data",
+              "marine-regions",
+              "obis-marine-biodiversity"
+            ]
+          }
+        }
+      ]
+    },
+    "french_southern_territories": {
+      "id": "french_southern_territories",
+      "name": "French Southern Territories",
+      "countries": [
+        {
+          "code": "TF",
+          "name": "French Southern and Antarctic Lands",
+          "type": "territory",
+          "addressFormatPath": "src/data/address_formats/antarctica/french_southern_territories/TF.json",
+          "addressFormat": {
+            "countryCode": "TF",
+            "name": "French Southern and Antarctic Lands",
+            "native": {
+              "name": "TAAF",
+              "addressFormat": "{{recipient}}\n{{organization}}\n{{city}}\nTAAF",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Destinataire",
+                  "placeholder": "Nom complet",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "organization",
+                  "label": "Base / Station",
+                  "placeholder": "ex. Base Alfred Faure",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Code",
+                  "placeholder": "ex. District de Crozet",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{organization}}\n{{city}}\nTAAF",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Recipient",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "organization",
+                  "label": "Base / Station",
+                  "placeholder": "e.g. Alfred Faure Station",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Code",
+                  "placeholder": "e.g. Crozet District",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "984NN",
+              "regex": "^984\\d{2}$",
+              "api": null,
+              "source": "TAAF"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "fr",
+                  "name": "French"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "streetNumber",
+                "street",
+                "postcode",
+                "city",
+                "territory"
+              ],
+              "englishOrder": [
+                "recipient",
+                "streetNumber",
+                "street",
+                "postcode",
+                "city",
+                "territory"
+              ],
+              "regionalHierarchy": [
+                "baseOrStation"
+              ],
+              "postalCode": {
+                "label": "984xx overseas territory postcode",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "la-poste-fr-overseas",
+                "data-gouv-fr-postcodes",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "copernicus-dem",
+                "copernicus-corine-land-cover",
+                "emodnet-bathymetry",
+                "emodnet-seabed-habitats",
+                "eea-natura-2000",
+                "eea-eunis-habitats",
+                "jrc-esdac-soils",
+                "scar-add",
+                "scar-cga",
+                "quantarctica",
+                "rema-antarctica",
+                "bedmap3-antarctica",
+                "ibcso-southern-ocean",
+                "measures-antarctic-grounding-line",
+                "ats-antarctic-protected-areas",
+                "nsidc-polar-data",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "marine-regions",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "obis-marine-biodiversity"
+              ]
+            },
+            "openSourceIds": [
+              "la-poste-fr-overseas",
+              "data-gouv-fr-postcodes",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "copernicus-dem",
+              "copernicus-corine-land-cover",
+              "emodnet-bathymetry",
+              "emodnet-seabed-habitats",
+              "eea-natura-2000",
+              "eea-eunis-habitats",
+              "jrc-esdac-soils",
+              "scar-add",
+              "scar-cga",
+              "quantarctica",
+              "rema-antarctica",
+              "bedmap3-antarctica",
+              "ibcso-southern-ocean",
+              "measures-antarctic-grounding-line",
+              "ats-antarctic-protected-areas",
+              "nsidc-polar-data",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "marine-regions",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "obis-marine-biodiversity"
+            ]
+          }
+        }
+      ]
+    },
+    "subantarctic_territories": {
+      "id": "subantarctic_territories",
+      "name": "Subantarctic Territories",
+      "countries": [
+        {
+          "code": "BV",
+          "name": "Bouvet Island",
+          "type": "territory",
+          "addressFormatPath": "src/data/address_formats/antarctica/subantarctic_territories/BV.json",
+          "addressFormat": {
+            "countryCode": "BV",
+            "name": "Bouvet Island",
+            "native": {
+              "name": "Bouvetøya",
+              "addressFormat": "No permanent address",
+              "ordering": "small-to-big",
+              "fields": []
+            },
+            "english": {
+              "name": "International English",
+              "addressFormat": "No permanent address",
+              "ordering": "small-to-big",
+              "fields": []
+            },
+            "postalCode": {
+              "format": "None",
+              "regex": null,
+              "api": null,
+              "source": "Uninhabited Norwegian dependency; no permanent postal addressing"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "no",
+                  "name": "Norwegian"
+                },
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "territory"
+              ],
+              "englishOrder": [
+                "territory"
+              ],
+              "regionalHierarchy": [
+                "uninhabitedIsland"
+              ],
+              "postalCode": null,
+              "openSourceIds": [
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "scar-add",
+                "scar-cga",
+                "quantarctica",
+                "rema-antarctica",
+                "bedmap3-antarctica",
+                "ibcso-southern-ocean",
+                "measures-antarctic-grounding-line",
+                "ats-antarctic-protected-areas",
+                "nsidc-polar-data",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "marine-regions",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "obis-marine-biodiversity"
+              ]
+            },
+            "openSourceIds": [
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "scar-add",
+              "scar-cga",
+              "quantarctica",
+              "rema-antarctica",
+              "bedmap3-antarctica",
+              "ibcso-southern-ocean",
+              "measures-antarctic-grounding-line",
+              "ats-antarctic-protected-areas",
+              "nsidc-polar-data",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "marine-regions",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "obis-marine-biodiversity"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "coverage": {
+    "total": 3,
+    "country": 0,
+    "territory": 2,
+    "autonomous": 0,
+    "disputed": 0,
+    "special": 1
+  }
+}

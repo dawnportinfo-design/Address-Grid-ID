@@ -1,0 +1,110 @@
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+
+import {
+  AFRICA_COUNTRY_CODES,
+  AFRICA_OPEN_GEO_SOURCES,
+  type AfricaOpenGeoSourceId,
+  getAfricaOpenSourceIds,
+} from './africaOpenGeoSources';
+
+const REQUIRED_AFRICA_NATURAL_SOURCE_IDS: AfricaOpenGeoSourceId[] = [
+  'digital-earth-africa-dem',
+  'digital-earth-africa-coastlines',
+  'digital-earth-africa-waterbodies',
+  'digital-earth-africa-wofs',
+  'digital-earth-africa-fractional-cover',
+  'digital-earth-africa-geomad',
+  'fao-wapor',
+  'esa-worldcover',
+  'gebco-bathymetry',
+  'gmrt-topography',
+  'global-mangrove-watch',
+  'allen-coral-atlas',
+  'protected-planet-wdpa',
+  'gbif-occurrence',
+  'rcmrd-gmes-africa-geoportal',
+];
+
+test('Africa open geography registry includes reusable postal and geodata OSS sources', () => {
+  const sourceIds = new Set(Object.keys(AFRICA_OPEN_GEO_SOURCES));
+
+  for (const sourceId of [
+    'osm-nominatim',
+    'osm-overpass',
+    'openaddresses',
+    'geonames-postal',
+    'geonames-gazetteer',
+    'geoboundaries',
+    'upu-addressing',
+    'hot-osm-africa',
+    'openstreetmap-wiki-africa',
+    'humdata-africa',
+    'openaerialmap',
+  ]) {
+    assert.ok(sourceIds.has(sourceId), `${sourceId} should be registered`);
+  }
+});
+
+test('African countries map to geodata, address, and postal-code validation sources', () => {
+  for (const countryCode of AFRICA_COUNTRY_CODES) {
+    const sourceIds = getAfricaOpenSourceIds(countryCode);
+
+    assert.ok(sourceIds.includes('osm-nominatim'), `${countryCode} should use OSM/Nominatim`);
+    assert.ok(sourceIds.includes('openaddresses'), `${countryCode} should use OpenAddresses`);
+    assert.ok(sourceIds.includes('geonames-gazetteer'), `${countryCode} should use GeoNames gazetteer`);
+    assert.ok(sourceIds.includes('geoboundaries'), `${countryCode} should use geoBoundaries`);
+    assert.ok(sourceIds.includes('upu-addressing'), `${countryCode} should use UPU addressing references`);
+    assert.ok(sourceIds.includes('hot-osm-africa'), `${countryCode} should use HOT OSM Africa`);
+    assert.ok(sourceIds.includes('humdata-africa'), `${countryCode} should use HDX Africa datasets`);
+    assert.ok(sourceIds.includes('openaerialmap'), `${countryCode} should use OpenAerialMap imagery fallback`);
+    assert.ok(
+      sourceIds.some((sourceId) =>
+        ['geonames-postal', 'datahub-postal', 'egy-list'].includes(sourceId),
+      ),
+      `${countryCode} should have at least one postal-code validation source`,
+    );
+  }
+});
+
+test('priority African countries map to national and regional open geospatial sources', () => {
+  const expectedSourceIdsByCountry: Record<string, AfricaOpenGeoSourceId[]> = {
+    NG: ['nipost-postcode', 'hot-osm-west-africa'],
+    KE: ['rcmrd-geoportal', 'kenya-open-data', 'hot-osm-east-southern-africa'],
+    TZ: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+    UG: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+    ZA: ['ngi-south-africa', 'sapo-postcodes', 'postafind-za'],
+    MZ: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  };
+
+  for (const [countryCode, expectedSourceIds] of Object.entries(expectedSourceIdsByCountry)) {
+    const sourceIds = getAfricaOpenSourceIds(countryCode);
+
+    for (const sourceId of expectedSourceIds) {
+      assert.ok(sourceIds.includes(sourceId), `${countryCode} should use ${sourceId}`);
+      const source = AFRICA_OPEN_GEO_SOURCES[sourceId as keyof typeof AFRICA_OPEN_GEO_SOURCES];
+      assert.ok(source, `${sourceId} should be registered`);
+      assert.match(source.url, /^https?:\/\//, `${sourceId} should expose a testable URL`);
+    }
+  }
+});
+
+test('Africa natural geography registry includes mountain, marine, water, and biodiversity open sources', () => {
+  for (const sourceId of REQUIRED_AFRICA_NATURAL_SOURCE_IDS) {
+    const source = AFRICA_OPEN_GEO_SOURCES[sourceId];
+
+    assert.ok(source, `${sourceId} should be registered`);
+    assert.match(source.url, /^https?:\/\//, `${sourceId} should expose a testable URL`);
+    assert.match(source.notes, /(mountain|elevation|sea|marine|coast|water|habitat|biodiversity|land cover|natural)/i);
+  }
+});
+
+test('African countries include natural geography sources for mountain, sea, and nature display', () => {
+  for (const countryCode of AFRICA_COUNTRY_CODES) {
+    const sourceIds = getAfricaOpenSourceIds(countryCode);
+
+    for (const sourceId of REQUIRED_AFRICA_NATURAL_SOURCE_IDS) {
+      assert.ok(sourceIds.includes(sourceId), `${countryCode} should use ${sourceId}`);
+    }
+  }
+});

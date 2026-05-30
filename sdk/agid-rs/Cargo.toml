@@ -1,0 +1,11 @@
+[package]
+name = "agid"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "AGID Rust SDK"
+
+[lib]
+name = "agid"
+path = "src/lib.rs"
+crate-type = ["rlib", "staticlib", "cdylib"]

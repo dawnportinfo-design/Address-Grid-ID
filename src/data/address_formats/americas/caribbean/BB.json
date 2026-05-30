@@ -1,0 +1,134 @@
+{
+  "countryCode": "BB",
+  "name": "Barbados",
+  "native": {
+    "name": "English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}\n{{state}}\n{{postcode}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": "1"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Broad Street"
+      },
+      {
+        "key": "city",
+        "label": "Town",
+        "placeholder": "Bridgetown"
+      },
+      {
+        "key": "state",
+        "label": "Parish",
+        "placeholder": "St. Michael"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "BB11000"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}, {{state}}\n{{postcode}}\nBARBADOS",
+    "ordering": "small-to-big",
+    "fields": []
+  },
+  "postalCode": {
+    "format": null,
+    "regex": null,
+    "source": "Barbados Postal Service",
+    "api": "https://bps.gov.bb/"
+  },
+  "openSourceIds": [
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "noaa-etopo",
+    "geobc-global-multi-resolution-topography",
+    "hydrosheds",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "esa-worldcover",
+    "usgs-3dep",
+    "nrcan-geospatial",
+    "conabio-geoportal",
+    "ibge-geosciences",
+    "inpe-terrabrasilis"
+  ],
+  "addressRules": {
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "deliveryLanguages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "region",
+      "city"
+    ],
+    "postalCode": {
+      "label": "not used",
+      "required": false,
+      "usage": "optional"
+    },
+    "openSourceIds": [
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "noaa-etopo",
+      "geobc-global-multi-resolution-topography",
+      "hydrosheds",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "esa-worldcover",
+      "usgs-3dep",
+      "nrcan-geospatial",
+      "conabio-geoportal",
+      "ibge-geosciences",
+      "inpe-terrabrasilis"
+    ]
+  }
+}

@@ -1,0 +1,109 @@
+countryCode: GY
+name: Guyana
+native:
+  name: English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{subdistrict}}
+    {{city}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Company
+      placeholder: ""
+    - key: houseNumber
+      label: Lot/House No.
+      placeholder: "45"
+    - key: street
+      label: Street
+      placeholder: Brickdam
+    - key: subdistrict
+      label: Area
+      placeholder: Stabroek
+    - key: city
+      label: Town/City
+      placeholder: Georgetown
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{subdistrict}}
+    {{city}}
+    GUYANA
+  ordering: small-to-big
+  fields: []
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis
+postalCode:
+  format: country specific or not used
+  regex: null
+  api: null
+  source: GeoNames / UPU
+addressRules:
+  languages:
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  englishOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  regionalHierarchy:
+    - region
+    - town
+  postalCode:
+    label: country specific or not used
+    required: false
+    usage: optional
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis

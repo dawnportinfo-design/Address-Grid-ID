@@ -1,0 +1,147 @@
+countryCode: SO
+name: Somalia
+native:
+  name: Soomaaliya
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}} {{postcode}}
+    Somalia
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Magaca oo Full
+      placeholder: Axmed Cali
+      required: true
+      type: text
+    - key: street
+      label: Cinwaanka
+      placeholder: Wadada Maka Al-Mukarama
+      required: true
+      type: text
+    - key: city
+      label: Magaalada
+      placeholder: Muqdisho
+      required: true
+      type: text
+    - key: postcode
+      label: Boostada
+      placeholder: AD 100
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}} {{postcode}}
+    Somalia
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: Ahmed Ali
+      required: true
+      type: text
+    - key: street
+      label: Street Address
+      placeholder: Maka Al-Mukarama Rd
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Mogadishu
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: AD 100
+      required: false
+      type: text
+postalCode:
+  format: AA NNN
+  regex: ^[A-Z]{2}\s?\d{3}$
+  api: null
+  source: Postal metadata from AGID East Africa regional table; open OSS source not configured
+addressRules:
+  languages:
+    - code: so
+      name: Somali
+    - code: ar
+      name: Arabic
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - postcode
+    - city
+    - region
+    - country
+  englishOrder:
+    - name
+    - street
+    - postcode
+    - city
+    - region
+    - country
+  regionalHierarchy:
+    - region
+    - district
+  postalCode:
+    label: Somalia alpha-2 plus 3 digits used
+    required: false
+    usage: used
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal

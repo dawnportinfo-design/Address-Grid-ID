@@ -1,0 +1,181 @@
+{
+  "countryCode": "TZ",
+  "name": "Tanzania",
+  "native": {
+    "name": "Kiswahili",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Kampuni",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "SLP/Namba ya Nyumba",
+        "placeholder": "SLP 1234"
+      },
+      {
+        "key": "street",
+        "label": "Mtaa",
+        "placeholder": "Mtaa wa Samora"
+      },
+      {
+        "key": "city",
+        "label": "Mji/Mkoa",
+        "placeholder": "Dar es Salaam"
+      },
+      {
+        "key": "postcode",
+        "label": "Namba ya Posta",
+        "placeholder": "11101"
+      }
+    ]
+  },
+  "domestic": {
+    "en": {
+      "name": "English",
+      "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Company",
+          "placeholder": ""
+        },
+        {
+          "key": "houseNumber",
+          "label": "PO Box/House No.",
+          "placeholder": "PO Box 1234"
+        },
+        {
+          "key": "street",
+          "label": "Street",
+          "placeholder": "Samora Ave"
+        },
+        {
+          "key": "city",
+          "label": "City/Region",
+          "placeholder": "Dar es Salaam"
+        },
+        {
+          "key": "postcode",
+          "label": "Postal Code",
+          "placeholder": "11101"
+        }
+      ]
+    }
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}\nTANZANIA",
+    "ordering": "small-to-big",
+    "fields": []
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": null,
+    "source": "Postal metadata from AGID East Africa regional table; open OSS source not configured"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "sw",
+        "name": "Swahili"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "houseNumber",
+      "street",
+      "postcode",
+      "city",
+      "region",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "houseNumber",
+      "street",
+      "postcode",
+      "city",
+      "region",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "region",
+      "district"
+    ],
+    "postalCode": {
+      "label": "5 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "rcmrd-geoportal",
+      "hot-osm-east-southern-africa",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "hot-osm-africa",
+      "openstreetmap-wiki-africa",
+      "humdata-africa",
+      "openaerialmap",
+      "digital-earth-africa-dem",
+      "digital-earth-africa-coastlines",
+      "digital-earth-africa-waterbodies",
+      "digital-earth-africa-wofs",
+      "digital-earth-africa-fractional-cover",
+      "digital-earth-africa-geomad",
+      "fao-wapor",
+      "esa-worldcover",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "global-mangrove-watch",
+      "allen-coral-atlas",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "rcmrd-gmes-africa-geoportal"
+    ]
+  },
+  "openSourceIds": [
+    "rcmrd-geoportal",
+    "hot-osm-east-southern-africa",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "hot-osm-africa",
+    "openstreetmap-wiki-africa",
+    "humdata-africa",
+    "openaerialmap",
+    "digital-earth-africa-dem",
+    "digital-earth-africa-coastlines",
+    "digital-earth-africa-waterbodies",
+    "digital-earth-africa-wofs",
+    "digital-earth-africa-fractional-cover",
+    "digital-earth-africa-geomad",
+    "fao-wapor",
+    "esa-worldcover",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "global-mangrove-watch",
+    "allen-coral-atlas",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "rcmrd-gmes-africa-geoportal"
+  ]
+}

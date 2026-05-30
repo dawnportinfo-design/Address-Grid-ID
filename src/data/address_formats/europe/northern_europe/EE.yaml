@@ -1,0 +1,135 @@
+countryCode: EE
+name: Estonia
+native:
+  name: Eesti
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Ettevõte/Organisatsioon
+      placeholder: ""
+      required: false
+      type: text
+    - key: street
+      label: Tänav
+      placeholder: Viru
+      required: true
+      type: text
+    - key: houseNumber
+      label: Maja/Korter
+      placeholder: 1-1
+      required: true
+      type: text
+    - key: postcode
+      label: Postiindeks
+      placeholder: "10111"
+      required: true
+      type: text
+    - key: city
+      label: Linn/Asula
+      placeholder: Tallinn
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Company/Organization
+      placeholder: ""
+      required: false
+      type: text
+    - key: street
+      label: Street
+      placeholder: Viru St
+      required: true
+      type: text
+    - key: houseNumber
+      label: House/Apt No.
+      placeholder: 1-1
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "10111"
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Tallinn
+      required: true
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: https://developers.kartes.lv/en/postal_codes/
+  source: Baltic postal code developer data
+addressRules:
+  languages:
+    - code: et
+      name: Estonian
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - city
+  postalCode:
+    label: 5 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - kartes-lv-postal-codes
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - maaamet-estonia
+    - estonia-address-data-system
+    - xgis-estonia
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - kartes-lv-postal-codes
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - maaamet-estonia
+  - estonia-address-data-system
+  - xgis-estonia
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

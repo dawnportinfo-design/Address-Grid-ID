@@ -1,0 +1,162 @@
+countryCode: IT
+name: Italy
+native:
+  name: Italia
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}} {{state}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Ditta/Organizzazione
+      placeholder: ""
+      required: false
+      type: text
+    - key: street
+      label: Via/Piazza
+      placeholder: Via Roma
+      required: true
+      type: text
+    - key: houseNumber
+      label: Numero civico
+      placeholder: "1"
+      required: true
+      type: text
+    - key: postcode
+      label: CAP
+      placeholder: "00100"
+      required: true
+      type: text
+    - key: city
+      label: Città
+      placeholder: Roma
+      required: true
+      type: text
+    - key: state
+      label: Provincia (Sigla)
+      placeholder: RM
+      required: true
+      type: text
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}} ({{state}})
+    ITALY
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Co./Org.
+      placeholder: ""
+    - key: street
+      label: Street (Latin)
+      placeholder: Via Roma
+    - key: houseNumber
+      label: No.
+      placeholder: "1"
+    - key: postcode
+      label: Postcode
+      placeholder: "00100"
+    - key: city
+      label: City/Town
+      placeholder: Rome
+    - key: state
+      label: Prov. (Abbr.)
+      placeholder: RM
+international:
+  it:
+    name: Italiano (Internazionale)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}} ({{state}})
+      ITALIA
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Soc./Org.
+        placeholder: ""
+      - key: street
+        label: Via/Piazza (Latín)
+        placeholder: Via Roma
+      - key: houseNumber
+        label: Nº
+        placeholder: "1"
+      - key: postcode
+        label: CAP
+        placeholder: "00100"
+      - key: city
+        label: Città
+        placeholder: Roma
+      - key: state
+        label: Prov. (Sigla)
+        placeholder: RM
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: https://datahub.io/logistics/postal-codes-it
+  source: datahub.io postal-codes-it
+addressRules:
+  languages:
+    - code: it
+      name: Italian
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - city
+  postalCode:
+    label: 5 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - datahub-postal
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - istat-italy-geodata
+    - agenzia-entrate-catasto
+    - geoportale-nazionale-italy
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - datahub-postal
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - istat-italy-geodata
+  - agenzia-entrate-catasto
+  - geoportale-nazionale-italy
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

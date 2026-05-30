@@ -1,0 +1,146 @@
+countryCode: BL
+name: Saint Barthélemy
+native:
+  name: Saint-Barthélemy
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{postcode}} {{city}}
+    Saint-Barthélemy
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Destinataire
+      placeholder: Nom complet
+      required: true
+      type: text
+    - key: street
+      label: Numéro + Rue
+      placeholder: Numéro et nom de la rue
+      required: true
+      type: text
+    - key: postcode
+      label: Code postal
+      placeholder: "97133"
+      required: true
+      type: text
+    - key: city
+      label: Ville
+      placeholder: ex. Gustavia
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{postcode}} {{city}}
+    Saint Barthélemy
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street Number + Street
+      placeholder: Number and street name
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "97133"
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: e.g. Gustavia
+      required: true
+      type: text
+postalCode:
+  format: "97133"
+  regex: ^97133$
+  api: null
+  source: La Poste
+addressRules:
+  languages:
+    - code: fr
+      name: French
+  nativeOrder:
+    - recipient
+    - streetNumber
+    - street
+    - postcode
+    - city
+    - territory
+  englishOrder:
+    - recipient
+    - streetNumber
+    - street
+    - postcode
+    - city
+    - territory
+  regionalHierarchy:
+    - overseasCollectivity
+  postalCode:
+    label: 97133 overseas collectivity postcode
+    required: true
+    usage: required
+  openSourceIds:
+    - la-poste-fr-overseas
+    - data-gouv-fr-postcodes
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - la-poste-fr-overseas
+  - data-gouv-fr-postcodes
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

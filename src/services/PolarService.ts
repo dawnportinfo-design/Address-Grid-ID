@@ -1,12 +1,19 @@
 
 import { RegionalLandmark } from './WestAsiaService';
 import { fetchWithRetry } from '../lib/utils';
+import {
+  type PolarOpenGeoSource,
+  getPolarOpenGeoSourcesForCoordinate,
+  getPolarOpenSourceIdsForCoordinate,
+} from '../data/polarOpenGeoSources';
 
 export interface PolarContext {
   region: string;
   features: RegionalLandmark[];
   seaIce?: string;
   bathymetry?: string;
+  openSourceIds?: string[];
+  naturalSources?: PolarOpenGeoSource[];
 }
 
 /**
@@ -20,6 +27,8 @@ export async function fetchPolarContext(lat: number, lon: number): Promise<Polar
 
   const features: RegionalLandmark[] = [];
   let region = isArctic ? "Arctic Region" : "Antarctic Region";
+  const openSourceIds = getPolarOpenSourceIdsForCoordinate(lat);
+  const naturalSources = getPolarOpenGeoSourcesForCoordinate(lat);
 
   try {
     // 1. Marine Regions API via Proxy
@@ -70,8 +79,12 @@ export async function fetchPolarContext(lat: number, lon: number): Promise<Polar
   return {
     region,
     features,
-    seaIce: "Data available via NSIDC (Satellite observation required)",
-    bathymetry: "Data available via GEBCO"
+    seaIce: "Data available via NSIDC polar datasets (satellite observation required)",
+    bathymetry: isAntarctic
+      ? "Data available via IBCSO and GEBCO"
+      : "Data available via IBCAO and GEBCO",
+    openSourceIds,
+    naturalSources,
   };
 }
 

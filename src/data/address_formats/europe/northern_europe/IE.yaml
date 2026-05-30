@@ -1,0 +1,153 @@
+countryCode: IE
+name: Ireland
+native:
+  name: English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}
+    {{state}}
+    {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Company
+      placeholder: ""
+    - key: houseNumber
+      label: Building No.
+      placeholder: "1"
+    - key: street
+      label: Street/Townland
+      placeholder: O'Connell Street
+    - key: city
+      label: Town/City
+      placeholder: Dublin
+    - key: state
+      label: County
+      placeholder: Co. Dublin
+    - key: postcode
+      label: Eircode
+      placeholder: D01 F2P5
+domestic:
+  ga:
+    name: Gaeilge
+    addressFormat: |-
+      {{organization}}
+      {{houseNumber}} {{street}}
+      {{city}}
+      {{state}}
+      {{postcode}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Comhlacht
+        placeholder: ""
+      - key: houseNumber
+        label: Uimhir
+        placeholder: "1"
+      - key: street
+        label: Sráid
+        placeholder: Sráid Uí Chonaill
+      - key: city
+        label: Baile
+        placeholder: Baile Átha Cliath
+      - key: state
+        label: Contae
+        placeholder: Co. Bhaile Átha Cliath
+      - key: postcode
+        label: Ríomhchód
+        placeholder: D01 F2P5
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}
+    {{state}}
+    {{postcode}}
+    IRELAND
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Co./Org.
+      placeholder: ""
+    - key: houseNumber
+      label: No.
+      placeholder: "1"
+    - key: street
+      label: St./Rd. (Latin)
+      placeholder: O'Connell Street
+    - key: city
+      label: City
+      placeholder: Dublin
+    - key: state
+      label: County Code
+      placeholder: Co. Dublin
+    - key: postcode
+      label: Eircode
+      placeholder: D01 F2P5
+postalCode:
+  format: A NN AAAA
+  regex: ^[A-Z]\d{2}\s?[A-Z\d]{4}$
+  api: https://docs.ideal-postcodes.co.uk/docs/changelog
+  source: Ideal Postcodes documentation
+addressRules:
+  languages:
+    - code: en
+      name: English
+    - code: ga
+      name: Irish
+  nativeOrder:
+    - recipient
+    - street
+    - locality
+    - town
+    - county
+    - eircode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - locality
+    - town
+    - county
+    - eircode
+    - country
+  regionalHierarchy:
+    - countyOrTown
+  postalCode:
+    label: 7-character Eircode recommended
+    required: false
+    usage: recommended
+  openSourceIds:
+    - ideal-postcodes-reference
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - ideal-postcodes-reference
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

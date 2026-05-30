@@ -1,0 +1,70 @@
+countryCode: CL-DI
+name: Desventuradas Islands
+native:
+  name: Islas Desventuradas
+  addressFormat: No permanent address
+  ordering: small-to-big
+  fields: []
+english:
+  name: International English
+  addressFormat: No permanent address
+  ordering: small-to-big
+  fields: []
+postalCode:
+  format: None
+  regex: null
+  api: null
+  source: Uninhabited Chilean oceanic islands; validate by OSM/GeoNames
+addressRules:
+  languages:
+    - code: es
+      name: Spanish
+    - code: en
+      name: English
+  nativeOrder:
+    - territory
+  englishOrder:
+    - territory
+  regionalHierarchy:
+    - uninhabitedIslands
+  postalCode: null
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis

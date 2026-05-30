@@ -1,0 +1,274 @@
+{
+  "countryCode": "ZA",
+  "name": "South Africa",
+  "native": {
+    "name": "English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}}\n{{postcode}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Building/Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": "123"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Main Rd"
+      },
+      {
+        "key": "suburb",
+        "label": "Suburb",
+        "placeholder": "Sandton"
+      },
+      {
+        "key": "city",
+        "label": "City/Town",
+        "placeholder": "Johannesburg"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "2196"
+      }
+    ]
+  },
+  "domestic": {
+    "af": {
+      "name": "Afrikaans",
+      "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}}\n{{postcode}}",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Gebou/Maatskappy"
+        },
+        {
+          "key": "houseNumber",
+          "label": "Huisnommer",
+          "placeholder": "123"
+        },
+        {
+          "key": "street",
+          "label": "Straat",
+          "placeholder": "Main Weg"
+        },
+        {
+          "key": "suburb",
+          "label": "Voorstad",
+          "placeholder": "Sandton"
+        },
+        {
+          "key": "city",
+          "label": "Stad",
+          "placeholder": "Johannesburg"
+        },
+        {
+          "key": "postcode",
+          "label": "Poskode",
+          "placeholder": "2196"
+        }
+      ]
+    }
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}}\n{{postcode}}\nSOUTH AFRICA",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Building/Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House/Building No.",
+        "placeholder": "123"
+      },
+      {
+        "key": "street",
+        "label": "Street Address",
+        "placeholder": "Main Rd"
+      },
+      {
+        "key": "suburb",
+        "label": "Suburb/District",
+        "placeholder": "Sandton"
+      },
+      {
+        "key": "city",
+        "label": "City/Town",
+        "placeholder": "Johannesburg"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "2196"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": "https://pcf.postafind.co.za/search",
+    "source": "South African Post Office / PostaFind / GeoNames postal data"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      },
+      {
+        "code": "af",
+        "name": "Afrikaans"
+      },
+      {
+        "code": "zu",
+        "name": "isiZulu"
+      },
+      {
+        "code": "xh",
+        "name": "isiXhosa"
+      },
+      {
+        "code": "st",
+        "name": "Sesotho"
+      },
+      {
+        "code": "tn",
+        "name": "Setswana"
+      }
+    ],
+    "deliveryLanguages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "region",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "region",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "province",
+      "municipality"
+    ],
+    "postalCode": {
+      "label": "4 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "sapo-postcodes",
+      "postafind-za",
+      "ngi-south-africa",
+      "hot-osm-east-southern-africa",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "hot-osm-africa",
+      "openstreetmap-wiki-africa",
+      "humdata-africa",
+      "openaerialmap",
+      "digital-earth-africa-dem",
+      "digital-earth-africa-coastlines",
+      "digital-earth-africa-waterbodies",
+      "digital-earth-africa-wofs",
+      "digital-earth-africa-fractional-cover",
+      "digital-earth-africa-geomad",
+      "fao-wapor",
+      "esa-worldcover",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "global-mangrove-watch",
+      "allen-coral-atlas",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "rcmrd-gmes-africa-geoportal"
+    ],
+    "aliasLayers": [
+      "OSM/GeoNames alternate names",
+      "official English delivery names",
+      "South African Post Office postal locality names",
+      "Afrikaans street and suburb terms",
+      "isiZulu/isiXhosa place-name aliases",
+      "historic municipal and colonial-era names"
+    ],
+    "romanization": {
+      "strategy": "South Africa alias-first normalization for English address tabs; preserve official delivery English where already present",
+      "examples": {
+        "eGoli": "Johannesburg",
+        "iKapa": "Cape Town",
+        "eThekwini": "Durban",
+        "Tshwane": "Pretoria",
+        "Gqeberha": "Port Elizabeth",
+        "Pietersburg": "Polokwane",
+        "Hoofstraat": "Main Street"
+      }
+    },
+    "normalizationPriority": [
+      "postal authority API or official/open postal dataset",
+      "OSM/Nominatim namedetails name:en and alternate tags",
+      "GeoNames alternateNames with English language tag",
+      "libpostal parser when configured server-side",
+      "local fallback aliases only when open-source lookups are unavailable"
+    ]
+  },
+  "openSourceIds": [
+    "sapo-postcodes",
+    "postafind-za",
+    "ngi-south-africa",
+    "hot-osm-east-southern-africa",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "hot-osm-africa",
+    "openstreetmap-wiki-africa",
+    "humdata-africa",
+    "openaerialmap",
+    "digital-earth-africa-dem",
+    "digital-earth-africa-coastlines",
+    "digital-earth-africa-waterbodies",
+    "digital-earth-africa-wofs",
+    "digital-earth-africa-fractional-cover",
+    "digital-earth-africa-geomad",
+    "fao-wapor",
+    "esa-worldcover",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "global-mangrove-watch",
+    "allen-coral-atlas",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "rcmrd-gmes-africa-geoportal"
+  ]
+}

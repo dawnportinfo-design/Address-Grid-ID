@@ -1,0 +1,142 @@
+countryCode: KM
+name: Comoros
+native:
+  name: Comores
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Comores
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Nom Complet
+      placeholder: Ahmed Ali
+      required: true
+      type: text
+    - key: street
+      label: Adresse
+      placeholder: BP 123
+      required: true
+      type: text
+    - key: city
+      label: Ville
+      placeholder: Moroni
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Comoros
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: Ahmed Ali
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 123
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Moroni
+      required: true
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: null
+  source: Postal metadata from AGID East Africa regional table; open OSS source not configured
+addressRules:
+  languages:
+    - code: fr
+      name: French
+    - code: ar
+      name: Arabic
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - region
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - region
+    - country
+  regionalHierarchy:
+    - island
+    - prefecture
+  postalCode:
+    label: 5 digits used
+    required: false
+    usage: used
+  deliveryLanguages:
+    - code: fr
+      name: French
+    - code: ar
+      name: Arabic
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal

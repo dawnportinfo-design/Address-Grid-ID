@@ -1,0 +1,120 @@
+countryCode: NU
+name: Niue
+native:
+  name: Niue
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Niue
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: John Doe
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 123
+      required: true
+      type: text
+    - key: city
+      label: Village
+      placeholder: Alofi
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Niue
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Name
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 123
+      required: true
+      type: text
+    - key: city
+      label: Village
+      placeholder: Alofi
+      required: true
+      type: text
+postalCode:
+  format: null
+  regex: null
+addressRules:
+  languages:
+    - code: niu
+      name: Niuean
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - street
+    - village
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - village
+    - postcode
+    - country
+  regionalHierarchy:
+    - village
+  postalCode:
+    label: Niue postcode pattern used
+    required: false
+    usage: used
+  openSourceIds:
+    - nz-post-territories
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - pacific-data-hub
+    - digital-earth-pacific
+    - pacioos
+openSourceIds:
+  - nz-post-territories
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - pacific-data-hub
+  - digital-earth-pacific
+  - pacioos

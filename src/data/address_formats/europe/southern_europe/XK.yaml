@@ -1,0 +1,136 @@
+countryCode: XK
+name: Kosovo
+native:
+  name: Kosova
+  addressFormat: |-
+    {{name}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: name
+      label: Name
+      placeholder: ""
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: ""
+      required: true
+      type: text
+    - key: houseNumber
+      label: Number
+      placeholder: ""
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: ""
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: ""
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{name}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: name
+      label: Name
+      placeholder: ""
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: ""
+      required: true
+      type: text
+    - key: houseNumber
+      label: Number
+      placeholder: ""
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: ""
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: ""
+      required: true
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: https://www.spotzi.com/en/data-catalog?page=1&categories=Postal+Codes
+  source: Spotzi postal code catalog
+addressRules:
+  languages:
+    - code: sq
+      name: Albanian
+    - code: sr
+      name: Serbian
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - city
+  postalCode:
+    label: 5 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - spotzi-postal-codes
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - kosovo-geoportal
+    - kosovo-cadastre
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - spotzi-postal-codes
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - kosovo-geoportal
+  - kosovo-cadastre
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

@@ -23,10 +23,14 @@ import {
   User, 
   Zap, 
   LocateFixed,
-  Globe 
+  Globe,
+  SlidersHorizontal,
+  Crosshair,
+  Building2
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import maplibregl from 'maplibre-gl';
+import { AdvancedSearchOptions, AdvancedSearchCategory } from '../lib/advancedSearch';
 
 interface SearchSidebarProps {
   t: (key: string) => string;
@@ -50,6 +54,8 @@ interface SearchSidebarProps {
   getCurrentMapCenter: () => { lat: number, lng: number } | null;
   showCoordinateSearch: boolean;
   setShowCoordinateSearch: (s: boolean) => void;
+  advancedSearchOptions: AdvancedSearchOptions;
+  setAdvancedSearchOptions: (options: AdvancedSearchOptions) => void;
   startQrScanner: () => void;
   setShowMenu: (s: boolean) => void;
   qrFileRef: React.RefObject<HTMLInputElement>;
@@ -106,6 +112,8 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
   getCurrentMapCenter,
   showCoordinateSearch,
   setShowCoordinateSearch,
+  advancedSearchOptions,
+  setAdvancedSearchOptions,
   startQrScanner,
   setShowMenu,
   qrFileRef,
@@ -141,6 +149,18 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
 }) => {
   const [coordLat, setCoordLat] = useState("");
   const [coordLng, setCoordLng] = useState("");
+  const updateAdvancedSearch = (patch: Partial<AdvancedSearchOptions>) => {
+    setAdvancedSearchOptions({ ...advancedSearchOptions, ...patch });
+  };
+
+  const categoryOptions: Array<{ value: AdvancedSearchCategory; label: string }> = [
+    { value: 'all', label: 'All' },
+    { value: 'address', label: 'Address' },
+    { value: 'place', label: 'Place' },
+    { value: 'business', label: 'Business' },
+    { value: 'transport', label: 'Transport' },
+    { value: 'nature', label: 'Nature' },
+  ];
 
   const handleCoordinateJump = () => {
     const lat = parseFloat(coordLat);
@@ -228,6 +248,20 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                   >
                     <QrCode className="w-4 h-4 md:w-5 md:h-5" />
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsSearchFocused(true);
+                      setShowCoordinateSearch(!showCoordinateSearch);
+                    }}
+                    className={cn(
+                      "p-1.5 md:p-2 transition-colors",
+                      showCoordinateSearch ? "text-blue-600" : "text-slate-400 hover:text-blue-500"
+                    )}
+                    title={t('advanced_search')}
+                  >
+                    <SlidersHorizontal className="w-4 h-4 md:w-5 md:h-5" />
+                  </button>
                   
                   {searchQuery && (
                     <button 
@@ -271,7 +305,7 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                   className="flex flex-col flex-1 overflow-hidden"
                 >
                   <div className="flex-1 overflow-y-auto no-scrollbar divide-y divide-slate-50">
-                    {/* Coordinate Search (Advanced) */}
+                    {/* Detailed Search */}
                     {(searchResults.length === 0 || showCoordinateSearch) && (
                       <div className={cn(
                         "flex flex-col border-b border-slate-50 last:border-0 transition-all duration-500",
@@ -292,7 +326,74 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                             {t('current_coords')}
                           </button>
                         </div>
-                        <div className="px-5 pb-4 pt-1 flex flex-col gap-3">
+                        <div className="px-5 pb-4 pt-3 flex flex-col gap-3">
+                          <div className="grid grid-cols-2 gap-2">
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Country</label>
+                              <input
+                                type="text"
+                                value={advancedSearchOptions.countryCodes}
+                                onChange={(e) => updateAdvancedSearch({ countryCodes: e.target.value })}
+                                placeholder="jp, us, ca"
+                                className="w-full bg-white px-3 py-2.5 rounded-xl text-sm font-bold border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all"
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Type</label>
+                              <select
+                                value={advancedSearchOptions.category}
+                                onChange={(e) => updateAdvancedSearch({ category: e.target.value as AdvancedSearchCategory })}
+                                className="w-full bg-white px-3 py-2.5 rounded-xl text-sm font-bold border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all"
+                              >
+                                {categoryOptions.map(option => (
+                                  <option key={option.value} value={option.value}>{option.label}</option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-[1fr_auto] gap-2 items-end">
+                            <label className="flex items-center gap-2 bg-white border border-slate-100 rounded-xl px-3 py-2.5 text-xs font-black text-slate-600">
+                              <input
+                                type="checkbox"
+                                checked={advancedSearchOptions.nearbyOnly}
+                                onChange={(e) => updateAdvancedSearch({ nearbyOnly: e.target.checked })}
+                                className="accent-blue-600"
+                              />
+                              <Crosshair className="w-3.5 h-3.5 text-blue-600" />
+                              Nearby only
+                            </label>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="number"
+                                min={1}
+                                max={500}
+                                value={advancedSearchOptions.radiusKm}
+                                onChange={(e) => updateAdvancedSearch({ radiusKm: Number(e.target.value) })}
+                                className="w-20 bg-white px-2 py-2.5 rounded-xl text-sm font-bold border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all"
+                              />
+                              <span className="text-[10px] font-black text-slate-400 uppercase">km</span>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-[1fr_auto] gap-3 items-center bg-slate-50/70 rounded-xl px-3 py-2.5 border border-slate-100">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 truncate">
+                                Detailed results
+                              </span>
+                            </div>
+                            <select
+                              value={advancedSearchOptions.limit}
+                              onChange={(e) => updateAdvancedSearch({ limit: Number(e.target.value) })}
+                              className="bg-white px-2 py-1.5 rounded-lg text-xs font-black border border-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                            >
+                              {[6, 12, 24, 36].map(limit => (
+                                <option key={limit} value={limit}>{limit}</option>
+                              ))}
+                            </select>
+                          </div>
+
                           <div className="flex gap-2">
                             <div className="flex-1 flex flex-col gap-1">
                               <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">{t('latitude')}</label>
@@ -369,12 +470,28 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                                   <span className="text-[10px] text-slate-400 truncate leading-tight">
                                     {result.display_name.split(',').slice(1).join(',').trim() || (result.type === 'saved_qr' ? t('saved_qr') : result.type)}
                                   </span>
+                                  {result.matched_query && result.matched_query !== searchQuery && (
+                                    <span className="text-[9px] text-blue-500 truncate leading-tight font-bold">
+                                      Candidate: {result.matched_query}
+                                    </span>
+                                  )}
                                 </div>
                                 {result.source === 'local_db' && (
                                   <span className="text-[8px] font-black bg-emerald-100 text-emerald-600 px-1.5 rounded-lg uppercase tracking-tighter shrink-0">Native</span>
                                 )}
                                 {result.source === 'local_qrs' && (
                                   <span className="text-[8px] font-black bg-purple-100 text-purple-600 px-1.5 rounded-lg uppercase tracking-tighter shrink-0">Saved</span>
+                                )}
+                                {result.morphism_status && (
+                                  <span className={cn(
+                                    "text-[8px] font-black px-1.5 rounded-lg uppercase tracking-tighter shrink-0",
+                                    result.morphism_status === 'verified' ? "bg-emerald-100 text-emerald-600" :
+                                    result.morphism_status === 'ambiguous' ? "bg-amber-100 text-amber-600" :
+                                    result.morphism_status === 'unresolved' ? "bg-slate-100 text-slate-500" :
+                                    "bg-blue-100 text-blue-600"
+                                  )}>
+                                    {result.morphism_status}
+                                  </span>
                                 )}
                               </div>
                             </button>

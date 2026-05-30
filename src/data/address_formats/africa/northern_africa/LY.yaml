@@ -1,0 +1,144 @@
+countryCode: LY
+name: Libya
+native:
+  name: ليبيا
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: الاسم الكامل
+      placeholder: علي حسن
+      required: true
+      type: text
+    - key: street
+      label: العنوان
+      placeholder: شارع الاستقلال
+      required: true
+      type: text
+    - key: city
+      label: المدينة
+      placeholder: طرابلس
+      required: true
+      type: text
+    - key: postcode
+      label: الرمز البريدي
+      placeholder: ١٢٣٤٥
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    {{postcode}}
+    Libya
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: Ali Hassan
+      required: true
+      type: text
+    - key: street
+      label: Street Address
+      placeholder: Istiklal Street
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Tripoli
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "12345"
+      required: false
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: null
+  source: No free postal OSS source configured
+addressRules:
+  languages:
+    - code: ar
+      name: Arabic
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - baladiyah
+    - country
+  regionalHierarchy:
+    - baladiyah
+  postalCode:
+    label: 5 digits used
+    required: false
+    usage: used
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal

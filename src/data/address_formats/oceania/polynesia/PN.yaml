@@ -1,0 +1,146 @@
+countryCode: PN
+name: Pitcairn Islands
+native:
+  name: Pitcairn Islands
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{city}}
+    {{postcode}}
+    Pitcairn Islands
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: city
+      label: Settlement
+      placeholder: Adamstown
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: PCRN 1ZZ
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{city}}
+    {{postcode}}
+    Pitcairn Islands
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: city
+      label: Settlement
+      placeholder: Adamstown
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: PCRN 1ZZ
+      required: true
+      type: text
+postalCode:
+  format: PCRN 1ZZ
+  regex: ^PCRN\s?1ZZ$
+  api: null
+  source: Pitcairn Islands Post Office
+addressRules:
+  languages:
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - stationOrBase
+    - dependency
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - stationOrBase
+    - dependency
+    - postcode
+    - country
+  regionalHierarchy:
+    - stationOrBase
+  postalCode:
+    label: New Zealand-dependent postal handling
+    required: false
+    usage: used
+  openSourceIds:
+    - british-overseas-postal-reference
+    - pitcairn-post
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - pacific-data-hub
+    - digital-earth-pacific
+    - pacioos
+openSourceIds:
+  - british-overseas-postal-reference
+  - pitcairn-post
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - pacific-data-hub
+  - digital-earth-pacific
+  - pacioos

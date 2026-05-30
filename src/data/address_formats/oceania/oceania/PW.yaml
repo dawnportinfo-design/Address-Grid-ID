@@ -1,0 +1,141 @@
+countryCode: PW
+name: Palau
+native:
+  name: Palau
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}} {{state}} {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: John Doe
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 123
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Koror
+      required: true
+      type: text
+    - key: state
+      label: State
+      placeholder: PW
+      required: true
+      type: text
+    - key: postcode
+      label: ZIP Code
+      placeholder: "96940"
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}} {{state}} {{postcode}}
+    Palau
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Name
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 123
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Koror
+      required: true
+      type: text
+    - key: state
+      label: State
+      placeholder: PW
+      required: true
+      type: text
+    - key: postcode
+      label: ZIP Code
+      placeholder: "96940"
+      required: true
+      type: text
+postalCode:
+  format: "96940"
+  regex: ^96940$
+addressRules:
+  languages:
+    - code: en
+      name: English
+    - code: pau
+      name: Palauan
+  nativeOrder:
+    - recipient
+    - street
+    - village
+    - state
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - village
+    - state
+    - postcode
+    - country
+  regionalHierarchy:
+    - state
+  postalCode:
+    label: 5 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - usps-pacific-territories
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - pacific-data-hub
+    - digital-earth-pacific
+    - pacioos
+openSourceIds:
+  - usps-pacific-territories
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - pacific-data-hub
+  - digital-earth-pacific
+  - pacioos

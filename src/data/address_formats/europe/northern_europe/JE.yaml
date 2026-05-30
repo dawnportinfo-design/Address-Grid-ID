@@ -1,0 +1,139 @@
+countryCode: JE
+name: Jersey
+native:
+  name: Jersey
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{district}}
+    {{postcode}}
+    Jersey
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: district
+      label: Parish
+      placeholder: e.g. Saint Helier
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: JE2 4XX
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{district}}
+    {{postcode}}
+    Jersey
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: district
+      label: Parish
+      placeholder: e.g. Saint Helier
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: JE2 4XX
+      required: true
+      type: text
+postalCode:
+  format: JE2 4XX
+  regex: ^JE\d[A-Z\d]?\s?\d[A-Z]{2}$
+  api: null
+  source: Jersey Post
+openSourceIds:
+  - jersey-post
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - jersey-gov-open-data
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils
+addressRules:
+  languages:
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - street
+    - locality
+    - city
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - locality
+    - city
+    - postcode
+    - country
+  regionalHierarchy:
+    - parish
+  postalCode:
+    label: JE postcode required
+    required: true
+    usage: required
+  openSourceIds:
+    - jersey-post
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - jersey-gov-open-data
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils

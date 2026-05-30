@@ -43,15 +43,38 @@ import { NatureContext } from '../services/NatureService';
 import { SeaContext } from '../services/SeaService';
 import { HeritageContext } from '../services/HeritageService';
 import { JapaneseGeoContext } from '../services/JapaneseGeoService';
-import { translateAddressOpenSource, BIG_TO_SMALL_COUNTRIES, formatAddress, COUNTRY_LANGUAGES, LANGUAGES, normalizeAddressText } from '../lib/addressUtils';
+import { normalizeAddressText } from '../lib/addressUtils';
 import { AddressRenderer, createCanonicalAddress } from '../lib/addressRendering';
 import { toSimplified, toTraditional, detectChineseScript } from '../lib/chineseAddressUtils';
 import { COUNTRIES } from '../constants/countries';
 import { getAddressFormat, AddressFormat } from '../data/address_formats';
 import { PostcodeInput } from './PostcodeInput';
+import { CountryFlag } from './CountryFlag';
 import { wgs84togcj02, wgs84tobd09 } from '../lib/coordTransform';
 import { lookupJapaneseZip } from '../services/JapaneseZipService';
 import { generateAOID } from '../lib/aoid';
+import { buildRegisteredAddressRecord } from '../lib/registeredAddressQr';
+import { getPostcodeInputConfig } from '../lib/postcodeControl';
+import {
+  buildPostcodeAutofillLanguageDrafts,
+  isPostcodeReadyForAutofill,
+  lookupPostcodeAutofill,
+  mergePostcodeAutofill,
+  translateRegistrationFormFields,
+} from '../lib/addressRegistrationAutomation';
+import {
+  buildRegistrationAddressLanguageTabs,
+  normalizeRegistrationAddressLanguage,
+  normalizeRegistrationUiLanguage,
+  selectRegistrationAddressFormat,
+  selectRegistrationCountry,
+} from '../lib/addressRegistrationState';
+import {
+  REGISTRATION_COUNTRY_TABS,
+  RegistrationCountryTabId,
+  getRegistrationCountryTabId,
+  groupRegistrationCountriesByTab,
+} from '../lib/registrationCountryTabs';
 
 interface AddressRegistrationProps {
   isOpen: boolean;
@@ -61,6 +84,8 @@ interface AddressRegistrationProps {
   initialAddress?: string;
   currentCoords?: { lat: number; lon: number };
   forceAoidMode?: boolean;
+  appLanguage?: string;
+  addressLanguage?: string;
 }
 
 interface AddressMetadata {
@@ -1464,7 +1489,9 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
   initialAgid,
   initialAddress,
   currentCoords,
-  forceAoidMode
+  forceAoidMode,
+  appLanguage = 'en',
+  addressLanguage = 'local'
 }) => {
   const [agidInput, setAgidInput] = useState(initialAgid || '');
   const [isSearching, setIsSearching] = useState(false);
@@ -1484,14 +1511,19 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
   });
 
   const [isAoidMode, setIsAoidMode] = useState(forceAoidMode || false);
-  const [appLanguage, setAppLanguage] = useState<'en' | 'ja' | 'de' | 'zh-Hant' | 'zh-Hans' | 'es' | 'pt' | 'fr' | 'ar'>('en');
-  const [activeTab, setActiveTab] = useState<string>('local');
-  const [viewMode, setViewMode] = useState<'form' | 'language-select' | 'country-select'>('form');
-  const [selectedBaseLang, setSelectedBaseLang] = useState<string | null>(null);
+  const registrationUiLanguage = useMemo(() => normalizeRegistrationUiLanguage(appLanguage), [appLanguage]);
+  const [activeTab, setActiveTab] = useState<string>(() => normalizeRegistrationAddressLanguage(addressLanguage));
+  const [viewMode, setViewMode] = useState<'form' | 'country-select'>('form');
+  const [selectedCountryTab, setSelectedCountryTab] = useState<RegistrationCountryTabId>('asia');
   const [localFormat, setLocalFormat] = useState<AddressFormat | null>(null);
+  const [postcodeLookupStatus, setPostcodeLookupStatus] = useState<'idle' | 'loading' | 'filled' | 'empty' | 'error'>('idle');
+  const [addressTranslationStatus, setAddressTranslationStatus] = useState<'idle' | 'translating' | 'translated' | 'error'>('idle');
   const [consensus, setConsensus] = useState<{ confidence: number, entropy: number } | null>(null);
   const [elevationData, setElevationData] = useState<{ elevation: number, source: string } | null>(null);
   const [agidData, setAgidData] = useState<any>(null);
+  const languageDraftsRef = React.useRef<Record<string, typeof formData>>({});
+  const lastPostcodeLookupRef = React.useRef('');
+  const previousCountryRef = React.useRef(formData.country);
 
   useEffect(() => {
     if (initialAgid) {
@@ -1501,6 +1533,12 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
   }, [initialAgid]);
 
   useEffect(() => {
+    if (isOpen) {
+      setActiveTab(normalizeRegistrationAddressLanguage(addressLanguage));
+    }
+  }, [addressLanguage, isOpen]);
+
+  useEffect(() => {
     const loadFormat = async () => {
       const format = await getAddressFormat(formData.country);
       setLocalFormat(format);
@@ -1508,8 +1546,29 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
     loadFormat();
   }, [formData.country]);
 
+  useEffect(() => {
+    if (previousCountryRef.current === formData.country) return;
+    previousCountryRef.current = formData.country;
+    languageDraftsRef.current = { [activeTab]: formData };
+    lastPostcodeLookupRef.current = '';
+    setPostcodeLookupStatus('idle');
+    setAddressTranslationStatus('idle');
+  }, [activeTab, formData]);
+
+  const addressLanguageTabs = useMemo(
+    () => buildRegistrationAddressLanguageTabs(localFormat, formData.country),
+    [localFormat, formData.country]
+  );
+
+  useEffect(() => {
+    if (!addressLanguageTabs.length) return;
+    if (!addressLanguageTabs.some(tab => tab.code === activeTab)) {
+      setActiveTab(addressLanguageTabs[0].code);
+    }
+  }, [activeTab, addressLanguageTabs]);
+
   const t = (key: string) => {
-    return UI_STRINGS[appLanguage]?.[key] || UI_STRINGS['en'][key] || key;
+    return UI_STRINGS[registrationUiLanguage]?.[key] || UI_STRINGS['en'][key] || key;
   };
 
   const handleRegister = (e: React.FormEvent) => {
@@ -1518,7 +1577,12 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
       setError(t('phoneRequired'));
       return;
     }
-    onRegister({ ...formData, isAoid: isAoidMode });
+    onRegister(buildRegisteredAddressRecord(formData, {
+      mode: isAoidMode ? 'AOID' : 'ADDRESS',
+      id: isAoidMode ? generateAOID() : undefined,
+      agid: agidInput || initialAgid,
+      coords: currentCoords,
+    }));
     setSuccess(true);
     setTimeout(onClose, 1500);
   };
@@ -1526,6 +1590,7 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
   const renderedAddress = useMemo(() => {
     if (!formData.country) return "";
     const canonical = createCanonicalAddress(formData);
+    const renderTab = activeTab === 'en' ? 'intl_en' : activeTab;
     
     // Greater China Specialized Injection
     if (formData.country === 'CN') {
@@ -1535,7 +1600,7 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
       fields.forEach(f => {
         if (simplifiedData[f]) simplifiedData[f] = toSimplified(simplifiedData[f]);
       });
-      return AddressRenderer.render(activeTab, simplifiedData);
+      return AddressRenderer.render(renderTab, simplifiedData);
     }
     
     if (['TW', 'HK', 'MO'].includes(formData.country)) {
@@ -1547,19 +1612,113 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
           traditionalData[f] = toTraditional(traditionalData[f], formData.country as any);
         }
       });
-      return AddressRenderer.render(activeTab, traditionalData);
+      return AddressRenderer.render(renderTab, traditionalData);
     }
     
-    return AddressRenderer.render(activeTab, canonical);
+    return AddressRenderer.render(renderTab, canonical);
   }, [formData, activeTab]);
 
   const currentCountry = React.useMemo(() => {
     return COUNTRIES.find(c => c.code === formData.country);
   }, [formData.country]);
 
-  const currentFlag = React.useMemo(() => {
-    return currentCountry ? currentCountry.flag : '🌐';
-  }, [currentCountry]);
+  const countryGroups = useMemo(() => groupRegistrationCountriesByTab(COUNTRIES), []);
+  const postcodeInputConfig = useMemo(() => getPostcodeInputConfig(localFormat), [localFormat]);
+
+  useEffect(() => {
+    if (!isOpen || !isPostcodeReadyForAutofill(localFormat, formData.postcode)) {
+      if (!formData.postcode) setPostcodeLookupStatus('idle');
+      return;
+    }
+
+    const lookupKey = `${formData.country}:${formData.postcode.trim().toUpperCase()}`;
+    if (lookupKey === lastPostcodeLookupRef.current) return;
+
+    let cancelled = false;
+    const timeoutId = window.setTimeout(async () => {
+      lastPostcodeLookupRef.current = lookupKey;
+      setPostcodeLookupStatus('loading');
+
+      try {
+        const patch = await lookupPostcodeAutofill(formData.country, formData.postcode);
+        if (cancelled) return;
+
+        if (patch) {
+          const drafts = await buildPostcodeAutofillLanguageDrafts({
+            formData,
+            patch,
+            countryCode: formData.country,
+            languageTabs: addressLanguageTabs.map(tab => tab.code),
+          });
+          if (cancelled) return;
+
+          setFormData(prev => {
+            const merged = mergePostcodeAutofill(prev, patch);
+            const next = drafts[activeTab] || drafts[normalizeRegistrationAddressLanguage(activeTab)] || merged;
+            languageDraftsRef.current = {
+              ...languageDraftsRef.current,
+              ...drafts,
+              [activeTab]: next,
+            };
+            return next;
+          });
+          setPostcodeLookupStatus('filled');
+        } else {
+          setPostcodeLookupStatus('empty');
+        }
+      } catch {
+        if (!cancelled) setPostcodeLookupStatus('error');
+      }
+    }, 350);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+    };
+  }, [activeTab, addressLanguageTabs, formData, isOpen, localFormat]);
+
+  const handleAddressLanguageTabClick = React.useCallback(async (tabCode: string) => {
+    if (tabCode === activeTab) return;
+
+    languageDraftsRef.current[activeTab] = formData;
+    const savedDraft = languageDraftsRef.current[tabCode];
+
+    setActiveTab(tabCode);
+    if (tabCode === 'local' && savedDraft) {
+      setFormData(savedDraft);
+      setAddressTranslationStatus('translated');
+      return;
+    }
+
+    setAddressTranslationStatus('translating');
+    try {
+      const translated = await translateRegistrationFormFields({
+        formData,
+        targetLanguage: tabCode,
+        countryCode: formData.country,
+        sourceLanguage: activeTab,
+      });
+      languageDraftsRef.current[tabCode] = translated;
+      setFormData(translated);
+      setAddressTranslationStatus('translated');
+    } catch {
+      setAddressTranslationStatus('error');
+    }
+  }, [activeTab, formData]);
+
+  const handlePostcodeChange = React.useCallback((value: string) => {
+    lastPostcodeLookupRef.current = '';
+    languageDraftsRef.current = {};
+    setPostcodeLookupStatus('idle');
+    setAddressTranslationStatus('idle');
+    setFormData(prev => ({ ...prev, postcode: value }));
+  }, []);
+
+  useEffect(() => {
+    if (viewMode === 'country-select' && currentCountry) {
+      setSelectedCountryTab(getRegistrationCountryTabId(currentCountry));
+    }
+  }, [viewMode, currentCountry]);
 
   const isBritishTerritoryMode = BRITISH_TERRITORIES.some(t => t.code === formData.country);
   const isFrenchTerritoryMode = FRENCH_TERRITORIES.some(t => t.code === formData.country);
@@ -1699,90 +1858,23 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
     isCaribbeanMode, isOceaniaMode, isGreaterChinaMode, isFrancophonieMode
   ]);
 
-  const quickLangs = useMemo(() => {
-    return ['local', 'en', 'romaji', 'international'];
-  }, []);
-
-  // Group languages for selection - simplified to base languages only
-  const groupedLanguages = useMemo(() => {
-    const groups: Record<string, typeof LANGUAGES> = {};
-    const INDIAN_LANGS = ['hi', 'bn', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'pa', 'ur'];
-    
-    LANGUAGES.forEach(lang => {
-      let base = lang.code.split('-')[0];
-      if (lang.code.startsWith('zh-Hans')) base = 'zh-Hans';
-      if (lang.code.startsWith('zh-Hant') || lang.code === 'yue') base = 'zh-Hant';
-      if (INDIAN_LANGS.includes(lang.code) || INDIAN_LANGS.includes(base)) base = 'in-regional';
-      
-      if (!groups[base]) groups[base] = [];
-      groups[base].push(lang);
-    });
-    return groups;
-  }, []);
-
-  const baseLanguages = useMemo(() => {
-    return Object.keys(groupedLanguages).map(base => {
-      const group = groupedLanguages[base];
-      
-      let name, flag;
-      if (base === 'in-regional') {
-        name = t('tab_indian_langs');
-        flag = '🇮🇳';
-      } else if (base === 'zh-Hans') {
-        name = t('tab_zh_hans');
-        flag = '🇨🇳';
-      } else if (base === 'zh-Hant') {
-        name = t('tab_zh_hant');
-        flag = '🇭🇰';
-      } else if (base === 'en') {
-        name = t('tab_anglosphere');
-        flag = '🌐';
-      } else if (base === 'es') {
-        name = t('tab_latam_es');
-        flag = '🇪🇸';
-      } else if (base === 'pt') {
-        name = t('tab_lusosphere');
-        flag = '🇵🇹';
-      } else if (base === 'ar') {
-        name = t('tab_arabic_global');
-        flag = '☪️';
-      } else if (base === 'fr') {
-        name = 'Français';
-        flag = '🇫🇷';
-      } else {
-        const main = group.find(l => !l.code.includes('-')) || group[0];
-        name = LANGUAGE_NAMES[base] || main.name.split(' (')[0];
-        flag = main.flag;
-      }
-      
-      return {
-        base,
-        name,
-        flag,
-        count: group.length,
-        variants: group
-      };
-    }).sort((a, b) => a.name.localeCompare(b.name));
-  }, [groupedLanguages, appLanguage]);
-
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100]"
-          />
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl z-[101] border border-slate-200"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            className="fixed inset-0 z-[101] overflow-y-auto bg-white"
           >
-            <div className="p-8">
+            <div
+              className="min-h-screen w-full px-4 py-6 sm:px-8 lg:px-12"
+              style={{
+                paddingTop: 'calc(env(safe-area-inset-top) + 1.5rem)',
+                paddingBottom: 'calc(env(safe-area-inset-bottom) + 1.5rem)'
+              }}
+            >
+              <div className="mx-auto w-full max-w-6xl">
                 <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-emerald-50 rounded-2xl">
@@ -1792,22 +1884,6 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                     <h2 className="text-2xl font-black text-slate-800 tracking-tight">
                       {t('addressRegistration')}
                     </h2>
-                    {/* App Language Toggle */}
-                    <div className="flex flex-wrap bg-slate-100 rounded-lg p-0.5 mt-1 w-fit gap-0.5">
-                      {(['en', 'ja', 'de', 'zh-Hant', 'zh-Hans', 'es', 'pt', 'fr', 'ar'] as const).map(lang => (
-                        <button
-                          key={lang}
-                          type="button"
-                          onClick={() => setAppLanguage(lang)}
-                          className={cn(
-                            "px-2 py-0.5 rounded-md text-[8px] font-black transition-all",
-                            appLanguage === lang ? "bg-white text-slate-900 shadow-sm" : "text-slate-400 hover:text-slate-600"
-                          )}
-                        >
-                          {lang === 'zh-Hant' ? '繁中' : lang === 'zh-Hans' ? '简中' : lang.toUpperCase()}
-                        </button>
-                      ))}
-                    </div>
                   </div>
                 </div>
                 <button 
@@ -1866,7 +1942,7 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                             renderedAddress ? "bg-emerald-500" : "bg-slate-500"
                           )} />
                           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                            {activeTab === 'en' || activeTab === 'international' ? 'International Shipping Label' : 'Domestic Delivery Format'}
+                            {activeTab === 'en' ? 'International Shipping Label' : 'Domestic Delivery Format'}
                           </span>
                         </div>
                         <div className="relative">
@@ -1881,12 +1957,12 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                              <div className="text-[9px] font-black bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30 uppercase tracking-tight">
                                Modular Chinese Engine Active
                              </div>
-                             {formData.country === 'CN' && activeTab !== 'en' && activeTab !== 'international' && (
+                             {formData.country === 'CN' && activeTab !== 'en' && (
                                <div className="text-[9px] font-black bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded border border-amber-500/30 uppercase tracking-tight">
                                  Simplified Canonical
                                </div>
                              )}
-                             {['TW', 'HK', 'MO'].includes(formData.country) && !activeTab.startsWith('en') && activeTab !== 'international' && activeTab !== 'romaji' && (
+                             {['TW', 'HK', 'MO'].includes(formData.country) && !activeTab.startsWith('en') && (
                                <div className="text-[9px] font-black bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded border border-blue-500/30 uppercase tracking-tight">
                                  Traditional Canonical
                                </div>
@@ -1933,38 +2009,34 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                           Address Language
                         </label>
                         <div className="flex flex-wrap items-center gap-2">
-                          {quickLangs.map(lang => (
+                          {addressLanguageTabs.map(tab => (
                             <button
-                              key={lang}
+                              key={tab.code}
                               type="button"
-                              onClick={() => setActiveTab(lang)}
+                              onClick={() => handleAddressLanguageTabClick(tab.code)}
                               className={cn(
                                 "px-4 py-2 rounded-xl text-xs font-black transition-all border",
-                                activeTab === lang 
+                                activeTab === tab.code 
                                   ? "bg-slate-900 text-white border-slate-900 shadow-sm" 
                                   : "bg-slate-100 text-slate-500 border-slate-100 hover:text-slate-700"
                               )}
                             >
-                              {LANGUAGE_NAMES[lang] || lang.toUpperCase()}
+                              {tab.label}
                             </button>
                           ))}
-                          <button
-                            type="button"
-                            onClick={() => setViewMode('language-select')}
-                            className={cn(
-                              "px-4 py-2 rounded-xl text-xs font-black transition-all border flex items-center gap-2",
-                              !['local', 'en', 'romaji', 'international'].includes(activeTab)
-                                ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
-                                : "bg-white text-emerald-600 border-emerald-100 hover:bg-emerald-50"
-                            )}
-                          >
-                            <Globe className="w-3 h-3" />
-                            {!['local', 'en', 'romaji', 'international'].includes(activeTab) 
-                              ? (LANGUAGE_NAMES[activeTab] || activeTab.toUpperCase())
-                              : 'Other...'}
-                            <ChevronRight className="w-3 h-3 rotate-90" />
-                          </button>
                         </div>
+                        {addressTranslationStatus === 'translating' && (
+                          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400">
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                            Translating address fields
+                          </div>
+                        )}
+                        {addressTranslationStatus === 'error' && (
+                          <div className="flex items-center gap-2 text-[10px] font-bold text-rose-500">
+                            <AlertCircle className="h-3 w-3" />
+                            Translation fallback kept the current fields
+                          </div>
+                        )}
                       </div>
 
                       {/* Country Selector */}
@@ -1979,8 +2051,14 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                             className="w-full bg-slate-50 px-4 py-4 rounded-xl border border-slate-200 flex items-center justify-between hover:bg-white transition-all group"
                           >
                             <div className="flex items-center gap-3">
-                              <span className="text-2xl rounded-xl shadow-sm">{currentFlag}</span>
-                              <span className="text-sm font-black text-slate-700">{currentCountry?.name}</span>
+                              <CountryFlag
+                                code={currentCountry?.code || formData.country}
+                                name={currentCountry?.name || formData.country || 'Unknown region'}
+                                fallback={currentCountry?.flag || '🌐'}
+                              />
+                              <span className="text-sm font-black text-slate-700">
+                                {currentCountry?.name || formData.country}
+                              </span>
                             </div>
                             <div className="flex items-center gap-2">
                               {/* Territory indicator */}
@@ -1997,13 +2075,7 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                   <div className="space-y-6">
                     {localFormat ? (
                       (() => {
-                        let currentFormat = localFormat.native;
-                        if (activeTab === 'en' && localFormat.english) {
-                          currentFormat = localFormat.english;
-                        } else if (localFormat.international && localFormat.international[activeTab]) {
-                          currentFormat = localFormat.international[activeTab];
-                        }
-                        
+                        const currentFormat = selectRegistrationAddressFormat(localFormat, activeTab);
                         const fields = currentFormat?.fields || localFormat.fields || [];
                         
                         return fields.map(field => (
@@ -2022,13 +2094,45 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                                 className="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm resize-none"
                               />
                             ) : field.key === 'postcode' ? (
-                              <PostcodeInput
-                                format="7-digit"
-                                value={formData.postcode}
-                                onChange={(val) => setFormData({ ...formData, postcode: val })}
-                                className="flex-wrap"
-                                countryCode={formData.country}
-                              />
+                              postcodeInputConfig.kind !== 'none' ? (
+                                <>
+                                  <PostcodeInput
+                                    format={postcodeInputConfig.pattern}
+                                    value={formData.postcode}
+                                    onChange={handlePostcodeChange}
+                                    className="flex-wrap"
+                                    countryCode={formData.country}
+                                    fixedValue={postcodeInputConfig.fixedValue}
+                                    source={postcodeInputConfig.source}
+                                  />
+                                  {postcodeLookupStatus === 'loading' && (
+                                    <div className="mt-2 flex items-center gap-2 text-[10px] font-bold text-slate-400">
+                                      <Loader2 className="h-3 w-3 animate-spin" />
+                                      Looking up postal code
+                                    </div>
+                                  )}
+                                  {postcodeLookupStatus === 'filled' && (
+                                    <div className="mt-2 flex items-center gap-2 text-[10px] font-bold text-emerald-600">
+                                      <CheckCircle2 className="h-3 w-3" />
+                                      Address fields filled from postal data
+                                    </div>
+                                  )}
+                                  {postcodeLookupStatus === 'empty' && (
+                                    <div className="mt-2 flex items-center gap-2 text-[10px] font-bold text-amber-600">
+                                      <AlertCircle className="h-3 w-3" />
+                                      No postal match found
+                                    </div>
+                                  )}
+                                </>
+                              ) : (
+                                <input
+                                  type={field.type || 'text'}
+                                  value={(formData as any)[field.key] || ''}
+                                  onChange={(e) => setFormData({...formData, [field.key]: e.target.value})}
+                                  placeholder={field.placeholder}
+                                  className="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+                                />
+                              )
                             ) : (
                               <input
                                 type={field.type || 'text'}
@@ -2125,99 +2229,6 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                       </button>
                     </div>
                   </motion.form>
-                ) : viewMode === 'language-select' ? (
-                  <motion.div
-                    key="language-select"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="space-y-6 min-h-[500px]"
-                  >
-                    <div className="flex items-center gap-4 mb-8">
-                      <button 
-                        onClick={() => {
-                          if (selectedBaseLang) setSelectedBaseLang(null);
-                          else setViewMode('form');
-                        }}
-                        className="p-3 bg-slate-100 rounded-2xl hover:bg-slate-200 transition-colors"
-                      >
-                        <ChevronRight className="w-5 h-5 rotate-180" />
-                      </button>
-                      <div>
-                        <h3 className="text-xl font-black text-slate-800">
-                          {selectedBaseLang ? 'Select Specific Language' : 'Select Language Group'}
-                        </h3>
-                        <p className="text-xs font-bold text-slate-400">Choose the language for this address</p>
-                      </div>
-                    </div>
-
-                    {!selectedBaseLang ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {baseLanguages.map(({ base, count }) => (
-                          <button
-                            key={base}
-                            onClick={() => setSelectedBaseLang(base)}
-                            className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-white hover:border-emerald-200 transition-all group"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center font-black text-emerald-600 shadow-sm border border-slate-100">
-                                {base.toUpperCase()}
-                              </div>
-                              <div className="text-left">
-                                <div className="text-sm font-black text-slate-700">
-                                  {LANGUAGE_NAMES[base] || base.toUpperCase()}
-                                </div>
-                                <div className="text-[10px] font-bold text-slate-400">
-                                  {count} regional variations
-                                </div>
-                              </div>
-                            </div>
-                            <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-emerald-500 transition-colors" />
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          {(groupedLanguages[selectedBaseLang] || []).map(lang => (
-                            <button
-                              key={lang.code}
-                              onClick={() => {
-                                setActiveTab(lang.code);
-                                setViewMode('form');
-                                setSelectedBaseLang(null);
-                              }}
-                              className={cn(
-                                "flex items-center justify-between p-4 rounded-2xl border transition-all group",
-                                activeTab === lang.code
-                                  ? "bg-emerald-600 border-emerald-600 text-white shadow-lg"
-                                  : "bg-slate-50 border-slate-100 hover:bg-white hover:border-emerald-200"
-                              )}
-                            >
-                              <div className="flex items-center gap-3">
-                                <div className={cn(
-                                  "w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-black border",
-                                  activeTab === lang.code ? "bg-emerald-500 border-emerald-400" : "bg-white border-slate-100 text-emerald-600"
-                                )}>
-                                  {lang.code.split('-')[1] || lang.code.toUpperCase()}
-                                </div>
-                                <span className={cn(
-                                  "text-xs font-black",
-                                  activeTab === lang.code ? "text-white" : "text-slate-700"
-                                )}>
-                                  {lang.name}
-                                </span>
-                              </div>
-                              <CheckCircle2 className={cn(
-                                "w-4 h-4 transition-opacity",
-                                activeTab === lang.code ? "opacity-100" : "opacity-0"
-                              )} />
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
                 ) : (
                   <motion.div
                     key="country-select"
@@ -2241,111 +2252,109 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
 
                     <div className="space-y-8">
                       {/* Main Countries */}
-                      <div className="space-y-3">
+                      <div className="space-y-4">
+                        <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+                          {REGISTRATION_COUNTRY_TABS.map(tab => {
+                            const count = countryGroups[tab.id].length;
+                            return (
+                              <button
+                                key={tab.id}
+                                type="button"
+                                onClick={() => setSelectedCountryTab(tab.id)}
+                                className={cn(
+                                  "shrink-0 rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-wider transition-all",
+                                  selectedCountryTab === tab.id
+                                    ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                                    : "bg-white text-slate-500 border-slate-100 hover:border-emerald-200 hover:text-emerald-700"
+                                )}
+                              >
+                                {tab.label}
+                                <span className={cn(
+                                  "ml-2 rounded-md px-1.5 py-0.5 text-[9px]",
+                                  selectedCountryTab === tab.id ? "bg-white/15 text-white" : "bg-slate-100 text-slate-400"
+                                )}>
+                                  {count}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">
-                          Countries
+                          {REGISTRATION_COUNTRY_TABS.find(tab => tab.id === selectedCountryTab)?.label} Countries / Territories
                         </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          {COUNTRIES.map(c => (
+                        <div
+                          className="grid gap-2"
+                          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}
+                        >
+                          {countryGroups[selectedCountryTab].map(c => (
                             <button
                               key={c.code}
                               onClick={() => {
-                                setFormData({...formData, country: c.code});
+                                setFormData(selectRegistrationCountry(formData, c, { storeRegionName: false }));
                                 setViewMode('form');
                               }}
                               className={cn(
-                                "flex items-center justify-between p-4 rounded-2xl border transition-all group",
+                                "flex items-center justify-between gap-3 p-3 rounded-lg border transition-all group",
                                 formData.country === c.code
                                   ? "bg-emerald-600 border-emerald-600 text-white shadow-lg"
                                   : "bg-slate-50 border-slate-100 hover:bg-white hover:border-emerald-200"
                               )}
                             >
-                              <div className="flex items-center gap-3">
-                                <span className="text-xl grayscale-0 group-hover:scale-110 transition-transform">
-                                  {c.flag}
-                                </span>
-                                <span className={cn(
-                                  "text-xs font-black",
-                                  formData.country === c.code ? "text-white" : "text-slate-700"
-                                )}>
-                                  {c.name}
-                                </span>
+                              <div className="flex min-w-0 items-center gap-3">
+                                <CountryFlag
+                                  code={c.code}
+                                  name={c.name}
+                                  fallback={c.flag}
+                                  selected={formData.country === c.code}
+                                />
+                                <div className="min-w-0 text-left">
+                                  <span className={cn(
+                                    "block truncate text-xs font-black",
+                                    formData.country === c.code ? "text-white" : "text-slate-700"
+                                  )}>
+                                    {c.name}
+                                  </span>
+                                  {c.nativeName && c.nativeName !== c.name && (
+                                    <span className={cn(
+                                      "block truncate text-[10px] font-bold",
+                                      formData.country === c.code ? "text-emerald-50" : "text-slate-400"
+                                    )}>
+                                      {c.nativeName}
+                                    </span>
+                                  )}
+                                  <span className={cn(
+                                    "block truncate text-[9px] font-black uppercase tracking-wider",
+                                    formData.country === c.code ? "text-emerald-100" : "text-slate-300"
+                                  )}>
+                                    {c.region}{c.type ? ` / ${c.type}` : ''}
+                                  </span>
+                                </div>
                               </div>
-                              <CheckCircle2 className={cn(
-                                "w-4 h-4 transition-opacity",
-                                formData.country === c.code ? "opacity-100" : "opacity-0"
-                              )} />
+                              <div className="flex shrink-0 items-center gap-2">
+                                <span className={cn(
+                                  "rounded-md px-2 py-1 text-[10px] font-black",
+                                  formData.country === c.code ? "bg-white/15 text-white" : "bg-white text-slate-400"
+                                )}>
+                                  {c.code}
+                                </span>
+                                <CheckCircle2 className={cn(
+                                  "w-4 h-4 transition-opacity",
+                                  formData.country === c.code ? "opacity-100" : "opacity-0"
+                                )} />
+                              </div>
                             </button>
                           ))}
                         </div>
                       </div>
 
-                      {/* Regional Territories */}
-                      <div className="space-y-6">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">
-                          Regional & Overseas Territories
-                        </label>
-                        
-                        {[
-                          { title: 'Anglosphere', items: ANGLOSPHERE_TERRITORIES, color: 'blue' },
-                          { title: 'Hispanosphere', items: HISPANOSPHERE_TERRITORIES, color: 'yellow' },
-                          { title: 'Lusosphere', items: LUSOSPHERE_TERRITORIES, color: 'red' },
-                          { title: 'Greater China', items: GREATER_CHINA_TERRITORIES, color: 'red' },
-                          { title: 'Francophonie', items: FRANCOPHONIE_TERRITORIES, color: 'blue' },
-                          { title: 'Arabic World', items: ARABIC_TERRITORIES, color: 'emerald' },
-                          { title: 'Southeast Asia', items: SOUTHEAST_ASIA_TERRITORIES, color: 'emerald' },
-                          { title: 'Oceania & Pacific', items: OCEANIA_TERRITORIES, color: 'sky' },
-                          { title: 'Caribbean', items: CARIBBEAN_TERRITORIES, color: 'amber' },
-                          { title: 'European Union', items: CENTRAL_EUROPE_TERRITORIES, color: 'indigo' },
-                          { title: 'Nordic & Baltic', items: [...NORDIC_TERRITORIES, ...BALTIC_TERRITORIES, ...NORWEGIAN_TERRITORIES], color: 'slate' },
-                          { title: 'Balkans', items: BALKAN_TERRITORIES, color: 'blue' },
-                          { title: 'Central Eurasia', items: [...EURASIAN_TERRITORIES, ...CENTRAL_SOUTH_ASIA_TERRITORIES], color: 'rose' },
-                          { title: 'Italian Regions', items: ITALIAN_TERRITORIES, color: 'green' },
-                          { title: 'German Regions', items: GERMAN_REGIONS, color: 'emerald' },
-                          { title: 'British Regions', items: BRITISH_TERRITORIES, color: 'emerald' },
-                          { title: 'French Regions', items: FRENCH_TERRITORIES, color: 'blue' },
-                          { title: 'Microstates', items: MICROSTATES_TERRITORIES, color: 'amber' },
-                        ].map(group => (
-                          <div key={group.title} className="space-y-3">
-                            <h4 className="text-[10px] font-black text-slate-500 flex items-center gap-2">
-                              {group.title}
-                              <span className="h-[1px] flex-1 bg-slate-100"></span>
-                            </h4>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                              {group.items.map(t => (
-                                <button
-                                  key={t.code}
-                                  onClick={() => {
-                                    const isMainland = t.name.includes('(Mainland)');
-                                    setFormData({
-                                      ...formData, 
-                                      country: t.code,
-                                      state: isMainland ? '' : t.name
-                                    });
-                                    setViewMode('form');
-                                  }}
-                                  className={cn(
-                                    "flex items-center gap-2 px-3 py-3 rounded-xl text-[10px] font-bold transition-all border",
-                                    formData.country === t.code
-                                      ? `bg-${group.color}-600 text-white border-${group.color}-600 shadow-sm`
-                                      : "bg-white text-slate-600 hover:bg-slate-50 border-slate-100"
-                                  )}
-                                >
-                                  <span className="text-sm">{t.flag}</span>
-                                  <span className="truncate">{t.name}</span>
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
+              </div>
             </div>
           </motion.div>
-        </>
       )}
     </AnimatePresence>
   );

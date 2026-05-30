@@ -1,0 +1,164 @@
+countryCode: FK
+name: Falkland Islands
+native:
+  name: Falkland Islands
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{city}}
+    {{postcode}}
+    Falkland Islands
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: city
+      label: Settlement
+      placeholder: Stanley
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: FIQQ 1ZZ
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{city}}
+    {{postcode}}
+    Falkland Islands
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: city
+      label: Settlement
+      placeholder: Stanley
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: FIQQ 1ZZ
+      required: true
+      type: text
+postalCode:
+  format: FIQQ 1ZZ
+  regex: ^FIQQ\s?1ZZ$
+  api: null
+  source: Falkland Islands Post Service
+openSourceIds:
+  - falkland-islands-post
+  - falkland-islands-gis
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils
+addressRules:
+  languages:
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  englishOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  regionalHierarchy:
+    - region
+    - city
+  postalCode:
+    label: FIQQ 1ZZ
+    required: true
+    usage: required
+  openSourceIds:
+    - falkland-islands-post
+    - falkland-islands-gis
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils

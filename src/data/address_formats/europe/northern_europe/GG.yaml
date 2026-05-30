@@ -1,0 +1,140 @@
+countryCode: GG
+name: Guernsey
+native:
+  name: Guernsey
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{district}}
+    {{postcode}}
+    Guernsey
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: district
+      label: Parish
+      placeholder: e.g. Saint Peter Port
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: GY1 1AA
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{suburb}}
+    {{district}}
+    {{postcode}}
+    Guernsey
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: House number and street name
+      required: true
+      type: text
+    - key: suburb
+      label: Locality
+      placeholder: ""
+      required: false
+      type: text
+    - key: district
+      label: Parish
+      placeholder: e.g. Saint Peter Port
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: GY1 1AA
+      required: true
+      type: text
+postalCode:
+  format: GY1 1AA
+  regex: ^GY\d[A-Z\d]?\s?\d[A-Z]{2}$
+  api: null
+  source: Guernsey Post
+openSourceIds:
+  - guernsey-post
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - digimap-guernsey
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils
+addressRules:
+  languages:
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - street
+    - locality
+    - city
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - locality
+    - city
+    - postcode
+    - country
+  regionalHierarchy:
+    - parish
+    - island
+  postalCode:
+    label: GY postcode required
+    required: true
+    usage: required
+  openSourceIds:
+    - guernsey-post
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - digimap-guernsey
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils

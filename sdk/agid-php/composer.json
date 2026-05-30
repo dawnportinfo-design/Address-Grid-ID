@@ -1,0 +1,14 @@
+{
+  "name": "agid/agid",
+  "description": "AGID PHP SDK",
+  "license": "MIT",
+  "type": "library",
+  "autoload": {
+    "psr4": {
+      "Agid\\\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=8.1"
+  }
+}

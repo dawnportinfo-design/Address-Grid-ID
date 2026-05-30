@@ -1,0 +1,108 @@
+countryCode: TT
+name: Trinidad and Tobago
+native:
+  name: English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}
+    {{state}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Company
+      placeholder: ""
+    - key: houseNumber
+      label: House/Unit No.
+      placeholder: "10"
+    - key: street
+      label: Street
+      placeholder: Independence Square
+    - key: city
+      label: Town/City
+      placeholder: Port of Spain
+    - key: state
+      label: Parish/County
+      placeholder: Saint George
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}, {{state}}
+    TRINIDAD AND TOBAGO
+  ordering: small-to-big
+  fields: []
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - noaa-etopo
+  - geobc-global-multi-resolution-topography
+  - hydrosheds
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - esa-worldcover
+  - usgs-3dep
+  - nrcan-geospatial
+  - conabio-geoportal
+  - ibge-geosciences
+  - inpe-terrabrasilis
+postalCode:
+  format: null
+  regex: null
+  api: https://ttpost.net/news/postal-code/
+  source: TTPost
+addressRules:
+  languages:
+    - code: en
+      name: English
+  deliveryLanguages:
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  englishOrder:
+    - name
+    - street
+    - city
+    - region
+    - postcode
+    - country
+  regionalHierarchy:
+    - region
+    - city
+  postalCode:
+    label: not used
+    required: false
+    usage: optional
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - noaa-etopo
+    - geobc-global-multi-resolution-topography
+    - hydrosheds
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - esa-worldcover
+    - usgs-3dep
+    - nrcan-geospatial
+    - conabio-geoportal
+    - ibge-geosciences
+    - inpe-terrabrasilis

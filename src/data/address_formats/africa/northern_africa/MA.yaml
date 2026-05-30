@@ -1,0 +1,148 @@
+countryCode: MA
+name: Morocco
+native:
+  name: المغرب
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{postcode}} {{city}}
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: الاسم الكامل
+      placeholder: محمد علي
+      required: true
+      type: text
+    - key: street
+      label: العنوان
+      placeholder: ١٢٣ شارع محمد الخامس
+      required: true
+      type: text
+    - key: postcode
+      label: الرمز البريدي
+      placeholder: ١٠٠٠٠
+      required: true
+      type: text
+    - key: city
+      label: المدينة
+      placeholder: الرباط
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{postcode}} {{city}}
+    Morocco
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: Mohamed Ali
+      required: true
+      type: text
+    - key: street
+      label: Street Address
+      placeholder: 123 Blvd Mohammed V
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "10000"
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Rabat
+      required: true
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: https://datahub.io/logistics/postal-codes-ma
+  source: DataHub postal-codes-ma
+addressRules:
+  languages:
+    - code: ar
+      name: Arabic
+    - code: fr
+      name: French
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - province
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - province
+    - country
+  regionalHierarchy:
+    - commune
+    - province
+  postalCode:
+    label: 5 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - datahub-postal
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+openSourceIds:
+  - datahub-postal
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal

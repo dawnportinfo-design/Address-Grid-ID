@@ -1,0 +1,156 @@
+{
+  "countryCode": "GB",
+  "name": "United Kingdom",
+  "native": {
+    "name": "English (UK)",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}}\n{{postcode}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "Building Name/No.",
+        "placeholder": "10"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Downing St"
+      },
+      {
+        "key": "suburb",
+        "label": "Locality",
+        "placeholder": "Westminster"
+      },
+      {
+        "key": "city",
+        "label": "Town/City",
+        "placeholder": "London"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "SW1A 2AA"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}}\n{{postcode}}\nUNITED KINGDOM",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Co./Org.",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "No./Bldg",
+        "placeholder": "10"
+      },
+      {
+        "key": "street",
+        "label": "St./Rd./Sq. (Latin)",
+        "placeholder": "Downing St"
+      },
+      {
+        "key": "suburb",
+        "label": "Locality",
+        "placeholder": "Westminster"
+      },
+      {
+        "key": "city",
+        "label": "Town/City",
+        "placeholder": "London"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "SW1A 2AA"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "AN NAA, ANA NAA, ANN NAA, AAN NAA, AANA NAA, AANN NAA",
+    "regex": "^([A-Z]{1,2}\\d[A-Z\\d]?\\s?\\d[A-Z]{2})$",
+    "api": "https://postcodes.io/",
+    "source": "postcodes.io"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "street",
+      "locality",
+      "postTown",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "recipient",
+      "street",
+      "locality",
+      "postTown",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "countyOrCity"
+    ],
+    "postalCode": {
+      "label": "UK outward/inward postcode required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "postcodes-io",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "ons-postcode-directory",
+      "ordnance-survey-open-names",
+      "ordnance-survey-boundary-line",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "postcodes-io",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "ons-postcode-directory",
+    "ordnance-survey-open-names",
+    "ordnance-survey-boundary-line",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

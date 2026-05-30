@@ -1,0 +1,191 @@
+{
+  "countryCode": "EEBD",
+  "name": "Ethiopia-Eritrea Border Area",
+  "native": {
+    "name": "Ethiopia-Eritrea Border Area",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\n{{region}}\nEthiopia-Eritrea Border Area",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street / Local address",
+        "placeholder": "Street, block, village, or landmark",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Locality",
+        "placeholder": "City or locality",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "region",
+        "label": "Region / Territory",
+        "placeholder": "Region",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "Postal code if used",
+        "required": false,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\n{{region}}\nEthiopia-Eritrea Border Area",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Recipient",
+        "placeholder": "Full name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street / Local address",
+        "placeholder": "Street, block, village, or landmark",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City / Locality",
+        "placeholder": "City or locality",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "region",
+        "label": "Region / Territory",
+        "placeholder": "Region",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "Postal code if used",
+        "required": false,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": null,
+    "regex": null,
+    "api": null,
+    "source": "Special/disputed territory metadata; validate with OSM/Nominatim, GeoNames, local postal authority, or parent postal operator when available"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "ti",
+        "name": "Tigrinya"
+      },
+      {
+        "code": "am",
+        "name": "Amharic"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "street",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "recipient",
+      "street",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "locality",
+      "woreda/subregion",
+      "border area"
+    ],
+    "postalCode": {
+      "label": "Not separately standardized",
+      "required": false,
+      "usage": "limited"
+    },
+    "openSourceIds": [
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "hot-osm-africa",
+      "openstreetmap-wiki-africa",
+      "humdata-africa",
+      "openaerialmap",
+      "digital-earth-africa-dem",
+      "digital-earth-africa-coastlines",
+      "digital-earth-africa-waterbodies",
+      "digital-earth-africa-wofs",
+      "digital-earth-africa-fractional-cover",
+      "digital-earth-africa-geomad",
+      "fao-wapor",
+      "esa-worldcover",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "global-mangrove-watch",
+      "allen-coral-atlas",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "rcmrd-gmes-africa-geoportal"
+    ]
+  },
+  "openSourceIds": [
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "hot-osm-africa",
+    "openstreetmap-wiki-africa",
+    "humdata-africa",
+    "openaerialmap",
+    "digital-earth-africa-dem",
+    "digital-earth-africa-coastlines",
+    "digital-earth-africa-waterbodies",
+    "digital-earth-africa-wofs",
+    "digital-earth-africa-fractional-cover",
+    "digital-earth-africa-geomad",
+    "fao-wapor",
+    "esa-worldcover",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "global-mangrove-watch",
+    "allen-coral-atlas",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "rcmrd-gmes-africa-geoportal"
+  ]
+}

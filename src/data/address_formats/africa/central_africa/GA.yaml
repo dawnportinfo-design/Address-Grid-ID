@@ -1,0 +1,128 @@
+countryCode: GA
+name: Gabon
+native:
+  name: Gabon
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Gabon
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Nom Complet
+      placeholder: Brice Oligui Nguema
+      required: true
+      type: text
+    - key: street
+      label: Adresse / BP
+      placeholder: BP 123
+      required: true
+      type: text
+    - key: city
+      label: Ville
+      placeholder: Libreville
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Gabon
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: Brice Oligui Nguema
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 123
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Libreville
+      required: true
+      type: text
+postalCode:
+  format: null
+  regex: null
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal
+addressRules:
+  languages:
+    - code: fr
+      name: French
+  deliveryLanguages:
+    - code: fr
+      name: French
+  nativeOrder:
+    - recipient
+    - street
+    - city
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - city
+    - country
+  regionalHierarchy:
+    - province
+    - department
+    - city
+  postalCode: null
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal

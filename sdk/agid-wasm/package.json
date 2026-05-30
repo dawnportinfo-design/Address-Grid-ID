@@ -1,0 +1,12 @@
+{
+  "name": "@agid/wasm",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "dist",
+    "agid_core.wasm"
+  ],
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}

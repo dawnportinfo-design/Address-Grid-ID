@@ -1,0 +1,265 @@
+countryCode: LU
+name: Luxembourg
+native:
+  name: Lëtzebuerg
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{postcode}} {{city}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Firma / Société
+      placeholder: ""
+      required: false
+      type: text
+    - key: houseNumber
+      label: Nummer / Numéro
+      placeholder: "1"
+      required: true
+      type: text
+    - key: street
+      label: Strooss / Rue
+      placeholder: Boulevard Royal
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode / Code Postal
+      placeholder: "2449"
+      required: true
+      type: text
+    - key: city
+      label: Stad / Ville
+      placeholder: Lëtzebuerg
+      required: true
+      type: text
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{postcode}} {{city}}
+    LUXEMBOURG
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Co./Org.
+      placeholder: ""
+    - key: houseNumber
+      label: No.
+      placeholder: "1"
+    - key: street
+      label: Street Address (Latin)
+      placeholder: Boulevard Royal
+    - key: postcode
+      label: Postcode
+      placeholder: "2449"
+    - key: city
+      label: City
+      placeholder: Luxembourg
+international:
+  de:
+    name: Deutsch (International)
+    addressFormat: |-
+      {{organization}}
+      {{houseNumber}} {{street}}
+      {{postcode}} {{city}}
+      LUXEMBURG
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Firma/Org. (Latein)
+        placeholder: ""
+      - key: houseNumber
+        label: Nr.
+        placeholder: "1"
+      - key: street
+        label: Strasse (Latein)
+        placeholder: Boulevard Royal
+      - key: postcode
+        label: PLZ
+        placeholder: "2449"
+      - key: city
+        label: Stadt
+        placeholder: Luxemburg
+  fr:
+    name: Français (International)
+    addressFormat: |-
+      {{organization}}
+      {{houseNumber}} {{street}}
+      {{postcode}} {{city}}
+      LUXEMBOURG
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Soc./Org.
+        placeholder: ""
+      - key: houseNumber
+        label: Nº
+        placeholder: "1"
+      - key: street
+        label: Rue (Latín)
+        placeholder: Boulevard Royal
+      - key: postcode
+        label: Code Postal
+        placeholder: "2449"
+      - key: city
+        label: Ville
+        placeholder: Luxembourg
+  lb:
+    name: Letzebuergesch (International)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+      LETZEBUERG
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Firma / Org.
+        placeholder: ""
+      - key: street
+        label: Strooss (Latin)
+        placeholder: Boulevard Royal
+      - key: houseNumber
+        label: Nr.
+        placeholder: "1"
+      - key: postcode
+        label: Postcode
+        placeholder: "2449"
+      - key: city
+        label: Uertschaft
+        placeholder: Letzebuerg
+postalCode:
+  format: NNNN
+  regex: ^\d{4}$
+  api: https://www.post.lu/en/particuliers/colis-courrier/rechercher-un-code-postal#/search
+  source: POST Luxembourg
+domestic:
+  lb:
+    name: Letzebuergesch
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Firma / Organisatioun
+        placeholder: ""
+      - key: street
+        label: Strooss
+        placeholder: Boulevard Royal
+      - key: houseNumber
+        label: Hausnummer
+        placeholder: "1"
+      - key: postcode
+        label: Postcode
+        placeholder: "2449"
+      - key: city
+        label: Uertschaft
+        placeholder: Letzebuerg
+  fr:
+    name: Francais
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Societe / Organisation
+        placeholder: ""
+      - key: street
+        label: Rue
+        placeholder: Boulevard Royal
+      - key: houseNumber
+        label: Numero
+        placeholder: "1"
+      - key: postcode
+        label: Code postal
+        placeholder: "2449"
+      - key: city
+        label: Localite
+        placeholder: Luxembourg
+  de:
+    name: Deutsch
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Firma / Organisation
+        placeholder: ""
+      - key: street
+        label: Strasse
+        placeholder: Boulevard Royal
+      - key: houseNumber
+        label: Hausnummer
+        placeholder: "1"
+      - key: postcode
+        label: Postleitzahl
+        placeholder: "2449"
+      - key: city
+        label: Ort
+        placeholder: Luxemburg
+addressRules:
+  languages:
+    - code: lb
+      name: Luxembourgish
+    - code: fr
+      name: French
+    - code: de
+      name: German
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - city
+  postalCode:
+    label: country-specific postcode
+    required: false
+    usage: recommended
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

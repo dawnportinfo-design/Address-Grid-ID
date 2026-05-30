@@ -1,0 +1,145 @@
+countryCode: OM
+name: Oman
+native:
+  name: عمان
+  addressFormat: |-
+    {{houseNumber}} {{street}}
+    {{suburb}}
+    {{city}} {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: اسم المبنى
+      placeholder: ""
+      required: false
+      type: text
+    - key: houseNumber
+      label: رقم المنزل
+      placeholder: "1"
+      required: false
+      type: text
+    - key: street
+      label: الشارع
+      placeholder: شارع السلطان قابوس
+      required: true
+      type: text
+    - key: suburb
+      label: المنطقة
+      placeholder: القرم
+      required: true
+      type: text
+    - key: city
+      label: المدينة
+      placeholder: مسقط
+      required: true
+      type: text
+    - key: postcode
+      label: الرمز البريدي
+      placeholder: "100"
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{houseNumber}} {{street}}
+    {{suburb}}
+    {{city}} {{postcode}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Building Name
+      placeholder: ""
+      required: false
+      type: text
+    - key: houseNumber
+      label: House No.
+      placeholder: "1"
+      required: false
+      type: text
+    - key: street
+      label: Street
+      placeholder: Sultan Qaboos St
+      required: true
+      type: text
+    - key: suburb
+      label: Area/District
+      placeholder: Qurum
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Muscat
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "100"
+      required: true
+      type: text
+postalCode:
+  format: NNN
+  regex: ^\d{3}$
+  api: https://www.omanpost.om/ar/office-locator
+  source: Oman Post
+addressRules:
+  languages:
+    - code: ar
+      name: Arabic
+  nativeOrder:
+    - governorate
+    - city
+    - area
+    - street
+    - name
+  englishOrder:
+    - governorate
+    - city
+    - area
+    - street
+    - name
+  regionalHierarchy:
+    - governorate
+    - city
+    - area
+  postalCode:
+    label: 3 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - nsgia-oman
+    - oman-post
+    - osm-oman
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+openSourceIds:
+  - nsgia-oman
+  - oman-post
+  - osm-oman
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

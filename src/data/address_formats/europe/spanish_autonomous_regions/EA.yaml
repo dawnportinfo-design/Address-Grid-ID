@@ -1,0 +1,133 @@
+countryCode: EA
+name: Ceuta
+native:
+  name: Ceuta
+  addressFormat: |-
+    {{recipient}}
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    Ceuta, España
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full name
+      required: true
+      type: text
+    - key: organization
+      label: Organization / Station
+      placeholder: Organization, station, or facility
+      required: false
+      type: text
+    - key: street
+      label: Street / Local address
+      placeholder: Street, road, sector, or locality
+      required: false
+      type: text
+    - key: houseNumber
+      label: House / Unit No.
+      placeholder: Number
+      required: false
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: Postal code if used
+      required: true
+      type: text
+    - key: city
+      label: City / Locality
+      placeholder: City, island, base, or locality
+      required: true
+      type: text
+english:
+  name: International English
+  addressFormat: |-
+    {{recipient}}
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    CEUTA
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Recipient
+      placeholder: Full name
+      required: true
+      type: text
+    - key: organization
+      label: Organization / Station
+      placeholder: Organization, station, or facility
+      required: false
+      type: text
+    - key: street
+      label: Street / Local address
+      placeholder: Street, road, sector, or locality
+      required: false
+      type: text
+    - key: houseNumber
+      label: House / Unit No.
+      placeholder: Number
+      required: false
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: Postal code if used
+      required: true
+      type: text
+    - key: city
+      label: City / Locality
+      placeholder: City, island, base, or locality
+      required: true
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^51\d{3}$
+  api: null
+  source: Correos Spain / GeoNames / OSM
+addressRules:
+  languages:
+    - code: es
+      name: Spanish
+    - code: ar
+      name: Arabic
+    - code: en
+      name: English
+  nativeOrder:
+    - recipient
+    - organization
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - territory
+  englishOrder:
+    - recipient
+    - organization
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - territory
+  regionalHierarchy:
+    - autonomousCity
+  postalCode:
+    label: NNNNN postal format
+    required: true
+    usage: required
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing

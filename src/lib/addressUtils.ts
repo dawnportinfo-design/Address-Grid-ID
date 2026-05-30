@@ -2,6 +2,10 @@ import { getAddressFormat } from '../data/address_formats';
 import { NO_POSTAL_COUNTRIES } from './postalPatterns';
 // import { GoogleGenAI } from "@google/genai"; // Gemini removed per user request
 import { transliterate } from './transliteration';
+import { normalizeEnglishAddressPart } from './addressEnglish';
+import { resolveEnglishAddressPartOpenSource } from './openSourceAddressResolver';
+import { formatNaturalAddress } from './naturalAddress';
+import { translateWithOpenSource } from './openSourceTranslation';
 
 // --- Address Utilities ---
 
@@ -185,15 +189,19 @@ export const LANGUAGES = [
   
   // East Asia
   { code: 'ko', name: '한국어', country: 'South Korea', flag: '🇰🇷' },
+  { code: 'ko-KP', name: '조선말', country: 'North Korea', flag: '🇰🇵' },
   { code: 'vi', name: 'Tiếng Việt', country: 'Vietnam', flag: '🇻🇳' },
   { code: 'th', name: 'ไทย', country: 'Thailand', flag: '🇹🇭' },
   { code: 'ms', name: 'Bahasa Melayu', country: 'Malaysia', flag: '🇲🇾' },
   { code: 'id', name: 'Bahasa Indonesia', country: 'Indonesia', flag: '🇮🇩' },
+  { code: 'fil', name: 'Filipino', country: 'Philippines', flag: '🇵🇭' },
   { code: 'tl', name: 'Tagalog', country: 'Philippines', flag: '🇵🇭' },
+  { code: 'tet', name: 'Tetun', country: 'Timor-Leste', flag: '🇹🇱' },
   { code: 'lo', name: 'ພາສາลาว', country: 'Laos', flag: '🇱🇦' },
   { code: 'km', name: 'ភាសាខ្មែរ', country: 'Cambodia', flag: '🇰🇭' },
   { code: 'my', name: 'ဗမာစာ', country: 'Myanmar', flag: '🇲🇲' },
   { code: 'mn', name: 'Монгол', country: 'Mongolia', flag: '🇲🇳' },
+  { code: 'mn-Cyrl', name: 'Монгол кирилл', country: 'Mongolia', flag: '🇲🇳' },
   
   // Europe
   { code: 'fr', name: 'Français', country: 'France', flag: '🇫🇷' },
@@ -202,6 +210,7 @@ export const LANGUAGES = [
   { code: 'de-AT', name: 'Deutsch (Österreich)', country: 'Austria', flag: '🇦🇹' },
   { code: 'it', name: 'Italiano', country: 'Italy', flag: '🇮🇹' },
   { code: 'es', name: 'Español (España)', country: 'Spain', flag: '🇪🇸' },
+  { code: 'pt', name: 'Português', country: 'Portugal', flag: '🇵🇹' },
   { code: 'pt-PT', name: 'Português (Portugal)', country: 'Portugal', flag: '🇵🇹' },
   { code: 'pt-AO', name: 'Português (Angola)', country: 'Angola', flag: '🇦🇴' },
   { code: 'pt-MZ', name: 'Português (Moçambique)', country: 'Mozambique', flag: '🇲🇿' },
@@ -218,6 +227,9 @@ export const LANGUAGES = [
   { code: 'fi', name: 'Suomi', country: 'Finland', flag: '🇫🇮' },
   { code: 'da', name: 'Dansk', country: 'Denmark', flag: '🇩🇰' },
   { code: 'no', name: 'Norsk', country: 'Norway', flag: '🇳🇴' },
+  { code: 'nb', name: 'Norsk bokmål', country: 'Norway', flag: '🇳🇴' },
+  { code: 'nn', name: 'Norsk nynorsk', country: 'Norway', flag: '🇳🇴' },
+  { code: 'se', name: 'Davvisámegiella', country: 'Sápmi', flag: '🇳🇴' },
   { code: 'hu', name: 'Magyar', country: 'Hungary', flag: '🇭🇺' },
   { code: 'el', name: 'Ελληνικά', country: 'Greece', flag: '🇬🇷' },
   { code: 'is', name: 'Íslenska', country: 'Iceland', flag: '🇮🇸' },
@@ -266,6 +278,7 @@ export const LANGUAGES = [
   { code: 'fo', name: 'Føroyskt', country: 'Faroe Islands', flag: '🇫🇴' },
   { code: 'kl', name: 'Kalaallisut', country: 'Greenland', flag: '🇬🇱' },
   { code: 'ga', name: 'Gaeilge', country: 'Ireland', flag: '🇮🇪' },
+  { code: 'gv', name: 'Gaelg', country: 'Isle of Man', flag: '🇮🇲' },
   { code: 'mt', name: 'Malti', country: 'Malta', flag: '🇲🇹' },
   { code: 'wa', name: 'Wallon', country: 'Belgium', flag: '🇧🇪' },
   { code: 'fy', name: 'Frysk', country: 'Netherlands', flag: '🇳🇱' },
@@ -304,8 +317,12 @@ export const LANGUAGES = [
   { code: 'sq', name: 'Shqip', country: 'Albania', flag: '🇦🇱' },
   { code: 'mk', name: 'Македонски', country: 'North Macedonia', flag: '🇲🇰' },
   { code: 'bs', name: 'Bosanski', country: 'Bosnia and Herzegovina', flag: '🇧🇦' },
+  { code: 'cnr', name: 'Crnogorski', country: 'Montenegro', flag: '🇲🇪' },
+  { code: 'crh', name: 'Qırımtatarca', country: 'Crimea', flag: '🏴' },
+  { code: 'la', name: 'Latina', country: 'Vatican City', flag: '🇻🇦' },
   
   // Middle East & Africa
+  { code: 'ar', name: 'العربية', country: 'Arab World', flag: '☪️' },
   { code: 'ar-SA', name: 'العربية (السعودية)', country: 'Saudi Arabia', flag: '🇸🇦' },
   { code: 'ar-EG', name: 'العربية (مصر)', country: 'Egypt', flag: '🇪🇬' },
   { code: 'ar-AE', name: 'العربية (الإمارات)', country: 'UAE', flag: '🇦🇪' },
@@ -317,6 +334,7 @@ export const LANGUAGES = [
   { code: 'ar-LB', name: 'العربية (لبنان)', country: 'Lebanon', flag: '🇱🇧' },
   { code: 'ar-SY', name: 'العربية (سوريا)', country: 'Syria', flag: '🇸🇾' },
   { code: 'ar-IQ', name: 'العربية (العراق)', country: 'Iraq', flag: '🇮🇶' },
+  { code: 'ar-PS', name: 'العربية (فلسطين)', country: 'Palestine', flag: '🇵🇸' },
   { code: 'ar-YE', name: 'العربية (اليمن)', country: 'Yemen', flag: '🇾🇪' },
   { code: 'ar-MA', name: 'العربية (المغرب)', country: 'Morocco', flag: '🇲🇦' },
   { code: 'ar-DZ', name: 'العربية (الجزائر)', country: 'Algeria', flag: '🇩🇿' },
@@ -324,28 +342,93 @@ export const LANGUAGES = [
   { code: 'ar-LY', name: 'العربية (ليبيا)', country: 'Libya', flag: '🇱🇾' },
   { code: 'ar-SD', name: 'العربية (السودان)', country: 'Sudan', flag: '🇸🇩' },
   { code: 'fa', name: 'فارسی', country: 'Iran', flag: '🇮🇷' },
+  { code: 'fa-AF', name: 'دری (Dari)', country: 'Afghanistan', flag: '🇦🇫' },
   { code: 'he', name: 'עברית', country: 'Israel', flag: '🇮🇱' },
   { code: 'ps', name: 'پښتو', country: 'Afghanistan', flag: '🇦🇫' },
   { code: 'ku', name: 'Kurdî', country: 'Kurdistan', flag: '☀️' },
   { code: 'az', name: 'Azərbaycanca', country: 'Azerbaijan', flag: '🇦🇿' },
   { code: 'sw', name: 'Kiswahili', country: 'Africa', flag: '🇰🇪' },
   { code: 'am', name: 'አማርኛ', country: 'Ethiopia', flag: '🇪🇹' },
+  { code: 'aa', name: 'Qafar Af', country: 'Djibouti / Eritrea', flag: '🇩🇯' },
+  { code: 'ak', name: 'Akan', country: 'Ghana', flag: '🇬🇭' },
+  { code: 'bm', name: 'Bamanankan', country: 'Mali', flag: '🇲🇱' },
+  { code: 'bem', name: 'IciBemba', country: 'Zambia', flag: '🇿🇲' },
+  { code: 'bci', name: 'Baoulé', country: "Côte d'Ivoire", flag: '🇨🇮' },
+  { code: 'din', name: 'Thuɔŋjäŋ', country: 'South Sudan', flag: '🇸🇸' },
+  { code: 'dyu', name: 'Julakan', country: "Côte d'Ivoire / Burkina Faso", flag: '🇨🇮' },
+  { code: 'ee', name: 'Eʋegbe', country: 'Togo / Ghana', flag: '🇹🇬' },
+  { code: 'fan', name: 'Fang', country: 'Gabon / Equatorial Guinea', flag: '🇬🇦' },
+  { code: 'ff', name: 'Fulfulde', country: 'West Africa', flag: '🌍' },
+  { code: 'fon', name: 'Fɔ̀ngbè', country: 'Benin', flag: '🇧🇯' },
+  { code: 'ha', name: 'Hausa', country: 'Nigeria / Niger', flag: '🇳🇬' },
+  { code: 'ig', name: 'Igbo', country: 'Nigeria', flag: '🇳🇬' },
+  { code: 'kea', name: 'Kabuverdianu', country: 'Cape Verde', flag: '🇨🇻' },
+  { code: 'ki', name: 'Gĩkũyũ', country: 'Kenya', flag: '🇰🇪' },
+  { code: 'kj', name: 'Oshikwanyama', country: 'Namibia / Angola', flag: '🇳🇦' },
+  { code: 'kpe', name: 'Kpɛlɛɛ', country: 'Liberia', flag: '🇱🇷' },
+  { code: 'kri', name: 'Krio', country: 'Sierra Leone', flag: '🇸🇱' },
+  { code: 'lg', name: 'Luganda', country: 'Uganda', flag: '🇺🇬' },
+  { code: 'ln', name: 'Lingála', country: 'DR Congo / Congo', flag: '🇨🇩' },
+  { code: 'lua', name: 'Tshiluba', country: 'DR Congo', flag: '🇨🇩' },
+  { code: 'mg', name: 'Malagasy', country: 'Madagascar', flag: '🇲🇬' },
+  { code: 'mos', name: 'Mooré', country: 'Burkina Faso', flag: '🇧🇫' },
+  { code: 'nd', name: 'isiNdebele', country: 'Zimbabwe', flag: '🇿🇼' },
+  { code: 'nr', name: 'isiNdebele', country: 'South Africa', flag: '🇿🇦' },
+  { code: 'nso', name: 'Sesotho sa Leboa', country: 'South Africa', flag: '🇿🇦' },
+  { code: 'ny', name: 'Chichewa', country: 'Malawi', flag: '🇲🇼' },
+  { code: 'om', name: 'Afaan Oromoo', country: 'Ethiopia', flag: '🇪🇹' },
+  { code: 'rw', name: 'Ikinyarwanda', country: 'Rwanda', flag: '🇷🇼' },
+  { code: 'rn', name: 'Ikirundi', country: 'Burundi', flag: '🇧🇮' },
+  { code: 'sg', name: 'Sängö', country: 'Central African Republic', flag: '🇨🇫' },
+  { code: 'sn', name: 'ChiShona', country: 'Zimbabwe', flag: '🇿🇼' },
+  { code: 'so', name: 'Soomaali', country: 'Somalia', flag: '🇸🇴' },
+  { code: 'ss', name: 'siSwati', country: 'Eswatini', flag: '🇸🇿' },
+  { code: 'st', name: 'Sesotho', country: 'Lesotho', flag: '🇱🇸' },
+  { code: 'suk', name: 'Kisukuma', country: 'Tanzania', flag: '🇹🇿' },
+  { code: 'sus', name: 'Sosoxui', country: 'Guinea', flag: '🇬🇳' },
+  { code: 'swb', name: 'Shikomori', country: 'Comoros / Mayotte', flag: '🇰🇲' },
+  { code: 'tem', name: 'Themne', country: 'Sierra Leone', flag: '🇸🇱' },
+  { code: 'ti', name: 'ትግርኛ', country: 'Eritrea / Ethiopia', flag: '🇪🇷' },
+  { code: 'tig', name: 'Tigre', country: 'Eritrea', flag: '🇪🇷' },
+  { code: 'tn', name: 'Setswana', country: 'Botswana', flag: '🇧🇼' },
+  { code: 'ts', name: 'XiTsonga', country: 'South Africa / Mozambique', flag: '🇿🇦' },
+  { code: 'tw', name: 'Twi', country: 'Ghana', flag: '🇬🇭' },
+  { code: 'umb', name: 'Umbundu', country: 'Angola', flag: '🇦🇴' },
+  { code: 've', name: 'Tshivenḓa', country: 'South Africa', flag: '🇿🇦' },
+  { code: 'vmw', name: 'Emakhuwa', country: 'Mozambique', flag: '🇲🇿' },
+  { code: 'wo', name: 'Wolof', country: 'Senegal / Gambia', flag: '🇸🇳' },
+  { code: 'yo', name: 'Yorùbá', country: 'Nigeria / Benin', flag: '🇳🇬' },
   
   // Central Asia
   { code: 'kk', name: 'Қазақ тілі', country: 'Kazakhstan', flag: '🇰🇿' },
   { code: 'uz', name: 'Oʻzbek', country: 'Uzbekistan', flag: '🇺🇿' },
+  { code: 'ky', name: 'Кыргызча', country: 'Kyrgyzstan', flag: '🇰🇬' },
+  { code: 'tg', name: 'Тоҷикӣ', country: 'Tajikistan', flag: '🇹🇯' },
+  { code: 'tk', name: 'Türkmençe', country: 'Turkmenistan', flag: '🇹🇲' },
   
   // India (Consolidated Group for screen transition)
   { code: 'hi', name: 'हिन्दी (Hindi)', country: 'India', flag: '🇮🇳' },
+  { code: 'as', name: 'অসমীয়া (Assamese)', country: 'India', flag: '🇮🇳' },
   { code: 'bn', name: 'বাংলা (Bengali)', country: 'India', flag: '🇮🇳' },
+  { code: 'brx', name: 'बड़ो (Bodo)', country: 'India', flag: '🇮🇳' },
+  { code: 'doi', name: 'डोगरी (Dogri)', country: 'India', flag: '🇮🇳' },
+  { code: 'kok', name: 'कोंकणी (Konkani)', country: 'India', flag: '🇮🇳' },
+  { code: 'ks', name: 'کٲشُر (Kashmiri)', country: 'India', flag: '🇮🇳' },
+  { code: 'mai', name: 'मैथिली (Maithili)', country: 'India', flag: '🇮🇳' },
+  { code: 'mni', name: 'মৈতৈলোন্ (Manipuri)', country: 'India', flag: '🇮🇳' },
   { code: 'ta', name: 'தமிழ் (Tamil)', country: 'India', flag: '🇮🇳' },
   { code: 'te', name: 'తెలుగు (Telugu)', country: 'India', flag: '🇮🇳' },
   { code: 'mr', name: 'मराठी (Marathi)', country: 'India', flag: '🇮🇳' },
   { code: 'gu', name: 'ગુજરાતી (Gujarati)', country: 'India', flag: '🇮🇳' },
   { code: 'kn', name: 'ಕನ್ನಡ (Kannada)', country: 'India', flag: '🇮🇳' },
   { code: 'ml', name: 'മലയാളം (Malayalam)', country: 'India', flag: '🇮🇳' },
+  { code: 'or', name: 'ଓଡ଼ିଆ (Odia)', country: 'India', flag: '🇮🇳' },
   { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)', country: 'India', flag: '🇮🇳' },
+  { code: 'sa', name: 'संस्कृतम् (Sanskrit)', country: 'India', flag: '🇮🇳' },
+  { code: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ (Santali)', country: 'India', flag: '🇮🇳' },
+  { code: 'sd', name: 'سنڌي (Sindhi)', country: 'India', flag: '🇮🇳' },
   { code: 'ur', name: 'اردو (Urdu)', country: 'India', flag: '🇮🇳' },
+  { code: 'si', name: 'සිංහල (Sinhala)', country: 'Sri Lanka', flag: '🇱🇰' },
   
   // South Africa
   { code: 'af', name: 'Afrikaans', country: 'South Africa', flag: '🇿🇦' },
@@ -554,8 +637,25 @@ export function fastJapaneseTransliterate(text: string): string {
   if (!text || !/[\u3040-\u30ff\u4e00-\u9faf]/.test(text)) return text;
   return transliterate(text, 'ja');
 }
-export async function formatAddress(details: any, lang: string = 'local', options: { shipping?: boolean, isHighPrecision?: boolean, forceDomestic?: boolean } = {}): Promise<string> {
+async function normalizeEnglishOutputPart(
+  value: string,
+  countryCode: string,
+  options: { isHighPrecision?: boolean; preferOpenSourceAliases?: boolean },
+) {
+  const shouldPreferOpenSource = options.preferOpenSourceAliases ?? options.isHighPrecision ?? false;
+  if (!shouldPreferOpenSource) return normalizeEnglishAddressPart(value, countryCode);
+
+  const resolved = await resolveEnglishAddressPartOpenSource(value, countryCode, {
+    fallback: normalizeEnglishAddressPart,
+  });
+  return resolved.value;
+}
+
+export async function formatAddress(details: any, lang: string = 'local', options: { shipping?: boolean, isHighPrecision?: boolean, forceDomestic?: boolean, preferOpenSourceAliases?: boolean } = {}): Promise<string> {
   if (!details) return "";
+
+  const naturalAddress = formatNaturalAddress(details);
+  if (naturalAddress) return naturalAddress;
 
   const c = details.country_code?.slice(0, 2).toUpperCase();
   const formatDef = await (c ? getAddressFormat(c) : Promise.resolve(null));
@@ -630,10 +730,9 @@ export async function formatAddress(details: any, lang: string = 'local', option
       else if (key === 'country') val = details.country || "";
 
       // Quality Romanization: If target is English, transliterate any non-latin values if they aren't translated
-      if (isTargetEn && val && /[^\u0000-\u007F]/.test(val)) {
-        // Attempt fast transliteration for the specific country if known
-        if (c === 'JP') val = fastJapaneseTransliterate(val);
-        else val = transliterate(val, c?.toLowerCase() || 'en');
+      if (isTargetEn && val && (/[^\u0000-\u007F]/.test(val) || c === 'IN' || c === 'ZA')) {
+        const normalized = await normalizeEnglishOutputPart(val, c || '', options);
+        val = normalized || transliterate(val, (c || 'en').toLowerCase());
       }
       mapping[key] = val;
     }
@@ -688,7 +787,7 @@ export async function formatAddress(details: any, lang: string = 'local', option
 
       if (isTargetEn) {
         // Final Latin-only cleanup for strict English output
-        result = result.replace(/[\u0400-\u04FF\u0370-\u03FF\u0590-\u05FF\u0600-\u06FF\u0E00-\u0E7F\u3040-\u30ff\u31f0-\u31ff\u4e00-\u9faf\uac00-\ud7af]/g, '').trim();
+        result = result.replace(/[\u0590-\u05FF\u0600-\u06FF\u0E00-\u0E7F]/g, '').trim();
         result = result.replace(/,\s*,/g, ',').replace(/^,|,$/g, '').replace(/\s+/g, ' ').trim();
       }
 
@@ -713,12 +812,28 @@ export async function formatAddress(details: any, lang: string = 'local', option
 
   const isTargetEn = lang === 'en' || lang === 'international';
   if (isTargetEn) {
-     Object.keys(parts).forEach(k => {
+     for (const k of Object.keys(parts)) {
        const key = k as keyof typeof parts;
        if (parts[key] && /[^\u0000-\u007F]/.test(parts[key])) {
-         parts[key] = transliterate(parts[key], c?.toLowerCase() || 'en');
+         const normalized = await normalizeEnglishOutputPart(parts[key], c || '', options);
+         parts[key] = normalized || transliterate(parts[key], (c || 'en').toLowerCase());
        }
-     });
+     }
+  }
+
+  if (isTargetEn && lang === 'international') {
+    const streetLine = parts.house && parts.road ? `${parts.house} ${parts.road}` : (parts.house || parts.road);
+    const cityLine = [parts.suburb, parts.city].filter(Boolean).join(', ');
+    const regionLine = [parts.state, parts.postcode].filter(Boolean).join(' ');
+    const countryLine = parts.country ? parts.country.toUpperCase() : '';
+
+    return [parts.poi, streetLine, cityLine, regionLine, countryLine]
+      .map(line => line.trim())
+      .filter(Boolean)
+      .join('\n')
+      .replace(/,\s*,/g, ',')
+      .replace(/^,|,$/g, '')
+      .trim();
   }
 
   if (isBigToSmall && !isTargetEn) {
@@ -740,46 +855,15 @@ async function performTranslation(text: string, target: string): Promise<string 
   const cacheKey = `${normalizedText}_${target}`;
   if (translationCache[cacheKey]) return translationCache[cacheKey];
 
-  // Try Open Source Translation APIs
-  const targetCode = target === 'zh-Hans' ? 'zh' : (target === 'zh-Hant' ? 'zt' : target);
+  const translated = await translateWithOpenSource({
+    text: normalizedText,
+    target,
+    timeoutMs: 3000,
+  });
 
-  const instances = [
-    "https://translate.argosopentech.com/translate",
-    "https://libretranslate.de/translate",
-    "https://translate.terraprint.co/translate",
-    "https://translate.fortland.io/translate",
-    "https://translate.api.skidder.xyz/translate"
-  ];
-
-  for (const url of instances) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000);
-
-      const res = await fetch(url, {
-        method: "POST",
-        body: JSON.stringify({
-          q: normalizedText,
-          source: "auto",
-          target: targetCode,
-          format: "text"
-        }),
-        headers: { "Content-Type": "application/json" },
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeoutId);
-      
-    if (res.ok) {
-        const data = await res.json();
-        if (data.translatedText) {
-          translationCache[cacheKey] = data.translatedText;
-          return data.translatedText;
-        }
-      }
-    } catch (err) {
-      continue;
-    }
+  if (translated?.translatedText) {
+    translationCache[cacheKey] = translated.translatedText;
+    return translated.translatedText;
   }
 
   return null;

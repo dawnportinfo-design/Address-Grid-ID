@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { TranslationKey } from '../constants/translations';
+import { QRCodeCanvas } from 'qrcode.react';
 
 interface SavedLocationsProps {
   show: boolean;
@@ -293,16 +294,26 @@ export const SavedLocations: React.FC<SavedLocationsProps> = ({
                               <img src={q.imageData} alt="QR Card" className="max-h-32 shadow-sm" />
                             </div>
                           )}
+                          {q.payload && !q.imageData && (
+                            <div className="mb-3 bg-slate-50 p-3 border border-slate-100 flex justify-center">
+                              <QRCodeCanvas value={q.payload} size={120} level="H" includeMargin={false} />
+                            </div>
+                          )}
 
                           <div className="flex items-center justify-between pt-2 border-t border-slate-50">
                             <button 
                               onClick={() => {
+                                if (!q.imageData) return;
                                 const link = document.createElement('a');
                                 link.download = `AGID_CARD-${q.id}.png`;
                                 link.href = q.imageData;
                                 link.click();
                               }}
-                              className="text-[10px] font-black text-purple-600 hover:text-purple-700"
+                              className={cn(
+                                "text-[10px] font-black",
+                                q.imageData ? "text-purple-600 hover:text-purple-700" : "text-slate-300 cursor-not-allowed"
+                              )}
+                              disabled={!q.imageData}
                             >
                               {t('download_card')}
                             </button>

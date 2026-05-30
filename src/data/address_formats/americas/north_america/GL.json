@@ -1,0 +1,208 @@
+{
+  "countryCode": "GL",
+  "name": "Greenland",
+  "native": {
+    "name": "Kalaallit Nunaat",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nKalaallit Nunaat",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Ateq",
+        "placeholder": "Ateq tamaat",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Aqquserngup aqqa",
+        "placeholder": "Aqquserngup aqqa",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Nr",
+        "placeholder": "Nr",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postnummeri",
+        "placeholder": "3900",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Illoqarfik",
+        "placeholder": "Nuuk",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nGreenland",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Name",
+        "placeholder": "Full Name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Street name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No",
+        "placeholder": "No",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "3900",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City/Town",
+        "placeholder": "Nuuk",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "GL-9999 or 9999",
+    "regex": "^(GL-)?39\\d{2}$",
+    "source": "Territory postal format metadata / local postal operator guidance"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "kl",
+        "name": "Greenlandic"
+      },
+      {
+        "code": "da",
+        "name": "Danish"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "poBox",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "poBox",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "cityOrTown"
+    ],
+    "postalCode": {
+      "label": "GL-9999 or 4 digits used",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "postnord-greenland",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "noaa-etopo",
+      "geobc-global-multi-resolution-topography",
+      "hydrosheds",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "esa-worldcover",
+      "usgs-3dep",
+      "nrcan-geospatial",
+      "conabio-geoportal",
+      "ibge-geosciences",
+      "inpe-terrabrasilis",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils",
+      "arcticdem",
+      "ibcao-arctic-ocean",
+      "glims-glacier-db",
+      "npolar-data-centre",
+      "greenland-gimp",
+      "nsidc-polar-data",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "marine-regions",
+      "obis-marine-biodiversity"
+    ]
+  },
+  "openSourceIds": [
+    "postnord-greenland",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "noaa-etopo",
+    "geobc-global-multi-resolution-topography",
+    "hydrosheds",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "esa-worldcover",
+    "usgs-3dep",
+    "nrcan-geospatial",
+    "conabio-geoportal",
+    "ibge-geosciences",
+    "inpe-terrabrasilis",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils",
+    "arcticdem",
+    "ibcao-arctic-ocean",
+    "glims-glacier-db",
+    "npolar-data-centre",
+    "greenland-gimp",
+    "nsidc-polar-data",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "marine-regions",
+    "obis-marine-biodiversity"
+  ]
+}

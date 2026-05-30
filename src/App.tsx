@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import maplibregl from 'maplibre-gl';
 import { fetchWithRetry } from './lib/utils';
+import { buildMapLibreOptions, OPENFREEMAP_STYLES, registerPmtilesProtocol, resolveMapStyle } from './lib/mapEngine';
 import { bearing, distance, polygon, bboxPolygon, difference, featureCollection, area } from '@turf/turf';
 import { TRANSLATIONS, TranslationKey } from './constants/translations';
 import { 
@@ -20,6 +21,7 @@ import {
 import { calculateDistance, calculateBearing, formatDistance } from './lib/nav';
 import legalData from './data/legal.json';
 import disputedTerritories from './data/disputed_territories.json';
+import { AdvancedSearchOptions, DEFAULT_ADVANCED_SEARCH_OPTIONS } from './lib/advancedSearch';
 import { 
   X, 
   Menu, 
@@ -119,6 +121,11 @@ import {
   normalizeAddressText,
   fastJapaneseTransliterate
 } from './lib/addressUtils';
+import { getAgidAddressTabLanguages } from './lib/languageTabs';
+import { getAgidCoordinates } from './lib/agidSelection';
+import { findContainingGridCellPolygon, getGridHighlightFrame, gridCellsCoverBounds, resolveGridHighlightPolygons, shouldRefreshGridForViewport, type GridRenderFrame } from './lib/gridGeometry';
+import { W3W_STYLE_GRID_MIN_ZOOM, getCloseDistanceGridFade, getEffectiveGridOpacityLevel, normalizeLongitude, shouldShowDisplayGrid } from './lib/gridDisplay';
+import { getViewportGridBounds, shouldShowGridForViewport } from './lib/gridViewport';
 import { 
   normalizeAddress, 
   parseAddress, 
@@ -129,6 +136,16 @@ import {
   db as placeDb 
 } from './services/GeocodingService';
 import { getPatternForPrefix, applySmartPattern, NO_POSTAL_COUNTRIES } from './lib/postalPatterns';
+import { getLanguageDirection, translateUi } from './lib/i18n';
+import { normalizeAppLanguage } from './lib/languageSettings';
+import { getAgidGridCellFillPaint, getAgidGridFocusFillPaint, getAgidGridLinePaint, getAgidSelectionFillPaint } from './lib/gridPaint';
+import { translateWithOpenSource } from './lib/openSourceTranslation';
+import {
+  buildRegisteredAddressQrPayload,
+  buildSavedQrFromRegisteredAddress,
+  parseRegisteredAddressQrPayload,
+  type RegisteredAddressRecord,
+} from './lib/registeredAddressQr';
 const AddressRegistration = React.lazy(() => import('./components/AddressRegistration').then(m => ({ default: m.AddressRegistration })));
 const PostalCodeLab = React.lazy(() => import('./components/PostalCodeLab').then(m => ({ default: m.PostalCodeLab })));
 const GeoArchitectPanel = React.lazy(() => import('./components/GeoArchitectPanel').then(m => ({ default: m.GeoArchitectPanel })));
@@ -175,6 +192,11 @@ export default function App() {
   const gridWorker = useRef<Worker | null>(null);
   const isSelectingResult = useRef(false);
   const lastPropsRef = useRef<Record<string, any>>({});
+  const renderedGridFrameRef = useRef<GridRenderFrame | null>(null);
+  const renderedGridCellsRef = useRef<any[]>([]);
+  const pendingGridBoundsRef = useRef<[[number, number], [number, number]] | null>(null);
+  const latestGridRequestIdRef = useRef(0);
+  const updateGridRef = useRef<((activeResult?: AGIDResult, selectedResult?: AGIDResult, gridSize?: number, refreshGrid?: boolean) => void) | null>(null);
 
   useEffect(() => {
     gridWorker.current = new Worker(new URL('./lib/gridWorker.ts', import.meta.url), { type: 'module' });
@@ -254,11 +276,14 @@ export default function App() {
     } catch { return true; }
   });
   // Language & Format Defaults - MOVED UP
-  const [appLanguage, setAppLanguage] = useState<string>(() => {
+  const [appLanguage, setAppLanguageState] = useState<string>(() => {
     try {
-      return localStorage.getItem('agid_app_language') || 'ja';
+      return normalizeAppLanguage(localStorage.getItem('agid_app_language') || 'ja');
     } catch { return 'ja'; }
   });
+  const setAppLanguage = (language: string) => {
+    setAppLanguageState(normalizeAppLanguage(language));
+  };
   const [addressLanguage, setAddressLanguage] = useState<string>(() => {
     try {
       return localStorage.getItem('agid_address_language') || 'en';
@@ -296,9 +321,21 @@ export default function App() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showCoordinateSearch, setShowCoordinateSearch] = useState(false);
+  const [advancedSearchOptions, setAdvancedSearchOptions] = useState<AdvancedSearchOptions>(DEFAULT_ADVANCED_SEARCH_OPTIONS);
   const [isFlying, setIsFlying] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
+  const isManualSelectionRef = useRef(isManualSelection);
+  const clickedAgidRef = useRef<AGIDResult | null>(clickedAgid);
+  const isGuidanceActiveRef = useRef(isGuidanceActive);
+  const isTrackingRef = useRef(isTracking);
+
+  useEffect(() => {
+    isManualSelectionRef.current = isManualSelection;
+    clickedAgidRef.current = clickedAgid;
+    isGuidanceActiveRef.current = isGuidanceActive;
+    isTrackingRef.current = isTracking;
+  }, [isManualSelection, clickedAgid, isGuidanceActive, isTracking]);
   const [isAgidPinnedToGps, setIsAgidPinnedToGps] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [isGridRegenerating, setIsGridRegenerating] = useState(false);
@@ -333,6 +370,12 @@ export default function App() {
   const [savedQrs, setSavedQrs] = useState<any[]>(() => {
     try {
       const saved = localStorage.getItem('saved_qrs');
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
+  const [registeredAddresses, setRegisteredAddresses] = useState<RegisteredAddressRecord[]>(() => {
+    try {
+      const saved = localStorage.getItem('agid_registered_addresses');
       return saved ? JSON.parse(saved) : [];
     } catch { return []; }
   });
@@ -373,7 +416,12 @@ export default function App() {
   const [selectedCountryBoundary, setSelectedCountryBoundary] = useState<any | null>(null);
   const [selectedRegionBoundary, setSelectedRegionBoundary] = useState<any | null>(null);
   const [showGeoArchitect, setShowGeoArchitect] = useState(false);
-  const [aoids, setAoids] = useState<any[]>([]);
+  const [aoids, setAoids] = useState<any[]>(() => {
+    try {
+      const saved = localStorage.getItem('agid_grid_aoids');
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
   const [nearestRoad, setNearestRoad] = useState<any>(null);
   const [useBidirectionalDijkstra, setUseBidirectionalDijkstra] = useState(false);
   const [isRoutingLoading, setIsRoutingLoading] = useState(false);
@@ -403,6 +451,14 @@ export default function App() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('agid_grid_aoids', JSON.stringify(aoids));
+  }, [aoids]);
+
+  useEffect(() => {
+    localStorage.setItem('agid_registered_addresses', JSON.stringify(registeredAddresses));
+  }, [registeredAddresses]);
 
   // Territory Lab Statistics Logic
   useEffect(() => {
@@ -485,13 +541,7 @@ export default function App() {
   });
 
   const t = React.useCallback((key: TranslationKey, params?: Record<string, string | number>) => {
-    let str = (TRANSLATIONS as any)[appLanguage]?.[key] || (TRANSLATIONS as any)['en']?.[key] || key;
-    if (params && typeof str === 'string') {
-      Object.entries(params).forEach(([k, v]) => {
-        str = str.replace(`{{${k}}}`, String(v));
-      });
-    }
-    return str;
+    return translateUi(TRANSLATIONS as any, appLanguage, key, params);
   }, [appLanguage]);
   const [showFullSeaRegistry, setShowFullSeaRegistry] = useState(false);
   const [showFullCountryRegistry, setShowFullCountryRegistry] = useState(false);
@@ -542,48 +592,16 @@ export default function App() {
     // 1. Normalization
     const normalizedText = normalizeAddressText(text);
     
-    // Convert our language codes to LibreTranslate codes
-    const targetCode = target === 'zh-Hans' ? 'zh' : (target === 'zh-Hant' ? 'zt' : target);
-    
     // Skip standard translation instances for Japanese-to-English to ensure Romaji via Gemini
     if (target !== 'en' || !/[\u3040-\u30ff\u4e00-\u9faf]/.test(normalizedText)) {
-      const instances = [
-        "https://translate.argosopentech.com/translate",
-        "https://libretranslate.de/translate",
-        "https://translate.terraprint.co/translate",
-        "https://translate.fortland.io/translate",
-        "https://translate.api.skidder.xyz/translate",
-        "https://libretranslate.pussthecat.org/translate",
-        "https://translate.trom.tf/translate"
-      ];
+      const translated = await translateWithOpenSource({
+        text: normalizedText,
+        target,
+        timeoutMs: 4000,
+      });
 
-      for (const url of instances) {
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout per instance
-
-          const res = await fetch(url, {
-            method: "POST",
-            body: JSON.stringify({
-              q: normalizedText,
-              source: "auto",
-              target: targetCode,
-              format: "text"
-            }),
-            headers: { "Content-Type": "application/json" },
-            signal: controller.signal
-          });
-          
-          clearTimeout(timeoutId);
-          
-          if (res.ok) {
-            const data = await res.json();
-            if (data.translatedText) return data.translatedText;
-          }
-        } catch (err) {
-          console.warn(`Translation failed for ${url}:`, err);
-          continue; // Try next instance
-        }
+      if (translated?.translatedText) {
+        return translated.translatedText;
       }
     }
     
@@ -714,8 +732,8 @@ export default function App() {
   });
   const [mapStyle, setMapStyle] = useState(() => {
     try {
-      return localStorage.getItem('agid_map_style') || 'https://tiles.openfreemap.org/styles/liberty';
-    } catch { return 'https://tiles.openfreemap.org/styles/liberty'; }
+      return localStorage.getItem('agid_map_style') || OPENFREEMAP_STYLES.liberty;
+    } catch { return OPENFREEMAP_STYLES.liberty; }
   });
   const [projection, setProjection] = useState<'mercator' | 'globe'>(() => {
     try {
@@ -761,8 +779,9 @@ export default function App() {
           lastPropsRef.current[layerId] = { paint, layout };
         }
         
-        // Ensure manual selection/hover layers always stay on top
-        if ((id.includes('selected') || id.includes('selection')) && map.current.getLayer(layerId)) {
+        if (beforeId && map.current.getLayer(beforeId) && map.current.getLayer(layerId)) {
+          map.current.moveLayer(layerId, beforeId);
+        } else if ((id.includes('selected') || id.includes('selection')) && map.current.getLayer(layerId)) {
           map.current.moveLayer(layerId);
         }
       }
@@ -774,132 +793,167 @@ export default function App() {
   const updateGrid = React.useCallback((activeResult?: AGIDResult, selectedResult?: AGIDResult, gridSize: number = 4, refreshGrid: boolean = true) => {
     if (!map.current || !map.current.isStyleLoaded()) return;
 
+    const center = map.current.getCenter();
+    const liveZoom = Number(map.current.getZoom().toFixed(2));
+    const gridLat = Number.isFinite(center.lat) ? center.lat : lat;
+    const gridLon = Number.isFinite(center.lng) ? normalizeLongitude(center.lng) : lng;
+    const gridZoom = Number.isFinite(liveZoom) ? liveZoom : zoom;
+
     // If we are zoomed in enough, always use 4m grid for detail, even in sea
     let effectiveGridSize = gridSize;
-    if (zoom >= 15) {
+    if (gridZoom >= 15) {
       effectiveGridSize = 4;
     }
 
     const sourceId = 'agid-grid';
     const activeSourceId = 'active-cell';
     const selectedSourceId = 'selected-cell';
+    const canvas = map.current.getCanvas();
+    const viewportCorners = [
+      map.current.unproject([0, 0]),
+      map.current.unproject([canvas.clientWidth, 0]),
+      map.current.unproject([canvas.clientWidth, canvas.clientHeight]),
+      map.current.unproject([0, canvas.clientHeight]),
+    ];
 
-    const shouldShow = isGridVisible && gridOpacityLevel > 0;
-    const shouldShowHighlight = true;
-
-    // Use cell bounds for active/selected cell
-    const activeBounds = activeResult?.bounds;
-    const selectedBounds = selectedResult?.bounds;
+    const effectiveGridOpacityLevel = getEffectiveGridOpacityLevel({ zoom: gridZoom, isGridVisible, gridOpacityLevel });
+    const shouldShow = shouldShowDisplayGrid({ zoom: gridZoom, isGridVisible, gridOpacityLevel }) && shouldShowGridForViewport(viewportCorners);
+    const shouldShowHighlight = shouldShow;
 
     const isSatellite = mapStyle === 'satellite';
     const isDark = mapStyle.includes('dark');
-    const isSeaGrid = activeResult?.isSea && zoom < 15;
+    const isSeaGrid = activeResult?.isSea && gridZoom < 15;
+    const currentGridFrame = { anchorLat: gridLat, zoom: gridZoom };
+    const clearGridLayers = () => {
+      const emptyData = { type: 'FeatureCollection', features: [] };
+      ensureSourceAndLayer(sourceId, 'line', emptyData, {});
+      ensureSourceAndLayer('grid-cells', 'fill', emptyData, {});
+      ensureSourceAndLayer('grid-cells-focus', 'fill', emptyData, {});
+      renderedGridCellsRef.current = [];
+      pendingGridBoundsRef.current = null;
+    };
+    const syncHighlightLayers = (frame: GridRenderFrame, showHighlight: boolean = shouldShowHighlight) => {
+      const { activePolygon, selectedPolygon } = resolveGridHighlightPolygons(
+        activeResult,
+        selectedResult,
+        frame.zoom,
+        frame.anchorLat,
+      );
+      const renderedActivePolygon = findContainingGridCellPolygon(renderedGridCellsRef.current, activeResult) || activePolygon;
+      const renderedSelectedPolygon = findContainingGridCellPolygon(renderedGridCellsRef.current, selectedResult) || selectedPolygon;
 
-    // 1) Update Active Cell
-    const activeData: any = (shouldShowHighlight && activeResult?.polygon) ? {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [activeResult.polygon]
-      },
-      properties: {}
-    } : { type: 'FeatureCollection', features: [] };
+      // 1) Update Active Cell
+      const activeData: any = (showHighlight && renderedActivePolygon) ? {
+        type: 'Feature',
+        geometry: {
+          type: 'Polygon',
+          coordinates: [renderedActivePolygon]
+        },
+        properties: {}
+      } : { type: 'FeatureCollection', features: [] };
 
-    // Active Highlight (Red for Land, White/Cyan for Sea)
-    ensureSourceAndLayer(activeSourceId, 'fill', activeData, {
-      'fill-color': isSeaGrid ? '#ffffff' : '#ef4444', 
-      'fill-opacity': isSeaGrid ? 0.35 : 0.4,
-      'fill-outline-color': isSeaGrid ? '#cbd5e1' : '#dc2626'
-    });
+      // Active Highlight (Red for Land, White/Cyan for Sea)
+      ensureSourceAndLayer(activeSourceId, 'fill', activeData, {
+        'fill-color': isSeaGrid ? '#ffffff' : '#ef4444', 
+        'fill-opacity': isSeaGrid ? 0.35 : 0.4,
+        'fill-outline-color': isSeaGrid ? '#cbd5e1' : '#dc2626'
+      }, {}, undefined, sourceId + '-layer');
 
-    // 2) Update Selected Cell
-    const selectedData: any = (shouldShowHighlight && selectedResult?.polygon) ? {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [selectedResult.polygon]
-      },
-      properties: {}
-    } : { type: 'FeatureCollection', features: [] };
+      // 2) Update Selected Cell
+      const selectedData: any = (showHighlight && renderedSelectedPolygon) ? {
+        type: 'Feature',
+        geometry: {
+          type: 'Polygon',
+          coordinates: [renderedSelectedPolygon]
+        },
+        properties: {}
+      } : { type: 'FeatureCollection', features: [] };
 
-    // Selection Fill
-    ensureSourceAndLayer(selectedSourceId, 'fill', selectedData, {
-      'fill-color': '#ef4444',
-      'fill-opacity': 0.45,
-    });
+      // Selection Fill
+      ensureSourceAndLayer(selectedSourceId, 'fill', selectedData, getAgidSelectionFillPaint(), {}, undefined, sourceId + '-layer');
 
-    // Selection Outline
-    const selectedOutlineData: any = (shouldShowHighlight && selectedResult?.polygon) ? {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [selectedResult.polygon]
-      },
-      properties: {}
-    } : { type: 'FeatureCollection', features: [] };
+      // Selection Outline
+      ensureSourceAndLayer(selectedSourceId + '-outline', 'line', (showHighlight && renderedSelectedPolygon) ? {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: renderedSelectedPolygon
+        },
+        properties: {}
+      } : { type: 'FeatureCollection', features: [] }, {
+        'line-color': '#dc2626',
+        'line-width': 3,
+        'line-opacity': 0.9
+      }, {}, undefined, sourceId + '-layer');
 
-    ensureSourceAndLayer(selectedSourceId + '-outline', 'line', {
-      type: 'Feature',
-      geometry: {
-        type: 'LineString',
-        coordinates: selectedResult?.polygon || []
-      },
-      properties: {}
-    }, {
-      'line-color': '#dc2626',
-      'line-width': 3,
-      'line-opacity': 0.9
-    });
+      // 3) Restore selection indicators (glow point and label)
+      const selectionPointData: any = (showHighlight && selectedResult) ? {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [selectedResult.lon, selectedResult.lat]
+        },
+        properties: { title: selectedResult.id }
+      } : { type: 'FeatureCollection', features: [] };
 
-    // 3) Restore selection indicators (glow point and label)
-    const selectionPointData: any = (shouldShowHighlight && selectedResult) ? {
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [selectedResult.lon, selectedResult.lat]
-      },
-      properties: { title: selectedResult.id }
-    } : { type: 'FeatureCollection', features: [] };
+      ensureSourceAndLayer('selection-point-glow', 'circle', selectionPointData, {
+        'circle-radius': [
+          'interpolate', ['linear'], ['zoom'],
+          15, 4,
+          20, 12
+        ],
+        'circle-color': '#ef4444',
+        'circle-opacity': 0.5,
+        'circle-blur': 0.8
+      });
 
-    ensureSourceAndLayer('selection-point-glow', 'circle', selectionPointData, {
-      'circle-radius': [
-        'interpolate', ['linear'], ['zoom'],
-        15, 4,
-        20, 12
-      ],
-      'circle-color': '#ef4444',
-      'circle-opacity': 0.5,
-      'circle-blur': 0.8
-    });
+      ensureSourceAndLayer('selection-label', 'symbol', selectionPointData, {
+        'text-color': '#dc2626',
+        'text-halo-color': 'rgba(255, 255, 255, 0.9)',
+        'text-halo-width': 2
+      }, {
+        'text-field': ['get', 'title'],
+        'text-font': ['Open Sans Bold'],
+        'text-size': [
+          'interpolate', ['linear'], ['zoom'],
+          15, 9,
+          18, 12
+        ],
+        'text-offset': [0, -2],
+        'text-anchor': 'bottom',
+        'text-letter-spacing': 0.1
+      });
+    };
 
-    ensureSourceAndLayer('selection-label', 'symbol', selectionPointData, {
-      'text-color': '#dc2626',
-      'text-halo-color': 'rgba(255, 255, 255, 0.9)',
-      'text-halo-width': 2
-    }, {
-      'text-field': ['get', 'title'],
-      'text-font': ['Open Sans Bold'],
-      'text-size': [
-        'interpolate', ['linear'], ['zoom'],
-        15, 9,
-        18, 12
-      ],
-      'text-offset': [0, -2],
-      'text-anchor': 'bottom',
-      'text-letter-spacing': 0.1
-    });
+    const visibleBounds = getViewportGridBounds(viewportCorners, 0);
+    const renderBounds = getViewportGridBounds(viewportCorners, mapPitch > 30 ? 1 : 0.75);
+    const hasViewportCoverage = gridCellsCoverBounds(renderedGridCellsRef.current, visibleBounds);
+    const shouldRefreshGrid = shouldRefreshGridForViewport(refreshGrid, renderedGridCellsRef.current, visibleBounds, pendingGridBoundsRef.current);
+    const highlightFrame = getGridHighlightFrame(currentGridFrame, renderedGridFrameRef.current, refreshGrid);
 
     if (!shouldShow) {
-      ensureSourceAndLayer(sourceId, 'line', { type: 'FeatureCollection', features: [] }, {});
-      ensureSourceAndLayer('grid-cells', 'fill', { type: 'FeatureCollection', features: [] }, {});
-      ensureSourceAndLayer('grid-cells-focus', 'fill', { type: 'FeatureCollection', features: [] }, {});
+      syncHighlightLayers(currentGridFrame, false);
+      clearGridLayers();
       return;
     }
 
-    if (!refreshGrid) return;
+    if (!shouldRefreshGrid) {
+      syncHighlightLayers(highlightFrame);
+      return;
+    }
 
-    const opacityMultiplier = gridOpacityLevel / 3; 
-    const gridColor = isSatellite || isDark ? '#94a3b8' : '#475569';
+    if (renderedGridCellsRef.current.length > 0 && !hasViewportCoverage) {
+      clearGridLayers();
+      syncHighlightLayers(currentGridFrame, false);
+    } else {
+      syncHighlightLayers(highlightFrame);
+    }
+
+    const opacityMultiplier = (effectiveGridOpacityLevel / 3) * getCloseDistanceGridFade(gridZoom); 
+    const gridLinePaint = getAgidGridLinePaint({
+      isSatelliteOrDark: isSatellite || isDark,
+      isCloseDistanceGrid: gridZoom >= W3W_STYLE_GRID_MIN_ZOOM,
+    });
     
     const dynamicGridOpacity = [
       'interpolate', ['linear'], ['zoom'],
@@ -922,10 +976,20 @@ export default function App() {
     if (gridWorker.current) {
       setIsGridRegenerating(true);
       const isLargeGrid = effectiveGridSize >= 1000;
+      const requestId = latestGridRequestIdRef.current + 1;
+      latestGridRequestIdRef.current = requestId;
+      const requestedGridFrame = currentGridFrame;
       
       gridWorker.current.onmessage = (e) => {
-        const { gridLines, gridCells } = e.data;
+        const { gridLines, gridCells, requestId: responseRequestId } = e.data;
+        if (responseRequestId !== undefined && responseRequestId !== latestGridRequestIdRef.current) {
+          return;
+        }
+        pendingGridBoundsRef.current = null;
+
         if (!gridLines || gridLines.length === 0) {
+          clearGridLayers();
+          syncHighlightLayers(requestedGridFrame, false);
           setIsGridRegenerating(false);
           return;
         }
@@ -938,48 +1002,41 @@ export default function App() {
             properties: {}
           }]
         }, {
-          'line-color': gridColor,
+          ...gridLinePaint,
           'line-width': dynamicGridWidth,
           'line-opacity': dynamicGridOpacity
         });
 
         const cellsData = { type: 'FeatureCollection', features: gridCells };
+        renderedGridCellsRef.current = gridCells;
 
-        ensureSourceAndLayer('grid-cells', 'fill', cellsData, {
-          'fill-color': isSatellite || isDark ? '#94a3b8' : '#475569', 
-          'fill-opacity': [
-            'interpolate', ['linear'], ['zoom'],
-            1, 0.15 * opacityMultiplier,
-            10, 0.25 * opacityMultiplier,
-            14, 0.35 * opacityMultiplier,
-            17, 0.55 * opacityMultiplier,
-            20, 0.75 * opacityMultiplier
-          ]
-        }, {}, ['!=', ['get', 'isFocus'], true], activeSourceId + '-layer');
+        ensureSourceAndLayer('grid-cells', 'fill', cellsData, getAgidGridCellFillPaint({
+          isSatelliteOrDark: isSatellite || isDark,
+          opacityMultiplier,
+        }), {}, ['!=', ['get', 'isFocus'], true], activeSourceId + '-layer');
 
-        ensureSourceAndLayer('grid-cells-focus', 'fill', cellsData, {
-          'fill-color': isSatellite || isDark ? '#94a3b8' : '#475569',
-          'fill-opacity': 0.4 * opacityMultiplier
-        }, {}, ['==', ['get', 'isFocus'], true], activeSourceId + '-layer');
+        ensureSourceAndLayer('grid-cells-focus', 'fill', cellsData, getAgidGridFocusFillPaint({
+          isSatelliteOrDark: isSatellite || isDark,
+          opacityMultiplier,
+        }), {}, ['==', ['get', 'isFocus'], true], activeSourceId + '-layer');
         
+        renderedGridFrameRef.current = requestedGridFrame;
+        syncHighlightLayers(requestedGridFrame);
         setIsGridRegenerating(false);
       };
 
-      let bounds = map.current.getBounds().toArray();
-      if (mapPitch > 30) {
-        const sw = bounds[0];
-        const ne = bounds[1];
-        const lngPad = (ne[0] - sw[0]) * 0.5; 
-        const latPad = (ne[1] - sw[1]) * 1.5; 
-        bounds = [[sw[0] - lngPad, sw[1] - latPad * 0.2], [ne[0] + lngPad, ne[1] + latPad]];
-      }
-
       gridWorker.current.postMessage({
-        lat, lon: lng, zoom, isLargeGrid,
-        bounds: bounds
+        requestId,
+        lat: gridLat, lon: gridLon, zoom: gridZoom, isLargeGrid,
+        bounds: renderBounds
       });
+      pendingGridBoundsRef.current = renderBounds;
     }
   }, [lat, lng, zoom, mapPitch, mapStyle, isGridVisible, gridOpacityLevel, ensureSourceAndLayer]);
+
+  useEffect(() => {
+    updateGridRef.current = updateGrid;
+  }, [updateGrid]);
 
   const updateMapScene = React.useCallback(() => {
     if (!map.current || !map.current.isStyleLoaded()) return;
@@ -1263,10 +1320,10 @@ export default function App() {
   };
 
   const MAP_STYLES = [
-    { id: 'bright', name: 'Bright', url: 'https://tiles.openfreemap.org/styles/bright', icon: Globe, thumb: 'https://picsum.photos/seed/map-bright/100/100' },
-    { id: 'liberty', name: 'Liberty', url: 'https://tiles.openfreemap.org/styles/liberty', icon: Layers, thumb: 'https://picsum.photos/seed/map-liberty/100/100' },
-    { id: 'positron', name: 'Light', url: 'https://tiles.openfreemap.org/styles/positron', icon: Compass, thumb: 'https://picsum.photos/seed/map-light/100/100' },
-    { id: 'dark', name: 'Dark', url: 'https://tiles.openfreemap.org/styles/dark', icon: Waves, thumb: 'https://picsum.photos/seed/map-dark/100/100' },
+    { id: 'bright', name: 'Bright', url: OPENFREEMAP_STYLES.bright, icon: Globe, thumb: 'https://picsum.photos/seed/map-bright/100/100' },
+    { id: 'liberty', name: 'Liberty', url: OPENFREEMAP_STYLES.liberty, icon: Layers, thumb: 'https://picsum.photos/seed/map-liberty/100/100' },
+    { id: 'positron', name: 'Light', url: OPENFREEMAP_STYLES.positron, icon: Compass, thumb: 'https://picsum.photos/seed/map-light/100/100' },
+    { id: 'dark', name: 'Dark', url: OPENFREEMAP_STYLES.dark, icon: Waves, thumb: 'https://picsum.photos/seed/map-dark/100/100' },
     { id: 'satellite', name: 'Satellite', url: 'satellite', icon: Globe, thumb: 'https://picsum.photos/seed/satellite-view/100/100' },
   ];
 
@@ -1352,6 +1409,10 @@ export default function App() {
   useEffect(() => { localStorage.setItem('agid_default_addr_tab', defaultAddrTab); }, [defaultAddrTab]);
   useEffect(() => { localStorage.setItem('agid_app_language', appLanguage); }, [appLanguage]);
   useEffect(() => { localStorage.setItem('agid_address_language', addressLanguage); }, [addressLanguage]);
+  useEffect(() => {
+    document.documentElement.lang = appLanguage;
+    document.documentElement.dir = getLanguageDirection(appLanguage);
+  }, [appLanguage]);
   useEffect(() => { localStorage.setItem('agid_theme_mode', themeMode); }, [themeMode]);
   useEffect(() => { localStorage.setItem('agid_distance_unit', distanceUnit); }, [distanceUnit]);
   useEffect(() => { localStorage.setItem('agid_3d_enabled', JSON.stringify(is3DEnabled)); }, [is3DEnabled]);
@@ -1441,23 +1502,23 @@ export default function App() {
   useEffect(() => {
     if (!map.current) return;
     const currentStyle = map.current.getStyle();
+    const nextStyle = resolveMapStyle(mapStyle, SATELLITE_STYLE);
     // Simple check to avoid redundant setStyle
     if (mapStyle === 'satellite') {
-      // Check if current style is satellite (ESRI)
-      const isSatellite = currentStyle?.sources?.['esri-satellite'];
+      const isSatellite = currentStyle?.sources?.['s2-satellite'];
       if (!isSatellite) {
         // Only set isMapLoaded to false if it's the very first load or if we really need a full reset
         // To avoid white screen, we can skip it if map.current exists
         if (!map.current) setIsMapLoaded(false);
-        map.current.setStyle(SATELLITE_STYLE as any);
+        map.current.setStyle(nextStyle as any);
       }
     } else {
       // Check if current style URL matches
-      const isSatellite = currentStyle?.sources?.['esri-satellite'];
+      const isSatellite = currentStyle?.sources?.['s2-satellite'];
       const currentUrl = (currentStyle as any)?.metadata?.url;
       if (!currentStyle || isSatellite || currentUrl !== mapStyle) {
         if (!map.current) setIsMapLoaded(false);
-        map.current.setStyle(mapStyle);
+        map.current.setStyle(nextStyle as any);
       }
     }
   }, [mapStyle]);
@@ -1534,7 +1595,6 @@ export default function App() {
                 // Periodically retry with high precision for the LOCKED spot if address is still vague
                 // This satisfies "Attempt to get accurate address in the meantime"
                 if (!clickedAddress || clickedAddress.includes("Unnamed") || clickedAddress.includes("Unknown") || clickedAddress.includes("Loading")) {
-                  const { lat, lon } = decodeAGID(clickedAgid.id);
                   // Use a slightly offset lat/lng from the current actual GPS if we want the "current" address,
                   // but "locked ID" suggests we want the address of the grid cell's center or the user's specific spot at lock time.
                   // Let's use the current user position to get the best address of the current exact spot,
@@ -1880,7 +1940,17 @@ export default function App() {
       const actualLangCode = langCode.startsWith('en_') ? 'en' : langCode;
       const data = await regionalReverseGeocode(l, n, actualLangCode, countryCode);
       if (data && data.address) {
-        const formatted = await formatAddress(data.address, actualLangCode, { 
+        const addressDetailsForFormatting = {
+          ...data.address,
+          elevation: data.elevation,
+          delivery_difficulty: data.delivery_difficulty,
+          plus_code: data.plus_code,
+          flood_risk: data.flood_risk,
+          mountain_name: data.mountain_name,
+          nature_context: data.nature_context,
+          sea_context: data.sea_context,
+        };
+        const formatted = await formatAddress(addressDetailsForFormatting, actualLangCode, { 
           shipping: isShippingMode,
           isHighPrecision,
           forceDomestic: langCode === 'en_domestic'
@@ -1892,7 +1962,7 @@ export default function App() {
         const isBigToSmall = BIG_TO_SMALL_COUNTRIES.includes(data.address.country_code?.toLowerCase());
 
         if ((langCode === 'en' && isBigToSmall) || isNativeLang) {
-          const domesticVersion = await formatAddress(data.address, langCode, {
+          const domesticVersion = await formatAddress(addressDetailsForFormatting, langCode, {
             shipping: isShippingMode,
             isHighPrecision,
             forceDomestic: true
@@ -1934,33 +2004,18 @@ export default function App() {
 
     try {
       // Determine languages based on AGID prefix and sea status
-      const ALLOWED_STRICT_LANGS = [
-        'ja', 'en', 'zh-Hans', 'zh-Hant', 'ko', 'fr', 'fr-SN', 'fr-CD', 'fr-CI', 
-        'de', 'es', 'es-MX', 'es-AR', 'es-CL', 'es-CO', 'es-PE', 'es-VE', 'es-EC', 'es-BO', 'es-PY', 'es-UY', 'es-GQ',
-        'pt-BR', 'pt-PT', 'pt-AO', 'pt-MZ', 'pt-CV', 'pt-GW', 'pt-ST', 
-        'ar', 'ar-SA', 'ar-EG', 'ar-MA', 'ar-DZ', 'ar-TN', 'ar-IQ', 'ar-JO', 'ar-KW', 'ar-LB', 'ar-LY', 'ar-OM', 'ar-PS', 'ar-QA', 'ar-SD', 'ar-SY', 'ar-YE', 'ar-AE', 'ar-BH', 'ar-MR', 'ar-SO', 'ar-DJ', 'ar-KM',
-        'it', 'ru'
-      ];
       let langs: string[] = [];
-      if (addressLanguage && addressLanguage !== 'local') {
-        langs.push(addressLanguage);
-      }
 
       if (isSeaLoc) {
-        if (!langs.includes('en')) langs.push('en');
+        langs = ['en'];
       } else {
         const cc = prefix.toLowerCase();
-        const countryLangs = COUNTRY_LANGUAGES[cc] || ['en'];
-        const isPrimaryEn = countryLangs[0] === 'en';
-
-        if (isPrimaryEn) {
-          // English-speaking country: Domestic vs International, plus other local langs
-          langs.push('en_domestic', ...countryLangs.filter(l => l !== 'en'), 'en');
-        } else {
-          // Non-English primary country: Local(s) vs English
-          langs.push(...countryLangs);
-          if (!langs.includes('en')) langs.push('en');
-        }
+        langs = getAgidAddressTabLanguages({
+          countryCode: cc,
+          preferredLanguage: addressLanguage,
+          countryLanguages: COUNTRY_LANGUAGES[cc] || ['en'],
+          knownLanguageCodes: LANGUAGES.map(lang => lang.code),
+        });
       }
 
       // Final unique filter and validation
@@ -1982,9 +2037,6 @@ export default function App() {
       let langName = LANGUAGES.find(lang => lang.code === primaryLang)?.name || "Local";
 
       if (data && data.address) {
-        const formatted = await formatAddress(data.address, primaryLang, { shipping: isShippingMode });
-        const initialMap = { [primaryLang]: formatted };
-        
         // Fetch nearby OSM places and update local DB
         fetchNearbyOSMPlaces(l, n, 200).then(places => {
           setNearbyPlaces(prev => {
@@ -2037,8 +2089,12 @@ export default function App() {
           nature_context: data.nature_context,
           sea_context: data.sea_context,
           heritage_context: data.heritage_context,
-          japanese_geo_context: data.japanese_geo_context
+          japanese_geo_context: data.japanese_geo_context,
+          address_analysis: data.address_analysis
         };
+
+        const formatted = await formatAddress(enrichedAddressDetails, primaryLang, { shipping: isShippingMode });
+        const initialMap = { [primaryLang]: formatted };
 
         if (isClicked) {
           setClickedAddress(prev => prev !== formatted ? formatted : prev);
@@ -2070,7 +2126,7 @@ export default function App() {
           });
 
           // Also trigger precision translation in background if enabled
-          if (addressLanguage) {
+          if (addressLanguage && langs.includes(addressLanguage)) {
              fetchAddressForLang(l, n, addressLanguage, true, isSeaLoc ? '' : prefix, true);
           }
         }
@@ -2094,15 +2150,15 @@ export default function App() {
     } catch (e) {
       console.error("Reverse geocoding logic error:", e);
     }
-  }, [formatAddress, defaultAddrTab, fetchAddressForLang, appLanguage]);
+  }, [formatAddress, defaultAddrTab, fetchAddressForLang, appLanguage, addressLanguage]);
 
   useEffect(() => {
     if (clickedAgid) {
-      const { lat, lon } = decodeAGID(clickedAgid.id);
+      const coords = getAgidCoordinates(clickedAgid);
+      if (!coords) return;
       
       const timer = setTimeout(() => {
-        const { lat, lon } = decodeAGID(clickedAgid.id);
-        reverseGeocode(lat, lon, clickedAgid.prefix, clickedAgid.isSea, true);
+        reverseGeocode(coords.lat, coords.lon, clickedAgid.prefix, clickedAgid.isSea, true);
         setClickedAddressTab(prev => prev !== defaultAddrTab ? defaultAddrTab : prev);
       }, 500);
       return () => clearTimeout(timer);
@@ -2208,7 +2264,7 @@ export default function App() {
 
     const timer = setTimeout(async () => {
       try {
-        const results = await smartSearch(searchQuery, lat, lng);
+        const results = await smartSearch(searchQuery, lat, lng, advancedSearchOptions);
         setSearchResults(results);
       } catch (error) {
         console.error("Smart search error:", error);
@@ -2216,7 +2272,7 @@ export default function App() {
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, lat, lng]);
+  }, [searchQuery, lat, lng, advancedSearchOptions]);
 
   const selectSearchResult = async (result: any) => {
     if (!map.current) return;
@@ -2320,10 +2376,17 @@ export default function App() {
         setClickedAddress("Loading address...");
         setClickedAddressEn("Loading address...");
         
-        // Use regionalReverseGeocode instead of direct Nominatim calls
-        regionalReverseGeocode(newLat, newLng, appLanguage, result.prefix).then(async data => {
+        const preferredAddressLanguage = addressLanguage === 'local'
+          ? (COUNTRY_LANGUAGES[result.prefix.toLowerCase()]?.[0] || 'en')
+          : (addressLanguage || 'en');
+        const lookupAddressLanguage = preferredAddressLanguage === 'en_domestic'
+          ? 'en'
+          : preferredAddressLanguage;
+
+        // Use address language settings here; appLanguage is only for the UI.
+        regionalReverseGeocode(newLat, newLng, lookupAddressLanguage, result.prefix).then(async data => {
           if (data && data.address) {
-            setClickedAddress(await formatAddress(data.address, appLanguage));
+            setClickedAddress(await formatAddress(data.address, preferredAddressLanguage));
             setClickedAddressDetails({
               ...data.address,
               elevation: data.elevation,
@@ -2348,7 +2411,7 @@ export default function App() {
         return;
       } else {
         // Use Smart Search (Local DB + Nominatim)
-        const results = await smartSearch(query, lat, lng);
+        const results = await smartSearch(query, lat, lng, advancedSearchOptions);
         setSearchResults(results);
         
         if (results.length > 0) {
@@ -2406,6 +2469,38 @@ export default function App() {
       }
     } catch (e) {}
 
+    const registeredAddressQr = parseRegisteredAddressQrPayload(result);
+    if (registeredAddressQr) {
+      const payload = result;
+      const savedQr = buildSavedQrFromRegisteredAddress(registeredAddressQr, payload);
+      const newSaved = [savedQr, ...savedQrs.filter(q => q.id !== savedQr.id)];
+      setSavedQrs(newSaved);
+      localStorage.setItem('saved_qrs', JSON.stringify(newSaved));
+
+      if (registeredAddressQr.type === 'AOID') {
+        setAoids(prev => {
+          const exists = prev.some(a => a.id === registeredAddressQr.id);
+          if (!exists && prev.length >= 3) return prev;
+          return [registeredAddressQr, ...prev.filter(a => a.id !== registeredAddressQr.id)];
+        });
+      } else {
+        setRegisteredAddresses(prev => [registeredAddressQr, ...prev.filter(address => address.id !== registeredAddressQr.id)]);
+      }
+
+      const qrLat = registeredAddressQr.lat;
+      const qrLon = registeredAddressQr.lon ?? registeredAddressQr.lng;
+      if (typeof qrLat === 'number' && typeof qrLon === 'number') {
+        map.current?.flyTo({ center: [qrLon, qrLat], zoom: 19 });
+        setLat(prev => prev !== qrLat ? qrLat : prev);
+        setLng(prev => prev !== qrLon ? qrLon : prev);
+      }
+
+      setSearchQuery(registeredAddressQr.id);
+      showAlert('QR Imported', 'Registered address imported from QR.');
+      setIsQrScanning(false);
+      return;
+    }
+
     if (result.includes(':')) {
       result = result.split(':').pop() || result;
     }
@@ -2435,7 +2530,7 @@ export default function App() {
       performSearch(result);
     }
     setIsQrScanning(false);
-  }, [jumpToAgid, performSearch, savedQrs, setSavedQrs]);
+  }, [jumpToAgid, performSearch, savedQrs, setSavedQrs, setRegisteredAddresses]);
 
   const startQrScanner = () => {
     setIsQrScanning(true);
@@ -2524,18 +2619,18 @@ export default function App() {
     if (map.current) return;
     if (!mapContainer.current) return;
 
-    map.current = new maplibregl.Map({
+    registerPmtilesProtocol(maplibregl);
+
+    map.current = new maplibregl.Map(buildMapLibreOptions({
       container: mapContainer.current,
-      style: mapStyle === 'satellite' ? SATELLITE_STYLE : mapStyle,
+      style: mapStyle,
+      satelliteStyle: SATELLITE_STYLE,
       center: [lng, lat],
       zoom: zoom,
       pitch: mapPitch,
       bearing: mapBearing,
-      attributionControl: true,
-      projection: { type: projection },
-      maxParallelImageRequests: 16, 
-      transformRequest: (url) => ({ url })
-    } as any);
+      projection,
+    }) as any);
 
     // Add ResizeObserver to handle map resizing properly
     const resizeObserver = new ResizeObserver(() => {
@@ -2630,16 +2725,23 @@ export default function App() {
 
     // Throttled move state updates
     let lastMoveUpdate = 0;
+    let lastGridMoveUpdate = 0;
     map.current.on('move', () => {
-      if (!map.current || isGuidanceActive || isTracking) return;
+      if (!map.current || isGuidanceActiveRef.current || isTrackingRef.current) return;
       
       const now = performance.now();
       if (now - lastMoveUpdate < 100) { // Throttle UI state updates to 10fps during pan
         // Still update the crosshair result for instant feel, but skip the expensive lat/lng state sync
-        if (!isManualSelection) {
-          const center = map.current.getCenter();
-          const result = encodeAGID(center.lat, center.lng);
+        const center = map.current.getCenter();
+        const newLng = normalizeLongitude(center.lng);
+        const result = encodeAGID(center.lat, newLng);
+        if (!isManualSelectionRef.current) {
           setClickedAgid(prev => (prev?.id === result.id ? prev : result));
+        }
+        const selectedResult = isManualSelectionRef.current ? clickedAgidRef.current || undefined : undefined;
+        if (now - lastGridMoveUpdate >= 50) {
+          lastGridMoveUpdate = now;
+          updateGridRef.current?.(result, selectedResult, 4, false);
         }
         return; 
       }
@@ -2668,15 +2770,18 @@ export default function App() {
       setMapPitch(prev => Math.abs(prev - newP) > 0.1 ? newP : prev);
 
       const result = encodeAGID(newLat, newLng);
-      if (!isManualSelection) {
+      if (!isManualSelectionRef.current) {
         setClickedAgid(prev => (prev?.id === result.id ? prev : result));
       }
-      updateGrid(result, isManualSelection ? clickedAgid || undefined : undefined, 4, false);
+      const selectedResult = isManualSelectionRef.current ? clickedAgidRef.current || undefined : undefined;
+      if (now - lastGridMoveUpdate >= 50) {
+        lastGridMoveUpdate = now;
+        updateGridRef.current?.(result, selectedResult, 4, false);
+      }
     });
 
     map.current.on('dragstart', () => {
       setIsTracking(false);
-      setIsManualSelection(false); // Returning to auto-center mode on drag
     });
 
     let lastHoverTime = 0;
@@ -2688,7 +2793,7 @@ export default function App() {
       lastHoverTime = now;
 
       const result = encodeAGID(e.lngLat.lat, e.lngLat.lng);
-      updateGrid(result, clickedAgid || undefined, 4, false);
+      updateGridRef.current?.(result, clickedAgidRef.current || undefined, 4, false);
     });
 
     map.current.on('click', (e) => {
@@ -2758,15 +2863,18 @@ export default function App() {
 
 
     map.current.on('moveend', () => {
-      if (!map.current || isGuidanceActive || isTracking) return;
+      if (!map.current || isGuidanceActiveRef.current || isTrackingRef.current) return;
+
+      const center = map.current.getCenter();
+      let newLng = center.lng;
+      while (newLng > 180) newLng -= 360;
+      while (newLng < -180) newLng += 360;
+      const result = encodeAGID(center.lat, newLng);
+      const selectedResult = isManualSelectionRef.current ? clickedAgidRef.current || undefined : undefined;
+      updateGridRef.current?.(result, selectedResult, 4, true);
       
       // If no manual selection exists, perform full geocode at final position
-      if (!isManualSelection) {
-        const center = map.current.getCenter();
-        let newLng = center.lng;
-        while (newLng > 180) newLng -= 360;
-        while (newLng < -180) newLng += 360;
-        const result = encodeAGID(center.lat, newLng);
+      if (!isManualSelectionRef.current) {
         reverseGeocode(center.lat, newLng, result.prefix, result.isSea, true);
       }
     });
@@ -4190,6 +4298,8 @@ export default function App() {
         setSearchResults={setSearchResults}
         showCoordinateSearch={showCoordinateSearch}
         setShowCoordinateSearch={setShowCoordinateSearch}
+        advancedSearchOptions={advancedSearchOptions}
+        setAdvancedSearchOptions={setAdvancedSearchOptions}
         isSearching={isSearching}
         searchHistory={searchHistory}
         clearHistory={clearHistory}
@@ -4476,21 +4586,30 @@ export default function App() {
             setShowAddressRegistration(false);
             setAoidModeForced(false);
           }}
-          initialAgid={clickedAgid?.id || ""}
+          initialAgid={clickedAgid?.id || encodeAGID(lat, lng).id}
           initialAddress={clickedAddress || ""}
           forceAoidMode={aoidModeForced}
-          currentCoords={clickedAgid ? { lat: clickedAgid.lat, lon: clickedAgid.lon } : undefined}
+          appLanguage={appLanguage}
+          addressLanguage={addressLanguage}
+          currentCoords={clickedAgid ? { lat: clickedAgid.lat, lon: clickedAgid.lon } : { lat, lon: lng }}
           onRegister={(data) => {
-            if (data.type === 'AOID') {
-              if (aoids.length >= 3) {
+            const payload = buildRegisteredAddressQrPayload(data);
+            const savedQr = buildSavedQrFromRegisteredAddress(data, payload);
+            const newSavedQrs = [savedQr, ...savedQrs.filter(q => q.id !== savedQr.id)];
+            setSavedQrs(newSavedQrs);
+            localStorage.setItem('saved_qrs', JSON.stringify(newSavedQrs));
+
+            if (data.type === 'AOID' || data.isAoid) {
+              const exists = aoids.some(aoid => aoid.id === data.id);
+              if (!exists && aoids.length >= 3) {
                 showAlert("Limit Reached", "You can only register up to 3 AOIDs. Please delete one to register a new one.");
                 return;
               }
-              setAoids(prev => [...prev, data]);
+              setAoids(prev => [data, ...prev.filter(aoid => aoid.id !== data.id)]);
               showAlert("AOID Registered", `Standard ID ${data.id} has been registered as your private Address Owner ID.`);
             } else {
-              console.log("Registered Address:", data);
-              showAlert("Address Registered", `Address for ${data.recipient} has been saved locally.`);
+              setRegisteredAddresses(prev => [data, ...prev.filter(address => address.id !== data.id)]);
+              showAlert("Address Registered", `Address for ${data.name || data.recipient} has been saved locally and a QR has been generated.`);
             }
           }}
         />

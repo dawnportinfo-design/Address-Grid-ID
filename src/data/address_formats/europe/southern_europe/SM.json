@@ -1,0 +1,188 @@
+{
+  "countryCode": "SM",
+  "name": "San Marino",
+  "native": {
+    "name": "San Marino",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Ditta/Organizzazione",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Via/Piazza",
+        "placeholder": "Via della Capannaccia",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Numero civico",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "CAP",
+        "placeholder": "47890",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Castello",
+        "placeholder": "San Marino",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nSAN MARINO",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Co./Org.",
+        "placeholder": ""
+      },
+      {
+        "key": "street",
+        "label": "Street Address (Latin)",
+        "placeholder": "Via della Capannaccia"
+      },
+      {
+        "key": "houseNumber",
+        "label": "No.",
+        "placeholder": "1"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "47890"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "San Marino"
+      }
+    ]
+  },
+  "international": {
+    "it": {
+      "name": "Italiano (Internazionale)",
+      "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nSAN MARINO",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Soc./Org.",
+          "placeholder": ""
+        },
+        {
+          "key": "street",
+          "label": "Via/Piazza (Latín)",
+          "placeholder": "Via della Capannaccia"
+        },
+        {
+          "key": "houseNumber",
+          "label": "Nº",
+          "placeholder": "1"
+        },
+        {
+          "key": "postcode",
+          "label": "CAP",
+          "placeholder": "47890"
+        },
+        {
+          "key": "city",
+          "label": "Castello",
+          "placeholder": "San Marino"
+        }
+      ]
+    }
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^4789\\d$",
+    "api": "https://github.com/zauberware/postal-codes-json-xml-csv",
+    "source": "zauberware postal-codes-json-xml-csv"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "it",
+        "name": "Italian"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "city"
+    ],
+    "postalCode": {
+      "label": "4789x San Marino postcode",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "zauberware-postal-codes",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "san-marino-geoportal",
+      "san-marino-statistics",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "zauberware-postal-codes",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "san-marino-geoportal",
+    "san-marino-statistics",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

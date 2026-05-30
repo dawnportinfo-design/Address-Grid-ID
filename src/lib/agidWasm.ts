@@ -53,3 +53,7 @@ void initAgidWasm();
 export function getAgidWasmCore(): AgidWasmExports | null {
   return wasmCore;
 }
+
+export function combineWasmU32Pair(hi: number, lo: number): bigint {
+  return (BigInt(hi >>> 0) << 32n) | BigInt(lo >>> 0);
+}

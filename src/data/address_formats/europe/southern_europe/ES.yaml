@@ -1,0 +1,324 @@
+countryCode: ES
+name: Spain
+native:
+  name: Español
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{state}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Empresa
+      placeholder: ""
+    - key: street
+      label: Calle
+      placeholder: Calle Mayor
+      required: true
+    - key: houseNumber
+      label: Número
+      placeholder: "1"
+      required: true
+    - key: postcode
+      label: Código Postal
+      placeholder: "28013"
+      required: true
+    - key: city
+      label: Localidad
+      placeholder: Madrid
+      required: true
+    - key: state
+      label: Provincia
+      placeholder: Madrid
+      required: true
+domestic:
+  ca:
+    name: Català
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+      {{state}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Empresa
+      - key: street
+        label: Carrer
+        placeholder: Carrer de Balmes
+      - key: houseNumber
+        label: Número
+        placeholder: "1"
+      - key: postcode
+        label: Codi Postal
+        placeholder: "08001"
+      - key: city
+        label: Localitat
+        placeholder: Barcelona
+      - key: state
+        label: Província
+        placeholder: Barcelona
+  gl:
+    name: Galego
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+      {{state}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Empresa
+      - key: street
+        label: Rúa
+        placeholder: Rúa Nova
+      - key: houseNumber
+        label: Número
+        placeholder: "1"
+      - key: postcode
+        label: Código Postal
+        placeholder: "15701"
+      - key: city
+        label: Localidade
+        placeholder: Santiago
+      - key: state
+        label: Provincia
+        placeholder: A Coruña
+  eu:
+    name: Euskara
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Enpresa
+        placeholder: ""
+      - key: street
+        label: Kalea
+        placeholder: Kale Nagusia
+      - key: houseNumber
+        label: Zenbakia
+        placeholder: "1"
+      - key: postcode
+        label: Posta kodea
+        placeholder: "48001"
+      - key: city
+        label: Herria
+        placeholder: Bilbo
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{state}}
+    SPAIN
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Co./Org.
+      placeholder: ""
+    - key: street
+      label: Street Address (Latin characters)
+      placeholder: Calle Mayor
+      required: true
+    - key: houseNumber
+      label: No./Block
+      placeholder: "1"
+      required: true
+    - key: postcode
+      label: Postcode
+      placeholder: "28013"
+      required: true
+    - key: city
+      label: City/Town
+      placeholder: Madrid
+      required: true
+    - key: state
+      label: Province (Code)
+      placeholder: MD
+      required: true
+international:
+  es:
+    name: Español (Internacional)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+      {{state}}
+      ESPAÑA
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Empresa (Latín)
+        placeholder: ""
+      - key: street
+        label: Calle/Via (Latín)
+        placeholder: Calle Mayor
+        required: true
+      - key: houseNumber
+        label: Nº/Bloque
+        placeholder: "1"
+        required: true
+      - key: postcode
+        label: Cod. Postal
+        placeholder: "28013"
+        required: true
+      - key: city
+        label: Localidad
+        placeholder: Madrid
+        required: true
+      - key: state
+        label: Provincia (Sigla/Cód)
+        placeholder: MD
+        required: true
+  ca:
+    name: Catala (Internacional)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+      ESPANYA
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Empresa
+        placeholder: ""
+      - key: street
+        label: Carrer / Via (llati)
+        placeholder: Carrer de Balmes
+      - key: houseNumber
+        label: Núm.
+        placeholder: "1"
+      - key: postcode
+        label: Codi postal
+        placeholder: "08001"
+      - key: city
+        label: Localitat
+        placeholder: Barcelona
+  gl:
+    name: Galego (Internacional)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+      ESPANA
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Empresa
+        placeholder: ""
+      - key: street
+        label: Rua / Via (latin)
+        placeholder: Rua Nova
+      - key: houseNumber
+        label: Num.
+        placeholder: "1"
+      - key: postcode
+        label: Codigo postal
+        placeholder: "15701"
+      - key: city
+        label: Localidade
+        placeholder: Santiago de Compostela
+  eu:
+    name: Euskara (Nazioartekoa)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+      ESPAINIA
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Enpresa
+        placeholder: ""
+      - key: street
+        label: Kalea / Bidea (latin)
+        placeholder: Kale Nagusia
+      - key: houseNumber
+        label: Zk.
+        placeholder: "1"
+      - key: postcode
+        label: Posta kodea
+        placeholder: "48001"
+      - key: city
+        label: Herria
+        placeholder: Bilbo
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: https://ec.europa.eu/eurostat/web/gisco/geodata/administrative-units/postal-codes
+  source: Eurostat GISCO postal codes
+addressRules:
+  languages:
+    - code: es
+      name: Spanish
+    - code: ca
+      name: Catalan
+    - code: gl
+      name: Galician
+    - code: eu
+      name: Basque
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - city
+  postalCode:
+    label: 5 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - eurostat-gisco-postcodes
+    - correos-spain
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - ign-spain-cnig
+    - catastro-spain
+    - idee-spain
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - eurostat-gisco-postcodes
+  - correos-spain
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - ign-spain-cnig
+  - catastro-spain
+  - idee-spain
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

@@ -1,0 +1,136 @@
+countryCode: GQ
+name: Equatorial Guinea
+native:
+  name: Guinea Ecuatorial
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Guinea Ecuatorial
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Nombre Completo
+      placeholder: Teodoro Obiang
+      required: true
+      type: text
+    - key: street
+      label: Endereço
+      placeholder: Calle de Malabo, 123
+      required: true
+      type: text
+    - key: city
+      label: Ciudad
+      placeholder: Malabo
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Equatorial Guinea
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: Teodoro Obiang
+      required: true
+      type: text
+    - key: street
+      label: Street Address
+      placeholder: 123 Malabo St
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Malabo
+      required: true
+      type: text
+postalCode:
+  format: null
+  regex: null
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal
+addressRules:
+  languages:
+    - code: es
+      name: Spanish
+    - code: fr
+      name: French
+    - code: pt
+      name: Portuguese
+  deliveryLanguages:
+    - code: es
+      name: Spanish
+    - code: fr
+      name: French
+    - code: pt
+      name: Portuguese
+  nativeOrder:
+    - recipient
+    - street
+    - city
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - city
+    - country
+  regionalHierarchy:
+    - province
+    - district
+    - city
+  postalCode: null
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal

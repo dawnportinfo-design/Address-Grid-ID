@@ -1,0 +1,100 @@
+{
+  "countryCode": "CP",
+  "name": "Clipperton Island",
+  "native": {
+    "name": "Clipperton",
+    "addressFormat": "No permanent address",
+    "ordering": "small-to-big",
+    "fields": []
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "No permanent address",
+    "ordering": "small-to-big",
+    "fields": []
+  },
+  "postalCode": {
+    "format": "None",
+    "regex": null,
+    "api": null,
+    "source": "Uninhabited territory; no permanent address"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "fr",
+        "name": "French"
+      }
+    ],
+    "nativeOrder": [
+      "territory"
+    ],
+    "englishOrder": [
+      "territory"
+    ],
+    "regionalHierarchy": [
+      "uninhabitedTerritory"
+    ],
+    "postalCode": null,
+    "openSourceIds": [
+      "la-poste-fr-overseas",
+      "data-gouv-fr-postcodes",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "noaa-etopo",
+      "geobc-global-multi-resolution-topography",
+      "hydrosheds",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "esa-worldcover",
+      "usgs-3dep",
+      "nrcan-geospatial",
+      "conabio-geoportal",
+      "ibge-geosciences",
+      "inpe-terrabrasilis",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "la-poste-fr-overseas",
+    "data-gouv-fr-postcodes",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "noaa-etopo",
+    "geobc-global-multi-resolution-topography",
+    "hydrosheds",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "esa-worldcover",
+    "usgs-3dep",
+    "nrcan-geospatial",
+    "conabio-geoportal",
+    "ibge-geosciences",
+    "inpe-terrabrasilis",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

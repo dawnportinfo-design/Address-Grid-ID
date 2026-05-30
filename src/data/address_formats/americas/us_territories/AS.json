@@ -1,0 +1,174 @@
+{
+  "countryCode": "AS",
+  "name": "American Samoa",
+  "native": {
+    "name": "American Samoa",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Full Name",
+        "placeholder": "John Doe",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street Address / PO Box",
+        "placeholder": "PO Box 123",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Pago Pago",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "state",
+        "label": "State",
+        "placeholder": "AS",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "ZIP Code",
+        "placeholder": "96799",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}\nAmerican Samoa",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Name",
+        "placeholder": "Full Name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street Address / PO Box",
+        "placeholder": "PO Box 123",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Pago Pago",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "state",
+        "label": "State",
+        "placeholder": "AS",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "ZIP Code",
+        "placeholder": "96799",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN[-NNNN]",
+    "regex": "^\\d{5}(-\\d{4})?$",
+    "api": "https://tools.usps.com/go/ZipLookupAction_input",
+    "source": "USPS"
+  },
+  "openSourceIds": [
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "noaa-etopo",
+    "geobc-global-multi-resolution-topography",
+    "hydrosheds",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "esa-worldcover",
+    "usgs-3dep",
+    "nrcan-geospatial",
+    "conabio-geoportal",
+    "ibge-geosciences",
+    "inpe-terrabrasilis"
+  ],
+  "addressRules": {
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "deliveryLanguages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "county",
+      "village"
+    ],
+    "postalCode": {
+      "label": "NNNNN[-NNNN]",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "noaa-etopo",
+      "geobc-global-multi-resolution-topography",
+      "hydrosheds",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "esa-worldcover",
+      "usgs-3dep",
+      "nrcan-geospatial",
+      "conabio-geoportal",
+      "ibge-geosciences",
+      "inpe-terrabrasilis"
+    ]
+  }
+}

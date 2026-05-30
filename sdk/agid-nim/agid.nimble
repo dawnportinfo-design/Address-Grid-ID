@@ -1,0 +1,5 @@
+version       = "0.1.0"
+author        = "AGID"
+description   = "AGID Nim SDK"
+license       = "MIT"
+srcDir        = "src"

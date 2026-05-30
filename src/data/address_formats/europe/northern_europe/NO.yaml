@@ -1,0 +1,134 @@
+countryCode: NO
+name: Norway
+native:
+  name: Norge
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    Norge
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Navn
+      placeholder: Fullt navn
+      required: true
+      type: text
+    - key: street
+      label: Gate
+      placeholder: Karl Johans gate
+      required: true
+      type: text
+    - key: houseNumber
+      label: Husnummer
+      placeholder: Nr
+      required: true
+      type: text
+    - key: postcode
+      label: Postnummer
+      placeholder: "0150"
+      required: true
+      type: text
+    - key: city
+      label: Poststed
+      placeholder: Oslo
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    Norway
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Name
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: Street name
+      required: true
+      type: text
+    - key: houseNumber
+      label: House No
+      placeholder: No
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "0150"
+      required: true
+      type: text
+    - key: city
+      label: City/Town
+      placeholder: Oslo
+      required: true
+      type: text
+postalCode:
+  format: NNNN
+  regex: ^\d{4}$
+  api: https://data.norge.no/nb
+  source: Norwegian open data catalogue / Posten
+addressRules:
+  languages:
+    - code: no
+      name: Norwegian
+  nativeOrder:
+    - name
+    - street
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - city
+  postalCode:
+    label: 4 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - data-norge
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - kartverket-norway
+    - geonorge-norway
+    - brreg-address-register
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - data-norge
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - kartverket-norway
+  - geonorge-norway
+  - brreg-address-register
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

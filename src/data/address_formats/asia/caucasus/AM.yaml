@@ -1,0 +1,155 @@
+countryCode: AM
+name: Armenia
+native:
+  name: Հայաստան
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{region}}
+    Հայաստան
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Անուն
+      placeholder: Ամբողջական անուն
+      required: true
+      type: text
+    - key: street
+      label: Փողոց
+      placeholder: Փողոցի անուն
+      required: true
+      type: text
+    - key: houseNumber
+      label: Տուն
+      placeholder: Տան համար
+      required: true
+      type: text
+    - key: postcode
+      label: Ինդեքս
+      placeholder: "0001"
+      required: true
+      type: text
+    - key: city
+      label: Քաղաք
+      placeholder: Երևան
+      required: true
+      type: text
+    - key: region
+      label: Մարզ
+      placeholder: Երևան
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{region}}
+    Armenia
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Name
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: Street name
+      required: true
+      type: text
+    - key: houseNumber
+      label: House No
+      placeholder: No
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "0001"
+      required: true
+      type: text
+    - key: city
+      label: City/Town
+      placeholder: Yerevan
+      required: true
+      type: text
+    - key: region
+      label: Region
+      placeholder: Yerevan
+      required: true
+      type: text
+postalCode:
+  format: NNNN
+  regex: ^\d{4}$
+  api: https://www.haypost.am/en/find-index
+  source: HayPost postal index lookup / GeoNames Armenia
+addressRules:
+  languages:
+    - code: hy
+      name: Armenian
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - region
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - region
+    - country
+  regionalHierarchy:
+    - cityOrTown
+    - region
+  postalCode:
+    label: 4 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - haypost-am
+    - armstat-geodata
+    - cadastre-armenia
+    - haypost-address-reference
+    - geonames-armenia
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+openSourceIds:
+  - haypost-am
+  - armstat-geodata
+  - cadastre-armenia
+  - haypost-address-reference
+  - geonames-armenia
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

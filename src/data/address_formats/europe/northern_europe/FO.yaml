@@ -1,0 +1,133 @@
+countryCode: FO
+name: Faroe Islands
+native:
+  name: Føroyar
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    Føroyar
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Navn
+      placeholder: Fullt navn
+      required: true
+      type: text
+    - key: street
+      label: Gøta
+      placeholder: Gøtunavn
+      required: true
+      type: text
+    - key: houseNumber
+      label: Nr
+      placeholder: Nr
+      required: true
+      type: text
+    - key: postcode
+      label: Postnummar
+      placeholder: "100"
+      required: true
+      type: text
+    - key: city
+      label: Býur/Bygd
+      placeholder: Tórshavn
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    Faroe Islands
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Name
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: Street name
+      required: true
+      type: text
+    - key: houseNumber
+      label: House No
+      placeholder: No
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "100"
+      required: true
+      type: text
+    - key: city
+      label: City/Town
+      placeholder: Torshavn
+      required: true
+      type: text
+postalCode:
+  format: "FO-### or ###"
+  regex: ^(FO-)?\d{3}$
+  source: Territory postal format metadata / local postal operator guidance
+addressRules:
+  languages:
+    - code: fo
+      name: Faroese
+    - code: da
+      name: Danish
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - poBox
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - poBox
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - townOrVillage
+  postalCode:
+    label: FO-### or 3 digits used
+    required: true
+    usage: required
+  openSourceIds:
+    - postnord-faroe
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - postnord-faroe
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

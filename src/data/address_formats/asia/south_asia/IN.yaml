@@ -1,0 +1,230 @@
+countryCode: IN
+name: India
+native:
+  name: हिन्दी
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}}, {{street}}
+    {{suburb}}
+    {{city}}, {{state}} {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: भवन/कंपनी
+      placeholder: ताज महल पैलेस
+    - key: houseNumber
+      label: मकान/फ्लैट नंबर
+      placeholder: "123"
+    - key: street
+      label: सड़क/गली
+      placeholder: एमजी रोड
+    - key: suburb
+      label: इलाका/क्षेत्र
+      placeholder: इंदिरानगर
+    - key: city
+      label: शहर
+      placeholder: बेंगलुरु
+    - key: state
+      label: राज्य
+      placeholder: कर्नाटक
+    - key: postcode
+      label: पिन कोड
+      placeholder: "560038"
+domestic:
+  en:
+    name: English
+    addressFormat: |-
+      {{organization}}
+      {{houseNumber}}, {{street}}
+      {{suburb}}
+      {{city}}, {{state}} {{postcode}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Building/Company
+        placeholder: Taj Mahal Palace
+      - key: houseNumber
+        label: House/Flat No.
+        placeholder: "123"
+      - key: street
+        label: Street/Road
+        placeholder: MG Road
+      - key: suburb
+        label: Locality/Area
+        placeholder: Indiranagar
+      - key: city
+        label: City/Town
+        placeholder: Bengaluru
+      - key: state
+        label: State
+        placeholder: Karnataka
+      - key: postcode
+        label: PIN Code
+        placeholder: "560038"
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}}, {{street}}
+    {{suburb}}
+    {{city}}, {{state}} {{postcode}}
+    INDIA
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Co./Bldg
+      placeholder: e.g. Taj Mahal Palace
+    - key: houseNumber
+      label: No.
+      placeholder: "123"
+    - key: street
+      label: St./Rd. (Latin)
+      placeholder: MG Road
+    - key: suburb
+      label: Area/Loc.
+      placeholder: Indiranagar
+    - key: city
+      label: City/Town
+      placeholder: Bengaluru
+    - key: state
+      label: State Code
+      placeholder: e.g. KA
+    - key: postcode
+      label: PIN Code
+      placeholder: "560038"
+postalCode:
+  format: NNNNNN
+  regex: ^\d{6}$
+  api: https://api.postalpincode.in/pincode/{{postcode}}
+  source: India Post / Data.gov.in All India Pincode Directory / PostalPINCodeIndia OSS fallback
+addressRules:
+  languages:
+    - code: en
+      name: English
+    - code: hi
+      name: Hindi
+    - code: bn
+      name: Bengali
+    - code: ta
+      name: Tamil
+    - code: te
+      name: Telugu
+    - code: mr
+      name: Marathi
+    - code: gu
+      name: Gujarati
+    - code: kn
+      name: Kannada
+    - code: ml
+      name: Malayalam
+    - code: pa
+      name: Punjabi
+    - code: or
+      name: Odia
+    - code: ur
+      name: Urdu
+  nativeOrder:
+    - name
+    - street
+    - locality
+    - townOrDistrict
+    - city
+    - state
+    - postcode
+    - country
+  englishOrder:
+    - name
+    - street
+    - locality
+    - townOrDistrict
+    - city
+    - state
+    - postcode
+    - country
+  regionalHierarchy:
+    - stateOrUnionTerritory
+    - district
+    - cityOrTownOrLocality
+  postalCode:
+    label: 6 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - postalpincode-in
+    - data-gov-in-pincode
+    - india-digipin
+    - india-pincode-api-oss
+    - survey-of-india
+    - datameet-maps
+    - osm-india
+    - hot-osm-south-asia
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+  aliasLayers:
+    - OSM/GeoNames alternate names
+    - official English postal names
+    - India Post PIN/post-office locality names
+    - state-language place names
+    - historic and dialect-derived English exonyms
+  romanization:
+    strategy: script-aware regional alias first, then English postal exonym fallback
+    scripts:
+      - Devanagari
+      - Bengali
+      - Tamil
+      - Telugu
+      - Kannada
+      - Malayalam
+      - Gujarati
+      - Gurmukhi
+      - Odia
+      - Arabic/Urdu
+    examples:
+      मुंबई: Mumbai
+      কলকাতা: Kolkata
+      சென்னை: Chennai
+      ಬೆಂಗಳೂರು: Bengaluru
+      Banaras: Varanasi
+  normalizationPriority:
+    - postal authority API or official/open postal dataset
+    - OSM/Nominatim namedetails name:en and alternate tags
+    - GeoNames alternateNames with English language tag
+    - libpostal parser when configured server-side
+    - local fallback aliases only when open-source lookups are unavailable
+openSourceIds:
+  - postalpincode-in
+  - data-gov-in-pincode
+  - india-digipin
+  - india-pincode-api-oss
+  - survey-of-india
+  - datameet-maps
+  - osm-india
+  - hot-osm-south-asia
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

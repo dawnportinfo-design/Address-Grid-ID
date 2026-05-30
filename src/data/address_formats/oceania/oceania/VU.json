@@ -1,0 +1,179 @@
+{
+  "countryCode": "VU",
+  "name": "Vanuatu",
+  "native": {
+    "name": "English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": "1"
+      },
+      {
+        "key": "street",
+        "label": "Street/PO Box",
+        "placeholder": "Lini Highway"
+      },
+      {
+        "key": "city",
+        "label": "Town/City",
+        "placeholder": "Port Vila"
+      }
+    ]
+  },
+  "domestic": {
+    "bi": {
+      "name": "Bislama",
+      "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Kampani",
+          "placeholder": ""
+        },
+        {
+          "key": "houseNumber",
+          "label": "Namba blong haos",
+          "placeholder": "1"
+        },
+        {
+          "key": "street",
+          "label": "Rod blong masta",
+          "placeholder": "Lini Highway"
+        },
+        {
+          "key": "city",
+          "label": "Taon",
+          "placeholder": "Port Vila"
+        }
+      ]
+    },
+    "fr": {
+      "name": "Français",
+      "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Organisation",
+          "placeholder": ""
+        },
+        {
+          "key": "houseNumber",
+          "label": "No. de maison",
+          "placeholder": "1"
+        },
+        {
+          "key": "street",
+          "label": "Rue",
+          "placeholder": "Lini Highway"
+        },
+        {
+          "key": "city",
+          "label": "Ville",
+          "placeholder": "Port Vila"
+        }
+      ]
+    }
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}\nVANUATU",
+    "ordering": "small-to-big",
+    "fields": []
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "bi",
+        "name": "Bislama"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      },
+      {
+        "code": "fr",
+        "name": "French"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "street",
+      "area",
+      "island",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "recipient",
+      "street",
+      "area",
+      "island",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "islandOrArea"
+    ],
+    "postalCode": {
+      "label": "3 digits used",
+      "required": false,
+      "usage": "used"
+    },
+    "openSourceIds": [
+      "vanuatu-post",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "jaxa-aw3d30",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "hydrosheds",
+      "esa-worldcover",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "global-mangrove-watch",
+      "allen-coral-atlas",
+      "pacific-data-hub",
+      "digital-earth-pacific",
+      "pacioos"
+    ]
+  },
+  "openSourceIds": [
+    "vanuatu-post",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "jaxa-aw3d30",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "hydrosheds",
+    "esa-worldcover",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "global-mangrove-watch",
+    "allen-coral-atlas",
+    "pacific-data-hub",
+    "digital-earth-pacific",
+    "pacioos"
+  ]
+}

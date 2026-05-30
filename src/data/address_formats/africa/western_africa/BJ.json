@@ -1,0 +1,163 @@
+{
+  "countryCode": "BJ",
+  "name": "Benin",
+  "native": {
+    "name": "Bénin",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nBénin",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Nom Complet",
+        "placeholder": "Patrice Talon",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Adresse / BP",
+        "placeholder": "BP 123",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Ville",
+        "placeholder": "Cotonou",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nBenin",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Full Name",
+        "placeholder": "Patrice Talon",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street Address / PO Box",
+        "placeholder": "PO Box 123",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Cotonou",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": null,
+    "source": "Postal metadata from AGID regional table; no free OSS source configured"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "fr",
+        "name": "French"
+      }
+    ],
+    "nativeOrder": [
+      "department",
+      "commune",
+      "arrondissement",
+      "quarter",
+      "street",
+      "houseNumber",
+      "country"
+    ],
+    "englishOrder": [
+      "department",
+      "commune",
+      "district",
+      "quarter",
+      "street",
+      "houseNumber",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "department"
+    ],
+    "postalCode": {
+      "label": "4 digits used",
+      "required": false,
+      "usage": "used"
+    },
+    "deliveryLanguages": [
+      {
+        "code": "fr",
+        "name": "French"
+      }
+    ],
+    "openSourceIds": [
+      "hot-osm-west-africa",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "hot-osm-africa",
+      "openstreetmap-wiki-africa",
+      "humdata-africa",
+      "openaerialmap",
+      "digital-earth-africa-dem",
+      "digital-earth-africa-coastlines",
+      "digital-earth-africa-waterbodies",
+      "digital-earth-africa-wofs",
+      "digital-earth-africa-fractional-cover",
+      "digital-earth-africa-geomad",
+      "fao-wapor",
+      "esa-worldcover",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "global-mangrove-watch",
+      "allen-coral-atlas",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "rcmrd-gmes-africa-geoportal"
+    ]
+  },
+  "openSourceIds": [
+    "hot-osm-west-africa",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "hot-osm-africa",
+    "openstreetmap-wiki-africa",
+    "humdata-africa",
+    "openaerialmap",
+    "digital-earth-africa-dem",
+    "digital-earth-africa-coastlines",
+    "digital-earth-africa-waterbodies",
+    "digital-earth-africa-wofs",
+    "digital-earth-africa-fractional-cover",
+    "digital-earth-africa-geomad",
+    "fao-wapor",
+    "esa-worldcover",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "global-mangrove-watch",
+    "allen-coral-atlas",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "rcmrd-gmes-africa-geoportal"
+  ]
+}

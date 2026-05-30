@@ -1,0 +1,181 @@
+{
+  "countryCode": "AO",
+  "name": "Angola",
+  "native": {
+    "name": "Angola",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Nome Completo",
+        "placeholder": "Manuel dos Santos",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Endereço",
+        "placeholder": "Rua da Liberdade, 123",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Cidade / Província",
+        "placeholder": "Luanda",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{street}}\n{{city}}\nANGOLA",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Co./Org.",
+        "placeholder": ""
+      },
+      {
+        "key": "street",
+        "label": "Street (Latin)",
+        "placeholder": "Rua da Liberdade, 123"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Luanda"
+      }
+    ]
+  },
+  "international": {
+    "pt": {
+      "name": "Português (Internacional)",
+      "addressFormat": "{{organization}}\n{{street}}\n{{city}}\nANGOLA",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Empresa (Latim)",
+          "placeholder": ""
+        },
+        {
+          "key": "street",
+          "label": "Endereço (Latim)",
+          "placeholder": "Rua da Liberdade, 123"
+        },
+        {
+          "key": "city",
+          "label": "Cidade",
+          "placeholder": "Luanda"
+        }
+      ]
+    }
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": null,
+    "source": "Postal metadata from AGID Southern Africa and Indian Ocean regional table; open OSS source not configured"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "pt",
+        "name": "Portuguese"
+      }
+    ],
+    "deliveryLanguages": [
+      {
+        "code": "pt",
+        "name": "Portuguese"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "region",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "region",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "province",
+      "municipality"
+    ],
+    "postalCode": {
+      "label": "4 digits used",
+      "required": false,
+      "usage": "used"
+    },
+    "openSourceIds": [
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "hot-osm-africa",
+      "openstreetmap-wiki-africa",
+      "humdata-africa",
+      "openaerialmap",
+      "digital-earth-africa-dem",
+      "digital-earth-africa-coastlines",
+      "digital-earth-africa-waterbodies",
+      "digital-earth-africa-wofs",
+      "digital-earth-africa-fractional-cover",
+      "digital-earth-africa-geomad",
+      "fao-wapor",
+      "esa-worldcover",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "global-mangrove-watch",
+      "allen-coral-atlas",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "rcmrd-gmes-africa-geoportal"
+    ]
+  },
+  "openSourceIds": [
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "hot-osm-africa",
+    "openstreetmap-wiki-africa",
+    "humdata-africa",
+    "openaerialmap",
+    "digital-earth-africa-dem",
+    "digital-earth-africa-coastlines",
+    "digital-earth-africa-waterbodies",
+    "digital-earth-africa-wofs",
+    "digital-earth-africa-fractional-cover",
+    "digital-earth-africa-geomad",
+    "fao-wapor",
+    "esa-worldcover",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "global-mangrove-watch",
+    "allen-coral-atlas",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "rcmrd-gmes-africa-geoportal"
+  ]
+}

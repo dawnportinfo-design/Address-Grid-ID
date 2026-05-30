@@ -1,0 +1,45 @@
+{
+  "name": "AGID",
+  "version": "0.1.0",
+  "precision": {
+    "projection": "cubed-sphere-equal-area",
+    "faceCount": 6,
+    "faceAxisBits": 21,
+    "faceAxisDivisions": 2097152,
+    "hashBits": 50,
+    "packedBitsUsed": 45
+  },
+  "stringFormat": {
+    "prefixLength": 2,
+    "hashLength": 10,
+    "totalLength": 12,
+    "base32Alphabet": "0123456789ABCDEFGHJKMNPQRSTVWXYZ",
+    "landPrefix": "ISO 3166-1 alpha-2 where available",
+    "openOceanPrefix": "letter + number",
+    "coastalSeaPrefix": "number + letter",
+    "otherPrefix": "number + number"
+  },
+  "api": [
+    "encode(latitude, longitude) -> AgidResult",
+    "decode(agid) -> AgidDecoded | null",
+    "cellBounds(agid) -> bounds",
+    "cellPolygon(agid) -> lon/lat polygon"
+  ],
+  "testVectors": [
+    {
+      "name": "Tokyo Station",
+      "lat": 35.681236,
+      "lon": 139.767125
+    },
+    {
+      "name": "Null Island",
+      "lat": 0,
+      "lon": 0
+    },
+    {
+      "name": "New York City",
+      "lat": 40.7128,
+      "lon": -74.006
+    }
+  ]
+}

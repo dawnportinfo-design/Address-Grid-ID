@@ -31,6 +31,300 @@ const SHIPPING_ENGLISH_DICT: Record<string, string> = {
   '乡': 'Township'
 };
 
+const MAINLAND_CHINA_ENGLISH_PLACE_NAMES: Record<string, string> = {
+  北京市: 'Beijing',
+  上海市: 'Shanghai',
+  天津市: 'Tianjin',
+  重庆市: 'Chongqing',
+  新疆维吾尔自治区: 'Xinjiang Uyghur Autonomous Region',
+  内蒙古自治区: 'Inner Mongolia Autonomous Region',
+  广西壮族自治区: 'Guangxi Zhuang Autonomous Region',
+  西藏自治区: 'Tibet Autonomous Region',
+  宁夏回族自治区: 'Ningxia Hui Autonomous Region',
+  新疆: 'Xinjiang',
+  内蒙古: 'Inner Mongolia',
+  广西: 'Guangxi',
+  西藏: 'Tibet',
+  宁夏: 'Ningxia',
+  广东省: 'Guangdong',
+  浙江省: 'Zhejiang',
+  江苏省: 'Jiangsu',
+  四川省: 'Sichuan',
+  山东省: 'Shandong',
+  福建省: 'Fujian',
+  海南省: 'Hainan',
+  云南省: 'Yunnan',
+  贵州省: 'Guizhou',
+  湖南省: 'Hunan',
+  湖北省: 'Hubei',
+  河南省: 'Henan',
+  河北省: 'Hebei',
+  山西省: 'Shanxi',
+  陕西省: 'Shaanxi',
+  甘肃省: 'Gansu',
+  青海省: 'Qinghai',
+  辽宁省: 'Liaoning',
+  吉林省: 'Jilin',
+  黑龙江省: 'Heilongjiang',
+  安徽省: 'Anhui',
+  江西省: 'Jiangxi',
+  朝阳区: 'Chaoyang District',
+  天山区: 'Tianshan District',
+  赛罕区: 'Saihan District',
+  浦东新区: 'Pudong New Area',
+  乌鲁木齐市: 'Urumqi',
+  呼和浩特市: 'Hohhot',
+  深圳市: 'Shenzhen',
+  广州市: 'Guangzhou',
+  杭州市: 'Hangzhou',
+  南京市: 'Nanjing',
+  成都市: 'Chengdu',
+  西安市: "Xi'an",
+  世纪大道: 'Century Avenue',
+  解放南路: 'Jiefang South Road',
+};
+
+const MAINLAND_CHINA_SUFFIX_TRANSLATIONS: Array<[string, string]> = [
+  ['自治州', 'Autonomous Prefecture'],
+  ['自治区', 'Autonomous Region'],
+  ['自治县', 'Autonomous County'],
+  ['特别行政区', 'Special Administrative Region'],
+  ['新区', 'New Area'],
+  ['地区', 'Prefecture'],
+  ['省', 'Province'],
+  ['市', ''],
+  ['区', 'District'],
+  ['县', 'County'],
+  ['旗', 'Banner'],
+  ['镇', 'Town'],
+  ['乡', 'Township'],
+  ['村', 'Village'],
+  ['大道', 'Avenue'],
+  ['大厦', 'Building'],
+  ['大廈', 'Building'],
+  ['大楼', 'Building'],
+  ['大樓', 'Building'],
+  ['中心', 'Center'],
+  ['广场', 'Square'],
+  ['廣場', 'Square'],
+  ['南路', 'South Road'],
+  ['北路', 'North Road'],
+  ['东路', 'East Road'],
+  ['西路', 'West Road'],
+  ['中路', 'Middle Road'],
+  ['路', 'Road'],
+  ['街道', 'Subdistrict'],
+  ['街', 'Street'],
+  ['巷', 'Lane'],
+  ['号', 'No.'],
+];
+
+export type ChineseAddressZone = 'mainland' | 'taiwan' | 'hong-kong' | 'macao';
+
+export type ChineseAddressAlias = {
+  native: string;
+  values: string[];
+  kind: 'english' | 'historical' | 'pinyin' | 'portuguese' | 'cantonese';
+};
+
+export type ChineseAddressProfile = {
+  zone: ChineseAddressZone;
+  scripts: {
+    simplified: Record<string, string>;
+    traditional: Record<string, string>;
+  };
+  aliases: ChineseAddressAlias[];
+};
+
+const CHINESE_REGION_ALIASES: Record<ChineseAddressZone, Record<string, ChineseAddressAlias>> = {
+  mainland: {
+    北京市: { native: '北京市', values: ['Beijing', 'Peking'], kind: 'historical' },
+    广州市: { native: '广州市', values: ['Guangzhou', 'Canton'], kind: 'historical' },
+    上海市: { native: '上海市', values: ['Shanghai'], kind: 'english' },
+    深圳市: { native: '深圳市', values: ['Shenzhen'], kind: 'english' },
+    新疆维吾尔自治区: { native: '新疆维吾尔自治区', values: ['Xinjiang Uyghur Autonomous Region'], kind: 'english' },
+  },
+  taiwan: {
+    台北市: { native: '台北市', values: ['Taipei', 'Taibei'], kind: 'pinyin' },
+    臺北市: { native: '臺北市', values: ['Taipei', 'Taibei'], kind: 'pinyin' },
+    新北市: { native: '新北市', values: ['New Taipei', 'Xinbei'], kind: 'pinyin' },
+    台中市: { native: '台中市', values: ['Taichung', 'Taizhong'], kind: 'pinyin' },
+    臺中市: { native: '臺中市', values: ['Taichung', 'Taizhong'], kind: 'pinyin' },
+    台南市: { native: '台南市', values: ['Tainan'], kind: 'pinyin' },
+    臺南市: { native: '臺南市', values: ['Tainan'], kind: 'pinyin' },
+    高雄市: { native: '高雄市', values: ['Kaohsiung', 'Gaoxiong'], kind: 'pinyin' },
+    信義區: { native: '信義區', values: ['Xinyi District'], kind: 'english' },
+    市府路: { native: '市府路', values: ['Shifu Rd.'], kind: 'english' },
+  },
+  'hong-kong': {
+    香港: { native: '香港', values: ['Hong Kong', 'Heung Gong'], kind: 'cantonese' },
+    九龍: { native: '九龍', values: ['Kowloon'], kind: 'cantonese' },
+    香港島: { native: '香港島', values: ['Hong Kong Island'], kind: 'cantonese' },
+    中環: { native: '中環', values: ['Central'], kind: 'historical' },
+    尖沙咀: { native: '尖沙咀', values: ['Tsim Sha Tsui'], kind: 'cantonese' },
+    旺角: { native: '旺角', values: ['Mong Kok'], kind: 'cantonese' },
+    銅鑼灣: { native: '銅鑼灣', values: ['Causeway Bay'], kind: 'historical' },
+    彌敦道: { native: '彌敦道', values: ['Nathan Road'], kind: 'historical' },
+  },
+  macao: {
+    澳門: { native: '澳門', values: ['Macau', 'Macao'], kind: 'portuguese' },
+    澳门: { native: '澳门', values: ['Macau', 'Macao'], kind: 'portuguese' },
+    氹仔: { native: '氹仔', values: ['Taipa'], kind: 'portuguese' },
+    路環: { native: '路環', values: ['Coloane'], kind: 'portuguese' },
+    新馬路: { native: '新馬路', values: ['Avenida de Almeida Ribeiro'], kind: 'portuguese' },
+    新马路: { native: '新马路', values: ['Avenida de Almeida Ribeiro'], kind: 'portuguese' },
+    大馬路: { native: '大馬路', values: ['Avenida'], kind: 'portuguese' },
+    大马路: { native: '大马路', values: ['Avenida'], kind: 'portuguese' },
+  },
+};
+
+const TAIWAN_FIELD_ALIASES: Record<string, string> = {
+  台北市: 'Taipei City',
+  臺北市: 'Taipei City',
+  新北市: 'New Taipei City',
+  台中市: 'Taichung City',
+  臺中市: 'Taichung City',
+  台南市: 'Tainan City',
+  臺南市: 'Tainan City',
+  高雄市: 'Kaohsiung City',
+  信義區: 'Xinyi District',
+  市府路: 'Shifu Rd.',
+};
+
+const HK_FIELD_ALIASES: Record<string, string> = Object.fromEntries(
+  Object.entries(CHINESE_REGION_ALIASES['hong-kong']).map(([key, alias]) => [key, alias.values[0]])
+);
+
+const MO_FIELD_ALIASES: Record<string, string> = Object.fromEntries(
+  Object.entries(CHINESE_REGION_ALIASES.macao).map(([key, alias]) => [key, alias.values[0]])
+);
+
+function zoneFromCountryCode(countryCode: string): ChineseAddressZone {
+  const code = countryCode.toUpperCase();
+  if (code === 'TW') return 'taiwan';
+  if (code === 'HK') return 'hong-kong';
+  if (code === 'MO') return 'macao';
+  return 'mainland';
+}
+
+function collectChineseAliases(zone: ChineseAddressZone, values: string[]) {
+  const aliases = CHINESE_REGION_ALIASES[zone];
+  const collected = new Map<string, ChineseAddressAlias>();
+
+  for (const value of values.filter(Boolean)) {
+    const candidates = [value, toSimplified(value), toTraditional(value, zone === 'hong-kong' || zone === 'macao' ? 'HK' : 'TW')];
+    for (const candidate of candidates) {
+      const alias = aliases[candidate];
+      if (alias) collected.set(alias.native, alias);
+    }
+  }
+
+  return Array.from(collected.values());
+}
+
+function aliasValue(value: string, aliases: Record<string, string>, fallback?: (text: string) => string) {
+  if (!value) return '';
+  return aliases[value] || aliases[toTraditional(value, 'HK')] || aliases[toSimplified(value)] || fallback?.(value) || value;
+}
+
+export function buildChineseAddressProfile(countryCode: string, details: Record<string, any>): ChineseAddressProfile {
+  const zone = zoneFromCountryCode(countryCode);
+  const fields = ['country', 'state', 'city', 'district', 'subdistrict', 'road', 'building', 'poi'];
+  const simplified: Record<string, string> = {};
+  const traditional: Record<string, string> = {};
+
+  for (const field of fields) {
+    const value = String(details[field] ?? '').trim();
+    if (!value) continue;
+    simplified[field] = toSimplified(value);
+    traditional[field] = toTraditional(value, zone === 'macao' || zone === 'hong-kong' ? 'HK' : 'TW');
+  }
+
+  return {
+    zone,
+    scripts: {
+      simplified,
+      traditional,
+    },
+    aliases: collectChineseAliases(zone, fields.map(field => String(details[field] ?? '').trim())),
+  };
+}
+
+function titleCasePinyinPhrase(text: string) {
+  const syllables = pinyin(text, { toneType: 'none' })
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(syllable => syllable.toLowerCase());
+
+  if (syllables.length === 0) return '';
+  const compact = syllables.join('');
+  return compact.charAt(0).toUpperCase() + compact.slice(1);
+}
+
+function normalizeChineseFallbackSegment(segment: string) {
+  if (!segment) return '';
+
+  for (const [suffix, translation] of MAINLAND_CHINA_SUFFIX_TRANSLATIONS) {
+    if (segment.endsWith(suffix) && segment.length > suffix.length) {
+      const base = normalizeChineseFallbackSegment(segment.slice(0, -suffix.length));
+      return [base, translation].filter(Boolean).join(' ');
+    }
+  }
+
+  return titleCasePinyinPhrase(segment);
+}
+
+export function normalizeMainlandChineseAddressPart(text: string): string {
+  if (!text) return '';
+
+  const simplified = toSimplified(text).normalize('NFKC');
+  const keys = Object.keys(MAINLAND_CHINA_ENGLISH_PLACE_NAMES).sort((a, b) => b.length - a.length);
+  const parts: string[] = [];
+  let index = 0;
+
+  while (index < simplified.length) {
+    const match = keys.find(key => simplified.startsWith(key, index));
+    if (match) {
+      parts.push(MAINLAND_CHINA_ENGLISH_PLACE_NAMES[match]);
+      index += match.length;
+      continue;
+    }
+
+    const char = simplified[index];
+    if (/[\s,，、]/.test(char)) {
+      index += 1;
+      continue;
+    }
+
+    if (/[\dA-Za-z\-]/.test(char)) {
+      let end = index + 1;
+      while (end < simplified.length && /[\dA-Za-z\-]/.test(simplified[end])) end += 1;
+      parts.push(simplified.slice(index, end));
+      index = end;
+      continue;
+    }
+
+    let end = index + 1;
+    while (
+      end < simplified.length &&
+      !keys.some(key => simplified.startsWith(key, end)) &&
+      !/[\s,，、\dA-Za-z\-]/.test(simplified[end])
+    ) {
+      end += 1;
+    }
+
+    parts.push(normalizeChineseFallbackSegment(simplified.slice(index, end)));
+    index = end;
+  }
+
+  return parts
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .replace(/\s+No\.\s*/g, ' No. ')
+    .trim();
+}
+
 /**
  * Layer 1: Input Absorption & Canonicalization
  * Handles Simplified/Traditional/Dialect variations.
@@ -124,29 +418,13 @@ export function renderInternationalCN(details: any): string {
   
   const translateField = (text: string, isMajorInternal?: boolean) => {
     if (!text) return "";
-    let processed = text;
-    
-    // Apply Shipping Dictionary
-    Object.entries(SHIPPING_ENGLISH_DICT).forEach(([zh, en]) => {
-      if (processed.includes(zh)) {
-        processed = processed.replace(zh, en ? ` ${en}` : "");
-      }
-    });
-    
-    // Pinyin-ify remaining characters
-    // We use pinyin-pro for better accuracy
-    const result = pinyin(processed, { toneType: 'none' })
-      .split(' ')
-      .map(s => s.charAt(0).toUpperCase() + s.slice(1))
-      .join('');
-      
-    return result.trim();
+    return normalizeMainlandChineseAddressPart(text);
   };
 
   const parts = [
     translateField(c.building),
     translateField(c.road),
-    c.house_number ? `No.${c.house_number}` : "",
+    c.house_number ? `No. ${c.house_number}` : "",
     translateField(c.subdistrict),
     translateField(c.district),
     translateField(c.city),
@@ -156,6 +434,77 @@ export function renderInternationalCN(details: any): string {
   ].filter(Boolean);
   
   return parts.join(", ");
+}
+
+function renderTaiwanEnglish(details: any): string {
+  const state = aliasValue(details.state, TAIWAN_FIELD_ALIASES, normalizeMainlandChineseAddressPart);
+  const city = aliasValue(details.city, TAIWAN_FIELD_ALIASES, normalizeMainlandChineseAddressPart);
+  const road = aliasValue(details.road, TAIWAN_FIELD_ALIASES, normalizeMainlandChineseAddressPart);
+  const parts = [
+    details.building,
+    details.house_number && road ? `No. ${details.house_number}, ${road}` : road,
+    city,
+    state,
+    details.postcode,
+    'TAIWAN',
+  ].filter(Boolean);
+  return parts.join(', ');
+}
+
+function renderHongKongEnglish(details: any): string {
+  const road = aliasValue(details.road, HK_FIELD_ALIASES);
+  const subdistrict = aliasValue(details.subdistrict, HK_FIELD_ALIASES);
+  const city = aliasValue(details.city || details.district, HK_FIELD_ALIASES);
+  const parts = [
+    details.building,
+    details.house_number && road ? `${details.house_number} ${road}` : (details.house_number || road),
+    subdistrict,
+    city,
+    'HONG KONG',
+  ].filter(Boolean);
+  return parts.join(', ');
+}
+
+function renderMacaoPortuguese(details: any) {
+  const road = aliasValue(details.road, MO_FIELD_ALIASES);
+  const subdistrict = aliasValue(details.subdistrict || details.city, MO_FIELD_ALIASES);
+  const locality = subdistrict && !/^maca[ou]$/i.test(subdistrict) ? subdistrict : '';
+  const parts = [
+    details.building,
+    details.house_number && road ? `No. ${details.house_number}, ${road}` : road,
+    locality,
+    'MACAU',
+  ].filter(Boolean);
+  return parts.join(', ');
+}
+
+export function renderChineseLocaleAddress(locale: string, details: any): string {
+  const countryCode = details.country_code || details.countryCode || 'CN';
+  const zone = zoneFromCountryCode(countryCode);
+  const normalizedLocale = locale.toLowerCase();
+
+  if (zone === 'mainland') {
+    return normalizedLocale.startsWith('zh-cn')
+      ? renderDomesticCN(details)
+      : renderInternationalCN(details);
+  }
+
+  if (zone === 'taiwan') {
+    return normalizedLocale.startsWith('zh')
+      ? renderTW(details, 'zh-Hant-TW')
+      : renderTaiwanEnglish(details);
+  }
+
+  if (zone === 'hong-kong') {
+    return normalizedLocale.startsWith('zh')
+      ? renderHK(details, 'zh-Hant-HK')
+      : renderHongKongEnglish(details);
+  }
+
+  if (normalizedLocale.startsWith('zh')) {
+    return renderMO(details, 'zh-Hant-MO');
+  }
+  return renderMacaoPortuguese(details);
 }
 
 /**
@@ -175,23 +524,14 @@ export function renderTW(details: any, lang: string): string {
     ].filter(Boolean);
     return parts.join("");
   } else {
-    // International TW
-    return pinyin(details.state + details.city, { toneType: 'none' }) + ", TAIWAN";
+    return renderTaiwanEnglish(details);
   }
 }
 
 export function renderHK(details: any, lang: string): string {
   const isEnglish = lang === 'en' || lang === 'international';
   if (isEnglish) {
-    // HK English Canonical (Small-to-Big)
-    const parts = [
-      details.building,
-      details.house_number && details.road ? `${details.house_number} ${details.road}` : (details.house_number || details.road),
-      details.subdistrict,
-      details.city || details.district, // Kowloon, Hong Kong Island, etc.
-      "HONG KONG"
-    ].filter(Boolean);
-    return parts.join(", ").toUpperCase();
+    return renderHongKongEnglish(details);
   } else {
     // HK Traditional (Can handle local, zh-Hant, or specific zh-Hant-HK)
     const parts = [
@@ -210,14 +550,7 @@ export function renderMO(details: any, lang: string): string {
   const isPortuguese = lang === 'pt-PT' || lang === 'pt';
   
   if (isPortuguese || isEnglish) {
-    // Macau Portuguese/English (often uses Rua instead of Rd)
-    const parts = [
-      details.building,
-      details.house_number && details.road ? `${details.house_number} ${details.road}` : (details.house_number || details.road),
-      details.subdistrict,
-      "MACAU"
-    ].filter(Boolean);
-    return parts.join(", ").toUpperCase();
+    return renderMacaoPortuguese(details);
   } else {
     // Macau Chinese
     const parts = [

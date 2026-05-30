@@ -1,0 +1,150 @@
+countryCode: MM
+name: Myanmar
+native:
+  name: မြန်မာ
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{subdistrict}}, {{district}}
+    {{city}} {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: အဆောက်အအုံ/ကုမ္ပဏီ
+      placeholder: Shwedagon Pagoda
+      required: false
+      type: text
+    - key: houseNumber
+      label: အိမ်အမှတ်
+      placeholder: No. 1
+      required: false
+      type: text
+    - key: street
+      label: လမ်း
+      placeholder: Pyay Road
+      required: true
+      type: text
+    - key: subdistrict
+      label: ရပ်ကွက်
+      placeholder: Dagon Township
+      required: true
+      type: text
+    - key: district
+      label: မြို့နယ်
+      placeholder: ""
+      required: false
+      type: text
+    - key: city
+      label: မြို့/တိုင်းဒေသကြီး
+      placeholder: Yangon
+      required: true
+      type: text
+    - key: postcode
+      label: စာပို့သင်္ကေတ
+      placeholder: "11191"
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{subdistrict}}, {{district}}
+    {{city}} {{postcode}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Building/Company
+      placeholder: Shwedagon Pagoda
+      required: false
+      type: text
+    - key: houseNumber
+      label: House No.
+      placeholder: No. 1
+      required: false
+      type: text
+    - key: street
+      label: Street
+      placeholder: Pyay Road
+      required: true
+      type: text
+    - key: subdistrict
+      label: Ward/Township
+      placeholder: Dagon Township
+      required: true
+      type: text
+    - key: district
+      label: District
+      placeholder: ""
+      required: false
+      type: text
+    - key: city
+      label: City/Region
+      placeholder: Yangon
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "11191"
+      required: false
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: http://www.myanmarpost.com.mm/
+  source: Myanmar Post
+addressRules:
+  languages:
+    - code: my
+      name: Burmese
+  nativeOrder:
+    - city
+    - stateOrRegion
+    - street
+    - houseNumber
+    - name
+  englishOrder:
+    - city
+    - stateOrRegion
+    - street
+    - houseNumber
+    - name
+  regionalHierarchy:
+    - stateOrRegion
+    - city
+  postalCode:
+    label: 5 digits partially maintained
+    required: false
+    usage: partial
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

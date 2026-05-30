@@ -1,0 +1,22 @@
+pub const base32_alphabet = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+pub const prefix_length = 2;
+pub const hash_length = 10;
+pub const total_length = 12;
+
+pub const Result = struct {
+    id: [total_length]u8,
+    lat: f64,
+    lon: f64,
+    face: ?u8,
+};
+
+pub fn encode(lat: f64, lon: f64) !Result {
+    _ = lat;
+    _ = lon;
+    return error.NotImplemented;
+}
+
+pub fn decode(id: []const u8) ?Result {
+    _ = id;
+    return null;
+}

@@ -1,0 +1,215 @@
+{
+  "countryCode": "BQ",
+  "name": "Caribbean Netherlands",
+  "native": {
+    "name": "Caribisch Nederland",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\n{{state}}\nCaribisch Nederland",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Naam",
+        "placeholder": "Volledige naam",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Straat",
+        "placeholder": "Straatnaam",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Huisnummer",
+        "placeholder": "Nr",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Stad",
+        "placeholder": "Kralendijk",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "state",
+        "label": "Eiland",
+        "placeholder": "Bonaire",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\n{{state}}\nCaribbean Netherlands",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Name",
+        "placeholder": "Full Name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Street name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No",
+        "placeholder": "No",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Kralendijk",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "state",
+        "label": "Island",
+        "placeholder": "Bonaire",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "7000-9999",
+    "regex": "^[7-9]\\d{3}$",
+    "source": "Territory postal format metadata / local postal operator guidance"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "nl",
+        "name": "Dutch"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "city",
+      "district",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "neighborhood",
+      "city",
+      "region",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "region",
+      "city"
+    ],
+    "postalCode": {
+      "label": "Bonaire 7000-7999, Sint Eustatius 8000-8999, Saba 9000-9999",
+      "required": true,
+      "usage": "required"
+    },
+    "deliveryLanguages": [
+      {
+        "code": "nl",
+        "name": "Dutch"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "openSourceIds": [
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "zippopotam",
+      "noaa-etopo",
+      "geobc-global-multi-resolution-topography",
+      "hydrosheds",
+      "protected-planet-wdpa",
+      "gbif-occurrence",
+      "esa-worldcover",
+      "usgs-3dep",
+      "nrcan-geospatial",
+      "conabio-geoportal",
+      "ibge-geosciences",
+      "inpe-terrabrasilis",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "territoryProfiles": [
+    {
+      "code": "BQ-BO",
+      "name": "Bonaire",
+      "postalCodeRange": "7000-7999"
+    },
+    {
+      "code": "BQ-SE",
+      "name": "Sint Eustatius",
+      "postalCodeRange": "8000-8999"
+    },
+    {
+      "code": "BQ-SA",
+      "name": "Saba",
+      "postalCodeRange": "9000-9999"
+    }
+  ],
+  "openSourceIds": [
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "zippopotam",
+    "noaa-etopo",
+    "geobc-global-multi-resolution-topography",
+    "hydrosheds",
+    "protected-planet-wdpa",
+    "gbif-occurrence",
+    "esa-worldcover",
+    "usgs-3dep",
+    "nrcan-geospatial",
+    "conabio-geoportal",
+    "ibge-geosciences",
+    "inpe-terrabrasilis",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

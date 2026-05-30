@@ -1,0 +1,122 @@
+countryCode: SB
+name: Solomon Islands
+native:
+  name: Solomon Islands
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Solomon Islands
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: John Doe
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 123
+      required: true
+      type: text
+    - key: city
+      label: City/Town
+      placeholder: Honiara
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+    Solomon Islands
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Name
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 123
+      required: true
+      type: text
+    - key: city
+      label: City/Town
+      placeholder: Honiara
+      required: true
+      type: text
+postalCode:
+  format: null
+  regex: null
+addressRules:
+  languages:
+    - code: en
+      name: English
+    - code: pis
+      name: Solomon Islands Pidgin
+  nativeOrder:
+    - recipient
+    - street
+    - locality
+    - province
+    - postcode
+    - country
+  englishOrder:
+    - recipient
+    - street
+    - locality
+    - province
+    - postcode
+    - country
+  regionalHierarchy:
+    - provinceOrRegion
+  postalCode:
+    label: 3 digits used
+    required: false
+    usage: used
+  openSourceIds:
+    - solomon-post
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - zippopotam
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - pacific-data-hub
+    - digital-earth-pacific
+    - pacioos
+openSourceIds:
+  - solomon-post
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - zippopotam
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - pacific-data-hub
+  - digital-earth-pacific
+  - pacioos

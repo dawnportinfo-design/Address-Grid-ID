@@ -12,7 +12,7 @@ export const RESOURCE_CATEGORIES = [
   {
     title: "2. Hash Calculation (Deterministic)",
     items: [
-      { name: "Grid Size: 4m", desc: "High-precision 4x4m grid cells", features: "O(1) calculation" },
+      { name: "Aligned Grid", desc: "High-precision AGID grid overlay", features: "O(1) calculation" },
       { name: "Base32 Encoding", desc: "Human-readable hash (excluding I, L, O, 0, 1)", features: "8-10 chars" }
     ]
   },

@@ -1,0 +1,76 @@
+countryCode: BV
+name: Bouvet Island
+native:
+  name: Bouvetøya
+  addressFormat: No permanent address
+  ordering: small-to-big
+  fields: []
+english:
+  name: International English
+  addressFormat: No permanent address
+  ordering: small-to-big
+  fields: []
+postalCode:
+  format: None
+  regex: null
+  api: null
+  source: Uninhabited Norwegian dependency; no permanent postal addressing
+addressRules:
+  languages:
+    - code: no
+      name: Norwegian
+    - code: en
+      name: English
+  nativeOrder:
+    - territory
+  englishOrder:
+    - territory
+  regionalHierarchy:
+    - uninhabitedIsland
+  postalCode: null
+  openSourceIds:
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - scar-add
+    - scar-cga
+    - quantarctica
+    - rema-antarctica
+    - bedmap3-antarctica
+    - ibcso-southern-ocean
+    - measures-antarctic-grounding-line
+    - ats-antarctic-protected-areas
+    - nsidc-polar-data
+    - gebco-bathymetry
+    - gmrt-topography
+    - marine-regions
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - obis-marine-biodiversity
+openSourceIds:
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - scar-add
+  - scar-cga
+  - quantarctica
+  - rema-antarctica
+  - bedmap3-antarctica
+  - ibcso-southern-ocean
+  - measures-antarctic-grounding-line
+  - ats-antarctic-protected-areas
+  - nsidc-polar-data
+  - gebco-bathymetry
+  - gmrt-topography
+  - marine-regions
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - obis-marine-biodiversity

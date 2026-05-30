@@ -1,0 +1,207 @@
+countryCode: CN
+name: China
+native:
+  name: 中国
+  addressFormat: |-
+    {{postcode}}
+    {{state}}{{city}}{{district}}
+    {{street}}{{houseNumber}}
+    {{organization}}
+  ordering: big-to-small
+  fields:
+    - key: postcode
+      label: 邮政编码
+      placeholder: "100000"
+      required: true
+      type: text
+    - key: state
+      label: 省/直辖市/自治区
+      placeholder: 北京市
+      required: true
+      type: text
+    - key: city
+      label: 市
+      placeholder: 北京市
+      required: true
+      type: text
+    - key: district
+      label: 区/县
+      placeholder: 东城区
+      required: true
+      type: text
+    - key: street
+      label: 街道/路
+      placeholder: 长安街
+      required: false
+      type: text
+    - key: houseNumber
+      label: 号/弄
+      placeholder: 1号
+      required: false
+      type: text
+    - key: organization
+      label: 单位/楼层/房间
+      placeholder: 某某大厦 101室
+      required: false
+      type: text
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{district}}, {{city}}
+    {{state}} {{postcode}}
+    CHINA (P.R.C.)
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Org./Bldg (ASCII/Pinyin)
+      placeholder: Bldg 1, Room 101
+    - key: houseNumber
+      label: No.
+      placeholder: No.123
+    - key: street
+      label: St./Rd. (Latin/Pinyin)
+      placeholder: Changan Jie
+    - key: district
+      label: District / Qu (Pinyin)
+      placeholder: Chaoyang Qu
+    - key: city
+      label: City / Shi (Latin)
+      placeholder: Beijing
+    - key: state
+      label: Prov. / Sheng (Latin)
+      placeholder: Beijing
+    - key: postcode
+      label: Postcode
+      placeholder: "100000"
+international:
+  zh-Hans:
+    name: 中文简体 (国际/拼音)
+    addressFormat: |-
+      {{organization}}
+      {{houseNumber}} {{street}}
+      {{district}}, {{city}}
+      {{state}} {{postcode}}
+      CHINA (P.R.C.)
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: 单位/楼层 (拼音/Pinyin)
+        placeholder: Dasha 101-shi
+      - key: houseNumber
+        label: 号/弄 (Pinyin)
+        placeholder: 123 Hao
+      - key: street
+        label: 路/街 (拼音/Pinyin)
+        placeholder: Changan Jie
+      - key: district
+        label: 区/县 (Pinyin)
+        placeholder: Chaoyang Qu
+      - key: city
+        label: 城市/市 (Pinyin)
+        placeholder: Beijing Shi
+      - key: state
+        label: 省/直辖市 (Pinyin)
+        placeholder: Beijing Shi
+      - key: postcode
+        label: 邮编 (Postcode)
+        placeholder: "100000"
+  zh-Hant:
+    name: 中文繁體 (國際/拼音)
+    addressFormat: |-
+      {{organization}}
+      {{houseNumber}} {{street}}
+      {{district}}, {{city}}
+      {{state}} {{postcode}}
+      CHINA (P.R.C.)
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: 單位/樓層 (拼音/Pinyin)
+        placeholder: Dasha 101-shi
+      - key: houseNumber
+        label: 號/弄 (Pinyin)
+        placeholder: 123 Hao
+      - key: street
+        label: 路/街 (拼音/Pinyin)
+        placeholder: Changan Jie
+      - key: district
+        label: 區/縣 (Pinyin)
+        placeholder: Chaoyang Qu
+      - key: city
+        label: 城市/市 (Pinyin)
+        placeholder: Beijing Shi
+      - key: state
+        label: 省/直轄市 (Pinyin)
+        placeholder: Beijing Shi
+      - key: postcode
+        label: 郵編 (Postcode)
+        placeholder: "100000"
+postalCode:
+  format: NNNNNN
+  regex: ^\d{6}$
+  api: http://www.ems.com.cn/ (Manual check usually)
+  source: China Post
+addressRules:
+  languages:
+    - code: zh-Hans
+      name: Chinese (Simplified)
+  nativeOrder:
+    - postcode
+    - province
+    - city
+    - district
+    - street
+    - address
+    - name
+  englishOrder:
+    - postcode
+    - province
+    - city
+    - district
+    - street
+    - address
+    - name
+  regionalHierarchy:
+    - province
+    - prefectureCity
+    - districtOrCounty
+  postalCode:
+    label: 6 digits, e.g. 100000
+    required: true
+    usage: required
+  openSourceIds:
+    - china-postal-code
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+openSourceIds:
+  - china-postal-code
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

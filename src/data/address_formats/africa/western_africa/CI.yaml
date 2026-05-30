@@ -1,0 +1,151 @@
+countryCode: CI
+name: Ivory Coast
+native:
+  name: Côte d'Ivoire
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}}
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Nom Complet
+      placeholder: Koffi Kouadio
+      required: true
+      type: text
+    - key: street
+      label: Adresse / BP
+      placeholder: 01 BP 1234
+      required: true
+      type: text
+    - key: city
+      label: Ville
+      placeholder: Abidjan
+      required: true
+      type: text
+english:
+  name: International English
+  addressFormat: |-
+    {{organization}}
+    {{street}}
+    {{city}}
+    IVORY COAST
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Company/Organization
+      placeholder: ""
+    - key: street
+      label: Street Address / PO Box
+      placeholder: 01 PO Box 1234
+    - key: city
+      label: City/Town
+      placeholder: Abidjan
+international:
+  fr:
+    name: Français (International)
+    addressFormat: |-
+      {{organization}}
+      {{street}}
+      {{city}}
+      CÔTE D'IVOIRE
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Société/Organisation
+        placeholder: ""
+      - key: street
+        label: Adresse / BP
+        placeholder: 01 BP 1234
+      - key: city
+        label: Ville
+        placeholder: Abidjan
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: null
+  source: Postal metadata from AGID regional table; no free OSS source configured
+addressRules:
+  languages:
+    - code: fr
+      name: French
+  nativeOrder:
+    - city
+    - commune
+    - quarter
+    - street
+    - houseNumber
+    - country
+  englishOrder:
+    - city
+    - district
+    - quarter
+    - street
+    - houseNumber
+    - country
+  regionalHierarchy:
+    - district
+    - commune
+  postalCode:
+    label: 5 digits used
+    required: false
+    usage: used
+  deliveryLanguages:
+    - code: fr
+      name: French
+  openSourceIds:
+    - hot-osm-west-africa
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+openSourceIds:
+  - hot-osm-west-africa
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal

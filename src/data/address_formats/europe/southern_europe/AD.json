@@ -1,0 +1,163 @@
+{
+  "countryCode": "AD",
+  "name": "Andorra",
+  "native": {
+    "name": "Andorra",
+    "addressFormat": "{{organization}}\n{{street}}, {{houseNumber}}\n{{postcode}} {{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Empresa/Organització",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Carrer",
+        "placeholder": "Avinguda Meritxell",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Número",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Codi Postal",
+        "placeholder": "AD500",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Parròquia",
+        "placeholder": "Andorra la Vella",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{organization}}\n{{street}}, {{houseNumber}}\n{{postcode}} {{city}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company/Organization",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Meritxell Ave",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Number",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "AD500",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Parish",
+        "placeholder": "Andorra la Vella",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "ADNNN",
+    "regex": "^AD\\d{3}$",
+    "api": "https://postalcodes.info/",
+    "source": "postalcodes.info"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "ca",
+        "name": "Catalan"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "parish",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "parish",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "parish"
+    ],
+    "postalCode": {
+      "label": "AD plus 3 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "postalcodes-info",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "andorra-cartografia",
+      "andorra-open-data",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "postalcodes-info",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "andorra-cartografia",
+    "andorra-open-data",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

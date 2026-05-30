@@ -1,0 +1,153 @@
+countryCode: AZ
+name: Azerbaijan
+native:
+  name: Azərbaycan
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{region}}
+    Azərbaycan
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Ad
+      placeholder: Tam ad
+      required: true
+      type: text
+    - key: street
+      label: Küçə
+      placeholder: Küçə adı
+      required: true
+      type: text
+    - key: houseNumber
+      label: Ev nömrəsi
+      placeholder: No
+      required: true
+      type: text
+    - key: postcode
+      label: Poçt indeksi
+      placeholder: "1000"
+      required: true
+      type: text
+    - key: city
+      label: Şəhər
+      placeholder: Bakı
+      required: true
+      type: text
+    - key: region
+      label: Rayon
+      placeholder: Abşeron
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{region}}
+    Azerbaijan
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Name
+      placeholder: Full Name
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: Street name
+      required: true
+      type: text
+    - key: houseNumber
+      label: House No
+      placeholder: No
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "1000"
+      required: true
+      type: text
+    - key: city
+      label: City/Town
+      placeholder: Baku
+      required: true
+      type: text
+    - key: region
+      label: Region
+      placeholder: Absheron
+      required: false
+      type: text
+postalCode:
+  format: NNNN
+  regex: ^\d{4}$
+  api: https://www.geonames.org/countries/AZ/azerbaijan.html
+  source: GeoNames Azerbaijan postal reference
+addressRules:
+  languages:
+    - code: az
+      name: Azerbaijani
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - region
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - region
+    - country
+  regionalHierarchy:
+    - cityOrTown
+    - region
+  postalCode:
+    label: 4 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - geonames-postal
+    - azerbaijan-state-committee-property
+    - azerbaijan-open-data
+    - azerpost-address-reference
+    - geonames-azerbaijan
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+openSourceIds:
+  - geonames-postal
+  - azerbaijan-state-committee-property
+  - azerbaijan-open-data
+  - azerpost-address-reference
+  - geonames-azerbaijan
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

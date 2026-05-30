@@ -1,0 +1,143 @@
+countryCode: IL
+name: Israel
+native:
+  name: ישראל
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{city}}
+    {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: שם הבניין/חברה
+      placeholder: מגדל עזריאלי
+      required: false
+      type: text
+    - key: houseNumber
+      label: מספר בית
+      placeholder: "1"
+      required: true
+      type: text
+    - key: street
+      label: רחוב
+      placeholder: דרך מנחם בגין
+      required: true
+      type: text
+    - key: city
+      label: עיר
+      placeholder: תל אביב
+      required: true
+      type: text
+    - key: postcode
+      label: מיקוד
+      placeholder: "6701101"
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}
+    {{postcode}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Building/Company
+      placeholder: Azrieli Tower
+      required: false
+      type: text
+    - key: houseNumber
+      label: House No.
+      placeholder: "1"
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: Menachem Begin Rd
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Tel Aviv
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "6701101"
+      required: true
+      type: text
+postalCode:
+  format: NNNNNNN
+  regex: ^\d{7}$
+  api: https://israelpost.co.il/%D7%A9%D7%99%D7%A8%D7%95%D7%AA%D7%99%D7%9D/%D7%90%D7%99%D7%AA%D7%95%D7%A8-%D7%9e%D7%99%D7%A7%D7%95%D7%93/
+  source: Israel Post
+addressRules:
+  languages:
+    - code: he
+      name: Hebrew
+    - code: ar
+      name: Arabic
+    - code: en
+      name: English
+  nativeOrder:
+    - postcode
+    - city
+    - street
+    - buildingNumber
+    - apartment
+    - name
+  englishOrder:
+    - postcode
+    - city
+    - street
+    - buildingNumber
+    - apartment
+    - name
+  regionalHierarchy:
+    - city
+  postalCode:
+    label: 7 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - israel-post
+    - govmap-israel
+    - data-gov-il
+    - osm-israel
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+openSourceIds:
+  - israel-post
+  - govmap-israel
+  - data-gov-il
+  - osm-israel
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

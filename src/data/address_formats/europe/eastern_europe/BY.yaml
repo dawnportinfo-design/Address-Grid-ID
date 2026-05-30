@@ -1,0 +1,154 @@
+countryCode: BY
+name: Belarus
+native:
+  name: Беларусь
+  addressFormat: |-
+    {{postcode}}
+    {{state}}
+    {{city}}
+    {{street}}, {{houseNumber}}
+    {{organization}}
+  ordering: big-to-small
+  fields:
+    - key: postcode
+      label: Паштовы індэкс
+      placeholder: "220000"
+      required: true
+      type: text
+    - key: state
+      label: Вобласць
+      placeholder: Мінская вобл.
+      required: true
+      type: text
+    - key: city
+      label: Горад
+      placeholder: Мінск
+      required: true
+      type: text
+    - key: street
+      label: Вуліца
+      placeholder: пр. Незалежнасці
+      required: true
+      type: text
+    - key: houseNumber
+      label: Дом/Кватэра
+      placeholder: 1, кв. 1
+      required: true
+      type: text
+    - key: organization
+      label: Арганізацыя
+      placeholder: ""
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{city}}
+    {{state}}
+    {{postcode}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Organization
+      placeholder: ""
+      required: false
+      type: text
+    - key: houseNumber
+      label: House/Apt No.
+      placeholder: 1, apt 1
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: Independence Ave
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Minsk
+      required: true
+      type: text
+    - key: state
+      label: Region
+      placeholder: Minsk Region
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "220000"
+      required: true
+      type: text
+postalCode:
+  format: NNNNNN
+  regex: ^\d{6}$
+  api: https://scrape4u.com/postal-codes/Belarus
+  source: Scrape4u Belarus postal code dataset
+addressRules:
+  languages:
+    - code: be
+      name: Belarusian
+    - code: ru
+      name: Russian
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - city
+  postalCode:
+    label: 6 digits required
+    required: true
+    usage: required
+  russianOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  openSourceIds:
+    - scrape4u-postal-codes
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - belarus-nca-geoportal
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+openSourceIds:
+  - scrape4u-postal-codes
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - belarus-nca-geoportal
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

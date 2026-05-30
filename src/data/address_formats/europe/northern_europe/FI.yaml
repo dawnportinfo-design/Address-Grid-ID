@@ -1,0 +1,208 @@
+countryCode: FI
+name: Finland
+native:
+  name: Suomi
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Yritys/Organisaatio
+      placeholder: ""
+      required: false
+      type: text
+    - key: street
+      label: Katu
+      placeholder: Mannerheimintie
+      required: true
+      type: text
+    - key: houseNumber
+      label: Talon numero
+      placeholder: "1"
+      required: true
+      type: text
+    - key: postcode
+      label: Postinumero
+      placeholder: "00100"
+      required: true
+      type: text
+    - key: city
+      label: Postitoimipaikka
+      placeholder: Helsinki
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Company/Organization
+      placeholder: ""
+      required: false
+      type: text
+    - key: street
+      label: Street
+      placeholder: Mannerheimintie
+      required: true
+      type: text
+    - key: houseNumber
+      label: House No.
+      placeholder: "1"
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "00100"
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Helsinki
+      required: true
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: https://avoindata.suomi.fi/data/fi/dataset/?collection_type=Open+Data&vocab_keywords_fi=postinumerot
+  source: Avoindata.fi postcodes dataset
+addressRules:
+  languages:
+    - code: fi
+      name: Finnish
+    - code: sv
+      name: Swedish
+  nativeOrder:
+    - name
+    - street
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - city
+  postalCode:
+    label: 5 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - avoindata-fi-postcodes
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nls-finland
+    - maanmittauslaitos-open-data
+    - dvv-finland-address-data
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils
+domestic:
+  sv:
+    name: Svenska
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Foretag / Organisation
+        placeholder: ""
+      - key: street
+        label: Gata / Vag
+        placeholder: Mannerheimvagen
+      - key: houseNumber
+        label: Husnummer
+        placeholder: "1"
+      - key: postcode
+        label: Postnummer
+        placeholder: "00100"
+      - key: city
+        label: Postort
+        placeholder: Helsingfors
+international:
+  fi:
+    name: Suomi (Kansainvalinen)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+      SUOMI
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Yritys / Org.
+        placeholder: ""
+      - key: street
+        label: Katu (Latinalainen)
+        placeholder: Mannerheimintie
+      - key: houseNumber
+        label: Nro
+        placeholder: "1"
+      - key: postcode
+        label: Postinumero
+        placeholder: "00100"
+      - key: city
+        label: Postitoimipaikka
+        placeholder: Helsinki
+  sv:
+    name: Svenska (Internationell)
+    addressFormat: |-
+      {{organization}}
+      {{street}} {{houseNumber}}
+      {{postcode}} {{city}}
+      FINLAND
+    ordering: small-to-big
+    fields:
+      - key: organization
+        label: Foretag / Org.
+        placeholder: ""
+      - key: street
+        label: Gata / Vag (latin)
+        placeholder: Mannerheimvagen
+      - key: houseNumber
+        label: Nr.
+        placeholder: "1"
+      - key: postcode
+        label: Postnummer
+        placeholder: "00100"
+      - key: city
+        label: Postort
+        placeholder: Helsingfors
+openSourceIds:
+  - avoindata-fi-postcodes
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nls-finland
+  - maanmittauslaitos-open-data
+  - dvv-finland-address-data
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils

@@ -1,0 +1,134 @@
+countryCode: CZ
+name: Czech Republic
+native:
+  name: Česká republika
+  addressFormat: |-
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Firma/Organizace
+      placeholder: ""
+      required: false
+      type: text
+    - key: street
+      label: Ulice
+      placeholder: Václavské náměstí
+      required: true
+      type: text
+    - key: houseNumber
+      label: Číslo popisné/orientační
+      placeholder: 1/2
+      required: true
+      type: text
+    - key: city
+      label: Město
+      placeholder: Praha
+      required: true
+      type: text
+    - key: postcode
+      label: PSČ
+      placeholder: 110 00
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{organization}}
+    {{street}} {{houseNumber}}
+    {{postcode}} {{city}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Company/Organization
+      placeholder: ""
+      required: false
+      type: text
+    - key: street
+      label: Street
+      placeholder: Wenceslas Square
+      required: true
+      type: text
+    - key: houseNumber
+      label: House/Apt No.
+      placeholder: 1/2
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Prague
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: 110 00
+      required: true
+      type: text
+postalCode:
+  format: NNN NN
+  regex: ^\d{3}\s?\d{2}$
+  api: https://www.postaonline.cz/vyhledani-psc
+  source: Česká pošta
+openSourceIds:
+  - ceska-posta-psc
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - cuzk-ruian
+  - cuzk-geoportal
+  - copernicus-dem
+  - copernicus-corine-land-cover
+  - emodnet-bathymetry
+  - emodnet-seabed-habitats
+  - eea-natura-2000
+  - eea-eunis-habitats
+  - jrc-esdac-soils
+addressRules:
+  languages:
+    - code: cs
+      name: Czech
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - country
+  regionalHierarchy:
+    - region
+    - district
+    - municipality
+  postalCode:
+    label: 3 digits plus 2 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - ceska-posta-psc
+    - cuzk-ruian
+    - cuzk-geoportal
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - copernicus-dem
+    - copernicus-corine-land-cover
+    - emodnet-bathymetry
+    - emodnet-seabed-habitats
+    - eea-natura-2000
+    - eea-eunis-habitats
+    - jrc-esdac-soils

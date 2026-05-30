@@ -7,3 +7,9 @@ coverage/
 .env*
 !.env.example
 native/**/target/
+.playwright-cli/
+artifacts/
+output/
+test-results/
+sdk/**/.gradle/
+sdk/**/build/

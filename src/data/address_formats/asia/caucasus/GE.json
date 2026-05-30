@@ -1,0 +1,186 @@
+{
+  "countryCode": "GE",
+  "name": "Georgia",
+  "native": {
+    "name": "საქართველო",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\n{{region}}\nსაქართველო",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "სახელი",
+        "placeholder": "სრული სახელი",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "ქუჩა",
+        "placeholder": "ქუჩის სახელი",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "სახლის ნომერი",
+        "placeholder": "No",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "საფოსტო ინდექსი",
+        "placeholder": "0100",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "ქალაქი",
+        "placeholder": "თბილისი",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "region",
+        "label": "რეგიონი",
+        "placeholder": "აჭარა",
+        "required": false,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\n{{region}}\nGeorgia",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "recipient",
+        "label": "Name",
+        "placeholder": "Full Name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Street name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No",
+        "placeholder": "No",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "0100",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City/Town",
+        "placeholder": "Tbilisi",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "region",
+        "label": "Region",
+        "placeholder": "Adjara",
+        "required": false,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": "https://www.gpost.ge/",
+    "source": "Georgian Post / GeoNames Georgia"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "ka",
+        "name": "Georgian"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "region",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "region",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "cityOrTown",
+      "region"
+    ],
+    "postalCode": {
+      "label": "4 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "gpost-ge",
+      "napr-georgia",
+      "gdi-georgia",
+      "gpost-address-reference",
+      "geonames-georgia",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "nasa-srtm",
+      "jaxa-aw3d30",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "hydrosheds",
+      "esa-worldcover",
+      "protected-planet-wdpa",
+      "gbif-occurrence"
+    ]
+  },
+  "openSourceIds": [
+    "gpost-ge",
+    "napr-georgia",
+    "gdi-georgia",
+    "gpost-address-reference",
+    "geonames-georgia",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "nasa-srtm",
+    "jaxa-aw3d30",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "hydrosheds",
+    "esa-worldcover",
+    "protected-planet-wdpa",
+    "gbif-occurrence"
+  ]
+}

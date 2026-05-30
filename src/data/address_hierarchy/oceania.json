@@ -1,0 +1,4017 @@
+{
+  "continent": "oceania",
+  "name": "Oceania",
+  "subregions": {
+    "australian_external_territories": {
+      "id": "australian_external_territories",
+      "name": "Australian External Territories",
+      "countries": [
+        {
+          "code": "CC",
+          "name": "Cocos (Keeling) Islands",
+          "type": "territory",
+          "addressFormatPath": "src/data/address_formats/oceania/australian_external_territories/CC.json",
+          "addressFormat": {
+            "countryCode": "CC",
+            "name": "Cocos (Keeling) Islands",
+            "native": {
+              "name": "Cocos (Keeling) Islands",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address",
+                  "placeholder": "123 George St",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Suburb/City",
+                  "placeholder": "Cocos Islands",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "WA",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "6799",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}\nCocos (Keeling) Islands",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address",
+                  "placeholder": "123 George St",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Suburb/City",
+                  "placeholder": "Cocos Islands",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "WA",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "6799",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "6799",
+              "regex": "^6799$"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "locality",
+                "cocosIslands",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "locality",
+                "cocosIslands",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "island"
+              ],
+              "postalCode": {
+                "label": "6799 for Cocos (Keeling) Islands",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "auspost-territories",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "auspost-territories",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "CX",
+          "name": "Christmas Island",
+          "type": "territory",
+          "addressFormatPath": "src/data/address_formats/oceania/australian_external_territories/CX.json",
+          "addressFormat": {
+            "countryCode": "CX",
+            "name": "Christmas Island",
+            "native": {
+              "name": "Christmas Island",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address",
+                  "placeholder": "123 George St",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Suburb/City",
+                  "placeholder": "Christmas Island",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "WA",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "6798",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}\nChristmas Island",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address",
+                  "placeholder": "123 George St",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Suburb/City",
+                  "placeholder": "Christmas Island",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "WA",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "6798",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "6798",
+              "regex": "^6798$"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "locality",
+                "christmasIsland",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "locality",
+                "christmasIsland",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "island"
+              ],
+              "postalCode": {
+                "label": "6798 for Christmas Island",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "auspost-territories",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "auspost-territories",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "NF",
+          "name": "Norfolk Island",
+          "type": "territory",
+          "addressFormatPath": "src/data/address_formats/oceania/australian_external_territories/NF.json",
+          "addressFormat": {
+            "countryCode": "NF",
+            "name": "Norfolk Island",
+            "native": {
+              "name": "Norfolk Island",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address",
+                  "placeholder": "123 George St",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Suburb/City",
+                  "placeholder": "Norfolk Island",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "NSW",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "2899",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}\nNorfolk Island",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address",
+                  "placeholder": "123 George St",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Suburb/City",
+                  "placeholder": "Norfolk Island",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "NSW",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "2899",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "2899",
+              "regex": "^2899$"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "norfolkIsland",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "norfolkIsland",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "island"
+              ],
+              "postalCode": {
+                "label": "2899 for Norfolk Island",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "auspost-territories",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "auspost-territories",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        }
+      ]
+    },
+    "oceania": {
+      "id": "oceania",
+      "name": "Oceania",
+      "countries": [
+        {
+          "code": "AU",
+          "name": "Australia",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/AU.json",
+          "addressFormat": {
+            "countryCode": "AU",
+            "name": "Australia",
+            "native": {
+              "name": "English (Australia)",
+              "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}} {{state}} {{postcode}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Company",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "House No.",
+                  "placeholder": "2"
+                },
+                {
+                  "key": "street",
+                  "label": "Street",
+                  "placeholder": "Opera Quays"
+                },
+                {
+                  "key": "suburb",
+                  "label": "Suburb/City",
+                  "placeholder": "Sydney"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "NSW"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "2000"
+                }
+              ]
+            },
+            "english": {
+              "name": "International English",
+              "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}} {{state}} {{postcode}}\nAUSTRALIA",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Co./Org.",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "No.",
+                  "placeholder": "2"
+                },
+                {
+                  "key": "street",
+                  "label": "St./Rd./Ave. (Latin)",
+                  "placeholder": "Opera Quays"
+                },
+                {
+                  "key": "suburb",
+                  "label": "Suburb/City",
+                  "placeholder": "Sydney"
+                },
+                {
+                  "key": "state",
+                  "label": "State Code",
+                  "placeholder": "NSW"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "2000"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "NNNN",
+              "regex": "^\\d{4}$",
+              "api": "https://auspost.com.au/postcode",
+              "source": "Australia Post"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "suburb",
+                "state",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "suburb",
+                "state",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "stateOrTerritory"
+              ],
+              "postalCode": {
+                "label": "4 digits required",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "auspost-postcode",
+                "digital-earth-australia-coastlines",
+                "digital-earth-australia-wofs",
+                "digital-earth-australia-fractional-cover",
+                "geoscience-australia-elvis",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "auspost-postcode",
+              "digital-earth-australia-coastlines",
+              "digital-earth-australia-wofs",
+              "digital-earth-australia-fractional-cover",
+              "geoscience-australia-elvis",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "CK",
+          "name": "Cook Islands",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/CK.json",
+          "addressFormat": {
+            "countryCode": "CK",
+            "name": "Cook Islands",
+            "native": {
+              "name": "Cook Islands",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nCook Islands",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Island",
+                  "placeholder": "Rarotonga",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nCook Islands",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Island",
+                  "placeholder": "Rarotonga",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": null,
+              "regex": null
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "locality",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "locality",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "island"
+              ],
+              "postalCode": {
+                "label": "Cook Islands postcode pattern used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "nz-post-territories",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "nz-post-territories",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "FJ",
+          "name": "Fiji",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/FJ.json",
+          "addressFormat": {
+            "countryCode": "FJ",
+            "name": "Fiji",
+            "native": {
+              "name": "English",
+              "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Company",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "House/Floor No.",
+                  "placeholder": "123"
+                },
+                {
+                  "key": "street",
+                  "label": "Street/PO Box",
+                  "placeholder": "Victoria Parade"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Suva"
+                }
+              ]
+            },
+            "domestic": {
+              "fj": {
+                "name": "Vosa Vakaviti",
+                "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}",
+                "ordering": "small-to-big",
+                "fields": [
+                  {
+                    "key": "organization",
+                    "label": "Kumpani",
+                    "placeholder": ""
+                  },
+                  {
+                    "key": "houseNumber",
+                    "label": "Namba ni Vale",
+                    "placeholder": "123"
+                  },
+                  {
+                    "key": "street",
+                    "label": "Gaunisala",
+                    "placeholder": "Victoria Parade"
+                  },
+                  {
+                    "key": "city",
+                    "label": "Koro/Tauni",
+                    "placeholder": "Suva"
+                  }
+                ]
+              }
+            },
+            "english": {
+              "name": "International English",
+              "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}\nFIJI",
+              "ordering": "small-to-big",
+              "fields": []
+            },
+            "postalCode": {
+              "format": null,
+              "regex": null
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                },
+                {
+                  "code": "fj",
+                  "name": "Fijian"
+                },
+                {
+                  "code": "hi",
+                  "name": "Hindi"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "suburb",
+                "city",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "suburb",
+                "city",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "cityOrIsland"
+              ],
+              "postalCode": {
+                "label": "3 digits used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "post-fiji",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "post-fiji",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "FM",
+          "name": "Micronesia",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/FM.json",
+          "addressFormat": {
+            "countryCode": "FM",
+            "name": "Micronesia",
+            "native": {
+              "name": "Micronesia",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "Pohnpei",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "FM",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "ZIP Code",
+                  "placeholder": "96941",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}\nMicronesia",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "Pohnpei",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "FM",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "ZIP Code",
+                  "placeholder": "96941",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "9694N",
+              "regex": "^9694[1-4]$"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                },
+                {
+                  "code": "chk",
+                  "name": "Chuukese"
+                },
+                {
+                  "code": "yap",
+                  "name": "Yapese"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "villageOrArea",
+                "state",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "villageOrArea",
+                "state",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "state"
+              ],
+              "postalCode": {
+                "label": "5 digits required",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "usps-pacific-territories",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "usps-pacific-territories",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "KI",
+          "name": "Kiribati",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/KI.json",
+          "addressFormat": {
+            "countryCode": "KI",
+            "name": "Kiribati",
+            "native": {
+              "name": "Kiribati",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nKiribati",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Tarawa",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nKiribati",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Tarawa",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": null,
+              "regex": null
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                },
+                {
+                  "code": "gil",
+                  "name": "Gilbertese"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "village",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "village",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "island"
+              ],
+              "postalCode": {
+                "label": "5 digits used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "kiribati-post",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "kiribati-post",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "MH",
+          "name": "Marshall Islands",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/MH.json",
+          "addressFormat": {
+            "countryCode": "MH",
+            "name": "Marshall Islands",
+            "native": {
+              "name": "Marshall Islands",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "Majuro",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "MH",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "ZIP Code",
+                  "placeholder": "96960",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}\nMarshall Islands",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "Majuro",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "MH",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "ZIP Code",
+                  "placeholder": "96960",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "96960",
+              "regex": "^96960$"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "mh",
+                  "name": "Marshallese"
+                },
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "atoll",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "atoll",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "atollOrIsland"
+              ],
+              "postalCode": {
+                "label": "5 digits required",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "usps-pacific-territories",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "usps-pacific-territories",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "NC",
+          "name": "New Caledonia",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/NC.json",
+          "addressFormat": {
+            "countryCode": "NC",
+            "name": "New Caledonia",
+            "native": {
+              "name": "Nouvelle-Calédonie",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{postcode}} {{city}}\nNouvelle-Calédonie",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Destinataire",
+                  "placeholder": "Nom complet",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Numéro + Rue",
+                  "placeholder": "Numéro et nom de la rue",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Code postal",
+                  "placeholder": "988xx",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Ville",
+                  "placeholder": "ex. Nouméa",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{postcode}} {{city}}\nNew Caledonia",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Recipient",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Number + Street",
+                  "placeholder": "Number and street name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postal Code",
+                  "placeholder": "988xx",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "e.g. Nouméa",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "988NN",
+              "regex": "^988\\d{2}$",
+              "api": null,
+              "source": "OPT-NC"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "fr",
+                  "name": "French"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "streetNumber",
+                "street",
+                "postcode",
+                "city",
+                "territory"
+              ],
+              "englishOrder": [
+                "recipient",
+                "streetNumber",
+                "street",
+                "postcode",
+                "city",
+                "territory"
+              ],
+              "regionalHierarchy": [
+                "specialCollectivity"
+              ],
+              "postalCode": {
+                "label": "988xx special collectivity postcode",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "la-poste-fr-overseas",
+                "data-gouv-fr-postcodes",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos",
+                "copernicus-dem",
+                "copernicus-corine-land-cover",
+                "emodnet-bathymetry",
+                "emodnet-seabed-habitats",
+                "eea-natura-2000",
+                "eea-eunis-habitats",
+                "jrc-esdac-soils"
+              ]
+            },
+            "openSourceIds": [
+              "la-poste-fr-overseas",
+              "data-gouv-fr-postcodes",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos",
+              "copernicus-dem",
+              "copernicus-corine-land-cover",
+              "emodnet-bathymetry",
+              "emodnet-seabed-habitats",
+              "eea-natura-2000",
+              "eea-eunis-habitats",
+              "jrc-esdac-soils"
+            ]
+          }
+        },
+        {
+          "code": "NR",
+          "name": "Nauru",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/NR.json",
+          "addressFormat": {
+            "countryCode": "NR",
+            "name": "Nauru",
+            "native": {
+              "name": "Nauru",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nNauru",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "District",
+                  "placeholder": "Yaren",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nNauru",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "District",
+                  "placeholder": "Yaren",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": null,
+              "regex": null
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                },
+                {
+                  "code": "na",
+                  "name": "Nauruan"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "district",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "district",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "district"
+              ],
+              "postalCode": {
+                "label": "3 digits used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "nauru-post",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "nauru-post",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "NZ",
+          "name": "New Zealand",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/NZ.json",
+          "addressFormat": {
+            "countryCode": "NZ",
+            "name": "New Zealand",
+            "native": {
+              "name": "English",
+              "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}} {{postcode}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Building/Company",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "House No.",
+                  "placeholder": "123"
+                },
+                {
+                  "key": "street",
+                  "label": "Street",
+                  "placeholder": "Queen St"
+                },
+                {
+                  "key": "suburb",
+                  "label": "Suburb",
+                  "placeholder": "Auckland Central"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "Auckland"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "1010"
+                }
+              ]
+            },
+            "english": {
+              "name": "International English",
+              "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}} {{postcode}}\nNEW ZEALAND",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Co./Org.",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "No.",
+                  "placeholder": "123"
+                },
+                {
+                  "key": "street",
+                  "label": "St./Rd. (Latin)",
+                  "placeholder": "Queen St"
+                },
+                {
+                  "key": "suburb",
+                  "label": "Suburb",
+                  "placeholder": "Auckland Central"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "Auckland"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "1010"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "NNNN",
+              "regex": "^\\d{4}$"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "suburb",
+                "city",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "suburb",
+                "city",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "cityOrRegion"
+              ],
+              "postalCode": {
+                "label": "4 digits required",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "linz-nz-addresses",
+                "linz-data-service",
+                "linz-elevation",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "linz-nz-addresses",
+              "linz-data-service",
+              "linz-elevation",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "PF",
+          "name": "French Polynesia",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/PF.json",
+          "addressFormat": {
+            "countryCode": "PF",
+            "name": "French Polynesia",
+            "native": {
+              "name": "Polynésie française",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{postcode}} {{city}}\nPolynésie française",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Destinataire",
+                  "placeholder": "Nom complet",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Numéro + Rue",
+                  "placeholder": "Numéro et nom de la rue",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Code postal",
+                  "placeholder": "987xx",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Ville",
+                  "placeholder": "ex. Papeete",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{postcode}} {{city}}\nFrench Polynesia",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Recipient",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Number + Street",
+                  "placeholder": "Number and street name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postal Code",
+                  "placeholder": "987xx",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "e.g. Papeete",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "987NN",
+              "regex": "^987\\d{2}$",
+              "api": null,
+              "source": "Fare Rata"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "fr",
+                  "name": "French"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "streetNumber",
+                "street",
+                "postcode",
+                "city",
+                "territory"
+              ],
+              "englishOrder": [
+                "recipient",
+                "streetNumber",
+                "street",
+                "postcode",
+                "city",
+                "territory"
+              ],
+              "regionalHierarchy": [
+                "overseasCollectivity"
+              ],
+              "postalCode": {
+                "label": "987xx overseas collectivity postcode",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "la-poste-fr-overseas",
+                "data-gouv-fr-postcodes",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos",
+                "copernicus-dem",
+                "copernicus-corine-land-cover",
+                "emodnet-bathymetry",
+                "emodnet-seabed-habitats",
+                "eea-natura-2000",
+                "eea-eunis-habitats",
+                "jrc-esdac-soils"
+              ]
+            },
+            "openSourceIds": [
+              "la-poste-fr-overseas",
+              "data-gouv-fr-postcodes",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos",
+              "copernicus-dem",
+              "copernicus-corine-land-cover",
+              "emodnet-bathymetry",
+              "emodnet-seabed-habitats",
+              "eea-natura-2000",
+              "eea-eunis-habitats",
+              "jrc-esdac-soils"
+            ]
+          }
+        },
+        {
+          "code": "PG",
+          "name": "Papua New Guinea",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/PG.json",
+          "addressFormat": {
+            "countryCode": "PG",
+            "name": "Papua New Guinea",
+            "native": {
+              "name": "Papua New Guinea",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{postcode}}\nPapua New Guinea",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Port Moresby",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "121",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{postcode}}\nPapua New Guinea",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Port Moresby",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "121",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "NNN",
+              "regex": "^\\d{3}$"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                },
+                {
+                  "code": "tpi",
+                  "name": "Tok Pisin"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "locality",
+                "province",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "locality",
+                "province",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "province"
+              ],
+              "postalCode": {
+                "label": "3 digits used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "post-png",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "post-png",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "PW",
+          "name": "Palau",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/PW.json",
+          "addressFormat": {
+            "countryCode": "PW",
+            "name": "Palau",
+            "native": {
+              "name": "Palau",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "Koror",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "PW",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "ZIP Code",
+                  "placeholder": "96940",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}} {{state}} {{postcode}}\nPalau",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "Koror",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "PW",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "ZIP Code",
+                  "placeholder": "96940",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "96940",
+              "regex": "^96940$"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                },
+                {
+                  "code": "pau",
+                  "name": "Palauan"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "village",
+                "state",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "village",
+                "state",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "state"
+              ],
+              "postalCode": {
+                "label": "5 digits required",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "usps-pacific-territories",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "usps-pacific-territories",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "SB",
+          "name": "Solomon Islands",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/SB.json",
+          "addressFormat": {
+            "countryCode": "SB",
+            "name": "Solomon Islands",
+            "native": {
+              "name": "Solomon Islands",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nSolomon Islands",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Honiara",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nSolomon Islands",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Honiara",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": null,
+              "regex": null
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                },
+                {
+                  "code": "pis",
+                  "name": "Solomon Islands Pidgin"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "locality",
+                "province",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "locality",
+                "province",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "provinceOrRegion"
+              ],
+              "postalCode": {
+                "label": "3 digits used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "solomon-post",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "solomon-post",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "TO",
+          "name": "Tonga",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/TO.json",
+          "addressFormat": {
+            "countryCode": "TO",
+            "name": "Tonga",
+            "native": {
+              "name": "Tonga",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nTonga",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Nuku'alofa",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nTonga",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Nuku'alofa",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": null,
+              "regex": null
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "to",
+                  "name": "Tongan"
+                },
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "town",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "town",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "islandOrTown"
+              ],
+              "postalCode": {
+                "label": "3 digits used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "tonga-post",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "tonga-post",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "TV",
+          "name": "Tuvalu",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/TV.json",
+          "addressFormat": {
+            "countryCode": "TV",
+            "name": "Tuvalu",
+            "native": {
+              "name": "Tuvalu",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nTuvalu",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Island",
+                  "placeholder": "Funafuti",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nTuvalu",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Island",
+                  "placeholder": "Funafuti",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": null,
+              "regex": null
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                },
+                {
+                  "code": "tvl",
+                  "name": "Tuvaluan"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "island"
+              ],
+              "postalCode": {
+                "label": "5 digits used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "tuvalu-post",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "tuvalu-post",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "VU",
+          "name": "Vanuatu",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/VU.json",
+          "addressFormat": {
+            "countryCode": "VU",
+            "name": "Vanuatu",
+            "native": {
+              "name": "English",
+              "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Company",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "House No.",
+                  "placeholder": "1"
+                },
+                {
+                  "key": "street",
+                  "label": "Street/PO Box",
+                  "placeholder": "Lini Highway"
+                },
+                {
+                  "key": "city",
+                  "label": "Town/City",
+                  "placeholder": "Port Vila"
+                }
+              ]
+            },
+            "domestic": {
+              "bi": {
+                "name": "Bislama",
+                "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}",
+                "ordering": "small-to-big",
+                "fields": [
+                  {
+                    "key": "organization",
+                    "label": "Kampani",
+                    "placeholder": ""
+                  },
+                  {
+                    "key": "houseNumber",
+                    "label": "Namba blong haos",
+                    "placeholder": "1"
+                  },
+                  {
+                    "key": "street",
+                    "label": "Rod blong masta",
+                    "placeholder": "Lini Highway"
+                  },
+                  {
+                    "key": "city",
+                    "label": "Taon",
+                    "placeholder": "Port Vila"
+                  }
+                ]
+              },
+              "fr": {
+                "name": "Français",
+                "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}",
+                "ordering": "small-to-big",
+                "fields": [
+                  {
+                    "key": "organization",
+                    "label": "Organisation",
+                    "placeholder": ""
+                  },
+                  {
+                    "key": "houseNumber",
+                    "label": "No. de maison",
+                    "placeholder": "1"
+                  },
+                  {
+                    "key": "street",
+                    "label": "Rue",
+                    "placeholder": "Lini Highway"
+                  },
+                  {
+                    "key": "city",
+                    "label": "Ville",
+                    "placeholder": "Port Vila"
+                  }
+                ]
+              }
+            },
+            "english": {
+              "name": "International English",
+              "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}\nVANUATU",
+              "ordering": "small-to-big",
+              "fields": []
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "bi",
+                  "name": "Bislama"
+                },
+                {
+                  "code": "en",
+                  "name": "English"
+                },
+                {
+                  "code": "fr",
+                  "name": "French"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "area",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "area",
+                "island",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "islandOrArea"
+              ],
+              "postalCode": {
+                "label": "3 digits used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "vanuatu-post",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "vanuatu-post",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "WS",
+          "name": "Samoa",
+          "type": "country",
+          "addressFormatPath": "src/data/address_formats/oceania/oceania/WS.json",
+          "addressFormat": {
+            "countryCode": "WS",
+            "name": "Samoa",
+            "native": {
+              "name": "Samoa",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nSamoa",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Apia",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nSamoa",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Apia",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": null,
+              "regex": null
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "sm",
+                  "name": "Samoan"
+                },
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "village",
+                "district",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "village",
+                "district",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "villageOrDistrict"
+              ],
+              "postalCode": {
+                "label": "3 digits used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "samoa-post",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "samoa-post",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        }
+      ]
+    },
+    "polynesia": {
+      "id": "polynesia",
+      "name": "Polynesia",
+      "countries": [
+        {
+          "code": "NU",
+          "name": "Niue",
+          "type": "territory",
+          "addressFormatPath": "src/data/address_formats/oceania/polynesia/NU.json",
+          "addressFormat": {
+            "countryCode": "NU",
+            "name": "Niue",
+            "native": {
+              "name": "Niue",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nNiue",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Village",
+                  "placeholder": "Alofi",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nNiue",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Village",
+                  "placeholder": "Alofi",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": null,
+              "regex": null
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "niu",
+                  "name": "Niuean"
+                },
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "village",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "village",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "village"
+              ],
+              "postalCode": {
+                "label": "Niue postcode pattern used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "nz-post-territories",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "nz-post-territories",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "PN",
+          "name": "Pitcairn Islands",
+          "type": "territory",
+          "addressFormatPath": "src/data/address_formats/oceania/polynesia/PN.json",
+          "addressFormat": {
+            "countryCode": "PN",
+            "name": "Pitcairn Islands",
+            "native": {
+              "name": "Pitcairn Islands",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{suburb}}\n{{city}}\n{{postcode}}\nPitcairn Islands",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Recipient",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street",
+                  "placeholder": "House number and street name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "suburb",
+                  "label": "Locality",
+                  "placeholder": "",
+                  "required": false,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Settlement",
+                  "placeholder": "Adamstown",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "PCRN 1ZZ",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{suburb}}\n{{city}}\n{{postcode}}\nPitcairn Islands",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Recipient",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street",
+                  "placeholder": "House number and street name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "suburb",
+                  "label": "Locality",
+                  "placeholder": "",
+                  "required": false,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Settlement",
+                  "placeholder": "Adamstown",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postcode",
+                  "placeholder": "PCRN 1ZZ",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "PCRN 1ZZ",
+              "regex": "^PCRN\\s?1ZZ$",
+              "api": null,
+              "source": "Pitcairn Islands Post Office"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "stationOrBase",
+                "dependency",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "stationOrBase",
+                "dependency",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "stationOrBase"
+              ],
+              "postalCode": {
+                "label": "New Zealand-dependent postal handling",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "british-overseas-postal-reference",
+                "pitcairn-post",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "british-overseas-postal-reference",
+              "pitcairn-post",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "TK",
+          "name": "Tokelau",
+          "type": "territory",
+          "addressFormatPath": "src/data/address_formats/oceania/polynesia/TK.json",
+          "addressFormat": {
+            "countryCode": "TK",
+            "name": "Tokelau",
+            "native": {
+              "name": "Tokelau",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nTokelau",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Full Name",
+                  "placeholder": "John Doe",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Atoll",
+                  "placeholder": "Fakaofo",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nTokelau",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Name",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address / PO Box",
+                  "placeholder": "PO Box 123",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Atoll",
+                  "placeholder": "Fakaofo",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": null,
+              "regex": null
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "tkl",
+                  "name": "Tokelauan"
+                },
+                {
+                  "code": "en",
+                  "name": "English"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "street",
+                "village",
+                "atoll",
+                "postcode",
+                "country"
+              ],
+              "englishOrder": [
+                "recipient",
+                "street",
+                "village",
+                "atoll",
+                "postcode",
+                "country"
+              ],
+              "regionalHierarchy": [
+                "atoll"
+              ],
+              "postalCode": {
+                "label": "TK postcode pattern used",
+                "required": false,
+                "usage": "used"
+              },
+              "openSourceIds": [
+                "nz-post-territories",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos"
+              ]
+            },
+            "openSourceIds": [
+              "nz-post-territories",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos"
+            ]
+          }
+        },
+        {
+          "code": "WF",
+          "name": "Wallis and Futuna",
+          "type": "territory",
+          "addressFormatPath": "src/data/address_formats/oceania/polynesia/WF.json",
+          "addressFormat": {
+            "countryCode": "WF",
+            "name": "Wallis and Futuna",
+            "native": {
+              "name": "Wallis-et-Futuna",
+              "addressFormat": "{{recipient}}\n{{street}}\n{{postcode}} {{city}}\nWallis-et-Futuna",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Destinataire",
+                  "placeholder": "Nom complet",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Numéro + Rue",
+                  "placeholder": "Numéro et nom de la rue",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Code postal",
+                  "placeholder": "986xx",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "Ville",
+                  "placeholder": "ex. Mata-Utu",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "english": {
+              "addressFormat": "{{recipient}}\n{{street}}\n{{postcode}} {{city}}\nWallis and Futuna",
+              "ordering": "small-to-big",
+              "fields": [
+                {
+                  "key": "recipient",
+                  "label": "Recipient",
+                  "placeholder": "Full Name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Number + Street",
+                  "placeholder": "Number and street name",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postal Code",
+                  "placeholder": "986xx",
+                  "required": true,
+                  "type": "text"
+                },
+                {
+                  "key": "city",
+                  "label": "City",
+                  "placeholder": "e.g. Mata-Utu",
+                  "required": true,
+                  "type": "text"
+                }
+              ]
+            },
+            "postalCode": {
+              "format": "986NN",
+              "regex": "^986\\d{2}$",
+              "api": null,
+              "source": "OPT-WF"
+            },
+            "addressRules": {
+              "languages": [
+                {
+                  "code": "fr",
+                  "name": "French"
+                }
+              ],
+              "nativeOrder": [
+                "recipient",
+                "streetNumber",
+                "street",
+                "postcode",
+                "city",
+                "territory"
+              ],
+              "englishOrder": [
+                "recipient",
+                "streetNumber",
+                "street",
+                "postcode",
+                "city",
+                "territory"
+              ],
+              "regionalHierarchy": [
+                "overseasCollectivity"
+              ],
+              "postalCode": {
+                "label": "986xx overseas collectivity postcode",
+                "required": true,
+                "usage": "required"
+              },
+              "openSourceIds": [
+                "la-poste-fr-overseas",
+                "data-gouv-fr-postcodes",
+                "osm-nominatim",
+                "osm-overpass",
+                "openaddresses",
+                "geonames-postal",
+                "geonames-gazetteer",
+                "geoboundaries",
+                "upu-addressing",
+                "zippopotam",
+                "jaxa-aw3d30",
+                "gebco-bathymetry",
+                "gmrt-topography",
+                "hydrosheds",
+                "esa-worldcover",
+                "protected-planet-wdpa",
+                "gbif-occurrence",
+                "global-mangrove-watch",
+                "allen-coral-atlas",
+                "pacific-data-hub",
+                "digital-earth-pacific",
+                "pacioos",
+                "copernicus-dem",
+                "copernicus-corine-land-cover",
+                "emodnet-bathymetry",
+                "emodnet-seabed-habitats",
+                "eea-natura-2000",
+                "eea-eunis-habitats",
+                "jrc-esdac-soils"
+              ]
+            },
+            "openSourceIds": [
+              "la-poste-fr-overseas",
+              "data-gouv-fr-postcodes",
+              "osm-nominatim",
+              "osm-overpass",
+              "openaddresses",
+              "geonames-postal",
+              "geonames-gazetteer",
+              "geoboundaries",
+              "upu-addressing",
+              "zippopotam",
+              "jaxa-aw3d30",
+              "gebco-bathymetry",
+              "gmrt-topography",
+              "hydrosheds",
+              "esa-worldcover",
+              "protected-planet-wdpa",
+              "gbif-occurrence",
+              "global-mangrove-watch",
+              "allen-coral-atlas",
+              "pacific-data-hub",
+              "digital-earth-pacific",
+              "pacioos",
+              "copernicus-dem",
+              "copernicus-corine-land-cover",
+              "emodnet-bathymetry",
+              "emodnet-seabed-habitats",
+              "eea-natura-2000",
+              "eea-eunis-habitats",
+              "jrc-esdac-soils"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "coverage": {
+    "total": 24,
+    "country": 17,
+    "territory": 7,
+    "autonomous": 0,
+    "disputed": 0,
+    "special": 0
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "description": "Generated AGID address metadata hierarchy. Canonical address_formats are stored by continent and subregion.",
+  "continents": [
+    {
+      "id": "africa",
+      "name": "Africa",
+      "file": "src/data/address_hierarchy/africa.json",
+      "total": 63
+    },
+    {
+      "id": "americas",
+      "name": "Americas",
+      "file": "src/data/address_hierarchy/americas.json",
+      "total": 65
+    },
+    {
+      "id": "antarctica",
+      "name": "Antarctica",
+      "file": "src/data/address_hierarchy/antarctica.json",
+      "total": 3
+    },
+    {
+      "id": "asia",
+      "name": "Asia",
+      "file": "src/data/address_hierarchy/asia.json",
+      "total": 55
+    },
+    {
+      "id": "europe",
+      "name": "Europe",
+      "file": "src/data/address_hierarchy/europe.json",
+      "total": 70
+    },
+    {
+      "id": "oceania",
+      "name": "Oceania",
+      "file": "src/data/address_hierarchy/oceania.json",
+      "total": 24
+    },
+    {
+      "id": "special",
+      "name": "Special Regions",
+      "file": "src/data/address_hierarchy/special.json",
+      "total": 1
+    }
+  ]
+}

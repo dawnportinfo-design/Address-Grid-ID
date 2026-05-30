@@ -1,0 +1,167 @@
+countryCode: VN
+name: Vietnam
+native:
+  name: Việt Nam
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{subdistrict}}, {{district}}
+    {{city}}, {{state}} {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Tên tòa nhà/Công ty
+      placeholder: Landmark 81
+      required: false
+      type: text
+    - key: houseNumber
+      label: Số nhà
+      placeholder: "208"
+      required: true
+      type: text
+    - key: street
+      label: Tên đường
+      placeholder: Nguyễn Hữu Cảnh
+      required: true
+      type: text
+    - key: subdistrict
+      label: Phường/Xã
+      placeholder: Phường 22
+      required: true
+      type: text
+    - key: district
+      label: Quận/Huyện
+      placeholder: Bình Thạnh
+      required: true
+      type: text
+    - key: city
+      label: Thành phố
+      placeholder: Hồ Chí Minh
+      required: true
+      type: text
+    - key: state
+      label: Tỉnh
+      placeholder: ""
+      required: false
+      type: text
+    - key: postcode
+      label: Mã bưu chính
+      placeholder: "700000"
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{organization}}
+    {{houseNumber}} {{street}}
+    {{subdistrict}}, {{district}}
+    {{city}}, {{state}} {{postcode}}
+    {{country}}
+  ordering: small-to-big
+  fields:
+    - key: organization
+      label: Building/Company
+      placeholder: Landmark 81
+      required: false
+      type: text
+    - key: houseNumber
+      label: House No.
+      placeholder: "208"
+      required: true
+      type: text
+    - key: street
+      label: Street
+      placeholder: Nguyen Huu Canh
+      required: true
+      type: text
+    - key: subdistrict
+      label: Ward/Commune
+      placeholder: Ward 22
+      required: true
+      type: text
+    - key: district
+      label: District
+      placeholder: Binh Thanh
+      required: true
+      type: text
+    - key: city
+      label: City
+      placeholder: Ho Chi Minh City
+      required: true
+      type: text
+    - key: state
+      label: Province
+      placeholder: ""
+      required: false
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "700000"
+      required: false
+      type: text
+postalCode:
+  format: NNNNNN
+  regex: ^\d{6}$
+  api: https://vpostcode.vn/
+  source: Vietnam Post Vpostcode
+addressRules:
+  languages:
+    - code: vi
+      name: Vietnamese
+  nativeOrder:
+    - postcode
+    - provinceOrCity
+    - district
+    - ward
+    - street
+    - houseNumber
+    - name
+  englishOrder:
+    - postcode
+    - provinceOrCity
+    - district
+    - ward
+    - street
+    - houseNumber
+    - name
+  regionalHierarchy:
+    - provinceOrCity
+    - district
+    - ward
+  postalCode:
+    label: 6 digits required
+    required: true
+    usage: required
+  openSourceIds:
+    - vietnam-postcode
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - nasa-srtm
+    - jaxa-aw3d30
+    - gebco-bathymetry
+    - gmrt-topography
+    - hydrosheds
+    - esa-worldcover
+    - protected-planet-wdpa
+    - gbif-occurrence
+openSourceIds:
+  - vietnam-postcode
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - nasa-srtm
+  - jaxa-aw3d30
+  - gebco-bathymetry
+  - gmrt-topography
+  - hydrosheds
+  - esa-worldcover
+  - protected-planet-wdpa
+  - gbif-occurrence

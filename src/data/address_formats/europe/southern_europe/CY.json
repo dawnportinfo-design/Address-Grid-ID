@@ -1,0 +1,249 @@
+{
+  "countryCode": "CY",
+  "name": "Cyprus",
+  "native": {
+    "name": "Κύπρος",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Οργανισμός",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Οδός",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Αριθμός",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Ταχυδρομικός Κώδικας",
+        "placeholder": "1010",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Πόλη",
+        "placeholder": "Λευκωσία",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nCYPRUS",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company/Organization"
+      },
+      {
+        "key": "street",
+        "label": "Street"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Number"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "1010"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Nicosia"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": "https://postalcodes.info/",
+    "source": "postalcodes.info / Cyprus open data"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "el",
+        "name": "Greek"
+      },
+      {
+        "code": "tr",
+        "name": "Turkish"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "city"
+    ],
+    "postalCode": {
+      "label": "4 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "postalcodes-info",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "cyprus-department-lands-surveys",
+      "cyprus-open-data-portal",
+      "inspire-cyprus",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "domestic": {
+    "tr": {
+      "name": "Türkçe",
+      "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Kurum"
+        },
+        {
+          "key": "street",
+          "label": "Cadde/Sokak"
+        },
+        {
+          "key": "houseNumber",
+          "label": "No."
+        },
+        {
+          "key": "postcode",
+          "label": "Posta Kodu"
+        },
+        {
+          "key": "city",
+          "label": "Şehir"
+        }
+      ]
+    }
+  },
+  "international": {
+    "el": {
+      "name": "Ellinika (International)",
+      "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nKYPROS",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Organismos",
+          "placeholder": ""
+        },
+        {
+          "key": "street",
+          "label": "Odos (Latin)",
+          "placeholder": "Odos Ledras"
+        },
+        {
+          "key": "houseNumber",
+          "label": "Arithmos",
+          "placeholder": "1"
+        },
+        {
+          "key": "postcode",
+          "label": "Tachydromikos kodikas",
+          "placeholder": "1010"
+        },
+        {
+          "key": "city",
+          "label": "Poli",
+          "placeholder": "Lefkosia"
+        }
+      ]
+    },
+    "tr": {
+      "name": "Turkce (International)",
+      "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{postcode}} {{city}}\nKIBRIS",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Kurum",
+          "placeholder": ""
+        },
+        {
+          "key": "street",
+          "label": "Cadde / Sokak (Latin)",
+          "placeholder": "Girne Caddesi"
+        },
+        {
+          "key": "houseNumber",
+          "label": "No.",
+          "placeholder": "1"
+        },
+        {
+          "key": "postcode",
+          "label": "Posta kodu",
+          "placeholder": "99010"
+        },
+        {
+          "key": "city",
+          "label": "Sehir",
+          "placeholder": "Lefkosa"
+        }
+      ]
+    }
+  },
+  "openSourceIds": [
+    "postalcodes-info",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "cyprus-department-lands-surveys",
+    "cyprus-open-data-portal",
+    "inspire-cyprus",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

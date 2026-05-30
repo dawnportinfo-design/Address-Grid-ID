@@ -1,0 +1,151 @@
+countryCode: ZM
+name: Zambia
+native:
+  name: Zambia
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}} {{postcode}}
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: John Banda
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 32101
+      required: true
+      type: text
+    - key: city
+      label: City / Town
+      placeholder: Lusaka
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "10101"
+      required: false
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{city}} {{postcode}}
+    Zambia
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: John Banda
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: PO Box 32101
+      required: true
+      type: text
+    - key: city
+      label: City / Town
+      placeholder: Lusaka
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "10101"
+      required: false
+      type: text
+postalCode:
+  format: NNNNN
+  regex: ^\d{5}$
+  api: null
+  source: Postal metadata from AGID East Africa regional table; open OSS source not configured
+addressRules:
+  languages:
+    - code: en
+      name: English
+  nativeOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - region
+    - country
+  englishOrder:
+    - name
+    - street
+    - houseNumber
+    - postcode
+    - city
+    - region
+    - country
+  regionalHierarchy:
+    - province
+    - district
+  postalCode:
+    label: 5 digits used
+    required: false
+    usage: used
+  deliveryLanguages:
+    - code: en
+      name: English
+  openSourceIds:
+    - rcmrd-geoportal
+    - hot-osm-east-southern-africa
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+openSourceIds:
+  - rcmrd-geoportal
+  - hot-osm-east-southern-africa
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal

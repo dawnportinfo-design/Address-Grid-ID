@@ -6,6 +6,8 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { initPostalCodeDB, getNearestPostalCode } from './src/services/PostalCodeDB';
 import { GoogleGenAI, Type } from "@google/genai";
+import { normalizeTranslationLanguage, detectOpenSourceTranslationLanguage } from './src/lib/openSourceTranslation';
+import { parseAddressText } from './src/lib/addressIntelligence';
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
@@ -70,6 +72,98 @@ async function startServer() {
   app.get('/api/health', (req, res) => {
     console.log('[API] Health check');
     res.json({ status: 'ok' });
+  });
+
+  app.post('/api/address/parse', async (req, res) => {
+    const endpoint = process.env.LIBPOSTAL_PARSE_URL;
+    const text = typeof req.body?.text === 'string' ? req.body.text : '';
+    const countryCode = typeof req.body?.countryCode === 'string' ? req.body.countryCode : '';
+
+    if (!text.trim()) {
+      return res.status(400).json({ error: 'Missing address text' });
+    }
+
+    if (!endpoint) {
+      const canonical = parseAddressText(text);
+      if (countryCode && !canonical.country_code) canonical.country_code = countryCode.toLowerCase();
+      return res.json({
+        source: 'local-parser',
+        available: false,
+        canonical,
+        components: Object.entries(canonical).map(([label, value]) => ({ label, value: String(value) })),
+      });
+    }
+
+    try {
+      const response = await safeFetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, countryCode }),
+      });
+      if (!response.ok) {
+        return res.status(response.status).json({ error: 'Libpostal service failed' });
+      }
+      const data = await response.json();
+      res.json({
+        source: 'libpostal',
+        available: true,
+        components: Array.isArray(data.components) ? data.components : data,
+      });
+    } catch (error) {
+      console.error('[API] Libpostal Parse Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  app.post('/api/translate', async (req, res) => {
+    const endpoint = process.env.LIBRETRANSLATE_URL || process.env.ARGOS_TRANSLATE_URL || '';
+    const text = typeof req.body?.q === 'string'
+      ? req.body.q
+      : typeof req.body?.text === 'string'
+        ? req.body.text
+        : '';
+    const target = normalizeTranslationLanguage(req.body?.target);
+    const source = detectOpenSourceTranslationLanguage(text, req.body?.source);
+
+    if (!text.trim() || target === 'auto') {
+      return res.status(400).json({ error: 'Missing text or target language' });
+    }
+
+    if (!endpoint) {
+      return res.status(503).json({
+        error: 'Open-source translation service not configured',
+        fallback: 'client-libretranslate-compatible',
+        configure: 'Set LIBRETRANSLATE_URL or ARGOS_TRANSLATE_URL to a LibreTranslate-compatible /translate endpoint.',
+      });
+    }
+
+    try {
+      const response = await safeFetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          q: text,
+          source,
+          target,
+          format: 'text',
+        }),
+      });
+
+      if (!response.ok) {
+        return res.status(response.status).json({ error: 'Open-source translation service failed' });
+      }
+
+      const data = await response.json();
+      res.json({
+        translatedText: data.translatedText || data.translation || data.text || '',
+        source,
+        target,
+        provider: 'libretranslate-compatible',
+      });
+    } catch (error) {
+      console.error('[API] Translation Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
   });
 
   // AI Data Quality Analysis Route (Stub)

@@ -1,0 +1,188 @@
+{
+  "countryCode": "MC",
+  "name": "Monaco",
+  "native": {
+    "name": "Monaco",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{postcode}} {{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Société/Organisation",
+        "placeholder": "",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "Numéro",
+        "placeholder": "1",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Rue/Avenue",
+        "placeholder": "Avenue Princesse Grace",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Code Postal",
+        "placeholder": "98000",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "Quartier",
+        "placeholder": "Monaco",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{postcode}} {{city}}\nMONACO",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company/Organization",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House/Building No.",
+        "placeholder": "1"
+      },
+      {
+        "key": "street",
+        "label": "Street Address",
+        "placeholder": "Avenue Princesse Grace"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "98000"
+      },
+      {
+        "key": "city",
+        "label": "District",
+        "placeholder": "Monaco"
+      }
+    ]
+  },
+  "international": {
+    "fr": {
+      "name": "Français (International)",
+      "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{postcode}} {{city}}\nMONACO",
+      "ordering": "small-to-big",
+      "fields": [
+        {
+          "key": "organization",
+          "label": "Société/Organisation",
+          "placeholder": ""
+        },
+        {
+          "key": "houseNumber",
+          "label": "Numéro",
+          "placeholder": "1"
+        },
+        {
+          "key": "street",
+          "label": "Rue/Avenue",
+          "placeholder": "Avenue Princesse Grace"
+        },
+        {
+          "key": "postcode",
+          "label": "Code Postal",
+          "placeholder": "98000"
+        },
+        {
+          "key": "city",
+          "label": "Quartier",
+          "placeholder": "Monaco"
+        }
+      ]
+    }
+  },
+  "postalCode": {
+    "format": "980NN",
+    "regex": "^980\\d{2}$",
+    "api": "https://www.npmjs.com/package/@mohamadalkadiri/eu-postal-code",
+    "source": "@mohamadalkadiri/eu-postal-code"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "fr",
+        "name": "French"
+      }
+    ],
+    "nativeOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "englishOrder": [
+      "name",
+      "street",
+      "houseNumber",
+      "postcode",
+      "city",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "city"
+    ],
+    "postalCode": {
+      "label": "98000-98099 Monaco postcode",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "eu-postal-code-package",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "monaco-gouv-cartography",
+      "monaco-imsee-geodata",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "eu-postal-code-package",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "monaco-gouv-cartography",
+    "monaco-imsee-geodata",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "countryCode": "AF",
+  "name": "Afghanistan",
+  "native": {
+    "name": "افغانستان",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}} {{postcode}}\n{{state}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "عمارت/کمپنی",
+        "placeholder": "ارگ",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "نمبر خانه",
+        "placeholder": "123",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "سرک",
+        "placeholder": "جاده میوند",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "suburb",
+        "label": "ناحیه",
+        "placeholder": "ناحیه ۱",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "شهر",
+        "placeholder": "کابل",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "state",
+        "label": "ولایت",
+        "placeholder": "کابل",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "کد پستی",
+        "placeholder": "1001",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}} {{postcode}}\n{{state}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Building/Company",
+        "placeholder": "Arg",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": "123",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Maiwand Ave",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "suburb",
+        "label": "District/Area",
+        "placeholder": "District 1",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "key": "city",
+        "label": "City",
+        "placeholder": "Kabul",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "state",
+        "label": "Province",
+        "placeholder": "Kabul",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "1001",
+        "required": true,
+        "type": "text"
+      }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": "https://postalcode.afghanpost.gov.af/",
+    "source": "Afghan Post / Afghanistan Postal Code System / HOT OSM Afghanistan"
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "ps",
+        "name": "Pashto"
+      },
+      {
+        "code": "fa-AF",
+        "name": "Dari"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "houseOrStreet",
+      "city",
+      "province",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "recipient",
+      "houseOrStreet",
+      "city",
+      "province",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "province"
+    ],
+    "postalCode": {
+      "label": "4 digits required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "afghan-post",
+      "afghan-postal-code-system",
+      "hot-osm-afghanistan",
+      "osm-afghanistan",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "nasa-srtm",
+      "jaxa-aw3d30",
+      "gebco-bathymetry",
+      "gmrt-topography",
+      "hydrosheds",
+      "esa-worldcover",
+      "protected-planet-wdpa",
+      "gbif-occurrence"
+    ]
+  },
+  "openSourceIds": [
+    "afghan-post",
+    "afghan-postal-code-system",
+    "hot-osm-afghanistan",
+    "osm-afghanistan",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "nasa-srtm",
+    "jaxa-aw3d30",
+    "gebco-bathymetry",
+    "gmrt-topography",
+    "hydrosheds",
+    "esa-worldcover",
+    "protected-planet-wdpa",
+    "gbif-occurrence"
+  ]
+}

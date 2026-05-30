@@ -1,0 +1,146 @@
+countryCode: LR
+name: Liberia
+native:
+  name: Liberia
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{postcode}} {{city}}
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: George Weah
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: 123 Broad St
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "1000"
+      required: false
+      type: text
+    - key: city
+      label: City / Town
+      placeholder: Monrovia
+      required: true
+      type: text
+english:
+  addressFormat: |-
+    {{recipient}}
+    {{street}}
+    {{postcode}} {{city}}
+    Liberia
+  ordering: small-to-big
+  fields:
+    - key: recipient
+      label: Full Name
+      placeholder: George Weah
+      required: true
+      type: text
+    - key: street
+      label: Street Address / PO Box
+      placeholder: 123 Broad St
+      required: true
+      type: text
+    - key: postcode
+      label: Postal Code
+      placeholder: "1000"
+      required: false
+      type: text
+    - key: city
+      label: City / Town
+      placeholder: Monrovia
+      required: true
+      type: text
+postalCode:
+  format: NNNN
+  regex: ^\d{4}$
+  api: null
+  source: Postal metadata from AGID regional table; no free OSS source configured
+addressRules:
+  languages:
+    - code: en
+      name: English
+  nativeOrder:
+    - county
+    - district
+    - cityOrTown
+    - street
+    - houseNumber
+    - country
+  englishOrder:
+    - county
+    - district
+    - cityOrTown
+    - street
+    - houseNumber
+    - country
+  regionalHierarchy:
+    - county
+  postalCode:
+    label: 4 digits used
+    required: false
+    usage: used
+  deliveryLanguages:
+    - code: en
+      name: English
+  openSourceIds:
+    - hot-osm-west-africa
+    - osm-nominatim
+    - osm-overpass
+    - openaddresses
+    - geonames-postal
+    - geonames-gazetteer
+    - geoboundaries
+    - upu-addressing
+    - hot-osm-africa
+    - openstreetmap-wiki-africa
+    - humdata-africa
+    - openaerialmap
+    - digital-earth-africa-dem
+    - digital-earth-africa-coastlines
+    - digital-earth-africa-waterbodies
+    - digital-earth-africa-wofs
+    - digital-earth-africa-fractional-cover
+    - digital-earth-africa-geomad
+    - fao-wapor
+    - esa-worldcover
+    - gebco-bathymetry
+    - gmrt-topography
+    - global-mangrove-watch
+    - allen-coral-atlas
+    - protected-planet-wdpa
+    - gbif-occurrence
+    - rcmrd-gmes-africa-geoportal
+openSourceIds:
+  - hot-osm-west-africa
+  - osm-nominatim
+  - osm-overpass
+  - openaddresses
+  - geonames-postal
+  - geonames-gazetteer
+  - geoboundaries
+  - upu-addressing
+  - hot-osm-africa
+  - openstreetmap-wiki-africa
+  - humdata-africa
+  - openaerialmap
+  - digital-earth-africa-dem
+  - digital-earth-africa-coastlines
+  - digital-earth-africa-waterbodies
+  - digital-earth-africa-wofs
+  - digital-earth-africa-fractional-cover
+  - digital-earth-africa-geomad
+  - fao-wapor
+  - esa-worldcover
+  - gebco-bathymetry
+  - gmrt-topography
+  - global-mangrove-watch
+  - allen-coral-atlas
+  - protected-planet-wdpa
+  - gbif-occurrence
+  - rcmrd-gmes-africa-geoportal
