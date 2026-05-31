@@ -54,6 +54,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "75001"
+      required: true
     - key: city
       label: City/Town
       placeholder: Paris
@@ -79,6 +80,7 @@ international:
       - key: postcode
         label: Code Postal
         placeholder: "75001"
+        required: true
       - key: city
         label: Ville
         placeholder: Paris

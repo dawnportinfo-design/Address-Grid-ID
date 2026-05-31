@@ -783,12 +783,17 @@ export async function formatAddress(details: any, lang: string = 'local', option
         .map(line => line.replace(/,\s*,/g, ',').replace(/^\s*,|,?\s*$/g, '').trim())
         .filter(line => line.length > 0 && line !== ',')
         .join('\n')
-        .replace(/\s+/g, ' ');
+        .replace(/[ \t]+/g, ' ');
 
       if (isTargetEn) {
         // Final Latin-only cleanup for strict English output
-        result = result.replace(/[\u0590-\u05FF\u0600-\u06FF\u0E00-\u0E7F]/g, '').trim();
-        result = result.replace(/,\s*,/g, ',').replace(/^,|,$/g, '').replace(/\s+/g, ' ').trim();
+        result = result
+          .split('\n')
+          .map(line => line.replace(/[\u0590-\u05FF\u0600-\u06FF\u0E00-\u0E7F]/g, '').trim())
+          .map(line => line.replace(/,\s*,/g, ',').replace(/^,|,$/g, '').replace(/[ \t]+/g, ' ').trim())
+          .filter(Boolean)
+          .join('\n')
+          .trim();
       }
 
       if (options.shipping && isTargetEn) {

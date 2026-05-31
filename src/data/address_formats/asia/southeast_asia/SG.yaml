@@ -24,6 +24,7 @@ native:
     - key: postcode
       label: Postal Code
       placeholder: "018956"
+      required: true
 domestic:
   ms:
     name: Bahasa Melayu
@@ -49,6 +50,7 @@ domestic:
       - key: postcode
         label: Poskod
         placeholder: "018956"
+        required: true
   zh:
     name: 简体中文
     addressFormat: |-
@@ -73,6 +75,7 @@ domestic:
       - key: postcode
         label: 邮政编码
         placeholder: "018956"
+        required: true
 english:
   name: International English
   addressFormat: |-
@@ -97,6 +100,7 @@ english:
     - key: postcode
       label: Postal Code
       placeholder: "018956"
+      required: true
 postalCode:
   format: NNNNNN
   regex: ^\d{6}$

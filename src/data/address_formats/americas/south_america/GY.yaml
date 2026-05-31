@@ -33,7 +33,22 @@ english:
     {{city}}
     GUYANA
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Building / Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: "45"
+    - key: street
+      label: Street
+      placeholder: Brickdam
+    - key: subdistrict
+      label: Neighborhood / Area
+      placeholder: Stabroek
+    - key: city
+      label: City / Town
+      placeholder: Georgetown
 openSourceIds:
   - osm-nominatim
   - osm-overpass

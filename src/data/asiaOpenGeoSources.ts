@@ -740,11 +740,11 @@ export const ASIA_OPEN_GEO_SOURCES: Record<AsiaOpenGeoSourceId, AsiaOpenGeoSourc
   'bd-post': {
     id: 'bd-post',
     name: 'Bangladesh Postcode Lookup',
-    url: 'http://www.bangladeshpost.gov.bd/',
+    url: 'https://bdpost.portal.gov.bd/',
     kind: 'postal-code',
     coverage: 'country',
     usage: 'reference',
-    notes: 'Bangladesh Post postcode reference for district and local delivery validation.',
+    notes: 'Bangladesh Post official portal, including postcode-search services, for district and local delivery validation.',
   },
   'survey-bangladesh': {
     id: 'survey-bangladesh',
@@ -778,11 +778,11 @@ export const ASIA_OPEN_GEO_SOURCES: Record<AsiaOpenGeoSourceId, AsiaOpenGeoSourc
   'postalservice-np': {
     id: 'postalservice-np',
     name: 'Nepal Postal Service Postcode',
-    url: 'https://www.postalservice.gov.np/postcode',
+    url: 'https://nepalpost.gov.np/content/1716/1716-postal-codes-of-nepal/',
     kind: 'postal-code',
     coverage: 'country',
     usage: 'primary',
-    notes: 'Nepal official postal-code lookup reference.',
+    notes: 'Nepal Post official postal-codes reference page under the current nepalpost.gov.np domain.',
   },
   'national-geoportal-nepal': {
     id: 'national-geoportal-nepal',
@@ -1347,11 +1347,11 @@ export const ASIA_OPEN_GEO_SOURCES: Record<AsiaOpenGeoSourceId, AsiaOpenGeoSourc
   'kuwait-post': {
     id: 'kuwait-post',
     name: 'Kuwait Ministry Postal Services',
-    url: 'https://moc.gov.kw/',
+    url: 'https://www.moc.gov.kw/en/important-links?tab=3',
     kind: 'postal-code',
     coverage: 'country',
     usage: 'reference',
-    notes: 'Kuwait postal-service reference for local delivery and post-office metadata.',
+    notes: 'Kuwait Ministry of Communications page listing postal codes and post-office numbers.',
   },
   'osm-kuwait': {
     id: 'osm-kuwait',

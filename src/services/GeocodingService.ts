@@ -34,6 +34,14 @@ import {
 import { rankAddressCandidatesByMorphism, type AddressMorphismCandidate } from '../lib/addressMorphism';
 import { buildMorphismCandidateFromSources, detectNaturalAddressContext } from '../lib/addressMorphismSources';
 import { getAddressFormat } from '../data/address_formats';
+import {
+  buildBuildingNameOverpassQuery,
+  buildingNameCandidateFromOsmElement,
+  extractBuildingNameFromReverseGeocode,
+  rankBuildingNameCandidates,
+  type BuildingNameCandidate,
+} from '../lib/buildingName';
+import { buildingNameCandidateFromOvertureFeature } from '../lib/overtureMaps';
 
 // --- Types ---
 
@@ -90,6 +98,10 @@ export interface ParsedAddress {
   postcode?: string;
   plus_code?: string | null;
   country?: string;
+  building?: string;
+  building_en?: string;
+  building_name_source?: string;
+  building_name_data?: BuildingNameCandidate | null;
   poi?: string;
   elevation?: number;
   mountain_class?: number;
@@ -435,6 +447,7 @@ export async function smartSearch(query: string, lat?: number, lon?: number, opt
       return {
         ...result,
         morphism_energy: morphism?.morphism_energy,
+        morphism_probability: morphism?.morphism_probability,
         morphism_status: morphism?.morphism_status,
         morphism_pid: morphism?.morphism_pid,
       };
@@ -445,6 +458,100 @@ export async function smartSearch(query: string, lat?: number, lon?: number, opt
       return (b.confidence ?? 0) - (a.confidence ?? 0);
     })
     .slice(0, advancedOptions.limit);
+}
+
+/**
+ * Fetches the strongest open-source building or housename candidate near the coordinate.
+ * Uses OSM/Overpass tags only and returns null when only generic building types are available.
+ */
+async function fetchNearbyOsmBuildingName(
+  lat: number,
+  lon: number,
+  langCode: string = 'en',
+  radius: number = 90,
+): Promise<BuildingNameCandidate | null> {
+  try {
+    const response = await fetchWithRetry('/api/overpass', {
+      method: 'POST',
+      body: JSON.stringify({ query: buildBuildingNameOverpassQuery(lat, lon, radius) }),
+      headers: { 'Content-Type': 'application/json' },
+      timeout: 45000,
+    });
+
+    if (!response.ok) return null;
+    const data = await response.json();
+    const elements = Array.isArray(data?.elements) ? data.elements : [];
+    const candidates = elements
+      .map((element: any) => {
+        const elLat = element.lat || element.center?.lat;
+        const elLon = element.lon || element.center?.lon;
+        const distanceMeters = elLat && elLon ? Math.round(calculateDistance(lat, lon, elLat, elLon) * 1000) : undefined;
+        return buildingNameCandidateFromOsmElement(element, lat, lon, langCode, distanceMeters);
+      })
+      .filter(Boolean) as BuildingNameCandidate[];
+
+    return rankBuildingNameCandidates(candidates)[0] || null;
+  } catch (error) {
+    console.warn('Failed to fetch nearby building name:', error);
+    return null;
+  }
+}
+
+export async function fetchNearbyOvertureBuildingName(
+  lat: number,
+  lon: number,
+  langCode: string = 'en',
+  radius: number = 90,
+): Promise<BuildingNameCandidate | null> {
+  try {
+    const params = new URLSearchParams({
+      lat: String(lat),
+      lon: String(lon),
+      lang: langCode,
+      radius: String(radius),
+    });
+    const response = await fetchWithRetry(`/api/overture/building-name?${params.toString()}`, {
+      timeout: 45000,
+    }, 0);
+
+    if (!response.ok) return null;
+    const data = await response.json();
+    const rawCandidates = Array.isArray(data)
+      ? data
+      : Array.isArray(data?.candidates)
+        ? data.candidates
+        : data?.candidate
+          ? [data.candidate]
+          : Array.isArray(data?.features)
+            ? data.features
+            : [];
+    const candidates = rawCandidates
+      .map((feature: any) => buildingNameCandidateFromOvertureFeature(feature, langCode))
+      .filter(Boolean) as BuildingNameCandidate[];
+
+    return rankBuildingNameCandidates(candidates)[0] || null;
+  } catch (error) {
+    console.warn('Failed to fetch Overture building name:', error);
+    return null;
+  }
+}
+
+export async function fetchNearbyBuildingName(
+  lat: number,
+  lon: number,
+  langCode: string = 'en',
+  radius: number = 90,
+): Promise<BuildingNameCandidate | null> {
+  const results = await Promise.allSettled([
+    fetchNearbyOvertureBuildingName(lat, lon, langCode, radius),
+    fetchNearbyOsmBuildingName(lat, lon, langCode, radius),
+  ]);
+  const candidates = results
+    .filter((result): result is PromiseFulfilledResult<BuildingNameCandidate | null> => result.status === 'fulfilled')
+    .map(result => result.value)
+    .filter(Boolean) as BuildingNameCandidate[];
+
+  return rankBuildingNameCandidates(candidates)[0] || null;
 }
 
 // --- Regional Geocoding ---
@@ -547,6 +654,7 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
   let seaContext: SeaContext | null = null;
   let heritageContext: HeritageContext | null = null;
   let japaneseGeoContext: JapaneseGeoContext | null = null;
+  let buildingNameData: BuildingNameCandidate | null = null;
 
   const westAsiaCountries = ['sa', 'ae', 'tr', 'ir', 'il', 'iq', 'sy', 'jo', 'lb', 'ye', 'om', 'kw', 'qa', 'bh'];
   const centralAsiaCountries = ['kz', 'uz', 'kg', 'tj', 'tm'];
@@ -560,6 +668,7 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
   let globalContextIdx = -1;
   let plusCodeIdx = -1;
   let hkAlsIdx = -1;
+  let buildingNameIdx = -1;
 
   try {
     const promises: Promise<any>[] = [
@@ -744,6 +853,11 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
       promises.push(fetchHKOfficialAddress(lat, lon).catch(() => null));
     }
 
+    // 12. OSM building/housename lookup. Keep this after regional index-sensitive
+    // promises so the existing results[6]/[7]/[8] regional unpacking remains stable.
+    buildingNameIdx = promises.length;
+    promises.push(fetchNearbyBuildingName(lat, lon, langCode, 90).catch(() => null));
+
     results = await Promise.allSettled(promises);
 
     const safeJson = async (result: any) => {
@@ -780,6 +894,10 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
     // Handle Japanese Geo results
     if (japanGeoIdx !== -1 && results[japanGeoIdx] && results[japanGeoIdx].status === 'fulfilled') {
       japaneseGeoContext = (results[japanGeoIdx] as PromiseFulfilledResult<any>).value;
+    }
+
+    if (buildingNameIdx !== -1 && results[buildingNameIdx] && results[buildingNameIdx].status === 'fulfilled') {
+      buildingNameData = (results[buildingNameIdx] as PromiseFulfilledResult<any>).value;
     }
 
     // Handle Polar results
@@ -1118,6 +1236,10 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
     nominatimData.south_asia_context = southAsiaContext;
     nominatimData.uk_ireland_context = ukIrelandContext;
     nominatimData.nordic_context = nordicContext;
+    nominatimData.local_postal_data = localData;
+    nominatimData.zippopotam_data = zippoData;
+    nominatimData.european_postal_data = europeanPostalData;
+    nominatimData.asia_oceania_data = asiaOceaniaData;
     nominatimData.oceania_context = oceaniaContext;
     nominatimData.east_asia_context = eastAsiaContext;
     nominatimData.north_america_context = northAmericaContext;
@@ -1154,6 +1276,17 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
       }
     }
 
+    const reverseBuilding = extractBuildingNameFromReverseGeocode(nominatimData, langCode);
+    const preferredBuilding = buildingNameData || (reverseBuilding ? { ...reverseBuilding, category: 'address' } : null);
+    if (preferredBuilding?.name) {
+      if (!nominatimData.address.building) nominatimData.address.building = preferredBuilding.name;
+      if (preferredBuilding.nameEn && !nominatimData.address.building_en) {
+        nominatimData.address.building_en = preferredBuilding.nameEn;
+      }
+      nominatimData.building_name_data = preferredBuilding;
+      nominatimData.building_name_source = preferredBuilding.source;
+    }
+
     const addressSources = [
       'nominatim',
       localData?.postalCode ? 'geonames-postal' : '',
@@ -1164,6 +1297,7 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
       officialRegionalData ? 'official-regional-api' : '',
       usCensusData ? 'us-census' : '',
       japaneseGeoContext ? 'japanese-open-data' : '',
+      preferredBuilding ? 'osm-building-name' : '',
     ].filter(Boolean) as string[];
     nominatimData.address_analysis = await enrichAnalysisWithOptionalLibpostal(analyzeAddress({
       apiAddress: nominatimData.address,
@@ -1173,6 +1307,9 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
     nominatimData.address = {
       ...nominatimData.address,
       ...nominatimData.address_analysis.canonical,
+      building_en: nominatimData.address.building_en,
+      building_name_source: nominatimData.building_name_source,
+      building_name_data: nominatimData.building_name_data,
     };
     
     return nominatimData;
@@ -1188,12 +1325,16 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
       state: localData.adminName1,
       city: localData.adminName2 || localData.placeName,
       suburb: localData.adminName3 || (localData.adminName2 ? localData.placeName : ''),
-      postcode: localData.postalCode
+      postcode: localData.postalCode,
+      building: buildingNameData?.name || '',
+      building_en: buildingNameData?.nameEn || '',
+      building_name_source: buildingNameData?.source || '',
+      building_name_data: buildingNameData,
     };
     const addressAnalysis = await enrichAnalysisWithOptionalLibpostal(analyzeAddress({
       apiAddress: address,
       displayName: [address.postcode, address.suburb, address.city, address.state, address.country].filter(Boolean).join(', '),
-      sources: ['geonames-postal'],
+      sources: ['geonames-postal', buildingNameData ? 'osm-building-name' : ''].filter(Boolean),
     }), [address.postcode, address.suburb, address.city, address.state, address.country].filter(Boolean).join(', '), localData.countryCode);
 
     return {
@@ -1211,6 +1352,8 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
       south_asia_context: southAsiaContext,
       uk_ireland_context: ukIrelandContext,
       nordic_context: nordicContext,
+      local_postal_data: localData,
+      zippopotam_data: zippoData,
       european_postal_data: europeanPostalData,
       asia_oceania_data: asiaOceaniaData,
       oceania_context: oceaniaContext,
@@ -1232,6 +1375,49 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
       address: {
         ...address,
         ...addressAnalysis.canonical,
+        building_en: address.building_en,
+        building_name_source: address.building_name_source,
+        building_name_data: address.building_name_data,
+      }
+    };
+  }
+
+  if (buildingNameData) {
+    const address = {
+      country_code: cc,
+      country: countryCode.toUpperCase(),
+      building: buildingNameData.name,
+      building_en: buildingNameData.nameEn || '',
+      building_name_source: buildingNameData.source,
+      building_name_data: buildingNameData,
+    };
+    const addressAnalysis = await enrichAnalysisWithOptionalLibpostal(analyzeAddress({
+      apiAddress: address,
+      displayName: buildingNameData.name,
+      sources: ['osm-building-name'],
+    }), buildingNameData.name, cc);
+
+    return {
+      elevation: elevationData?.elevation,
+      delivery_difficulty: deliveryDifficulty,
+      plus_code: (results[plusCodeIdx] && results[plusCodeIdx].status === 'fulfilled') ? (results[plusCodeIdx] as PromiseFulfilledResult<any>).value : null,
+      flood_risk: floodRisk,
+      mountain_name: mountainData?.peaks?.[0]?.name,
+      landslide_risk: geoRiskData?.risks?.landslide,
+      seismic_risk: geoRiskData?.risks?.seismic,
+      land_cover: geoRiskData?.land_cover,
+      nature_context: natureContext,
+      sea_context: seaContext,
+      heritage_context: heritageContext,
+      address_analysis: addressAnalysis,
+      building_name_data: buildingNameData,
+      building_name_source: buildingNameData.source,
+      address: {
+        ...address,
+        ...addressAnalysis.canonical,
+        building_en: address.building_en,
+        building_name_source: address.building_name_source,
+        building_name_data: address.building_name_data,
       }
     };
   }

@@ -54,6 +54,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "9490"
+      required: true
     - key: city
       label: City
       placeholder: Vaduz
@@ -79,6 +80,7 @@ international:
       - key: postcode
         label: PLZ
         placeholder: "9490"
+        required: true
       - key: city
         label: Stadt
         placeholder: Vaduz

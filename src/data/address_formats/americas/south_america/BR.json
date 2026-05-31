@@ -77,7 +77,8 @@
       {
         "key": "postcode",
         "label": "CEP",
-        "placeholder": "01310-100"
+        "placeholder": "01310-100",
+        "required": true
       },
       {
         "key": "city",
@@ -120,7 +121,8 @@
         {
           "key": "postcode",
           "label": "CEP",
-          "placeholder": "01310-100"
+          "placeholder": "01310-100",
+          "required": true
         },
         {
           "key": "city",

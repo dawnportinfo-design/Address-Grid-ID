@@ -37,7 +37,25 @@ english:
     {{postcode}}
     BARBADOS
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Building / Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: "1"
+    - key: street
+      label: Street
+      placeholder: Broad Street
+    - key: city
+      label: City / Town
+      placeholder: Bridgetown
+    - key: state
+      label: State / Province
+      placeholder: St. Michael
+    - key: postcode
+      label: Postal Code
+      placeholder: BB11000
 postalCode:
   format: null
   regex: null

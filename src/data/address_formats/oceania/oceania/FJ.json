@@ -61,7 +61,28 @@
     "name": "International English",
     "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}\nFIJI",
     "ordering": "small-to-big",
-    "fields": []
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Building / Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House/Floor No.",
+        "placeholder": "123"
+      },
+      {
+        "key": "street",
+        "label": "Street / PO Box",
+        "placeholder": "Victoria Parade"
+      },
+      {
+        "key": "city",
+        "label": "City / Town",
+        "placeholder": "Suva"
+      }
+    ]
   },
   "postalCode": {
     "format": null,

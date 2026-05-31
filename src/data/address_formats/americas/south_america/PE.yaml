@@ -53,6 +53,7 @@ native:
     - key: postcode
       label: Codigo Postal
       placeholder: ""
+      required: true
 english:
   name: International English
   addressFormat: |-
@@ -61,7 +62,26 @@ english:
     {{city}}, {{state}} {{postcode}}
     PERU
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Building / Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: ""
+    - key: street
+      label: Street
+      placeholder: ""
+    - key: city
+      label: City / Town
+      placeholder: ""
+    - key: state
+      label: State / Province
+      placeholder: ""
+    - key: postcode
+      label: Postal Code
+      placeholder: ""
+      required: true
 international:
   es:
     name: Español (Internacional)
@@ -73,7 +93,29 @@ international:
       {{postcode}}
       Peru
     ordering: small-to-big
-    fields: []
+    fields:
+      - key: organization
+        label: Organizacion / Empresa
+        placeholder: ""
+      - key: street
+        label: Calle / Avenida
+        placeholder: ""
+      - key: houseNumber
+        label: Numero
+        placeholder: ""
+      - key: subdistrict
+        label: Barrio / Colonia
+        placeholder: ""
+      - key: city
+        label: Ciudad / Municipio
+        placeholder: ""
+      - key: state
+        label: Estado / Provincia
+        placeholder: ""
+      - key: postcode
+        label: Codigo Postal
+        placeholder: ""
+        required: true
 postalCode:
   format: NNNNN
   regex: ^\d{5}$

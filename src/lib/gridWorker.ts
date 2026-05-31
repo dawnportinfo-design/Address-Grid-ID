@@ -14,6 +14,8 @@ type AgidGridWasmExports = {
 
 let wasmExports: AgidGridWasmExports | null = null;
 let wasmLoadStarted = false;
+let lastRequestKey = '';
+let lastFeatureResult: ReturnType<typeof buildRegularMetricGridFeatures> | null = null;
 
 function hasGridWasmExports(exportsObj: WebAssembly.Exports): exportsObj is WebAssembly.Exports & AgidGridWasmExports {
   return !!(
@@ -49,16 +51,29 @@ void loadGridWasm();
 
 self.onmessage = async (e: MessageEvent) => {
   const { lat, lon, zoom, bounds, requestId } = e.data;
+  const requestKey = makeGridRequestKey({ lat, lon, zoom, bounds });
 
   if (!wasmExports && !wasmLoadStarted) {
     await loadGridWasm();
   }
 
-  const features = wasmExports
-    ? getGridFeaturesFromWasm(zoom, bounds, lat, lon)
-    : getGridFeaturesWorker(zoom, bounds, lat, lon);
+  const features = requestKey === lastRequestKey && lastFeatureResult
+    ? lastFeatureResult
+    : wasmExports
+      ? getGridFeaturesFromWasm(zoom, bounds, lat, lon)
+      : getGridFeaturesWorker(zoom, bounds, lat, lon);
+
+  lastRequestKey = requestKey;
+  lastFeatureResult = features;
   self.postMessage({ ...features, requestId });
 };
+
+function makeGridRequestKey({ lat, lon, zoom, bounds }: { lat: number; lon: number; zoom: number; bounds: any }) {
+  const boundsKey = Array.isArray(bounds)
+    ? bounds.flat().map((value: number) => Number(value).toFixed(8)).join(',')
+    : 'no-bounds';
+  return `${Number(lat).toFixed(8)}|${Number(lon).toFixed(8)}|${Number(zoom).toFixed(3)}|${boundsKey}`;
+}
 
 function getGridFeaturesFromWasm(zoom: number, bounds: any, lat: number, lon: number) {
   if (!bounds || !wasmExports) return { gridLines: [], gridCells: [] };

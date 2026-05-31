@@ -2804,7 +2804,8 @@
                 {
                   "key": "postcode",
                   "label": "Postal Code",
-                  "placeholder": "00100"
+                  "placeholder": "00100",
+                  "required": true
                 }
               ]
             },
@@ -2837,7 +2838,8 @@
                   {
                     "key": "postcode",
                     "label": "Nambari ya Posta",
-                    "placeholder": "00100"
+                    "placeholder": "00100",
+                    "required": true
                   }
                 ]
               }
@@ -2846,7 +2848,34 @@
               "name": "International English",
               "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}\nKENYA",
               "ordering": "small-to-big",
-              "fields": []
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Company",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "House/Plot No.",
+                  "placeholder": "123"
+                },
+                {
+                  "key": "street",
+                  "label": "Street/PO Box",
+                  "placeholder": "Kenyatta Ave"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Nairobi"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postal Code",
+                  "placeholder": "00100",
+                  "required": true
+                }
+              ]
             },
             "postalCode": {
               "format": "NNNNN",
@@ -3346,7 +3375,8 @@
                 {
                   "key": "postcode",
                   "label": "Postal Code",
-                  "placeholder": "12345"
+                  "placeholder": "12345",
+                  "required": true
                 }
               ]
             },
@@ -3379,7 +3409,8 @@
                   {
                     "key": "postcode",
                     "label": "Code postal",
-                    "placeholder": "12345"
+                    "placeholder": "12345",
+                    "required": true
                   }
                 ]
               }
@@ -3388,7 +3419,34 @@
               "name": "International English",
               "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}\nMAURITIUS",
               "ordering": "small-to-big",
-              "fields": []
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Company",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "House No.",
+                  "placeholder": "1"
+                },
+                {
+                  "key": "street",
+                  "label": "Street",
+                  "placeholder": "Royal Road"
+                },
+                {
+                  "key": "city",
+                  "label": "Town/City",
+                  "placeholder": "Port Louis"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postal Code",
+                  "placeholder": "12345",
+                  "required": true
+                }
+              ]
             },
             "postalCode": {
               "format": "NNNNN",
@@ -4417,7 +4475,8 @@
                 {
                   "key": "postcode",
                   "label": "Namba ya Posta",
-                  "placeholder": "11101"
+                  "placeholder": "11101",
+                  "required": true
                 }
               ]
             },
@@ -4450,7 +4509,8 @@
                   {
                     "key": "postcode",
                     "label": "Postal Code",
-                    "placeholder": "11101"
+                    "placeholder": "11101",
+                    "required": true
                   }
                 ]
               }
@@ -4459,7 +4519,34 @@
               "name": "International English",
               "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}\nTANZANIA",
               "ordering": "small-to-big",
-              "fields": []
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Company",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "PO Box/House No.",
+                  "placeholder": "PO Box 1234"
+                },
+                {
+                  "key": "street",
+                  "label": "Street",
+                  "placeholder": "Samora Ave"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Region",
+                  "placeholder": "Dar es Salaam"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postal Code",
+                  "placeholder": "11101",
+                  "required": true
+                }
+              ]
             },
             "postalCode": {
               "format": "NNNNN",
@@ -7177,7 +7264,7 @@
                   "key": "postcode",
                   "label": "Código Postal",
                   "placeholder": "1100",
-                  "required": false,
+                  "required": true,
                   "type": "text"
                 },
                 {
@@ -7207,7 +7294,8 @@
                 {
                   "key": "postcode",
                   "label": "Postcode",
-                  "placeholder": "1100"
+                  "placeholder": "1100",
+                  "required": true
                 },
                 {
                   "key": "city",
@@ -7235,7 +7323,8 @@
                   {
                     "key": "postcode",
                     "label": "C.P. (Latin)",
-                    "placeholder": "1100"
+                    "placeholder": "1100",
+                    "required": true
                   },
                   {
                     "key": "city",
@@ -8199,7 +8288,8 @@
                 {
                   "key": "postcode",
                   "label": "Postal Code",
-                  "placeholder": "2196"
+                  "placeholder": "2196",
+                  "required": true
                 }
               ]
             },
@@ -8236,7 +8326,8 @@
                   {
                     "key": "postcode",
                     "label": "Poskode",
-                    "placeholder": "2196"
+                    "placeholder": "2196",
+                    "required": true
                   }
                 ]
               }
@@ -8274,7 +8365,8 @@
                 {
                   "key": "postcode",
                   "label": "Postal Code",
-                  "placeholder": "2196"
+                  "placeholder": "2196",
+                  "required": true
                 }
               ]
             },
@@ -10801,7 +10893,8 @@
                 {
                   "key": "postcode",
                   "label": "Postal Code",
-                  "placeholder": "101241"
+                  "placeholder": "101241",
+                  "required": true
                 },
                 {
                   "key": "state",
@@ -10814,7 +10907,44 @@
               "name": "International English",
               "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{district}}\n{{city}} {{postcode}}\n{{state}}\nNIGERIA",
               "ordering": "small-to-big",
-              "fields": []
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Company",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "Plot/House No.",
+                  "placeholder": "123"
+                },
+                {
+                  "key": "street",
+                  "label": "Street Address",
+                  "placeholder": "Victoria Island Way"
+                },
+                {
+                  "key": "district",
+                  "label": "District/Area",
+                  "placeholder": "Victoria Island"
+                },
+                {
+                  "key": "city",
+                  "label": "City/Town",
+                  "placeholder": "Lagos"
+                },
+                {
+                  "key": "postcode",
+                  "label": "Postal Code",
+                  "placeholder": "101241",
+                  "required": true
+                },
+                {
+                  "key": "state",
+                  "label": "State",
+                  "placeholder": "Lagos State"
+                }
+              ]
             },
             "postalCode": {
               "format": "NNNNNN",

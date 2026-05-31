@@ -54,6 +54,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "00120"
+      required: true
     - key: city
       label: City
       placeholder: Vatican City
@@ -79,6 +80,7 @@ international:
       - key: postcode
         label: CAP
         placeholder: "00120"
+        required: true
       - key: city
         label: Città
         placeholder: Città del Vaticano

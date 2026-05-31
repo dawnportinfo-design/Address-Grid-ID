@@ -70,6 +70,89 @@ test('clusters candidates that refer to the same address entity', () => {
   assert.equal(clusters[0].candidates.length, 2);
 });
 
+test('clusters stay bounded instead of chaining distant candidates transitively', () => {
+  const chainA = {
+    id: 'chain-a',
+    label: '1 Main Street, Metro',
+    canonical: {
+      country_code: 'us',
+      state: 'Test',
+      city: 'Metro',
+      road: 'Main Street',
+      house_number: '1',
+      postcode: '10000',
+    },
+    lat: 0,
+    lon: 0,
+    sources: ['nominatim'],
+    confidence: 0.8,
+  };
+  const chainB = {
+    id: 'chain-b',
+    label: '2 Main Street, Metro',
+    canonical: {
+      country_code: 'us',
+      state: 'Test',
+      city: 'Metro',
+      road: 'Main Street',
+      house_number: '2',
+      postcode: '10000',
+    },
+    lat: 0.009,
+    lon: 0,
+    sources: ['nominatim'],
+    confidence: 0.8,
+  };
+  const chainC = {
+    id: 'chain-c',
+    label: '2 Market Street, Metro',
+    canonical: {
+      country_code: 'us',
+      state: 'Test',
+      city: 'Metro',
+      road: 'Market Street',
+      house_number: '2',
+      postcode: '10000',
+    },
+    lat: 0.018,
+    lon: 0,
+    sources: ['nominatim'],
+    confidence: 0.8,
+  };
+
+  assert.ok(structuralDistance(chainA, chainB) <= 0.34);
+  assert.ok(structuralDistance(chainB, chainC) <= 0.34);
+  assert.ok(structuralDistance(chainA, chainC) > 0.34);
+
+  const clusters = clusterAddressCandidates([chainA, chainB, chainC], 0.34);
+
+  assert.equal(clusters.length, 2);
+  assert.equal(clusters.every(cluster => cluster.candidates.length < 3), true);
+});
+
+test('builds AMT PID from SHA-256 upper 128 bits', () => {
+  const pid = buildAddressPid({
+    country_code: 'jp',
+    state: 'Tokyo',
+    city: 'Chiyoda',
+    subdistrict: 'Marunouchi',
+    road: 'Marunouchi',
+    house_number: '1-9-1',
+    postcode: '1000005',
+  });
+
+  assert.match(pid, /^AMT-[0-9A-F]{32}$/);
+  assert.equal(pid, buildAddressPid({
+    country_code: 'jp',
+    state: 'Tokyo',
+    city: 'Chiyoda',
+    subdistrict: 'Marunouchi',
+    road: 'Marunouchi',
+    house_number: '1-9-1',
+    postcode: '1000005',
+  }));
+});
+
 test('resolves a clear candidate to a stable PID and verified status', () => {
   const result = resolveAddressMorphism({
     input: 'Tokyo Station Marunouchi 1-9-1',
@@ -81,6 +164,8 @@ test('resolves a clear candidate to a stable PID and verified status', () => {
   assert.equal(result.selected?.canonical.country_code, 'jp');
   assert.ok(result.pid?.startsWith('AMT-'));
   assert.equal(result.pid, buildAddressPid(result.selected!.canonical));
+  assert.ok(result.confidence > 0.95);
+  assert.ok(result.entropy >= 0);
   assert.ok(Number.isFinite(result.energySummary.best));
   assert.ok(result.energySummary.best <= result.energySummary.average);
 });
@@ -109,6 +194,8 @@ test('marks near-tied unrelated candidates as ambiguous instead of forcing a dec
 
   assert.equal(result.status, 'ambiguous');
   assert.equal(result.pid, null);
+  assert.ok(result.confidence < 0.6);
+  assert.ok(result.entropy > 0.65);
 });
 
 test('returns unresolved when no candidate has enough evidence', () => {

@@ -111,24 +111,31 @@ function buildRegularMetricGridFeaturesFromRange({
   const { step } = metrics;
   const gridCells: any[] = [];
   const gridLines: number[][][] = [];
-  const lineCache = new Set<string>();
 
-  const pointAt = (col: number, row: number) => regularMetricPointAt(startCol + col, startRow + row, metrics);
+  const points: number[][][] = Array.from({ length: rows + 1 }, (_, row) =>
+    Array.from({ length: columns + 1 }, (_, col) =>
+      regularMetricPointAt(startCol + col, startRow + row, metrics),
+    ),
+  );
 
-  const addLine = (a: number[], b: number[]) => {
-    const key = toUndirectedSegmentKey(a, b);
-    if (!lineCache.has(key)) {
-      gridLines.push([a, b]);
-      lineCache.add(key);
+  for (let row = 0; row <= rows; row++) {
+    for (let col = 0; col < columns; col++) {
+      gridLines.push([points[row][col], points[row][col + 1]]);
     }
-  };
+  }
+
+  for (let col = 0; col <= columns; col++) {
+    for (let row = 0; row < rows; row++) {
+      gridLines.push([points[row][col], points[row + 1][col]]);
+    }
+  }
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < columns; col++) {
-      const sw = pointAt(col, row);
-      const se = pointAt(col + 1, row);
-      const ne = pointAt(col + 1, row + 1);
-      const nw = pointAt(col, row + 1);
+      const sw = points[row][col];
+      const se = points[row][col + 1];
+      const ne = points[row + 1][col + 1];
+      const nw = points[row + 1][col];
       const poly = [sw, se, ne, nw, sw];
 
       gridCells.push({
@@ -140,11 +147,6 @@ function buildRegularMetricGridFeaturesFromRange({
           isFocus: step === 1,
         },
       });
-
-      addLine(sw, se);
-      addLine(se, ne);
-      addLine(ne, nw);
-      addLine(nw, sw);
     }
   }
 

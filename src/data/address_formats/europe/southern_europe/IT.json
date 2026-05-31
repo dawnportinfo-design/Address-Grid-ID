@@ -73,7 +73,8 @@
       {
         "key": "postcode",
         "label": "Postcode",
-        "placeholder": "00100"
+        "placeholder": "00100",
+        "required": true
       },
       {
         "key": "city",
@@ -111,7 +112,8 @@
         {
           "key": "postcode",
           "label": "CAP",
-          "placeholder": "00100"
+          "placeholder": "00100",
+          "required": true
         },
         {
           "key": "city",

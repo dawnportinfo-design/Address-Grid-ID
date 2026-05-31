@@ -11,6 +11,7 @@ export type CanonicalAddressParts = {
   building?: string;
   postcode?: string;
   poi?: string;
+  plus_code?: string;
 };
 
 export type AddressAnalysis = {
@@ -33,6 +34,7 @@ const FIELD_ALIASES: Record<keyof CanonicalAddressParts, string[]> = {
   building: ['building', 'organization', 'flats', 'premise'],
   postcode: ['postcode', 'postalcode', 'postal_code', 'postalCode', 'zip', 'zipcode'],
   poi: ['amenity', 'shop', 'office', 'tourism', 'leisure', 'railway', 'aeroway', 'historic', 'station', 'healthcare', 'name'],
+  plus_code: ['plus_code', 'plusCode', 'open_location_code', 'olc'],
 };
 
 const ROAD_ABBREVIATIONS: Record<string, string> = {
@@ -173,6 +175,7 @@ function confidenceFor(parts: CanonicalAddressParts, sourceCount: number) {
     ['road', 0.18],
     ['house_number', 0.18],
     ['poi', 0.08],
+    ['plus_code', 0.06],
   ];
   const fieldScore = weightedFields.reduce((score, [key, weight]) => score + (parts[key] ? weight : 0), 0);
   return Math.min(0.99, Math.round((fieldScore + Math.min(sourceCount, 3) * 0.05) * 100) / 100);

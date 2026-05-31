@@ -66,7 +66,8 @@
       {
         "key": "postcode",
         "label": "Postcode",
-        "placeholder": "9490"
+        "placeholder": "9490",
+        "required": true
       },
       {
         "key": "city",
@@ -99,7 +100,8 @@
         {
           "key": "postcode",
           "label": "PLZ",
-          "placeholder": "9490"
+          "placeholder": "9490",
+          "required": true
         },
         {
           "key": "city",

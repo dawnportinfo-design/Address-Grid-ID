@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { getViewportGridBounds, getViewportSpanMeters, shouldShowGridForViewport } from './gridViewport';
+import {
+  getViewportGridBounds,
+  getViewportSamplePixelCoordinates,
+  getViewportSpanMeters,
+  shouldShowGridForViewport,
+} from './gridViewport';
 
 function closeTo(actual: number, expected: number, epsilon = 1e-12) {
   assert.ok(Math.abs(actual - expected) <= epsilon, `${actual} !== ${expected}`);
@@ -18,6 +23,20 @@ test('builds padded grid bounds from all visible viewport corners', () => {
   closeTo(bounds[0][1], 35.674);
   closeTo(bounds[1][0], 139.776);
   closeTo(bounds[1][1], 35.69);
+});
+
+test('samples corners, edge midpoints, and center so viewport grid bounds cover the full rendered map', () => {
+  assert.deepEqual(getViewportSamplePixelCoordinates(600, 900), [
+    [0, 0],
+    [600, 0],
+    [600, 900],
+    [0, 900],
+    [300, 0],
+    [600, 450],
+    [300, 900],
+    [0, 450],
+    [300, 450],
+  ]);
 });
 
 test('allows grid by viewport width only and does not hide it because of height over 200m', () => {

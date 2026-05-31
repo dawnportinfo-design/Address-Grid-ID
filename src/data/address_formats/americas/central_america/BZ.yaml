@@ -57,7 +57,22 @@ english:
     {{city}}, {{state}}
     BELIZE
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Building / Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: "101"
+    - key: street
+      label: Street
+      placeholder: Albert Street
+    - key: city
+      label: City / Town
+      placeholder: Belize City
+    - key: state
+      label: State / Province
+      placeholder: Belize District
 openSourceIds:
   - belize-statistical-institute
   - osm-nominatim

@@ -5,6 +5,7 @@ import {
   findContainingGridCellPolygon,
   gridBoundsCoverBounds,
   gridCellsCoverBounds,
+  getGridCellsRenderBounds,
   getDisplayCellPolygon,
   getDisplayGridStep,
   getGridCellMetricSummary,
@@ -12,6 +13,7 @@ import {
   polygonToRightAngleCell,
   resolveGridHighlightPolygons,
   rightAngleCellLines,
+  shouldDisplayGridResponse,
   shouldRefreshGridForViewport,
 } from './gridGeometry';
 import { buildRegularMetricGridFeatures } from './gridWorkerWasm';
@@ -146,6 +148,47 @@ describe('grid display geometry', () => {
 
     assert.equal(gridCellsCoverBounds(partialGrid.gridCells, visibleBounds), false);
     assert.equal(gridCellsCoverBounds(coveringGrid.gridCells, visibleBounds), true);
+  });
+
+  it('caches rendered grid bounds so repeated coverage checks avoid rescanning cells', () => {
+    const grid = buildRegularMetricGridFeatures({
+      lat: 35.6812,
+      lon: 139.7671,
+      zoom: 18,
+      columns: 10,
+      rows: 10,
+    });
+
+    const firstBounds = getGridCellsRenderBounds(grid.gridCells);
+    const secondBounds = getGridCellsRenderBounds(grid.gridCells);
+
+    assert.ok(firstBounds);
+    assert.equal(firstBounds, secondBounds);
+  });
+
+  it('rejects worker grid responses that would only cover part of the current viewport', () => {
+    const currentVisibleBounds: [[number, number], [number, number]] = [
+      [139.764, 35.678],
+      [139.772, 35.686],
+    ];
+    const staleWorkerGrid = buildRegularMetricGridFeatures({
+      lat: 35.6812,
+      lon: 139.7671,
+      zoom: 18,
+      columns: 4,
+      rows: 4,
+    });
+    const currentWorkerGrid = buildRegularMetricGridFeatures({
+      lat: 35.6812,
+      lon: 139.7671,
+      zoom: 18,
+      columns: 70,
+      rows: 70,
+      bounds: currentVisibleBounds,
+    });
+
+    assert.equal(shouldDisplayGridResponse(staleWorkerGrid.gridCells, currentVisibleBounds), false);
+    assert.equal(shouldDisplayGridResponse(currentWorkerGrid.gridCells, currentVisibleBounds), true);
   });
 
   it('requests a fast refresh while panning when cached grid cells no longer cover the viewport', () => {

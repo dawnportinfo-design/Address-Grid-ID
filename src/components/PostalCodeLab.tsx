@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { encodeAGID } from '../lib/agid';
 import { getPatternForPrefix, applySmartPattern, PostalPattern, NO_POSTAL_COUNTRIES, POSTAL_PATTERNS } from '../lib/postalPatterns';
+import { fetchCountryBoundary, fetchCountryCities, fetchCountryStats, type CountryStats } from '../services/GeoAdminService';
 
 interface PostalCodeLabProps {
   isOpen: boolean;
@@ -29,7 +30,7 @@ export const PostalCodeLab: React.FC<PostalCodeLabProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCountry, setSelectedCountry] = useState<typeof NO_POSTAL_COUNTRIES[number] | null>(null);
   const [countryBoundary, setCountryBoundary] = useState<any>(null);
-  const [countryStats, setCountryStats] = useState<{ population: number, area: number, region: string, subregion: string, capital: string } | null>(null);
+  const [countryStats, setCountryStats] = useState<CountryStats | null>(null);
   const [isLoadingBoundary, setIsLoadingBoundary] = useState(false);
   const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [style, setStyle] = useState<'numeric' | 'alphanumeric' | 'hybrid' | 'smart'>('smart');
@@ -82,45 +83,50 @@ export const PostalCodeLab: React.FC<PostalCodeLabProps> = ({
   // Fetch cities, boundary and stats when country is selected
   useEffect(() => {
     if (selectedCountry) {
+      let cancelled = false;
       setIsLoadingCities(true);
       setIsLoadingBoundary(true);
       setIsLoadingStats(true);
       
-      // Fetch cities
-      fetch(`/api/country-cities?cc=${selectedCountry.code}`)
-        .then(res => res.json())
+      fetchCountryCities(selectedCountry.code)
         .then(data => {
+          if (cancelled) return;
           setCities(data || []);
           setIsLoadingCities(false);
         })
         .catch(err => {
+          if (cancelled) return;
           console.error("Failed to fetch cities:", err);
           setIsLoadingCities(false);
         });
 
-      // Fetch boundary metadata
-      fetch(`/api/country-boundary?cc=${selectedCountry.code}`)
-        .then(res => res.json())
+      fetchCountryBoundary(selectedCountry.code)
         .then(data => {
+          if (cancelled) return;
           setCountryBoundary(data);
           setIsLoadingBoundary(false);
         })
         .catch(err => {
+          if (cancelled) return;
           console.error("Failed to fetch boundary:", err);
           setIsLoadingBoundary(false);
         });
 
-      // Fetch Stats
-      fetch(`/api/country-stats?cc=${selectedCountry.code}`)
-        .then(res => res.json())
+      fetchCountryStats(selectedCountry.code)
         .then(data => {
+          if (cancelled) return;
           setCountryStats(data);
           setIsLoadingStats(false);
         })
         .catch(err => {
+          if (cancelled) return;
           console.error("Failed to fetch stats:", err);
           setIsLoadingStats(false);
         });
+
+      return () => {
+        cancelled = true;
+      };
     } else {
       setCities([]);
       setCountryBoundary(null);

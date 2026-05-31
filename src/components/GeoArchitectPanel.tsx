@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { proposeAddressingScheme, AddressingProposal } from '../services/AddressDesignAI';
 import { cn } from '../lib/utils';
+import { searchOsmRegion } from '../services/GeoAdminService';
 
 interface GeoArchitectPanelProps {
   isOpen: boolean;
@@ -71,21 +72,18 @@ export const GeoArchitectPanel: React.FC<GeoArchitectPanelProps> = ({
     try {
       // Nominatim search for specific local region via Proxy
       const query = target.includes(currentCountry) ? target : `${target}, ${currentCountry}`;
-      const res = await fetch(`/api/osm-search?q=${encodeURIComponent(query)}&limit=1&polygon_geojson=1`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data.length > 0) {
-          const first = data[0];
-          // Valid GeoJSON can come from Nominatim if polygon_geojson=1 is used
-          if (first.geojson) {
-             onSelectRegion(first.geojson);
-          } else {
-             // Fallback to coordinates if no polygon
-             onSelectRegion({
-               type: 'Point',
-               coordinates: [parseFloat(first.lon), parseFloat(first.lat)]
-             });
-          }
+      const data = await searchOsmRegion(query);
+      if (data.length > 0) {
+        const first = data[0];
+        // Valid GeoJSON can come from Nominatim if polygon_geojson=1 is used
+        if (first.geojson) {
+           onSelectRegion(first.geojson);
+        } else {
+           // Fallback to coordinates if no polygon
+           onSelectRegion({
+             type: 'Point',
+             coordinates: [parseFloat(String(first.lon)), parseFloat(String(first.lat))]
+           });
         }
       }
     } catch (e) {

@@ -67,7 +67,8 @@
         {
           "key": "postcode",
           "label": "Code Postal",
-          "placeholder": "1204"
+          "placeholder": "1204",
+          "required": true
         },
         {
           "key": "city",
@@ -99,7 +100,8 @@
         {
           "key": "postcode",
           "label": "CAP",
-          "placeholder": "6900"
+          "placeholder": "6900",
+          "required": true
         },
         {
           "key": "city",
@@ -131,7 +133,8 @@
         {
           "key": "postcode",
           "label": "Numer postal",
-          "placeholder": "7000"
+          "placeholder": "7000",
+          "required": true
         },
         {
           "key": "city",
@@ -165,7 +168,8 @@
         {
           "key": "postcode",
           "label": "PLZ",
-          "placeholder": "8001"
+          "placeholder": "8001",
+          "required": true
         },
         {
           "key": "city",
@@ -197,7 +201,8 @@
         {
           "key": "postcode",
           "label": "Code Postal",
-          "placeholder": "1204"
+          "placeholder": "1204",
+          "required": true
         },
         {
           "key": "city",
@@ -229,7 +234,8 @@
         {
           "key": "postcode",
           "label": "CAP",
-          "placeholder": "6900"
+          "placeholder": "6900",
+          "required": true
         },
         {
           "key": "city",
@@ -261,7 +267,8 @@
         {
           "key": "postcode",
           "label": "Numer postal",
-          "placeholder": "7000"
+          "placeholder": "7000",
+          "required": true
         },
         {
           "key": "city",
@@ -294,7 +301,8 @@
       {
         "key": "postcode",
         "label": "Postcode",
-        "placeholder": "8001"
+        "placeholder": "8001",
+        "required": true
       },
       {
         "key": "city",

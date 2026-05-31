@@ -59,6 +59,7 @@ domestic:
       - key: postcode
         label: Código Postal
         placeholder: "94043"
+        required: true
 english:
   name: International English
   addressFormat: |-
@@ -86,6 +87,7 @@ english:
     - key: postcode
       label: ZIP Code
       placeholder: "94043"
+      required: true
 postalCode:
   format: NNNNN[-NNNN]
   regex: ^\d{5}(-\d{4})?$

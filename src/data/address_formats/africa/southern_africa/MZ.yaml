@@ -21,7 +21,7 @@ native:
     - key: postcode
       label: Código Postal
       placeholder: "1100"
-      required: false
+      required: true
       type: text
     - key: city
       label: Cidade / Província
@@ -46,6 +46,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "1100"
+      required: true
     - key: city
       label: City
       placeholder: Maputo
@@ -68,6 +69,7 @@ international:
       - key: postcode
         label: C.P. (Latin)
         placeholder: "1100"
+        required: true
       - key: city
         label: Cidade
         placeholder: Maputo

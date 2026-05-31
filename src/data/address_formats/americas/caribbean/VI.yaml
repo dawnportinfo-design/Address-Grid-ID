@@ -50,6 +50,7 @@ native:
     - key: postcode
       label: Postcode
       placeholder: ""
+      required: true
 english:
   name: International English
   addressFormat: |-
@@ -58,7 +59,26 @@ english:
     {{city}}, {{state}} {{postcode}}
     U.S. VIRGIN ISLANDS
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Building / Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: ""
+    - key: street
+      label: Street
+      placeholder: ""
+    - key: city
+      label: City / Town
+      placeholder: ""
+    - key: state
+      label: State / Province
+      placeholder: ""
+    - key: postcode
+      label: Postal Code
+      placeholder: ""
+      required: true
 postalCode:
   format: NNNNN[-NNNN]
   regex: ^\d{5}(-\d{4})?$

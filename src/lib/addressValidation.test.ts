@@ -70,6 +70,37 @@ test('reports missing required fields and invalid postal code', () => {
   assert.ok(result.warnings.some(warning => warning.includes('postcode')));
 });
 
+test('treats invalid external postal-code regex as unavailable instead of throwing', () => {
+  const result = validateAddressWithOpenSourceRules(
+    {
+      country_code: 'xx',
+      country: 'Exampleland',
+      city: 'Sample City',
+      road: 'Main Street',
+      postcode: '12345',
+    },
+    {
+      name: 'Example open rules',
+      native: {
+        addressFormat: '{{street}}\n{{postcode}} {{city}}',
+        fields: [
+          { key: 'street', required: true },
+          { key: 'city', required: true },
+          { key: 'postcode', required: true },
+        ],
+      },
+      postalCode: {
+        regex: '[',
+        source: 'broken-postal-oss',
+      },
+    },
+    ['broken-postal-oss']
+  );
+
+  assert.equal(result.postalCodeValid, null);
+  assert.ok(result.warnings.some(warning => warning.includes('Postal code rule is unavailable')));
+});
+
 test('English display templates omit dangling punctuation when native-compatible fields are partial', () => {
   const result = validateAddressWithOpenSourceRules(
     {

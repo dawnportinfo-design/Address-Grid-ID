@@ -23,6 +23,7 @@ native:
     - key: postcode
       label: Kodiċi Postali
       placeholder: VLT 1117
+      required: true
 domestic:
   en:
     name: English
@@ -47,6 +48,7 @@ domestic:
       - key: postcode
         label: Postal Code
         placeholder: VLT 1117
+        required: true
 english:
   name: International English
   addressFormat: |-
@@ -55,7 +57,23 @@ english:
     {{city}} {{postcode}}
     MALTA
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: "1"
+    - key: street
+      label: Street
+      placeholder: Republic St
+    - key: city
+      label: City/Locality
+      placeholder: Valletta
+    - key: postcode
+      label: Postal Code
+      placeholder: VLT 1117
+      required: true
 postalCode:
   format: AAA NNNN
   regex: ^[A-Z]{3}\s?\d{4}$

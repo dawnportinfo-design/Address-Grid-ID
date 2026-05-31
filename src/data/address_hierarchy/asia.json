@@ -5328,7 +5328,7 @@
             "postalCode": {
               "format": "NNNNN",
               "regex": "^\\d{5}$",
-              "api": "https://www.moc.gov.kw/post/postcode.html",
+              "api": "https://www.moc.gov.kw/en/important-links?tab=3",
               "source": "Ministry of Communications"
             },
             "addressRules": {
@@ -7198,7 +7198,7 @@
             "postalCode": {
               "format": "NNNN",
               "regex": "^\\d{4}$",
-              "api": "http://www.bangladeshpost.gov.bd/",
+              "api": "https://bdpost.portal.gov.bd/",
               "source": "Bangladesh Post / Survey of Bangladesh / OSM Bangladesh"
             },
             "addressRules": {
@@ -8280,7 +8280,7 @@
             "postalCode": {
               "format": "NNNNN",
               "regex": "^\\d{5}$",
-              "api": "https://www.postalservice.gov.np/postcode",
+              "api": "https://nepalpost.gov.np/content/1716/1716-postal-codes-of-nepal/",
               "source": "Nepal Post / National Geoportal Nepal / Survey Department Nepal"
             },
             "addressRules": {

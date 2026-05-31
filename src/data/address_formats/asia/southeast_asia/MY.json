@@ -96,7 +96,8 @@
         {
           "key": "postcode",
           "label": "Postcode",
-          "placeholder": "50088"
+          "placeholder": "50088",
+          "required": true
         }
       ]
     },
@@ -138,7 +139,8 @@
         {
           "key": "postcode",
           "label": "邮政编码",
-          "placeholder": "50088"
+          "placeholder": "50088",
+          "required": true
         }
       ]
     }
@@ -181,7 +183,8 @@
       {
         "key": "postcode",
         "label": "Postal Code",
-        "placeholder": "50088"
+        "placeholder": "50088",
+        "required": true
       }
     ]
   },

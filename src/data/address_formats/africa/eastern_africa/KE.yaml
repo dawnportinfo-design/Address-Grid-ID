@@ -23,6 +23,7 @@ native:
     - key: postcode
       label: Postal Code
       placeholder: "00100"
+      required: true
 domestic:
   sw:
     name: Kiswahili
@@ -47,6 +48,7 @@ domestic:
       - key: postcode
         label: Nambari ya Posta
         placeholder: "00100"
+        required: true
 english:
   name: International English
   addressFormat: |-
@@ -55,7 +57,23 @@ english:
     {{city}} {{postcode}}
     KENYA
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Company
+      placeholder: ""
+    - key: houseNumber
+      label: House/Plot No.
+      placeholder: "123"
+    - key: street
+      label: Street/PO Box
+      placeholder: Kenyatta Ave
+    - key: city
+      label: City/Town
+      placeholder: Nairobi
+    - key: postcode
+      label: Postal Code
+      placeholder: "00100"
+      required: true
 postalCode:
   format: NNNNN
   regex: ^\d{5}$

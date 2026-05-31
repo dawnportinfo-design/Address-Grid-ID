@@ -78,7 +78,8 @@
         {
           "key": "postcode",
           "label": "Código Postal",
-          "placeholder": "94043"
+          "placeholder": "94043",
+          "required": true
         }
       ]
     }
@@ -116,7 +117,8 @@
       {
         "key": "postcode",
         "label": "ZIP Code",
-        "placeholder": "94043"
+        "placeholder": "94043",
+        "required": true
       }
     ]
   },

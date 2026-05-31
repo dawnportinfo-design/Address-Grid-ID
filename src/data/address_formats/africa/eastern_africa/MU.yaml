@@ -24,6 +24,7 @@ native:
     - key: postcode
       label: Postal Code
       placeholder: "12345"
+      required: true
 domestic:
   fr:
     name: Français
@@ -49,6 +50,7 @@ domestic:
       - key: postcode
         label: Code postal
         placeholder: "12345"
+        required: true
 english:
   name: International English
   addressFormat: |-
@@ -57,7 +59,23 @@ english:
     {{city}} {{postcode}}
     MAURITIUS
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: "1"
+    - key: street
+      label: Street
+      placeholder: Royal Road
+    - key: city
+      label: Town/City
+      placeholder: Port Louis
+    - key: postcode
+      label: Postal Code
+      placeholder: "12345"
+      required: true
 postalCode:
   format: NNNNN
   regex: ^\d{5}$

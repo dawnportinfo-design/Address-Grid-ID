@@ -37,7 +37,33 @@
     "name": "International English",
     "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}, {{state}}\nSAINT LUCIA",
     "ordering": "small-to-big",
-    "fields": []
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Building / Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": "1"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "William Peter Blvd"
+      },
+      {
+        "key": "city",
+        "label": "City / Town",
+        "placeholder": "Castries"
+      },
+      {
+        "key": "state",
+        "label": "State / Province",
+        "placeholder": "Castries"
+      }
+    ]
   },
   "openSourceIds": [
     "osm-nominatim",

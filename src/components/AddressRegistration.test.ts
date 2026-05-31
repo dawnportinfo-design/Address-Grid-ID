@@ -71,3 +71,9 @@ test('postcode autofill and language tabs do not keep stale drafts', () => {
   assert.match(source, /if \(tabCode === 'local' && savedDraft\)/);
   assert.doesNotMatch(source, /if \(savedDraft\) \{\s*setFormData\(savedDraft\)/);
 });
+
+test('Address Registration can prefill building names from reverse geocode details', () => {
+  assert.match(source, /initialAddressDetails\?: any;/);
+  assert.match(source, /initialAddressDetails\?\.address_analysis\?\.canonical/);
+  assert.match(source, /organization: details\.building \|\| details\.building_en \|\| details\.organization \|\| details\.poi \|\| prev\.organization/);
+});

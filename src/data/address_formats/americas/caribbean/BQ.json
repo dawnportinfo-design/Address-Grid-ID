@@ -28,6 +28,12 @@
         "type": "text"
       },
       {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "7000-9999",
+        "required": true
+      },
+      {
         "key": "city",
         "label": "Stad",
         "placeholder": "Kralendijk",
@@ -67,6 +73,12 @@
         "placeholder": "No",
         "required": true,
         "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "7000-9999",
+        "required": true
       },
       {
         "key": "city",

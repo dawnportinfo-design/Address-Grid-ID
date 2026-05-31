@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { formatAddressDisplayText, shouldPreserveAddressDisplayLines } from './addressDisplay';
+import { assessAddressDisplayQuality, formatAddressDisplayText, shouldPreserveAddressDisplayLines } from './addressDisplay';
 
 test('regular English address display is compact and removes needless line breaks', () => {
   assert.equal(
@@ -16,4 +16,22 @@ test('international shipping labels keep deliberate line breaks', () => {
     '1 1-1\nNAGATACHO, CHIYODA-KU\nTOKYO 100-0014\nJAPAN'
   );
   assert.equal(shouldPreserveAddressDisplayLines('shipping_label'), true);
+});
+
+test('detects weak partial address displays before they reach the AGID panel', () => {
+  const weak = assessAddressDisplayQuality('20.\nMali', {
+    country: 'Mali',
+    countryCode: 'ML',
+    missingRequiredFields: ['recipient', 'street'],
+  });
+
+  assert.equal(weak.isWeak, true);
+  assert.equal(weak.meaningfulParts.length, 0);
+
+  const usable = assessAddressDisplayQuality('1 Infinite Loop, Cupertino, CA 95014', {
+    country: 'United States',
+    countryCode: 'US',
+  });
+
+  assert.equal(usable.isWeak, false);
 });

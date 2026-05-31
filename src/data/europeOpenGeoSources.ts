@@ -2000,6 +2000,7 @@ export const EUROPE_COUNTRY_AND_TERRITORY_CODES = [
   'IE', 'IS', 'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'MD', 'ME',
   'MK', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'RS', 'RU', 'SE',
   'SI', 'SK', 'SM', 'UA', 'VA', 'XK',
+  'SBA',
   'BQ', 'AW', 'CW', 'SX',
   'GL', 'FO', 'SJ', 'SJ_SVA', 'SJ_JAN',
   'ES_BAL', 'ES_CAN', 'PT_AZO', 'PT_MAD',

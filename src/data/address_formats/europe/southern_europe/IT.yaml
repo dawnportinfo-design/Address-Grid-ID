@@ -59,6 +59,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "00100"
+      required: true
     - key: city
       label: City/Town
       placeholder: Rome
@@ -87,6 +88,7 @@ international:
       - key: postcode
         label: CAP
         placeholder: "00100"
+        required: true
       - key: city
         label: Città
         placeholder: Roma

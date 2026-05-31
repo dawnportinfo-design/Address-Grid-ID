@@ -32,7 +32,22 @@ english:
     {{city}}, {{state}}
     TRINIDAD AND TOBAGO
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Building / Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: "10"
+    - key: street
+      label: Street
+      placeholder: Independence Square
+    - key: city
+      label: City / Town
+      placeholder: Port of Spain
+    - key: state
+      label: State / Province
+      placeholder: Saint George
 openSourceIds:
   - osm-nominatim
   - osm-overpass

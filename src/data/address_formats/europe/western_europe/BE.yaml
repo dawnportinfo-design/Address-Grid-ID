@@ -54,6 +54,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "1000"
+      required: true
     - key: city
       label: City
       placeholder: Brussels
@@ -79,6 +80,7 @@ international:
       - key: postcode
         label: PLZ
         placeholder: "1000"
+        required: true
       - key: city
         label: Stadt
         placeholder: Brüssel
@@ -103,6 +105,7 @@ international:
       - key: postcode
         label: Code Postal
         placeholder: "1000"
+        required: true
       - key: city
         label: Ville
         placeholder: Bruxelles
@@ -127,6 +130,7 @@ international:
       - key: postcode
         label: Postcode
         placeholder: "1000"
+        required: true
       - key: city
         label: Stad
         placeholder: Brussel
@@ -200,6 +204,7 @@ domestic:
       - key: postcode
         label: Postcode
         placeholder: "1000"
+        required: true
       - key: city
         label: Gemeente / Stad
         placeholder: Brussel
@@ -223,6 +228,7 @@ domestic:
       - key: postcode
         label: Code postal
         placeholder: "1000"
+        required: true
       - key: city
         label: Localité / Ville
         placeholder: Bruxelles
@@ -246,6 +252,7 @@ domestic:
       - key: postcode
         label: Postleitzahl
         placeholder: "4700"
+        required: true
       - key: city
         label: Ort / Stadt
         placeholder: Eupen

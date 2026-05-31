@@ -60,7 +60,8 @@
       {
         "key": "postcode",
         "label": "Postal Code",
-        "placeholder": "1010"
+        "placeholder": "1010",
+        "required": true
       },
       {
         "key": "city",
@@ -151,7 +152,8 @@
         },
         {
           "key": "postcode",
-          "label": "Posta Kodu"
+          "label": "Posta Kodu",
+          "required": true
         },
         {
           "key": "city",
@@ -184,7 +186,8 @@
         {
           "key": "postcode",
           "label": "Tachydromikos kodikas",
-          "placeholder": "1010"
+          "placeholder": "1010",
+          "required": true
         },
         {
           "key": "city",
@@ -216,7 +219,8 @@
         {
           "key": "postcode",
           "label": "Posta kodu",
-          "placeholder": "99010"
+          "placeholder": "99010",
+          "required": true
         },
         {
           "key": "city",

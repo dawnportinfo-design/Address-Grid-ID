@@ -95,7 +95,8 @@
       {
         "key": "postcode",
         "label": "Postcode",
-        "placeholder": "100000"
+        "placeholder": "100000",
+        "required": true
       }
     ]
   },
@@ -138,7 +139,8 @@
         {
           "key": "postcode",
           "label": "邮编 (Postcode)",
-          "placeholder": "100000"
+          "placeholder": "100000",
+          "required": true
         }
       ]
     },
@@ -180,7 +182,8 @@
         {
           "key": "postcode",
           "label": "郵編 (Postcode)",
-          "placeholder": "100000"
+          "placeholder": "100000",
+          "required": true
         }
       ]
     }

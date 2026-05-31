@@ -34,7 +34,8 @@
       {
         "key": "postcode",
         "label": "Postcode",
-        "placeholder": "HM 11"
+        "placeholder": "HM 11",
+        "required": true
       }
     ]
   },
@@ -42,7 +43,39 @@
     "name": "International English",
     "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{district}}\n{{postcode}}\nBERMUDA",
     "ordering": "small-to-big",
-    "fields": []
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Building / Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": "1"
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": "Front St"
+      },
+      {
+        "key": "suburb",
+        "label": "Locality",
+        "placeholder": ""
+      },
+      {
+        "key": "district",
+        "label": "District / Parish",
+        "placeholder": "Hamilton"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "HM 11",
+        "required": true
+      }
+    ]
   },
   "postalCode": {
     "format": "AA 00",

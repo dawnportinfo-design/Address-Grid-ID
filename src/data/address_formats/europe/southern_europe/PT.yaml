@@ -61,6 +61,7 @@ english:
     - key: postcode
       label: Postal Code
       placeholder: 1000-001
+      required: true
     - key: city
       label: City/Town
       placeholder: Lisboa
@@ -90,6 +91,7 @@ international:
       - key: postcode
         label: Código Postal
         placeholder: 1000-001
+        required: true
       - key: city
         label: Localidade
         placeholder: Lisboa

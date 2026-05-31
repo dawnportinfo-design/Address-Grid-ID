@@ -58,7 +58,25 @@ english:
     {{city}}, {{state}} {{postcode}}
     SAINT VINCENT AND THE GRENADINES
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Building / Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: ""
+    - key: street
+      label: Street
+      placeholder: ""
+    - key: city
+      label: City / Town
+      placeholder: ""
+    - key: state
+      label: State / Province
+      placeholder: ""
+    - key: postcode
+      label: Postal Code
+      placeholder: ""
 postalCode:
   format: country specific or not used
   regex: null

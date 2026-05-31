@@ -8,6 +8,15 @@ export type GridRenderFrame = {
   zoom: number;
 };
 
+export type GridCellBounds = {
+  minLon: number;
+  maxLon: number;
+  minLat: number;
+  maxLat: number;
+};
+
+const gridCellBoundsCache = new WeakMap<any[], GridCellBounds | null>();
+
 export function getGridHighlightFrame(
   currentFrame: GridRenderFrame,
   renderedFrame: GridRenderFrame | null | undefined,
@@ -132,35 +141,45 @@ export function gridCellsCoverBounds(
   bounds: [[number, number], [number, number]],
   epsilon = 1e-12,
 ) {
-  if (!gridCells?.length) return false;
-
-  let minLon = Infinity;
-  let maxLon = -Infinity;
-  let minLat = Infinity;
-  let maxLat = -Infinity;
-
-  for (const cell of gridCells) {
-    const polygon = cell?.geometry?.coordinates?.[0];
-    if (!Array.isArray(polygon) || polygon.length < 4) continue;
-    const ring = polygon[0] === polygon[polygon.length - 1] ? polygon.slice(0, -1) : polygon;
-
-    for (const point of ring) {
-      minLon = Math.min(minLon, point[0]);
-      maxLon = Math.max(maxLon, point[0]);
-      minLat = Math.min(minLat, point[1]);
-      maxLat = Math.max(maxLat, point[1]);
-    }
-  }
-
-  if (![minLon, maxLon, minLat, maxLat].every(Number.isFinite)) return false;
+  const renderedBounds = getGridCellsRenderBounds(gridCells);
+  if (!renderedBounds) return false;
 
   const [[west, south], [east, north]] = bounds;
   return (
-    minLon <= Math.min(west, east) + epsilon &&
-    maxLon >= Math.max(west, east) - epsilon &&
-    minLat <= Math.min(south, north) + epsilon &&
-    maxLat >= Math.max(south, north) - epsilon
+    renderedBounds.minLon <= Math.min(west, east) + epsilon &&
+    renderedBounds.maxLon >= Math.max(west, east) - epsilon &&
+    renderedBounds.minLat <= Math.min(south, north) + epsilon &&
+    renderedBounds.maxLat >= Math.max(south, north) - epsilon
   );
+}
+
+export function getGridCellsRenderBounds(gridCells: any[] | null | undefined): GridCellBounds | null {
+  if (!gridCells?.length) return null;
+
+  const cached = gridCellBoundsCache.get(gridCells);
+  if (cached !== undefined) return cached;
+
+  const renderBounds = gridCells.reduce<GridCellBounds>((acc, cell) => {
+    const polygon = cell?.geometry?.coordinates?.[0];
+    if (!Array.isArray(polygon) || polygon.length < 4) return acc;
+    const ring = polygon[0] === polygon[polygon.length - 1] ? polygon.slice(0, -1) : polygon;
+
+    for (const point of ring) {
+      acc.minLon = Math.min(acc.minLon, point[0]);
+      acc.maxLon = Math.max(acc.maxLon, point[0]);
+      acc.minLat = Math.min(acc.minLat, point[1]);
+      acc.maxLat = Math.max(acc.maxLat, point[1]);
+    }
+
+    return acc;
+  }, { minLon: Infinity, maxLon: -Infinity, minLat: Infinity, maxLat: -Infinity });
+
+  const normalizedBounds = [renderBounds.minLon, renderBounds.maxLon, renderBounds.minLat, renderBounds.maxLat].every(Number.isFinite)
+    ? renderBounds
+    : null;
+
+  gridCellBoundsCache.set(gridCells, normalizedBounds);
+  return normalizedBounds;
 }
 
 export function gridBoundsCoverBounds(
@@ -188,6 +207,13 @@ export function shouldRefreshGridForViewport(
   pendingBounds?: [[number, number], [number, number]] | null,
 ) {
   return refreshGrid || (!gridCellsCoverBounds(gridCells, bounds) && !gridBoundsCoverBounds(pendingBounds, bounds));
+}
+
+export function shouldDisplayGridResponse(
+  gridCells: any[] | null | undefined,
+  currentVisibleBounds: [[number, number], [number, number]],
+) {
+  return gridCellsCoverBounds(gridCells, currentVisibleBounds);
 }
 
 export function resolveGridHighlightPolygons(

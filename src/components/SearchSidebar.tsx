@@ -31,6 +31,8 @@ import {
 import { cn } from '../lib/utils';
 import maplibregl from 'maplibre-gl';
 import { AdvancedSearchOptions, AdvancedSearchCategory } from '../lib/advancedSearch';
+import type { CarNavigationDestination } from '../services/NavigationDestinationService';
+import type { travelMode } from '../services/RoutingService';
 
 interface SearchSidebarProps {
   t: (key: string) => string;
@@ -74,10 +76,11 @@ interface SearchSidebarProps {
   setOriginQuery: (q: string) => void;
   routeData: any;
   setRouteData: (d: any) => void;
+  carNavigationDestination?: CarNavigationDestination | null;
   isNavigating: boolean;
   setIsNavigating: (n: boolean) => void;
-  routingMode: 'driving' | 'walking';
-  setRoutingMode: (m: 'driving' | 'walking') => void;
+  routingMode: travelMode;
+  setRoutingMode: (m: travelMode) => void;
   useBidirectionalDijkstra: boolean;
   setUseBidirectionalDijkstra: (v: boolean) => void;
   isRoutingLoading: boolean;
@@ -132,6 +135,7 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
   setOriginQuery,
   routeData,
   setRouteData,
+  carNavigationDestination,
   isNavigating,
   setIsNavigating,
   routingMode,
@@ -732,12 +736,12 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                     </button>
                   </div>
 
-                  <button 
+                  <button
                     onClick={() => setUseBidirectionalDijkstra(!useBidirectionalDijkstra)}
                     className={cn(
                       "flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all border shrink-0 ml-auto",
-                      useBidirectionalDijkstra 
-                        ? "bg-blue-50 border-blue-200 text-blue-700 shadow-sm" 
+                      useBidirectionalDijkstra
+                        ? "bg-blue-50 border-blue-200 text-blue-700 shadow-sm"
                         : "bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100"
                     )}
                   >
@@ -747,6 +751,15 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                     </span>
                   </button>
                 </div>
+
+                {routingMode === 'driving' && carNavigationDestination && (
+                  <div className="flex flex-wrap items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2 text-[10px] font-bold text-blue-700">
+                    <Truck className="w-3.5 h-3.5" />
+                    <span className="font-black uppercase tracking-widest">{t('car_stop_adjusted')}</span>
+                    <span>{Math.round(carNavigationDestination.distanceMeters)}m</span>
+                    <span>{t('car_stop_confidence')} {Math.round(carNavigationDestination.confidence * 100)}%</span>
+                  </div>
+                )}
 
                 <div className="relative">
                   <input
@@ -842,9 +855,12 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
                   if (start && destination) {
                     setIsNavigating(true);
                     if (mapRef.current) {
+                      const routeDestination = routingMode === 'driving'
+                        ? (carNavigationDestination || destination)
+                        : destination;
                       const bounds = new maplibregl.LngLatBounds()
                         .extend([start.lng, start.lat])
-                        .extend([destination.lng, destination.lat]);
+                        .extend([routeDestination.lng, routeDestination.lat]);
                       mapRef.current.fitBounds(bounds, { padding: 100 });
                     }
                   }

@@ -75,6 +75,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: 100-0001
+      required: true
 postalCode:
   format: NNN-NNNN
   regex: ^\d{3}-\d{4}$

@@ -24,7 +24,7 @@
         "key": "postcode",
         "label": "Código Postal",
         "placeholder": "1100",
-        "required": false,
+        "required": true,
         "type": "text"
       },
       {
@@ -54,7 +54,8 @@
       {
         "key": "postcode",
         "label": "Postcode",
-        "placeholder": "1100"
+        "placeholder": "1100",
+        "required": true
       },
       {
         "key": "city",
@@ -82,7 +83,8 @@
         {
           "key": "postcode",
           "label": "C.P. (Latin)",
-          "placeholder": "1100"
+          "placeholder": "1100",
+          "required": true
         },
         {
           "key": "city",

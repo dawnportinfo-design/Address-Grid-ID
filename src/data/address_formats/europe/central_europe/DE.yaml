@@ -60,6 +60,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "10115"
+      required: true
     - key: city
       label: City
       placeholder: Berlin
@@ -85,6 +86,7 @@ international:
       - key: postcode
         label: PLZ
         placeholder: "10115"
+        required: true
       - key: city
         label: Stadt
         placeholder: Berlin

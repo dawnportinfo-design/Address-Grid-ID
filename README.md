@@ -1,77 +1,192 @@
-# GeoGrid Explorer
+# AGID
 
-An advanced, interactive geographic visualization tool built with React, MapLibre GL, and Express. GeoGrid Explorer provides high-precision grid overlays, integrated elevation data, and intelligent location searching for both land and sea.
+AGID is an address and location intelligence system built around a deterministic global grid ID. It combines a MapLibre-based map UI, country-aware address registration, multilingual address rendering, open-source postal/geographic evidence, QR registration, and SDK generation for multiple programming languages.
 
-![GeoGrid Explorer UI](https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=1200)
+The goal is practical: make land, sea, mountain, waterfront, disputed-area, and building-level locations easier to identify, display, validate, share, and integrate without depending on a single proprietary map provider.
 
-## Features
+## Project Resume
 
-- **Dynamic Grid Overlay**: High-performance grid rendering that adapts to zoom levels. Includes a 300m "focus radius" that remains visible even at lower zooms.
-- **Elevation Integration**: Real-time elevation lookups using multiple open-source data providers (OpenTopoData, Open-Elevation).
-- **Marine Support**: Intelligent sea naming and location proxying using Marine Regions Gazetteer.
-- **Smart Search**: Integrated Nominatim search with quick-action coordinates and Japanese region handling.
-- **Customizable UI**: Support for multiple map styles (Satellite, Dark, Outdoor, Light) with responsive design.
-- **External Map Bridge**: Quick shortcuts to open current locations in Google Maps, Yahoo Map, and more.
+For a deeper project summary, architecture map, validation strategy, and roadmap, see [Project Resume](docs/project-resume.md).
 
-## Tech Stack
+## Core Capabilities
 
-- **Frontend**: React 18, Vite, MapLibre GL, Tailwind CSS, Motion (framer-motion), Lucide React.
-- **Backend API**: Express (Node.js) acting as a proxy for elevation and marine data to avoid CORS issues.
-- **Worker Threads**: Off-canvas grid generation using Web Workers for smooth UI performance.
-- **Native Core (Optional)**: Rust (WASM) for AGID quantization/Hilbert encode-decode acceleration.
+- **Deterministic AGID grid**: absolute grid positioning based on latitude/longitude, designed to stay stable while panning and zooming.
+- **Address registration**: full-screen address registration flow with country/region selection, address-language tabs, postal-code fields, QR generation, and registered-address persistence.
+- **Multilingual address rendering**: native-language and international-English address display with country-specific ordering, romanization, and multilingual-country support.
+- **Postal and open-source evidence**: postal-code metadata, source classification, confidence display, and fallback behavior for countries with weak or unavailable postal APIs.
+- **Building and place names**: OpenStreetMap/OpenFreeMap/Overture-ready building-name lookup and ranking paths for stronger address labels.
+- **Sea, natural, and special geography**: support paths for sea names, mountains, waterfronts, natural features, territories, autonomous regions, and disputed regions.
+- **GIS validation**: optional open-source validation path using generated GeoJSON, GDAL when available, and QGIS review projects.
+- **Drone and navigation planning groundwork**: internal drone landing, corridor, mission package, and navigation services without exposing drone UI by default.
+- **Multi-language SDK output**: generated SDK packages under `sdk/` for C, C++, Dart, .NET, Elixir, Go, Java, JavaScript/TypeScript, Julia, Kotlin, Lua, Nim, PHP, Python, R, Rust, Swift, WASM, Zig, and related runtimes.
 
-## Prerequisites
+## Architecture
 
-- Node.js (v18 or higher recommended)
-- npm or yarn
+```text
+Map UI / Address UI
+        |
+        v
+Typed frontend services
+        |
+        v
+Express API proxy and validation endpoints
+        |
+        v
+Open-source providers, local metadata, postal datasets, GIS validation
+```
 
-## Getting Started
+Important areas:
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-username/geogrid-explorer.git
-   cd geogrid-explorer
-   ```
+- `src/App.tsx`: application shell, map orchestration, QR/search/navigation wiring.
+- `src/components/`: focused UI surfaces such as address registration, grid detail, search, saved locations, postal lab, and geo architect panels.
+- `src/lib/`: AGID math, address rendering, validation policies, HTTP client, endpoint builders, grid logic, QR payloads, and data-quality helpers.
+- `src/services/`: geocoding, routing, communication, drone, navigation, and geo-admin service boundaries.
+- `src/data/address_formats/`: country, territory, autonomous-region, disputed-region, and special-location address metadata organized by continent and subregion.
+- `src/data/address_hierarchy/`: generated continent-level address hierarchy files.
+- `scripts/`: metadata sync, address hierarchy generation, SDK generation, postal-source verification, and GIS validation.
+- `docs/`: project resume, GIS validation notes, and refactor/code-quality scans.
 
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+## Address Quality Model
 
-3. **Development Mode**:
-   Starts the Express server which also serves the Vite frontend.
-   ```bash
-   npm run dev
-   ```
-   The app will be available at `http://localhost:3000`.
+AGID separates address accuracy into several layers instead of presenting every result as equally certain:
 
-4. **Build for Production**:
-   ```bash
-   npm run build
-   ```
+- **Postal Code Available + Reliable API**: postal-code lookup and strong validation are allowed.
+- **Postal Code Available + Weak API**: format validation and candidate suggestions are used, but manual confirmation remains important.
+- **No Postal Code + Strong Geo OSS**: AGID, coordinates, administrative hierarchy, and open geographic sources drive a Geo Verified result.
+- **No Postal Code + Weak Geo OSS**: AGID and coordinates become the primary identifier and manual confirmation is required.
 
-5. **Build Rust WASM Core (optional, for faster AGID core math)**:
-   ```bash
-   npm run build:rust-wasm
-   ```
+This policy is implemented in `src/lib/addressCoveragePolicy.ts` and surfaced through address quality summaries and tests.
 
-## Configuration
+## Open-Source Data Strategy
 
-Environment variables can be set in a `.env` file (see `.env.example`).
-- `PORT`: Server port (default: 3000)
+AGID uses open-source data as evidence layers:
 
-## Contributing
+- Map rendering: MapLibre GL, OpenFreeMap/OpenStreetMap-compatible tiles, PMTiles-ready paths.
+- Geometry and analysis: Turf, OpenLayers, generated GeoJSON, optional GDAL/QGIS/PostGIS review paths.
+- Geocoding and place labels: OSM/Nominatim-style data, Photon-compatible search, Overpass, OpenFreeMap/Overture-ready building name candidates.
+- Postal/address rules: local address-format metadata, libaddressinput/OpenCage-style formatting concepts, official postal APIs when available, and open postal datasets where quality is sufficient.
+- Language data: CLDR-based language/country display data, native scripts, and country-specific international-English rendering rules.
 
-We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+The app should treat each source as evidence with a source label, confidence, warnings, and fallback behavior.
+
+## Development
+
+### Requirements
+
+- Node.js 18 or newer
+- npm
+- Optional: Rust toolchain for the WASM AGID core
+- Optional: GDAL and QGIS for GIS validation review
+
+### Install
+
+```bash
+npm install
+```
+
+### Run
+
+```bash
+npm run dev
+```
+
+The app runs at:
+
+```text
+http://localhost:3000
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Type Check
+
+```bash
+npm run lint
+```
+
+### GIS Validation
+
+```bash
+npm run verify:gis
+```
+
+Fast changed-file preflight:
+
+```bash
+npm run verify:gis:changed
+```
+
+Strict validation:
+
+```bash
+npm run verify:gis:strict
+```
+
+See [GIS validation](docs/gis-validation.md).
+
+### Postal Source Verification
+
+```bash
+npm run verify:postal-sources
+```
+
+Live provider checks can be run when network access is available:
+
+```bash
+npm run verify:postal-sources:live
+```
+
+### Address Metadata Generation
+
+```bash
+npm run sync:address-metadata
+npm run organize:address-formats
+npm run generate:address-format-yaml
+npm run generate:address-hierarchy
+```
+
+### SDK Generation
+
+```bash
+npm run generate:agid-sdks
+```
+
+Optional Rust WASM build:
+
+```bash
+npm run build:rust-wasm
+```
+
+## Current Engineering Strategy
+
+1. Keep AGID grid math deterministic and viewport rendering stable.
+2. Keep address registration separate from app language settings and country selection.
+3. Prefer typed service boundaries over direct `fetch` calls in UI components.
+4. Classify postal/geographic source quality instead of hiding uncertainty.
+5. Keep large generated country/address data out of UI components.
+6. Split heavy app-shell responsibilities into hooks and service modules one slice at a time.
+7. Use tests to prevent regressions in grid rendering, QR registration, address-language compatibility, and data-source policy.
+
+## Validation Snapshot
+
+Recent local checks used during the current refactor pass:
+
+```bash
+node --import tsx --test src/App.gridUi.test.ts src/App.registrationQr.test.ts src/components/GridDetailPanel.test.ts src/components/AddressRegistration.test.ts src/lib/refactorGuard.test.ts src/lib/apiEndpoints.test.ts src/services/GeoAdminService.test.ts src/hooks/useAppDatabasePersistence.test.ts
+npm run lint
+npm run build
+```
+
+Build warnings currently remain around large chunks and mixed static/dynamic imports in geocoding services. They are known refactor targets, not runtime blockers.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT
 
 ## Acknowledgements
 
-- [MapLibre GL](https://maplibre.org/)
-- [Marine Regions](https://www.marineregions.org/)
-- [OpenTopoData](https://www.opentopodata.org/)
-- [Open-Elevation](https://open-elevation.com/)
-- [OpenStreetMap](https://www.openstreetmap.org/)
+AGID builds on open-source geography and web tooling, including MapLibre GL, OpenStreetMap, OpenFreeMap-compatible map delivery, Turf, OpenLayers, CLDR data, PMTiles, Open Location Code, and the broader open GIS ecosystem.

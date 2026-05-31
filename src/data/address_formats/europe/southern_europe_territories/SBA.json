@@ -29,5 +29,77 @@
     "regex": "^BFPO\\s?\\d{1,4}$",
     "api": null,
     "source": "BFPO"
-  }
+  },
+  "addressRules": {
+    "languages": [
+      {
+        "code": "en",
+        "name": "English"
+      }
+    ],
+    "nativeOrder": [
+      "recipient",
+      "street",
+      "locality",
+      "baseArea",
+      "postcode",
+      "country"
+    ],
+    "englishOrder": [
+      "recipient",
+      "street",
+      "locality",
+      "baseArea",
+      "postcode",
+      "country"
+    ],
+    "regionalHierarchy": [
+      "sovereignBaseArea"
+    ],
+    "postalCode": {
+      "label": "BFPO number required",
+      "required": true,
+      "usage": "required"
+    },
+    "openSourceIds": [
+      "british-overseas-postal-reference",
+      "cyprus-department-lands-surveys",
+      "cyprus-open-data-portal",
+      "inspire-cyprus",
+      "osm-nominatim",
+      "osm-overpass",
+      "openaddresses",
+      "geonames-postal",
+      "geonames-gazetteer",
+      "geoboundaries",
+      "upu-addressing",
+      "copernicus-dem",
+      "copernicus-corine-land-cover",
+      "emodnet-bathymetry",
+      "emodnet-seabed-habitats",
+      "eea-natura-2000",
+      "eea-eunis-habitats",
+      "jrc-esdac-soils"
+    ]
+  },
+  "openSourceIds": [
+    "british-overseas-postal-reference",
+    "cyprus-department-lands-surveys",
+    "cyprus-open-data-portal",
+    "inspire-cyprus",
+    "osm-nominatim",
+    "osm-overpass",
+    "openaddresses",
+    "geonames-postal",
+    "geonames-gazetteer",
+    "geoboundaries",
+    "upu-addressing",
+    "copernicus-dem",
+    "copernicus-corine-land-cover",
+    "emodnet-bathymetry",
+    "emodnet-seabed-habitats",
+    "eea-natura-2000",
+    "eea-eunis-habitats",
+    "jrc-esdac-soils"
+  ]
 }

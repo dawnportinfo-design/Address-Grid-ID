@@ -756,7 +756,7 @@ const COUNTRY_NAMES: Record<string, string> = {
   XK: 'Kosovo',
 };
 
-function countryName(countryCode: string, fallback: string) {
+export function countryName(countryCode: string, fallback: string) {
   const code = countryCode.toUpperCase();
   if (COUNTRY_NAMES[code]) return COUNTRY_NAMES[code];
   try {
@@ -1264,22 +1264,83 @@ function localeLine(...parts: string[]) {
   return parts.map(part => part.trim()).filter(Boolean).join(', ').trim();
 }
 
+const STREET_NAME_BEFORE_NUMBER_COUNTRIES = new Set([
+  'AD', 'AL', 'AM', 'AT', 'AZ', 'BA', 'BE', 'BG', 'BY', 'CH', 'CZ', 'DE', 'DK', 'EE', 'ES',
+  'FI', 'FO', 'GE', 'GL', 'GR', 'HR', 'HU', 'IS', 'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'MD',
+  'ME', 'MK', 'NL', 'NO', 'PL', 'PT', 'RO', 'RS', 'RU', 'SE', 'SI', 'SK', 'SM', 'TR', 'UA',
+  'VA', 'XK'
+]);
+
+const POSTCODE_BEFORE_CITY_COUNTRIES = new Set([
+  'AD', 'AT', 'BE', 'BG', 'CH', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FO', 'FR', 'GL', 'GR',
+  'HR', 'HU', 'IS', 'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'NL', 'NO', 'PL', 'PT', 'RO', 'SE',
+  'SI', 'SK', 'SM', 'VA'
+]);
+
+function normalizeComparable(value: string) {
+  return value
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '')
+    .trim();
+}
+
+export function uniqueAddressParts(parts: string[]) {
+  const seen = new Set<string>();
+  return parts
+    .map(part => cleanEnglish(part))
+    .filter(Boolean)
+    .filter(part => {
+      const key = normalizeComparable(part);
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
+export function renderStreetAddressLine(countryCode: string, road: string, houseNumber: string) {
+  const code = countryCode.toUpperCase();
+  const roadPart = cleanEnglish(road);
+  const housePart = cleanEnglish(houseNumber);
+  if (roadPart && housePart) {
+    return STREET_NAME_BEFORE_NUMBER_COUNTRIES.has(code)
+      ? line(roadPart, housePart)
+      : line(housePart, roadPart);
+  }
+  return roadPart || housePart;
+}
+
 export function renderEnglishPostalAddress(data: CanonicalAddress, options: { includeCountry?: boolean } = {}) {
   const code = data.country_code.toUpperCase();
   const t = (value: unknown) => normalizeEnglishAddressPart(value, code);
   const tb = (value: unknown) => normalizeEnglishAddressBuildingName(value, code);
   const country = countryName(code, t(data.country)).toUpperCase();
+  const organization = tb(data.building || data.poi);
+  const streetLine = renderStreetAddressLine(code, t(data.road), t(data.house_number));
+  const sublocalityLine = localeLine(t(data.subdistrict || data.suburb), t(data.district));
+  const city = t(data.city);
+  const state = t(data.state);
+  const postcode = String(data.postcode || '').trim();
+  const localityLine = POSTCODE_BEFORE_CITY_COUNTRIES.has(code)
+    ? sublocalityLine
+    : localeLine(sublocalityLine, city);
+  const regionLine = POSTCODE_BEFORE_CITY_COUNTRIES.has(code)
+    ? line(postcode, city)
+    : line(state, postcode);
+  const stateLine = POSTCODE_BEFORE_CITY_COUNTRIES.has(code) && normalizeComparable(state) !== normalizeComparable(city)
+    ? state
+    : '';
   const lines = [
-    tb(data.building || data.poi),
-    line(t(data.house_number), t(data.road)),
-    localeLine(t(data.subdistrict || data.suburb), t(data.district), t(data.city)),
-    line(t(data.state), t(data.postcode)),
+    organization,
+    streetLine,
+    localityLine,
+    regionLine,
+    stateLine,
     options.includeCountry === false ? '' : country,
   ]
-    .filter(Boolean)
-    .map(cleanEnglish);
+    .filter(Boolean);
 
-  return lines.join('\n');
+  return uniqueAddressParts(lines).join('\n');
 }
 
 export function renderDomesticEnglishPostalAddress(data: CanonicalAddress) {

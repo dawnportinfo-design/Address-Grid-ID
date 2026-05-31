@@ -14,11 +14,9 @@ import {
   ArrowUpRight, 
   Waves, 
   Flag, 
-  Globe, 
   Bookmark, 
   Zap, 
-  Download,
-  Truck
+  Download
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { QRCodeCanvas } from 'qrcode.react';
@@ -27,14 +25,19 @@ import { AddressRenderer, createCanonicalAddress } from '../lib/addressRendering
 import {
   getAgidAddressDisplayTabs,
   getAgidAddressTabLanguages,
-  getEnglishAddressCircle,
-  isEnglishAddressCountry,
   isInternationalShippingEnglishTab,
 } from '../lib/languageTabs';
-import { getAddressLanguageTabLabel } from '../lib/languageLabels';
 import { getAddressFormat, type AddressFormat } from '../data/address_formats';
 import { validateAddressWithOpenSourceRules } from '../lib/addressValidation';
-import { formatAddressDisplayText, shouldPreserveAddressDisplayLines } from '../lib/addressDisplay';
+import { assessAddressDisplayQuality, formatAddressDisplayText, shouldPreserveAddressDisplayLines } from '../lib/addressDisplay';
+import { collectOpenSourceAddressEvidenceSources } from '../lib/addressEvidence';
+import { AddressLanguageTabs } from './AddressLanguageTabs';
+import { AddressQualitySummary } from './AddressQualitySummary';
+import {
+  formatTerritoryClaimSummary,
+  getTerritoryClaimOptions,
+  type TerritoryClaimOption,
+} from '../lib/disputedTerritoryClaims';
 
 interface GridDetailPanelProps {
   clickedAgid: any;
@@ -127,20 +130,34 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
 }) => {
   const [shippingLabel, setShippingLabel] = React.useState<string>("");
   const [addressFormat, setAddressFormat] = React.useState<AddressFormat | null>(null);
+  const [selectedTerritoryClaimId, setSelectedTerritoryClaimId] = React.useState<string | null>(null);
 
   // Move derived constants and hooks to the top to satisfy Rules of Hooks
+  const regionCodeFromAgid = (!clickedAgid?.isSea && clickedAgid?.regionCode ? clickedAgid.regionCode : "").toLowerCase();
   const countryCodeFromPrefix = (clickedAgid?.prefix || "").toLowerCase();
   const countryCodeFromId = (clickedAgid?.id?.slice(0, 2) || "").toLowerCase();
   const countryCodeFromDetails = (clickedAddressDetails?.country_code || "").toLowerCase();
-  const countryCode = countryCodeFromPrefix || countryCodeFromDetails || countryCodeFromId || "";
+  const countryCode = regionCodeFromAgid || countryCodeFromDetails || countryCodeFromPrefix || countryCodeFromId || "";
+  const territoryClaimOptions = React.useMemo(() => getTerritoryClaimOptions({
+    regionCode: clickedAgid?.regionCode,
+    countryCode,
+    regionName: clickedAgid?.regionName || clickedAddressDetails?.country,
+  }), [clickedAgid?.regionCode, clickedAgid?.regionName, clickedAddressDetails?.country, countryCode]);
   
   const officialLangs = React.useMemo(() => {
+    const formatLanguages = addressFormat?.addressRules?.languages
+      ?.map(language => language.code)
+      .filter(Boolean) || [];
+    if (territoryClaimOptions.length > 0 && formatLanguages.length > 0) {
+      return formatLanguages;
+    }
+
     return getAgidAddressTabLanguages({
       countryCode: countryCode || countryCodeFromDetails,
       countryLanguages: COUNTRY_LANGUAGES[countryCode] || ['en'],
       knownLanguageCodes: LANGUAGES.map(lang => lang.code),
     });
-  }, [countryCode, countryCodeFromDetails]);
+  }, [addressFormat, countryCode, countryCodeFromDetails, territoryClaimOptions.length]);
 
   const displayTabs = React.useMemo(() => {
     return getAgidAddressDisplayTabs(officialLangs);
@@ -153,31 +170,58 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
       return;
     }
 
-    getAddressFormat(countryCode).then(format => {
-      if (!cancelled) setAddressFormat(format);
-    });
+    getAddressFormat(countryCode)
+      .then(format => {
+        if (!cancelled) setAddressFormat(format);
+      })
+      .catch(() => {
+        if (!cancelled) setAddressFormat(null);
+      });
 
     return () => {
       cancelled = true;
     };
   }, [countryCode]);
 
+  React.useEffect(() => {
+    if (territoryClaimOptions.length === 0) {
+      if (selectedTerritoryClaimId !== null) setSelectedTerritoryClaimId(null);
+      return;
+    }
+    if (!selectedTerritoryClaimId || !territoryClaimOptions.some(option => option.id === selectedTerritoryClaimId)) {
+      setSelectedTerritoryClaimId(territoryClaimOptions[0].id);
+    }
+  }, [selectedTerritoryClaimId, territoryClaimOptions]);
+
   const addressValidation = React.useMemo(() => {
     if (!clickedAddressDetails) return null;
-    const canonical = createCanonicalAddress(clickedAddressDetails);
-    return validateAddressWithOpenSourceRules(
-      canonical,
-      addressFormat,
-      clickedAddressDetails?.address_analysis?.sources || [],
-      {
-        referenceMatches: clickedAddressDetails?.address_analysis?.referenceMatches || clickedAddressDetails?.openaddresses_matches || [],
-      }
-    );
+    try {
+      const canonical = createCanonicalAddress(clickedAddressDetails);
+      const evidenceSources = collectOpenSourceAddressEvidenceSources(clickedAddressDetails);
+      return validateAddressWithOpenSourceRules(
+        canonical,
+        addressFormat,
+        [
+          ...(clickedAddressDetails?.address_analysis?.sources || []),
+          ...evidenceSources,
+        ],
+        {
+          referenceMatches: clickedAddressDetails?.address_analysis?.referenceMatches || clickedAddressDetails?.openaddresses_matches || [],
+        }
+      );
+    } catch (error) {
+      console.warn('Address validation fallback:', error);
+      return null;
+    }
   }, [clickedAddressDetails, addressFormat]);
 
   React.useEffect(() => {
     if (clickedAddressTab === 'shipping_label' && clickedAddressDetails) {
-      generateInternationalShippingLabel(clickedAddressDetails).then(setShippingLabel);
+      generateInternationalShippingLabel(clickedAddressDetails)
+        .then(setShippingLabel)
+        .catch(() => {
+          setShippingLabel("Address label unavailable");
+        });
     }
   }, [clickedAddressTab, clickedAddressDetails]);
 
@@ -217,24 +261,41 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
            "Resolving...";
   };
 
-  const getTabLabel = (langCode: string) => {
-    const lang = LANGUAGES.find(l => l.code === langCode);
-    const englishCircle =
-      langCode === 'en_domestic' && isEnglishAddressCountry(countryCode)
-        ? getEnglishAddressCircle(countryCode)
-        : undefined;
-    return getAddressLanguageTabLabel(langCode, lang?.name, {
-      englishMode: isInternationalShippingEnglishTab(langCode)
-        ? 'international'
-        : langCode === 'en_domestic'
-          ? 'domestic'
-          : 'plain',
-      englishCircle,
-    });
+  const getFallbackAddressDisplay = () =>
+    clickedAddressMap[clickedAddressTab] ||
+    clickedAddress ||
+    clickedAgid?.id ||
+    "Address unavailable";
+
+  const safeAddressDisplay = () => {
+    try {
+      return getAddressDisplay();
+    } catch (error) {
+      console.warn('Address display fallback:', error);
+      return getFallbackAddressDisplay();
+    }
   };
 
-  const addressDisplayText = formatAddressDisplayText(getAddressDisplay(), { tab: clickedAddressTab });
+  const rawAddressDisplay = safeAddressDisplay();
+  const addressQuality = assessAddressDisplayQuality(rawAddressDisplay, {
+    country: clickedAddressDetails?.country,
+    countryCode,
+    missingRequiredFields: addressValidation?.missingRequiredFields,
+  });
+  const resolvedAddressDisplay = (() => {
+    try {
+      return addressQuality.isWeak && clickedAddressDetails
+        ? AddressRenderer.renderPartialAddress(clickedAddressTab, createCanonicalAddress(clickedAddressDetails))
+        : rawAddressDisplay;
+    } catch (error) {
+      console.warn('Address display fallback:', error);
+      return rawAddressDisplay || getFallbackAddressDisplay();
+    }
+  })();
+  const addressDisplayText = formatAddressDisplayText(resolvedAddressDisplay, { tab: clickedAddressTab });
   const preserveAddressDisplayLines = shouldPreserveAddressDisplayLines(clickedAddressTab);
+  const selectedTerritoryClaim: TerritoryClaimOption | null =
+    territoryClaimOptions.find(option => option.id === selectedTerritoryClaimId) || territoryClaimOptions[0] || null;
 
   return (
     <motion.div 
@@ -428,36 +489,36 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
                  <div className="group relative bg-white/5 rounded-2xl p-3 border border-white/10 hover:bg-white/[0.08] transition-colors">
                   <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
-                          {/* Intelligent Language Tabs */}
-                          {displayTabs.map((langCode) => {
-                            const isIntlEn = isInternationalShippingEnglishTab(langCode);
-                            const isActive = clickedAddressTab === langCode;
-                            
-                            let label = getTabLabel(langCode);
-                            let icon = isIntlEn ? <Globe className="w-2.5 h-2.5" /> : <MapPin className="w-2.5 h-2.5" />;
-                            if (isIntlEn) icon = <Truck className="w-2.5 h-2.5" />;
-
+                        <AddressLanguageTabs
+                          tabs={displayTabs}
+                          activeTab={clickedAddressTab}
+                          countryCode={countryCode}
+                          onSelect={setClickedAddressTab}
+                        />
+                      </div>
+                      {territoryClaimOptions.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {territoryClaimOptions.map(option => {
+                            const isActive = selectedTerritoryClaim?.id === option.id;
                             return (
                               <button
-                                key={langCode}
-                                onClick={() => {
-                                  setClickedAddressTab(langCode);
-                                }}
+                                key={option.id}
+                                onClick={() => setSelectedTerritoryClaimId(option.id)}
                                 className={cn(
-                                  "px-2.5 py-1 rounded-lg text-[8px] font-black tracking-normal transition-all whitespace-nowrap flex items-center gap-1.5",
+                                  "px-2 py-1 rounded-lg text-[8px] font-black transition-all flex items-center gap-1.5 border",
                                   isActive
-                                    ? "bg-white text-slate-900 shadow-lg"
-                                    : "bg-white/5 text-slate-500 hover:bg-white/10"
+                                    ? "bg-amber-400 text-slate-950 border-amber-300"
+                                    : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10"
                                 )}
+                                title={option.label}
                               >
-                                {icon}
-                                <span>{label}</span>
+                                <Flag className="w-2.5 h-2.5" />
+                                <span>{option.shortLabel}</span>
                               </button>
                             );
                           })}
                         </div>
-                      </div>
+                      )}
 
                       <div className="text-[11px] font-medium text-slate-200 leading-snug min-h-[2.5em] space-y-2">
                          <div className={cn(
@@ -467,32 +528,16 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
                          )}>
                            {addressDisplayText}
                          </div>
-                         {addressValidation && (
-                           <div className="flex flex-wrap items-center gap-1.5 text-[8px] font-black uppercase tracking-wider text-slate-400">
-                             <span className={cn(
-                               "px-2 py-0.5 rounded-full border",
-                               addressValidation.status === 'verified'
-                                 ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
-                                 : "bg-amber-500/10 text-amber-300 border-amber-500/20"
-                             )}>
-                               {addressValidation.status === 'verified' ? 'Verified format' : 'Partial format'}
-                             </span>
-                             <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/5">
-                               Score {Math.round(addressValidation.score * 100)}%
-                             </span>
-                             {addressValidation.postalCodeValid === true && (
-                               <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/5">Postcode OK</span>
-                             )}
-                             {addressValidation.checkedWith.slice(0, 3).map(source => (
-                               <span key={source} className="px-2 py-0.5 rounded-full bg-white/5 border border-white/5 normal-case tracking-normal">
-                                 {source}
-                               </span>
-                             ))}
-                             {addressValidation.warnings.slice(0, 1).map(warning => (
-                               <span key={warning} className="text-amber-300/80 normal-case tracking-normal">{warning}</span>
-                             ))}
+                         {selectedTerritoryClaim && (
+                           <div className="rounded-lg border border-amber-400/15 bg-amber-400/10 px-2 py-1.5 text-[9px] font-bold leading-snug text-amber-100">
+                             <div className="mb-0.5 flex items-center gap-1.5 text-[8px] font-black uppercase tracking-wider text-amber-300">
+                               <Flag className="w-2.5 h-2.5" />
+                               <span>{selectedTerritoryClaim.label}</span>
+                             </div>
+                             <div>{formatTerritoryClaimSummary(selectedTerritoryClaim)}</div>
                            </div>
                          )}
+                         {addressValidation && <AddressQualitySummary validation={addressValidation} />}
                       </div>
 
                      <div className="flex items-center gap-2.5 mt-2 pt-2 border-t border-white/5 overflow-x-auto no-scrollbar">

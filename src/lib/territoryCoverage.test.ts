@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
-import { getRegionInfo } from './agid';
+import { encodeAGID, getRegionInfo } from './agid';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const addressFormatsDir = join(here, '..', 'data', 'address_formats');
@@ -99,4 +99,14 @@ test('disputed territories and missing autonomous regions expose address JSON me
     assert.ok(format.addressRules?.englishOrder.length, `${code} should define English order`);
     assert.ok(format.openSourceIds?.includes('osm-nominatim'), `${code} should expose OSM/Nominatim source`);
   }
+});
+
+test('AGID results keep disputed region codes for claim-aware address display', () => {
+  const birTawil = encodeAGID(21.92, 33.55);
+  assert.equal(birTawil.regionCode, 'BT_T');
+  assert.equal(birTawil.regionName, 'Bir Tawil (Terra Nullius)');
+
+  const takeshima = encodeAGID(37.24, 131.86);
+  assert.equal(takeshima.prefix, 'JP');
+  assert.equal(takeshima.regionCode, 'JP_TK');
 });

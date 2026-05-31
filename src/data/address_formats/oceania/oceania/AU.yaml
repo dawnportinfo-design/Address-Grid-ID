@@ -26,6 +26,7 @@ native:
     - key: postcode
       label: Postcode
       placeholder: "2000"
+      required: true
 english:
   name: International English
   addressFormat: |-
@@ -53,6 +54,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "2000"
+      required: true
 postalCode:
   format: NNNN
   regex: ^\d{4}$

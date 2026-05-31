@@ -28,6 +28,7 @@ native:
     - key: postcode
       label: Postcode
       placeholder: HM 11
+      required: true
 english:
   name: International English
   addressFormat: |-
@@ -38,7 +39,26 @@ english:
     {{postcode}}
     BERMUDA
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Building / Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: "1"
+    - key: street
+      label: Street
+      placeholder: Front St
+    - key: suburb
+      label: Locality
+      placeholder: ""
+    - key: district
+      label: District / Parish
+      placeholder: Hamilton
+    - key: postcode
+      label: Postal Code
+      placeholder: HM 11
+      required: true
 postalCode:
   format: AA 00
   regex: ^[A-Z]{2}\s?\d{2}$

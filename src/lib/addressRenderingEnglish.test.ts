@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { AddressRenderer, type CanonicalAddress } from './addressRendering';
+import { AddressRenderer, createCanonicalAddress, type CanonicalAddress } from './addressRendering';
 
 const japaneseAddress: CanonicalAddress = {
   country_code: 'JP',
@@ -71,4 +71,86 @@ test('renders Outer Circle domestic English with the same domestic layout', () =
   });
 
   assert.equal(rendered, 'Burj Khalifa\n1 Sheikh Mohammed bin Rashid Boulevard\nDowntown Dubai, Dubai\nDubai');
+});
+
+test('keeps European street and postcode order in English rendering', () => {
+  const rendered = AddressRenderer.render('intl_en', {
+    ...japaneseAddress,
+    country_code: 'DE',
+    country: 'Deutschland',
+    state: 'Berlin',
+    city: 'Berlin',
+    subdistrict: '',
+    road: 'Hauptstraße',
+    house_number: '12',
+    building: '',
+    postcode: '10115',
+  });
+
+  assert.equal(rendered, 'Main Street 12\n10115 Berlin\nGERMANY');
+});
+
+test('renders a safer partial AGID area when no street address is available', () => {
+  const rendered = AddressRenderer.renderPartialAddress('fr', {
+    ...japaneseAddress,
+    country_code: 'ML',
+    country: 'Mali',
+    state: '',
+    city: '20.',
+    district: '',
+    subdistrict: '',
+    road: '',
+    house_number: '',
+    building: '',
+    postcode: '',
+  });
+
+  assert.equal(rendered, 'Mali');
+});
+
+test('canonical AGID address display uses postal and open-source evidence when available', () => {
+  const canonical = createCanonicalAddress({
+    country_code: 'fr',
+    country: 'France',
+    city: '20.',
+    address_analysis: {
+      canonical: {
+        country_code: 'fr',
+        country: 'France',
+        city: '20.',
+      },
+    },
+    european_postal_data: {
+      postcode: '75001',
+      city: 'Paris',
+      street: 'Rue de Rivoli',
+      houseNumber: '99',
+    },
+  });
+
+  assert.equal(canonical.country_code, 'FR');
+  assert.equal(canonical.city, 'Paris');
+  assert.equal(canonical.road, 'Rue de Rivoli');
+  assert.equal(canonical.house_number, '99');
+  assert.equal(canonical.postcode, '75001');
+});
+
+test('canonical address creation tolerates missing details during error recovery', () => {
+  const canonical = createCanonicalAddress(undefined);
+
+  assert.deepEqual(canonical, {
+    country_code: '',
+    country: '',
+    state: '',
+    city: '',
+    district: '',
+    subdistrict: '',
+    suburb: '',
+    road: '',
+    house_number: '',
+    building: '',
+    postcode: '',
+    poi: '',
+    plus_code: '',
+  });
 });

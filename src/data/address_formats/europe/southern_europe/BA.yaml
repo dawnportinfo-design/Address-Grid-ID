@@ -138,6 +138,7 @@ domestic:
       - key: postcode
         label: Postanski broj
         placeholder: "71000"
+        required: true
       - key: city
         label: Grad
         placeholder: Sarajevo
@@ -161,6 +162,7 @@ domestic:
       - key: postcode
         label: Postanski broj
         placeholder: "71000"
+        required: true
       - key: city
         label: Grad
         placeholder: Sarajevo
@@ -184,6 +186,7 @@ domestic:
       - key: postcode
         label: Postanski broj
         placeholder: "71000"
+        required: true
       - key: city
         label: Grad
         placeholder: Sarajevo
@@ -209,6 +212,7 @@ international:
       - key: postcode
         label: Postanski broj
         placeholder: "71000"
+        required: true
       - key: city
         label: Grad
         placeholder: Sarajevo
@@ -233,6 +237,7 @@ international:
       - key: postcode
         label: Postanski broj
         placeholder: "71000"
+        required: true
       - key: city
         label: Grad
         placeholder: Sarajevo
@@ -257,6 +262,7 @@ international:
       - key: postcode
         label: Postanski broj
         placeholder: "71000"
+        required: true
       - key: city
         label: Grad
         placeholder: Sarajevo

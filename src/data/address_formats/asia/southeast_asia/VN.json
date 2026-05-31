@@ -59,7 +59,7 @@
         "key": "postcode",
         "label": "Mã bưu chính",
         "placeholder": "700000",
-        "required": false,
+        "required": true,
         "type": "text"
       }
     ]
@@ -121,7 +121,7 @@
         "key": "postcode",
         "label": "Postal Code",
         "placeholder": "700000",
-        "required": false,
+        "required": true,
         "type": "text"
       }
     ]

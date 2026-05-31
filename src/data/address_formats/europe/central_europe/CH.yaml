@@ -54,6 +54,7 @@ domestic:
       - key: postcode
         label: Code Postal
         placeholder: "1204"
+        required: true
       - key: city
         label: Ville
         placeholder: Genève
@@ -77,6 +78,7 @@ domestic:
       - key: postcode
         label: CAP
         placeholder: "6900"
+        required: true
       - key: city
         label: Città
         placeholder: Lugano
@@ -100,6 +102,7 @@ domestic:
       - key: postcode
         label: Numer postal
         placeholder: "7000"
+        required: true
       - key: city
         label: Lieu
         placeholder: Cuira
@@ -125,6 +128,7 @@ international:
       - key: postcode
         label: PLZ
         placeholder: "8001"
+        required: true
       - key: city
         label: Stadt
         placeholder: Zürich
@@ -149,6 +153,7 @@ international:
       - key: postcode
         label: Code Postal
         placeholder: "1204"
+        required: true
       - key: city
         label: Ville
         placeholder: Genève
@@ -173,6 +178,7 @@ international:
       - key: postcode
         label: CAP
         placeholder: "6900"
+        required: true
       - key: city
         label: Città
         placeholder: Lugano
@@ -197,6 +203,7 @@ international:
       - key: postcode
         label: Numer postal
         placeholder: "7000"
+        required: true
       - key: city
         label: Lieu
         placeholder: Cuira
@@ -221,6 +228,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "8001"
+      required: true
     - key: city
       label: City
       placeholder: Zurich

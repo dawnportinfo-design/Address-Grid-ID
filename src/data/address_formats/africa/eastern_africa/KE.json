@@ -29,7 +29,8 @@
       {
         "key": "postcode",
         "label": "Postal Code",
-        "placeholder": "00100"
+        "placeholder": "00100",
+        "required": true
       }
     ]
   },
@@ -62,7 +63,8 @@
         {
           "key": "postcode",
           "label": "Nambari ya Posta",
-          "placeholder": "00100"
+          "placeholder": "00100",
+          "required": true
         }
       ]
     }
@@ -71,7 +73,34 @@
     "name": "International English",
     "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}} {{postcode}}\nKENYA",
     "ordering": "small-to-big",
-    "fields": []
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House/Plot No.",
+        "placeholder": "123"
+      },
+      {
+        "key": "street",
+        "label": "Street/PO Box",
+        "placeholder": "Kenyatta Ave"
+      },
+      {
+        "key": "city",
+        "label": "City/Town",
+        "placeholder": "Nairobi"
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "00100",
+        "required": true
+      }
+    ]
   },
   "postalCode": {
     "format": "NNNNN",

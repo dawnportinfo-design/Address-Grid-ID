@@ -47,7 +47,7 @@ native:
     - key: postcode
       label: Mã bưu chính
       placeholder: "700000"
-      required: false
+      required: true
       type: text
 english:
   addressFormat: |-
@@ -96,7 +96,7 @@ english:
     - key: postcode
       label: Postal Code
       placeholder: "700000"
-      required: false
+      required: true
       type: text
 postalCode:
   format: NNNNNN

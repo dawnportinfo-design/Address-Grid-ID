@@ -58,6 +58,7 @@ domestic:
       - key: postcode
         label: Code postal
         placeholder: K1A 0A6
+        required: true
 english:
   name: International English
   addressFormat: |-
@@ -85,6 +86,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: K1A 0A6
+      required: true
 international:
   fr:
     name: Français (International)
@@ -113,6 +115,7 @@ international:
       - key: postcode
         label: Code postal
         placeholder: K1A 0A6
+        required: true
 postalCode:
   format: ANA NAN
   regex: ^[A-Z]\d[A-Z][ -]?\d[A-Z]\d$

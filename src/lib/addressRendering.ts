@@ -6,8 +6,12 @@ import {
   normalizeEnglishAddressPart,
   renderDomesticEnglishPostalAddress,
   renderEnglishPostalAddress,
+  renderStreetAddressLine,
+  uniqueAddressParts,
+  countryName,
 } from './addressEnglish';
-import { isEnglishAddressCountry } from './languageTabs';
+import { mergeOpenSourceAddressEvidence } from './addressEvidence';
+import { isEnglishAddressCountry, isInternationalShippingEnglishTab } from './languageTabs';
 import { 
   renderDomesticCN, 
   renderInternationalCN, 
@@ -31,6 +35,7 @@ export interface CanonicalAddress {
   building: string;
   postcode: string;
   poi: string;
+  plus_code?: string;
 }
 
 /**
@@ -49,14 +54,15 @@ export function normalizeUnicode(text: string): string {
  * Creates a Canonical Address object from raw API details
  */
 export function createCanonicalAddress(details: any): CanonicalAddress {
-  const source = details?.address_analysis?.canonical
-    ? { ...details, ...details.address_analysis.canonical }
-    : details;
+  const safeDetails = details && typeof details === 'object' ? details : {};
+  const source = safeDetails?.address_analysis?.canonical
+    ? { ...safeDetails, ...safeDetails.address_analysis.canonical }
+    : safeDetails;
   const parts = {
     poi: source.amenity || source.shop || source.office || source.tourism || source.leisure || source.railway || source.aeroway || source.historic || source.station || source.healthcare || source.poi || "",
     country: source.country || "",
     country_code: (source.country_code || "").toUpperCase(),
-    postcode: source.postcode || "",
+    postcode: source.postcode || source.postal_code || source.zip || "",
     state: source.state || source.province || source.region || source.department || source.governorate || source.emirate || "",
     city: source.city || source.town || source.village || source.municipality || "",
     district: source.city_district || source.district || source.county || source.subdivision || "",
@@ -64,23 +70,46 @@ export function createCanonicalAddress(details: any): CanonicalAddress {
     suburb: source.suburb || source.hamlet || source.colonia || source.bairro || "",
     road: source.road || source.street || source.square || source.avenue || source.place || "",
     house_number: source.house_number || source.houseNumber || "",
-    building: source.building || source.organization || source.flats || ""
+    building: source.building || source.building_name || source.organization || source.flats || "",
+    plus_code: source.plus_code?.global_code || source.plus_code?.plus_code || source.plus_code || "",
   };
+  const { address: mergedParts } = mergeOpenSourceAddressEvidence(parts, details);
 
   return {
-    country_code: parts.country_code,
-    country: parts.country,
-    state: parts.state,
-    city: parts.city,
-    district: parts.district,
-    subdistrict: parts.subdistrict,
-    suburb: parts.suburb,
-    road: parts.road,
-    house_number: parts.house_number,
-    building: parts.building,
-    postcode: parts.postcode,
-    poi: parts.poi
+    country_code: mergedParts.country_code,
+    country: mergedParts.country,
+    state: mergedParts.state,
+    city: mergedParts.city,
+    district: mergedParts.district,
+    subdistrict: mergedParts.subdistrict,
+    suburb: mergedParts.suburb,
+    road: mergedParts.road,
+    house_number: mergedParts.house_number,
+    building: mergedParts.building,
+    postcode: mergedParts.postcode,
+    poi: mergedParts.poi,
+    plus_code: mergedParts.plus_code,
   };
+}
+
+const meaningfulAddressTextPattern =
+  /[A-Za-zÀ-ž\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af\u0400-\u04ff\u0370-\u03ff\u0590-\u05ff\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff\u0e00-\u0e7f]/;
+
+const comparableAddressPart = (value: string) =>
+  normalizeUnicode(value)
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '')
+    .trim();
+
+function meaningfulAddressContextPart(value: string, country: string) {
+  const cleaned = normalizeUnicode(value).replace(/^[,，、]\s*|,\s*$/g, '').trim();
+  if (!cleaned) return '';
+
+  const comparable = comparableAddressPart(cleaned);
+  const comparableCountry = comparableAddressPart(country);
+  if (comparableCountry && comparable === comparableCountry) return cleaned;
+  if (/^\d+[a-z]?$/.test(comparable)) return '';
+  return meaningfulAddressTextPattern.test(cleaned) ? cleaned : '';
 }
 
 /**
@@ -174,7 +203,10 @@ export class AddressRenderer {
       return parts.join(data.country_code === 'JP' ? "" : " ");
     } else {
       // Small-to-Big for others
-      const isRoadFirst = ['DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'SE', 'NO', 'DK', 'FI'].includes(data.country_code);
+      const isRoadFirst = [
+        'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'SE', 'NO', 'DK', 'FI',
+        'CH', 'LU', 'CY', 'BA',
+      ].includes(data.country_code);
       const t = (val: string) => isEnglish ? normalizeEnglishAddressPart(val, data.country_code) : val;
       const tb = (val: string) => isEnglish ? normalizeEnglishAddressBuildingName(val, data.country_code) : val;
 
@@ -249,6 +281,46 @@ export class AddressRenderer {
     let text = this.renderInternationalEnglish(canonical);
     text = applyShippingAbbreviations(text);
     return text.toUpperCase();
+  }
+
+  static renderPartialAddress(tab: string, data: CanonicalAddress): string {
+    const canonical = this.normalizeCanonical(data);
+    const isEnglish = tab.startsWith('en') || tab === 'international' || isInternationalShippingEnglishTab(tab);
+    const preserveLines = tab === 'shipping_label' || isInternationalShippingEnglishTab(tab);
+    const c = canonical.country_code.toUpperCase();
+    const t = (value: string) => isEnglish ? normalizeEnglishAddressPart(value, c) : value;
+    const tb = (value: string) => isEnglish ? normalizeEnglishAddressBuildingName(value, c) : value;
+    const country = isEnglish
+      ? countryName(c, t(canonical.country))
+      : canonical.country;
+    const organization = tb(canonical.building || canonical.poi);
+    const street = canonical.road
+      ? renderStreetAddressLine(c, t(canonical.road), t(canonical.house_number))
+      : '';
+    const areaParts = uniqueAddressParts([
+      t(canonical.subdistrict || canonical.suburb),
+      t(canonical.district),
+      t(canonical.city),
+      t(canonical.state),
+      canonical.postcode,
+      country,
+    ].map(part => meaningfulAddressContextPart(part, country)));
+
+    const areaLine = areaParts.join(', ');
+    const fallbackLines = uniqueAddressParts([
+      organization,
+      street,
+      areaLine,
+      !areaLine && canonical.plus_code ? `Plus Code: ${canonical.plus_code}` : '',
+    ]);
+
+    if (preserveLines) {
+      return fallbackLines
+        .map(line => isInternationalShippingEnglishTab(tab) ? line.toUpperCase() : line)
+        .join('\n');
+    }
+
+    return fallbackLines.join('\n');
   }
 
   static renderCarrier(data: CanonicalAddress): string {

@@ -69,7 +69,19 @@ english:
     {{city}}
     VANUATU
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Building / Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: "1"
+    - key: street
+      label: Street / PO Box
+      placeholder: Lini Highway
+    - key: city
+      label: Town / City
+      placeholder: Port Vila
 addressRules:
   languages:
     - code: bi

@@ -5,6 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+function createAgidRequestId() {
+  return `agid-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 /**
  * Robust fetch with retries and timeout
  */
@@ -12,10 +16,13 @@ export async function fetchWithRetry(url: string, options: any = {}, retries = 2
   const timeoutMs = options.timeout || defaultTimeout;
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
+  const headers = new Headers(options.headers);
+  if (!headers.has('X-AGID-Request-ID')) headers.set('X-AGID-Request-ID', createAgidRequestId());
 
   try {
     const response = await fetch(url, { 
       ...options, 
+      headers,
       signal: options.signal || controller.signal 
     });
     

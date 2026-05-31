@@ -32,7 +32,22 @@ english:
     {{city}}, {{state}}
     BAHAMAS
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Building / Company
+      placeholder: ""
+    - key: houseNumber
+      label: House No.
+      placeholder: P.O. Box N-1234
+    - key: street
+      label: Street
+      placeholder: Bay Street
+    - key: city
+      label: City / Town
+      placeholder: Nassau
+    - key: state
+      label: State / Province
+      placeholder: New Providence
 openSourceIds:
   - osm-nominatim
   - osm-overpass

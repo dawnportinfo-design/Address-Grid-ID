@@ -75,6 +75,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "100000"
+      required: true
 international:
   zh-Hans:
     name: 中文简体 (国际/拼音)
@@ -107,6 +108,7 @@ international:
       - key: postcode
         label: 邮编 (Postcode)
         placeholder: "100000"
+        required: true
   zh-Hant:
     name: 中文繁體 (國際/拼音)
     addressFormat: |-
@@ -138,6 +140,7 @@ international:
       - key: postcode
         label: 郵編 (Postcode)
         placeholder: "100000"
+        required: true
 postalCode:
   format: NNNNNN
   regex: ^\d{6}$

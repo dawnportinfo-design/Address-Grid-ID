@@ -73,7 +73,8 @@
       {
         "key": "postcode",
         "label": "Postal Code",
-        "placeholder": "1000-001"
+        "placeholder": "1000-001",
+        "required": true
       },
       {
         "key": "city",
@@ -111,7 +112,8 @@
         {
           "key": "postcode",
           "label": "Código Postal",
-          "placeholder": "1000-001"
+          "placeholder": "1000-001",
+          "required": true
         },
         {
           "key": "city",

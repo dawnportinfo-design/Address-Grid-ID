@@ -28,6 +28,7 @@ native:
     - key: postcode
       label: Postcode
       placeholder: SW1A 2AA
+      required: true
 english:
   name: International English
   addressFormat: |-
@@ -57,6 +58,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: SW1A 2AA
+      required: true
 postalCode:
   format: AN NAA, ANA NAA, ANN NAA, AAN NAA, AANA NAA, AANN NAA
   regex: ^([A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2})$

@@ -54,6 +54,7 @@ english:
     - key: postcode
       label: Postcode
       placeholder: "47890"
+      required: true
     - key: city
       label: City
       placeholder: San Marino
@@ -79,6 +80,7 @@ international:
       - key: postcode
         label: CAP
         placeholder: "47890"
+        required: true
       - key: city
         label: Castello
         placeholder: San Marino

@@ -383,6 +383,7 @@ function decodeBase32(hash: string): bigint {
 export interface AGIDResult {
   id: string; // The prefix + hash
   prefix: string; // The 2-char alphanumeric prefix
+  regionCode: string; // Internal country/territory code, including non-ISO disputed regions.
   hash: string; // 10-char hash
   isSea: boolean;
   gridSize: number;
@@ -409,6 +410,31 @@ interface AGIDOptions {
   isSea?: boolean; // Override sea detection manually.
 }
 
+const CLAIM_AWARE_REGION_CODES = [
+  "BT_T", "EH", "CRIM", "DONB", "KASH", "SCSD", "EEBD", "TRNC", "SLND", "PMR", "CYGL",
+  "JP_NT", "JP_TK", "JP_SK",
+];
+
+function getClaimAwareRegionCode(lat: number, lon: number, fallbackCode: string) {
+  const normalizedFallback = fallbackCode.toUpperCase();
+  if (CLAIM_AWARE_REGION_CODES.includes(normalizedFallback)) return normalizedFallback;
+  if (normalizedFallback !== "JP") return normalizedFallback;
+
+  let normLon = lon;
+  while (normLon > 180) normLon -= 360;
+  while (normLon < -180) normLon += 360;
+
+  const cell = getSpatialCell(lat, normLon);
+  for (const code of ["JP_TK", "JP_SK", "JP_NT"]) {
+    const region = cell.countries.find(c => c.code === code);
+    if (!region) continue;
+    const polyRaw = (region as any).polygons || region.polygon;
+    if (isPointInPolygon(lat, normLon, polyRaw, region)) return code;
+  }
+
+  return normalizedFallback;
+}
+
 /**
  * Core AGID Encoding
  * Redesigned for Cubed Sphere (23-bit precision per face axis).
@@ -417,6 +443,7 @@ interface AGIDOptions {
 export function encodeAGID(lat: number, lon: number): AGIDResult {
   const region = getRegionInfo(lat, lon);
   const prefix = generatePrefix(region.prefix, region.isSea, region.name);
+  const regionCode = getClaimAwareRegionCode(lat, lon, region.prefix);
 
   // 1. Quantization: Cubed Sphere mapping with Equal-Area correction
   const { face, qx, qy } = getQuantized(lat, lon);
@@ -431,6 +458,7 @@ export function encodeAGID(lat: number, lon: number): AGIDResult {
   return {
     id: prefix + hash,
     prefix,
+    regionCode,
     hash,
     isSea: region.isSea,
     gridSize: 4.4, // ~4.4m average resolution (2^21 divisions per face)

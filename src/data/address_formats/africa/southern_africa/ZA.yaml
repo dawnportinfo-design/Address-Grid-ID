@@ -28,6 +28,7 @@ native:
     - key: postcode
       label: Postal Code
       placeholder: "2196"
+      required: true
 domestic:
   af:
     name: Afrikaans
@@ -56,6 +57,7 @@ domestic:
       - key: postcode
         label: Poskode
         placeholder: "2196"
+        required: true
 english:
   name: International English
   addressFormat: |-
@@ -85,6 +87,7 @@ english:
     - key: postcode
       label: Postal Code
       placeholder: "2196"
+      required: true
 postalCode:
   format: NNNN
   regex: ^\d{4}$

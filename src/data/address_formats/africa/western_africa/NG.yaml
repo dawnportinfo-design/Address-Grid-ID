@@ -28,6 +28,7 @@ native:
     - key: postcode
       label: Postal Code
       placeholder: "101241"
+      required: true
     - key: state
       label: State
       placeholder: Lagos State
@@ -41,7 +42,29 @@ english:
     {{state}}
     NIGERIA
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Company
+      placeholder: ""
+    - key: houseNumber
+      label: Plot/House No.
+      placeholder: "123"
+    - key: street
+      label: Street Address
+      placeholder: Victoria Island Way
+    - key: district
+      label: District/Area
+      placeholder: Victoria Island
+    - key: city
+      label: City/Town
+      placeholder: Lagos
+    - key: postcode
+      label: Postal Code
+      placeholder: "101241"
+      required: true
+    - key: state
+      label: State
+      placeholder: Lagos State
 postalCode:
   format: NNNNNN
   regex: ^\d{6}$

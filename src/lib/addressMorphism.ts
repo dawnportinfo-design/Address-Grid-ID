@@ -1,6 +1,7 @@
 import type { CanonicalAddressParts } from './addressIntelligence';
 import type { NaturalAddressContext } from './addressMorphismSources';
 import { expandSearchQuery, normalizeSearchText, scoreSearchCandidate } from './searchQuery';
+import { sha256Hex } from './sha256';
 
 export type AddressMorphismStatus = 'verified' | 'partial' | 'ambiguous' | 'unresolved';
 
@@ -25,6 +26,7 @@ export type AddressMorphismContext = {
   postcode?: string;
   state?: string;
   purpose?: 'search' | 'shipping' | 'registration' | 'emergency';
+  temperature?: number;
 };
 
 export type AddressMorphismCluster = {
@@ -35,6 +37,7 @@ export type AddressMorphismCluster = {
   centroid?: { lat: number; lon: number };
   sources: string[];
   confidence: number;
+  probability: number;
   energy: number;
   pid: string;
 };
@@ -44,6 +47,8 @@ export type AddressMorphismResult = {
   pid: string | null;
   selected: AddressMorphismCluster | null;
   clusters: AddressMorphismCluster[];
+  confidence: number;
+  entropy: number;
   energySummary: {
     best: number;
     secondBest: number | null;
@@ -183,13 +188,7 @@ function sourceReliability(sources: string[]) {
 }
 
 function stableHash(value: string) {
-  let hash = 0xcbf29ce484222325n;
-  const prime = 0x100000001b3n;
-  for (const char of value.normalize('NFKC')) {
-    hash ^= BigInt(char.codePointAt(0) ?? 0);
-    hash = BigInt.asUintN(64, hash * prime);
-  }
-  return hash.toString(36).toUpperCase().padStart(13, '0');
+  return sha256Hex(value.normalize('NFKC')).slice(0, 32).toUpperCase();
 }
 
 function canonicalString(canonical: CanonicalAddressParts) {
@@ -224,15 +223,24 @@ function clusterId(candidates: AddressMorphismCandidate[]) {
   return stableHash(candidates.map(candidate => candidate.id || candidate.label).sort().join('|')).slice(0, 10);
 }
 
+function candidateSortKey(candidate: AddressMorphismCandidate) {
+  return [
+    candidate.id,
+    canonicalString(candidate.canonical),
+    candidate.label,
+  ].map(value => clean(value)).join('|');
+}
+
 export function clusterAddressCandidates(
   candidates: AddressMorphismCandidate[],
   threshold = 0.34,
 ): AddressMorphismCluster[] {
   const clusters: AddressMorphismCandidate[][] = [];
+  const orderedCandidates = [...candidates].sort((a, b) => candidateSortKey(a).localeCompare(candidateSortKey(b)));
 
-  for (const candidate of candidates) {
+  for (const candidate of orderedCandidates) {
     const cluster = clusters.find(existing =>
-      existing.some(member => structuralDistance(member, candidate) <= threshold)
+      existing.every(member => structuralDistance(member, candidate) <= threshold)
     );
     if (cluster) cluster.push(candidate);
     else clusters.push([candidate]);
@@ -251,6 +259,7 @@ export function clusterAddressCandidates(
       centroid: center,
       sources,
       confidence,
+      probability: 0,
       energy: Number.POSITIVE_INFINITY,
       pid: buildAddressPid(canonical),
     };
@@ -326,6 +335,21 @@ function statusFor(best: AddressMorphismCluster | null, second: AddressMorphismC
   return { status: 'partial' as const };
 }
 
+function posteriorProbabilities(clusters: AddressMorphismCluster[], temperature = 0.16) {
+  if (!clusters.length) return [];
+  const safeTemperature = Math.max(0.04, Math.min(1, temperature));
+  const minEnergy = Math.min(...clusters.map(cluster => cluster.energy));
+  const weights = clusters.map(cluster => Math.exp(-(cluster.energy - minEnergy) / safeTemperature));
+  const total = weights.reduce((sum, weight) => sum + weight, 0) || 1;
+  return weights.map(weight => weight / total);
+}
+
+function shannonEntropy(probabilities: number[]) {
+  return probabilities.reduce((sum, probability) => (
+    probability > 0 ? sum - probability * Math.log(probability) : sum
+  ), 0);
+}
+
 export function resolveAddressMorphism({
   input,
   candidates,
@@ -335,23 +359,31 @@ export function resolveAddressMorphism({
   candidates: AddressMorphismCandidate[];
   context?: AddressMorphismContext;
 }): AddressMorphismResult {
-  const clusters = clusterAddressCandidates(candidates)
+  const rankedClusters = clusterAddressCandidates(candidates)
     .map(cluster => ({
       ...cluster,
       energy: energyForCluster(cluster, input, context),
     }))
     .sort((a, b) => a.energy - b.energy || a.pid.localeCompare(b.pid));
+  const probabilities = posteriorProbabilities(rankedClusters, context.temperature);
+  const clusters = rankedClusters.map((cluster, index) => ({
+    ...cluster,
+    probability: probabilities[index] ?? 0,
+  }));
 
   const selected = clusters[0] || null;
   const second = clusters[1] || null;
   const status = statusFor(selected, second);
   const energies = clusters.map(cluster => cluster.energy);
+  const selectedConfidence = status.status === 'unresolved' ? 0 : selected?.probability ?? 0;
 
   return {
     status: status.status,
     pid: status.status === 'verified' || status.status === 'partial' ? selected?.pid ?? null : null,
     selected: status.status === 'unresolved' ? null : selected,
     clusters,
+    confidence: selectedConfidence,
+    entropy: shannonEntropy(probabilities),
     unresolvedReason: status.reason,
     energySummary: {
       best: energies[0] ?? Number.POSITIVE_INFINITY,
@@ -370,15 +402,18 @@ export function rankAddressCandidatesByMorphism(
 ) {
   const result = resolveAddressMorphism({ input, candidates, context });
   const energyByLabel = new Map<string, number>();
+  const probabilityByLabel = new Map<string, number>();
   result.clusters.forEach(cluster => {
     cluster.candidates.forEach(candidate => {
       energyByLabel.set(candidate.id || candidate.label, cluster.energy);
+      probabilityByLabel.set(candidate.id || candidate.label, cluster.probability);
     });
   });
   return candidates
     .map(candidate => ({
       ...candidate,
       morphism_energy: energyByLabel.get(candidate.id || candidate.label) ?? Number.POSITIVE_INFINITY,
+      morphism_probability: probabilityByLabel.get(candidate.id || candidate.label) ?? 0,
       morphism_status: result.status,
       morphism_pid: result.pid,
     }))

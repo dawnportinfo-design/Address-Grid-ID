@@ -1,13 +1,28 @@
 import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import helmet from 'helmet';
+import { execFile as execFileCallback } from 'child_process';
+import { promisify } from 'util';
 import rateLimit from 'express-rate-limit';
 import { initPostalCodeDB, getNearestPostalCode } from './src/services/PostalCodeDB';
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { normalizeTranslationLanguage, detectOpenSourceTranslationLanguage } from './src/lib/openSourceTranslation';
 import { parseAddressText } from './src/lib/addressIntelligence';
+import {
+  DEFAULT_OVERTURE_RELEASE,
+  buildOvertureBuildingNameDuckDbSql,
+  buildingNameCandidateFromOvertureFeature,
+} from './src/lib/overtureMaps';
+import {
+  buildCarStoppableOverpassQuery,
+  resolveCarStoppableDestination,
+} from './src/lib/navigationDestination';
+import {
+  buildDroneObstacleOverpassQuery,
+  resolveDroneNavigationPoint,
+} from './src/lib/droneNavigation';
+
+const execFile = promisify(execFileCallback);
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
@@ -18,8 +33,6 @@ const ai = new GoogleGenAI({
   }
 });
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -27,8 +40,6 @@ async function startServer() {
   // Trust proxy for rate limiting in Cloud Run environment (Setting to 1 for security)
   app.set('trust proxy', 1);
 
-  // REMOVED HELMET FOR COMPATIBILITY TESTING
-  
   // Extra Security Headers / Compatibility Headers
   app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -68,10 +79,92 @@ async function startServer() {
     console.error('[Server] Unhandled Rejection at:', promise, 'reason:', reason);
   });
 
+  type AgidServerResult<T = unknown> = {
+    ok: boolean;
+    data?: T;
+    error?: string;
+    confidence?: number;
+    sources: string[];
+    warnings: string[];
+    cache?: 'hit' | 'miss' | 'stale' | 'none';
+    requestId: string;
+  };
+
+  function requestIdFor(req: express.Request) {
+    const fromHeader = req.header('X-AGID-Request-ID');
+    if (fromHeader) return fromHeader;
+    return `srv-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  }
+
+  function sendAgidResult<T>(
+    req: express.Request,
+    res: express.Response,
+    result: Omit<AgidServerResult<T>, 'requestId'> & { requestId?: string },
+    status = result.ok ? 200 : 500,
+  ) {
+    const requestId = result.requestId || requestIdFor(req);
+    res.setHeader('X-AGID-Request-ID', requestId);
+    res.status(status).json({
+      ...result,
+      requestId,
+      sources: Array.isArray(result.sources) ? result.sources : [],
+      warnings: Array.isArray(result.warnings) ? result.warnings : [],
+    } satisfies AgidServerResult<T>);
+  }
+
   // API Routes
   app.get('/api/health', (req, res) => {
     console.log('[API] Health check');
     res.json({ status: 'ok' });
+  });
+
+  app.get('/api/communication/health', (req, res) => {
+    sendAgidResult(req, res, {
+      ok: true,
+      data: {
+        rest: true,
+        sse: true,
+        localFirstSync: true,
+        externalApiProxy: true,
+      },
+      confidence: 1,
+      sources: ['agid-server'],
+      warnings: [],
+      cache: 'none',
+    });
+  });
+
+  app.get('/api/jobs/:jobId/events', (req, res) => {
+    const requestId = requestIdFor(req);
+    const jobId = String(req.params.jobId || '').slice(0, 80);
+
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache, no-transform',
+      Connection: 'keep-alive',
+      'X-AGID-Request-ID': requestId,
+    });
+
+    const writeEvent = (event: string, data: unknown) => {
+      res.write(`event: ${event}\n`);
+      res.write(`data: ${JSON.stringify({ requestId, jobId, ...(data as object) })}\n\n`);
+    };
+
+    writeEvent('ready', {
+      ok: true,
+      sources: ['agid-server'],
+      warnings: [],
+      message: 'AGID job event stream is ready.',
+    });
+
+    const heartbeat = setInterval(() => {
+      writeEvent('heartbeat', { ok: true, timestamp: Date.now() });
+    }, 15000);
+
+    req.on('close', () => {
+      clearInterval(heartbeat);
+      res.end();
+    });
   });
 
   app.post('/api/address/parse', async (req, res) => {
@@ -1038,6 +1131,172 @@ Primary language: ${lang}. Output ONLY valid JSON.`;
 
   app.get('/api/overpass', (req, res) => {
     res.json({ message: 'Overpass proxy is active. Use POST to query.' });
+  });
+
+  app.get('/api/navigation/resolve-destination', async (req, res) => {
+    const lat = parseFloat(req.query.lat as string);
+    const lon = parseFloat(req.query.lon as string);
+    const radius = Math.min(Math.max(parseFloat(req.query.radius as string) || 180, 40), 600);
+    const mode = String(req.query.mode || 'car');
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      return res.status(400).json({ error: 'Missing or invalid lat/lon' });
+    }
+
+    if (mode !== 'car' && mode !== 'driving') {
+      return res.json({
+        ok: true,
+        inputPoint: { lat, lon },
+        finalPoint: {
+          lat,
+          lon,
+          method: 'original',
+          source: 'agid-original',
+          distanceMeters: 0,
+        },
+        confidence: 1,
+        warnings: [],
+        sources: [],
+        candidates: [],
+      });
+    }
+
+    try {
+      const query = buildCarStoppableOverpassQuery({ lat, lon }, radius);
+      const data = await fetchFromOverpass(query);
+      const result = resolveCarStoppableDestination({ lat, lon }, Array.isArray(data?.elements) ? data.elements : []);
+      return res.json({
+        ok: true,
+        ...result,
+      });
+    } catch (error) {
+      console.error('[API] Navigation destination resolution failed:', error);
+      return res.status(500).json({ error: 'Navigation destination resolution failed' });
+    }
+  });
+
+  app.get('/api/drone/resolve-point', async (req, res) => {
+    const lat = parseFloat(req.query.lat as string);
+    const lon = parseFloat(req.query.lon as string);
+    const requestedAltitudeM = parseFloat(req.query.altitudeM as string);
+    const minAltitudeM = parseFloat(req.query.minM as string);
+    const maxAltitudeM = parseFloat(req.query.maxM as string);
+    const stepCm = parseFloat(req.query.stepCm as string);
+    const radius = Math.min(Math.max(parseFloat(req.query.radius as string) || 250, 50), 800);
+    const mode = String(req.query.mode || 'agl') === 'msl' ? 'msl' : 'agl';
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      return res.status(400).json({ error: 'Missing or invalid lat/lon' });
+    }
+
+    try {
+      const [elevation, overpassData] = await Promise.all([
+        getElevationData(lat, lon).catch(error => {
+          console.warn('[API] Drone elevation lookup failed:', error);
+          return null;
+        }),
+        fetchFromOverpass(buildDroneObstacleOverpassQuery({ lat, lon }, radius)).catch(error => {
+          console.warn('[API] Drone obstacle lookup failed:', error);
+          return { elements: [] };
+        }),
+      ]);
+      const result = resolveDroneNavigationPoint(
+        {
+          lat,
+          lon,
+          requestedAltitudeM: Number.isFinite(requestedAltitudeM) ? requestedAltitudeM : 30,
+          minAltitudeM: Number.isFinite(minAltitudeM) ? minAltitudeM : 0,
+          maxAltitudeM: Number.isFinite(maxAltitudeM) ? maxAltitudeM : 120,
+          stepCm: Number.isFinite(stepCm) ? stepCm : 10,
+          mode,
+        },
+        elevation,
+        Array.isArray(overpassData?.elements) ? overpassData.elements : [],
+      );
+
+      return res.json({
+        ok: true,
+        ...result,
+      });
+    } catch (error) {
+      console.error('[API] Drone point resolution failed:', error);
+      return res.status(500).json({ error: 'Drone point resolution failed' });
+    }
+  });
+
+  app.get('/api/overture/building-name', async (req, res) => {
+    const lat = parseFloat(req.query.lat as string);
+    const lon = parseFloat(req.query.lon as string);
+    const radius = Math.min(Math.max(parseFloat(req.query.radius as string) || 90, 10), 500);
+    const lang = String(req.query.lang || 'en');
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      return res.status(400).json({ error: 'Missing or invalid lat/lon' });
+    }
+
+    const normalizeCandidates = (payload: any) => {
+      const rawCandidates = Array.isArray(payload)
+        ? payload
+        : Array.isArray(payload?.candidates)
+          ? payload.candidates
+          : payload?.candidate
+            ? [payload.candidate]
+            : Array.isArray(payload?.features)
+              ? payload.features
+              : Array.isArray(payload?.rows)
+                ? payload.rows
+                : [];
+      return rawCandidates
+        .map((feature: any) => buildingNameCandidateFromOvertureFeature(feature, lang))
+        .filter(Boolean);
+    };
+
+    try {
+      const upstreamUrl = process.env.OVERTURE_BUILDING_NAME_URL;
+      if (upstreamUrl) {
+        const url = new URL(upstreamUrl);
+        url.searchParams.set('lat', String(lat));
+        url.searchParams.set('lon', String(lon));
+        url.searchParams.set('radius', String(radius));
+        url.searchParams.set('lang', lang);
+        const response = await safeFetch(url.toString(), {}, 45000, 0);
+        if (!response.ok) {
+          return res.status(response.status).json({ error: 'Overture upstream failed' });
+        }
+        const data = await response.json();
+        return res.json({
+          source: 'overture-maps-foundation',
+          mode: 'upstream',
+          candidates: normalizeCandidates(data),
+        });
+      }
+
+      const duckdbCmd = process.env.OVERTURE_DUCKDB_CMD;
+      if (duckdbCmd) {
+        const release = process.env.OVERTURE_RELEASE || DEFAULT_OVERTURE_RELEASE;
+        const sql = buildOvertureBuildingNameDuckDbSql(lat, lon, radius, release);
+        const { stdout } = await execFile(duckdbCmd, ['-json', '-c', sql], {
+          timeout: 60000,
+          maxBuffer: 1024 * 1024 * 8,
+        });
+        const rows = stdout.trim() ? JSON.parse(stdout) : [];
+        return res.json({
+          source: 'overture-maps-foundation',
+          mode: 'duckdb',
+          release,
+          candidates: normalizeCandidates(rows),
+        });
+      }
+
+      return res.status(503).json({
+        error: 'Overture Maps backend not configured',
+        source: 'overture-maps-foundation',
+        configure: 'Set OVERTURE_BUILDING_NAME_URL for an external Overture lookup service, or OVERTURE_DUCKDB_CMD to a DuckDB CLI path.',
+      });
+    } catch (error) {
+      console.error('[API] Overture building lookup error:', error);
+      return res.status(500).json({ error: 'Overture building lookup failed' });
+    }
   });
 
   // Using a more flexible body parser for Overpass

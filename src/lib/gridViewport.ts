@@ -5,6 +5,7 @@ type ViewportPoint = {
 } | [number, number];
 
 export const GRID_VIEWPORT_MAX_METERS = 200;
+export const GRID_VIEWPORT_RENDER_PADDING_RATIO = 1.25;
 
 function getLon(point: ViewportPoint) {
   return Array.isArray(point) ? point[0] : point.lng ?? point.lon ?? 0;
@@ -39,6 +40,25 @@ export function getViewportSpanMeters(points: ViewportPoint[]) {
 export function shouldShowGridForViewport(points: ViewportPoint[], maxMeters = GRID_VIEWPORT_MAX_METERS) {
   const { widthMeters } = getViewportSpanMeters(points);
   return widthMeters <= maxMeters;
+}
+
+export function getViewportSamplePixelCoordinates(width: number, height: number) {
+  const right = Math.max(0, width);
+  const bottom = Math.max(0, height);
+  const midX = right / 2;
+  const midY = bottom / 2;
+
+  return [
+    [0, 0],
+    [right, 0],
+    [right, bottom],
+    [0, bottom],
+    [midX, 0],
+    [right, midY],
+    [midX, bottom],
+    [0, midY],
+    [midX, midY],
+  ];
 }
 
 export function getViewportGridBounds(points: ViewportPoint[], paddingRatio = 0.5): [[number, number], [number, number]] {

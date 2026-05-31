@@ -576,7 +576,8 @@
                 {
                   "key": "postcode",
                   "label": "Postcode",
-                  "placeholder": "2000"
+                  "placeholder": "2000",
+                  "required": true
                 }
               ]
             },
@@ -613,7 +614,8 @@
                 {
                   "key": "postcode",
                   "label": "Postcode",
-                  "placeholder": "2000"
+                  "placeholder": "2000",
+                  "required": true
                 }
               ]
             },
@@ -926,7 +928,28 @@
               "name": "International English",
               "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}\nFIJI",
               "ordering": "small-to-big",
-              "fields": []
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Building / Company",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "House/Floor No.",
+                  "placeholder": "123"
+                },
+                {
+                  "key": "street",
+                  "label": "Street / PO Box",
+                  "placeholder": "Victoria Parade"
+                },
+                {
+                  "key": "city",
+                  "label": "City / Town",
+                  "placeholder": "Suva"
+                }
+              ]
             },
             "postalCode": {
               "format": null,
@@ -1902,7 +1925,8 @@
                 {
                   "key": "postcode",
                   "label": "Postcode",
-                  "placeholder": "1010"
+                  "placeholder": "1010",
+                  "required": true
                 }
               ]
             },
@@ -1939,7 +1963,8 @@
                 {
                   "key": "postcode",
                   "label": "Postcode",
-                  "placeholder": "1010"
+                  "placeholder": "1010",
+                  "required": true
                 }
               ]
             },
@@ -3100,7 +3125,28 @@
               "name": "International English",
               "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}\nVANUATU",
               "ordering": "small-to-big",
-              "fields": []
+              "fields": [
+                {
+                  "key": "organization",
+                  "label": "Building / Company",
+                  "placeholder": ""
+                },
+                {
+                  "key": "houseNumber",
+                  "label": "House No.",
+                  "placeholder": "1"
+                },
+                {
+                  "key": "street",
+                  "label": "Street / PO Box",
+                  "placeholder": "Lini Highway"
+                },
+                {
+                  "key": "city",
+                  "label": "Town / City",
+                  "placeholder": "Port Vila"
+                }
+              ]
             },
             "addressRules": {
               "languages": [

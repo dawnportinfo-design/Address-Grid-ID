@@ -23,6 +23,7 @@ native:
     - key: postcode
       label: Namba ya Posta
       placeholder: "11101"
+      required: true
 domestic:
   en:
     name: English
@@ -47,6 +48,7 @@ domestic:
       - key: postcode
         label: Postal Code
         placeholder: "11101"
+        required: true
 english:
   name: International English
   addressFormat: |-
@@ -55,7 +57,23 @@ english:
     {{city}} {{postcode}}
     TANZANIA
   ordering: small-to-big
-  fields: []
+  fields:
+    - key: organization
+      label: Company
+      placeholder: ""
+    - key: houseNumber
+      label: PO Box/House No.
+      placeholder: PO Box 1234
+    - key: street
+      label: Street
+      placeholder: Samora Ave
+    - key: city
+      label: City/Region
+      placeholder: Dar es Salaam
+    - key: postcode
+      label: Postal Code
+      placeholder: "11101"
+      required: true
 postalCode:
   format: NNNNN
   regex: ^\d{5}$

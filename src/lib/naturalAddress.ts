@@ -26,6 +26,45 @@ const formatDistance = (distance?: number) => {
   return `${(distance / 1000).toFixed(distance < 10000 ? 1 : 0)} km`;
 };
 
+const marineTypeLabels: Record<string, string> = {
+  ocean: 'Ocean',
+  sea: 'Sea',
+  gulf: 'Gulf',
+  bay: 'Bay',
+  strait: 'Strait',
+  channel: 'Channel',
+  trench: 'Trench',
+  ridge: 'Ridge',
+  seamount: 'Seamount',
+  reef: 'Reef',
+  deep: 'Deep',
+};
+
+const marineAreaRank: Record<string, number> = {
+  Ocean: 1,
+  Sea: 2,
+  Gulf: 3,
+  Bay: 4,
+  Strait: 5,
+  Channel: 5,
+};
+
+const normalizeMarineType = (value: unknown) => {
+  const cleaned = cleanName(value);
+  if (!cleaned) return '';
+  const normalized = cleaned.toLowerCase().replace(/[_-]+/g, ' ');
+  return marineTypeLabels[normalized] || cleaned.replace(/\b\w/g, char => char.toUpperCase());
+};
+
+const isGenericOpenOcean = (value: string) => /^open\s+ocean$/i.test(value);
+
+const getCoordinateLine = (details: any) => {
+  const lat = Number(details.lat ?? details.latitude ?? details.coordinates?.lat ?? details.coords?.lat);
+  const lon = Number(details.lon ?? details.lng ?? details.longitude ?? details.coordinates?.lon ?? details.coords?.lon);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return '';
+  return `Coordinates: ${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+};
+
 const landmarkLabel = (landmark: Landmark) => {
   const name = cleanName(landmark.name);
   if (!name || name === 'Unnamed Feature') return '';
@@ -39,6 +78,45 @@ const landmarkLabel = (landmark: Landmark) => {
 const getNearbyLine = (label: string, landmarks: Landmark[] = []) => {
   const values = unique(landmarks.map(landmarkLabel)).slice(0, 3);
   return values.length ? `${label}: ${values.join('; ')}` : '';
+};
+
+const marineLandmarkLabel = (landmark: Landmark) => {
+  const name = cleanName(landmark.name);
+  if (!name || name === 'Unnamed Feature') return '';
+  const type = normalizeMarineType(landmark.type);
+  const distance = formatDistance(landmark.distance);
+  return [name, type && type !== name ? `(${type})` : '', distance ? `- ${distance}` : '']
+    .filter(Boolean)
+    .join(' ');
+};
+
+const getNearbyMarineLine = (label: string, landmarks: Landmark[] = []) => {
+  const values = unique(landmarks.map(marineLandmarkLabel)).slice(0, 3);
+  return values.length ? `${label}: ${values.join('; ')}` : '';
+};
+
+const getMarineAreaFeatures = (features: Landmark[] = []) =>
+  features
+    .map(feature => ({ ...feature, type: normalizeMarineType(feature.type) }))
+    .filter(feature => cleanName(feature.name) && marineAreaRank[feature.type || ''])
+    .sort((a, b) => marineAreaRank[a.type || ''] - marineAreaRank[b.type || '']);
+
+const getMarineHierarchyLine = (features: Landmark[] = []) => {
+  const names = unique(getMarineAreaFeatures(features).map(feature => cleanName(feature.name)));
+  return names.length > 1 ? `Marine hierarchy: ${names.join(' > ')}` : '';
+};
+
+const getMarineLabel = (seaContext: any, areaFeatures: Landmark[]) => {
+  const explicitName = cleanName(seaContext.sea_name);
+  if (explicitName && !isGenericOpenOcean(explicitName)) {
+    const explicitType = normalizeMarineType(areaFeatures.find(feature => cleanName(feature.name) === explicitName)?.type);
+    const moreSpecific = areaFeatures
+      .filter(feature => marineAreaRank[normalizeMarineType(feature.type)] > (marineAreaRank[explicitType] || 0))
+      .at(-1);
+    return cleanName(moreSpecific?.name) || explicitName;
+  }
+
+  return cleanName(areaFeatures.at(-1)?.name) || 'Open ocean';
 };
 
 const getAreaLine = (details: any) => {
@@ -66,26 +144,27 @@ export function buildNaturalAddress(details: any): NaturalAddressResult | null {
   if (seaContext) {
     sources.add('Marine Regions');
     sources.add('OpenStreetMap');
-    if (typeof seaContext.bathymetry === 'number') sources.add('open elevation/bathymetry');
+    if (typeof seaContext.bathymetry === 'number') sources.add('GEBCO/open bathymetry');
+    if (plusCode) sources.add('Google Open Location Code');
 
     const seaFeatures: Landmark[] = seaContext.features ?? [];
-    const preferredFeature = seaFeatures.find(feature =>
-      ['Ocean', 'Sea', 'Gulf', 'Bay', 'Strait', 'Channel'].includes(cleanName(feature.type))
-    );
-    const seaName = cleanName(seaContext.sea_name) && seaContext.sea_name !== 'Open Ocean'
-      ? cleanName(seaContext.sea_name)
-      : cleanName(preferredFeature?.name) || 'Open ocean';
+    const marineAreaFeatures = getMarineAreaFeatures(seaFeatures);
+    const marineAreaNames = new Set(marineAreaFeatures.map(feature => cleanName(feature.name)));
+    const seabedFeatures = seaFeatures.filter(feature => !marineAreaNames.has(cleanName(feature.name)));
+    const seaName = getMarineLabel(seaContext, marineAreaFeatures);
     const depth = typeof seaContext.bathymetry === 'number' && seaContext.bathymetry < 0
       ? `Depth: ${Math.round(Math.abs(seaContext.bathymetry))} m below sea level`
       : '';
 
     const lines = [
       seaName,
-      'Marine address area',
+      'Marine address area (non-postal)',
+      getMarineHierarchyLine(seaFeatures),
       cleanName(seaContext.marine_protected_area) ? `Marine protected area: ${cleanName(seaContext.marine_protected_area)}` : '',
-      getNearbyLine('Nearby marine features', seaFeatures),
+      getNearbyMarineLine('Nearby marine or seabed features', seabedFeatures),
       depth,
       areaLine,
+      getCoordinateLine(details),
       plusCode ? `Plus Code: ${plusCode}` : '',
       `Sources: ${Array.from(sources).join(', ')}`,
     ].filter(Boolean);

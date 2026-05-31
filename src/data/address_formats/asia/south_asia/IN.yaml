@@ -30,6 +30,7 @@ native:
     - key: postcode
       label: पिन कोड
       placeholder: "560038"
+      required: true
 domestic:
   en:
     name: English
@@ -61,6 +62,7 @@ domestic:
       - key: postcode
         label: PIN Code
         placeholder: "560038"
+        required: true
 english:
   name: International English
   addressFormat: |-
@@ -92,6 +94,7 @@ english:
     - key: postcode
       label: PIN Code
       placeholder: "560038"
+      required: true
 postalCode:
   format: NNNNNN
   regex: ^\d{6}$

@@ -10,7 +10,8 @@ export interface RouteNode {
   lon: number;
 }
 
-export type travelMode = 'driving' | 'walking';
+export type travelMode = 'driving' | 'walking' | 'drone';
+export type GroundTravelMode = Exclude<travelMode, 'drone'>;
 
 export interface RouteResult {
   path: RouteNode[];
@@ -26,7 +27,7 @@ export class RoutingService {
   /**
    * Fetches road data from Overpass for a bounding box.
    */
-  private static async fetchRoads(minLat: number, minLon: number, maxLat: number, maxLon: number, mode: travelMode) {
+  private static async fetchRoads(minLat: number, minLon: number, maxLat: number, maxLon: number, mode: GroundTravelMode) {
     const filters = mode === 'walking' 
       ? 'way["highway"]["footway"!="no"]["access"!="private"]'
       : 'way["highway"~"motorway|trunk|primary|secondary|tertiary|unclassified|residential"]["motor_vehicle"!="no"]["access"!="private"]';
@@ -54,7 +55,7 @@ export class RoutingService {
   /**
    * Finds the shortest path between two coordinates.
    */
-  public static async findRoute(start: [number, number], end: [number, number], mode: travelMode = 'driving'): Promise<RouteResult | null> {
+  public static async findRoute(start: [number, number], end: [number, number], mode: GroundTravelMode = 'driving'): Promise<RouteResult | null> {
     const [startLat, startLon] = start;
     const [endLat, endLon] = end;
 

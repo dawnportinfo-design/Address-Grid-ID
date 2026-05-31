@@ -53,6 +53,7 @@ domestic:
       - key: postcode
         label: Codi Postal
         placeholder: "08001"
+        required: true
       - key: city
         label: Localitat
         placeholder: Barcelona
@@ -79,6 +80,7 @@ domestic:
       - key: postcode
         label: Código Postal
         placeholder: "15701"
+        required: true
       - key: city
         label: Localidade
         placeholder: Santiago
@@ -105,6 +107,7 @@ domestic:
       - key: postcode
         label: Posta kodea
         placeholder: "48001"
+        required: true
       - key: city
         label: Herria
         placeholder: Bilbo
@@ -196,6 +199,7 @@ international:
       - key: postcode
         label: Codi postal
         placeholder: "08001"
+        required: true
       - key: city
         label: Localitat
         placeholder: Barcelona
@@ -220,6 +224,7 @@ international:
       - key: postcode
         label: Codigo postal
         placeholder: "15701"
+        required: true
       - key: city
         label: Localidade
         placeholder: Santiago de Compostela
@@ -244,6 +249,7 @@ international:
       - key: postcode
         label: Posta kodea
         placeholder: "48001"
+        required: true
       - key: city
         label: Herria
         placeholder: Bilbo

@@ -101,7 +101,7 @@
   "postalCode": {
     "format": "NNNNN",
     "regex": "^\\d{5}$",
-    "api": "https://www.moc.gov.kw/post/postcode.html",
+    "api": "https://www.moc.gov.kw/en/important-links?tab=3",
     "source": "Ministry of Communications"
   },
   "addressRules": {

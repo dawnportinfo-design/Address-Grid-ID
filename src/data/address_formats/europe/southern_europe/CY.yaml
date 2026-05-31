@@ -48,6 +48,7 @@ english:
     - key: postcode
       label: Postal Code
       placeholder: "1010"
+      required: true
     - key: city
       label: City
       placeholder: Nicosia
@@ -118,6 +119,7 @@ domestic:
         label: No.
       - key: postcode
         label: Posta Kodu
+        required: true
       - key: city
         label: Şehir
 international:
@@ -142,6 +144,7 @@ international:
       - key: postcode
         label: Tachydromikos kodikas
         placeholder: "1010"
+        required: true
       - key: city
         label: Poli
         placeholder: Lefkosia
@@ -166,6 +169,7 @@ international:
       - key: postcode
         label: Posta kodu
         placeholder: "99010"
+        required: true
       - key: city
         label: Sehir
         placeholder: Lefkosa

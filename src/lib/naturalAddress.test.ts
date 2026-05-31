@@ -22,7 +22,38 @@ test('renders marine addresses with sea name, protected area, depth, plus code, 
   assert.match(formatted, /Marine protected area: Mariana Trench Marine National Monument/);
   assert.match(formatted, /Depth: 5420 m below sea level/);
   assert.match(formatted, /Plus Code: 73H9\+22/);
-  assert.match(formatted, /Sources: Marine Regions, OpenStreetMap, open elevation\/bathymetry/);
+  assert.match(formatted, /Sources: Marine Regions, OpenStreetMap, GEBCO\/open bathymetry, Google Open Location Code/);
+});
+
+test('renders marine hierarchy, coordinates, and seabed features for open-sea locations', () => {
+  const naturalAddress = buildNaturalAddress({
+    lat: 11.35,
+    lon: 142.2,
+    sea_context: {
+      sea_name: 'Open Ocean',
+      bathymetry: -10920,
+      features: [
+        { name: 'Pacific Ocean', type: 'Ocean', distance: 0 },
+        { name: 'Philippine Sea', type: 'Sea', distance: 0 },
+        { name: 'Mariana Trench', type: 'trench', distance: 18000 },
+        { name: 'Challenger Deep', type: 'deep', distance: 2500 },
+      ],
+    },
+    plus_code: { global_code: '7Q48+22' },
+  });
+
+  assert.ok(naturalAddress);
+  assert.equal(naturalAddress.kind, 'marine');
+  assert.equal(naturalAddress.label, 'Philippine Sea');
+  assert.deepEqual(naturalAddress.lines.slice(0, 4), [
+    'Philippine Sea',
+    'Marine address area (non-postal)',
+    'Marine hierarchy: Pacific Ocean > Philippine Sea',
+    'Nearby marine or seabed features: Mariana Trench (Trench) - 18 km; Challenger Deep (Deep) - 2.5 km',
+  ]);
+  assert.ok(naturalAddress.lines.includes('Depth: 10920 m below sea level'));
+  assert.ok(naturalAddress.lines.includes('Coordinates: 11.35000, 142.20000'));
+  assert.ok(naturalAddress.lines.includes('Plus Code: 7Q48+22'));
 });
 
 test('renders mountain addresses when no street-level address exists', () => {

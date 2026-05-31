@@ -60,7 +60,8 @@
       {
         "key": "postcode",
         "label": "Postcode",
-        "placeholder": ""
+        "placeholder": "",
+        "required": true
       }
     ]
   },
@@ -68,7 +69,39 @@
     "name": "International English",
     "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{city}}, {{state}} {{postcode}}\nU.S. VIRGIN ISLANDS",
     "ordering": "small-to-big",
-    "fields": []
+    "fields": [
+      {
+        "key": "organization",
+        "label": "Building / Company",
+        "placeholder": ""
+      },
+      {
+        "key": "houseNumber",
+        "label": "House No.",
+        "placeholder": ""
+      },
+      {
+        "key": "street",
+        "label": "Street",
+        "placeholder": ""
+      },
+      {
+        "key": "city",
+        "label": "City / Town",
+        "placeholder": ""
+      },
+      {
+        "key": "state",
+        "label": "State / Province",
+        "placeholder": ""
+      },
+      {
+        "key": "postcode",
+        "label": "Postal Code",
+        "placeholder": "",
+        "required": true
+      }
+    ]
   },
   "postalCode": {
     "format": "NNNNN[-NNNN]",

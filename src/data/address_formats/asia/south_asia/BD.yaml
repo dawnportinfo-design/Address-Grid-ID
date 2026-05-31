@@ -93,7 +93,7 @@ english:
 postalCode:
   format: NNNN
   regex: ^\d{4}$
-  api: http://www.bangladeshpost.gov.bd/
+  api: https://bdpost.portal.gov.bd/
   source: Bangladesh Post / Survey of Bangladesh / OSM Bangladesh
 addressRules:
   languages:

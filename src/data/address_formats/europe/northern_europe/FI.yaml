@@ -135,6 +135,7 @@ domestic:
       - key: postcode
         label: Postnummer
         placeholder: "00100"
+        required: true
       - key: city
         label: Postort
         placeholder: Helsingfors
@@ -160,6 +161,7 @@ international:
       - key: postcode
         label: Postinumero
         placeholder: "00100"
+        required: true
       - key: city
         label: Postitoimipaikka
         placeholder: Helsinki
@@ -184,6 +186,7 @@ international:
       - key: postcode
         label: Postnummer
         placeholder: "00100"
+        required: true
       - key: city
         label: Postort
         placeholder: Helsingfors

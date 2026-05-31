@@ -54,6 +54,7 @@ english:
     - key: postcode
       label: Postal Code
       placeholder: "98000"
+      required: true
     - key: city
       label: District
       placeholder: Monaco
@@ -79,6 +80,7 @@ international:
       - key: postcode
         label: Code Postal
         placeholder: "98000"
+        required: true
       - key: city
         label: Quartier
         placeholder: Monaco

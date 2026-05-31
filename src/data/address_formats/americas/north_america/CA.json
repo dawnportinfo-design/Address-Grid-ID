@@ -78,7 +78,8 @@
         {
           "key": "postcode",
           "label": "Code postal",
-          "placeholder": "K1A 0A6"
+          "placeholder": "K1A 0A6",
+          "required": true
         }
       ]
     }
@@ -116,7 +117,8 @@
       {
         "key": "postcode",
         "label": "Postcode",
-        "placeholder": "K1A 0A6"
+        "placeholder": "K1A 0A6",
+        "required": true
       }
     ]
   },
@@ -154,7 +156,8 @@
         {
           "key": "postcode",
           "label": "Code postal",
-          "placeholder": "K1A 0A6"
+          "placeholder": "K1A 0A6",
+          "required": true
         }
       ]
     }

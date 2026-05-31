@@ -61,6 +61,7 @@ english:
     - key: postcode
       label: CEP
       placeholder: 01310-100
+      required: true
     - key: city
       label: City
       placeholder: Sao Paulo
@@ -93,6 +94,7 @@ international:
       - key: postcode
         label: CEP
         placeholder: 01310-100
+        required: true
       - key: city
         label: Cidade
         placeholder: São Paulo
