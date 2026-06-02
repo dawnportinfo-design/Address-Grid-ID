@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import {
-  buildGridFeaturesFromPackedCells,
-  buildRegularMetricGridFeatures,
-  metricSquareCellFromCorners,
-} from './gridWorkerWasm';
 import { encodeAGID } from './agid';
 import { getDisplayCellPolygon } from './gridGeometry';
+import {
+buildGridFeaturesFromPackedCells,
+buildRegularMetricGridFeatures,
+metricSquareCellFromCorners,
+} from './gridWorkerWasm';
 
 function boundsOf(poly: number[][]) {
   const ring = poly[0] === poly[poly.length - 1] ? poly.slice(0, -1) : poly;

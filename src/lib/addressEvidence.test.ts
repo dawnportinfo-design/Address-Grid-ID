@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  collectOpenSourceAddressEvidenceSources,
-  mergeOpenSourceAddressEvidence,
+collectOpenSourceAddressEvidenceSources,
+mergeOpenSourceAddressEvidence,
 } from './addressEvidence';
 
 test('merges regional postal API evidence into sparse AGID address parts', () => {

@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, rm, stat } from 'node:fs/promises';
+import { mkdtemp,readFile,rm,stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
-import { AGID_SDK_TARGETS, generateAgidSdks } from './generate-agid-sdks';
+import { AGID_SDK_TARGETS,generateAgidSdks } from './generate-agid-sdks';
 
 test('generates every requested AGID SDK package target', async () => {
   const outputDir = await mkdtemp(path.join(tmpdir(), 'agid-sdks-'));

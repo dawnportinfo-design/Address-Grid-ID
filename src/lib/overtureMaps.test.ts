@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  buildOvertureBuildingNameDuckDbSql,
-  buildingNameCandidateFromOvertureFeature,
+buildOvertureBuildingNameDuckDbSql,
+buildingNameCandidateFromOvertureFeature,
 } from './overtureMaps';
 
 test('extracts building names from Overture Maps schema names', () => {

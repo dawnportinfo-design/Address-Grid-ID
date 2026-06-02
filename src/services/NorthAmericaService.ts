@@ -16,7 +16,7 @@ export interface NorthAmericaContext {
 /**
  * Fetches regional context for North America using Overpass API.
  */
-export async function fetchNorthAmericaContext(lat: number, lon: number, cc: string): Promise<NorthAmericaContext | null> {
+export async function fetchNorthAmericaContext(lat: number, lon: number): Promise<NorthAmericaContext | null> {
   const radius = 2000;
   
   // Query for administrative boundaries (State, County) and landmarks

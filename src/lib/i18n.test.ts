@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { getLanguageDirection, hasUiTranslation, isUiLanguageSelectable, translateUi } from './i18n';
+import { getLanguageDirection,hasUiTranslation,isUiLanguageSelectable,translateUi } from './i18n';
 
 const translations = {
   en: { app_language: 'App Language', save: 'Save {{count}}' },

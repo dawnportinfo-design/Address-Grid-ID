@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import {
-  convertLibaddressinputMetadata,
-  getTerritoryDisplayName,
-  resolveAddressFormatMetadataPath,
-} from './openSourceAddressMetadata';
 import { validateAddressWithOpenSourceRules } from './addressValidation';
+import {
+convertLibaddressinputMetadata,
+getTerritoryDisplayName,
+resolveAddressFormatMetadataPath,
+} from './openSourceAddressMetadata';
 
 test('converts libaddressinput metadata into local address validation format', () => {
   const format = convertLibaddressinputMetadata({

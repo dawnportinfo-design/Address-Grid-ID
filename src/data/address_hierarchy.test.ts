@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { basename, join, relative } from 'node:path';
+import { existsSync,readdirSync,readFileSync } from 'node:fs';
+import { basename,join,relative } from 'node:path';
 import { test } from 'node:test';
 
 const root = process.cwd();

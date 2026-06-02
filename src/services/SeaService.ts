@@ -1,6 +1,6 @@
 
-import { RegionalLandmark } from './WestAsiaService';
 import { fetchWithRetry } from '../lib/utils';
+import { RegionalLandmark } from './WestAsiaService';
 
 export interface SeaContext {
   sea_name: string;

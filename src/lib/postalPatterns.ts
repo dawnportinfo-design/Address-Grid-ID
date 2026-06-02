@@ -708,22 +708,21 @@ export function applySmartPattern(agid: string, pattern: PostalPattern): string 
   const format = pattern.format;
   let result = '';
   let hashIdx = 0;
+  const nextHashValue = () => parseInt(hash[hashIdx % hash.length] || '0', 36);
+  const tokenWriters: Record<string, () => string> = {
+    N: () => String(nextHashValue() % 10),
+    A: () => String.fromCharCode((nextHashValue() % 26) + 65),
+  };
 
   for (let i = 0; i < format.length; i++) {
     const char = format[i];
-    if (char === 'N') {
-      // Map Base32 char to digit
-      const val = parseInt(hash[hashIdx % hash.length] || '0', 36) % 10;
-      result += val;
+    const writer = tokenWriters[char];
+    if (writer) {
+      result += writer();
       hashIdx++;
-    } else if (char === 'A') {
-      // Map to Alpha
-      const val = (parseInt(hash[hashIdx % hash.length] || '0', 36) % 26) + 65;
-      result += String.fromCharCode(val);
-      hashIdx++;
-    } else {
-      result += char;
+      continue;
     }
+    result += char;
   }
 
   return result;

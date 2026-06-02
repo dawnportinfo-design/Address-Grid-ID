@@ -1,11 +1,10 @@
 import { getAddressFormat } from '../data/address_formats';
-import { NO_POSTAL_COUNTRIES } from './postalPatterns';
 // import { GoogleGenAI } from "@google/genai"; // Gemini removed per user request
-import { transliterate } from './transliteration';
 import { normalizeEnglishAddressPart } from './addressEnglish';
-import { resolveEnglishAddressPartOpenSource } from './openSourceAddressResolver';
 import { formatNaturalAddress } from './naturalAddress';
+import { resolveEnglishAddressPartOpenSource } from './openSourceAddressResolver';
 import { translateWithOpenSource } from './openSourceTranslation';
+import { transliterate } from './transliteration';
 
 // --- Address Utilities ---
 
@@ -70,7 +69,6 @@ export async function generateInternationalShippingLabel(details: any, options: 
   const c = details.country_code?.slice(0, 2).toUpperCase() || "";
   
   // Use English/International as the base language for the algorithm
-  const baseLang = 'international';
   const mapping: Record<string, string> = {
     organization: details.building || details.organization || details.amenity || "",
     houseNumber: details.house_number || details.building || "",
@@ -262,6 +260,11 @@ export const LANGUAGES = [
   { code: 'es-PR', name: 'Español (Puerto Rico)', country: 'Puerto Rico', flag: '🇵🇷' },
   { code: 'es-CU', name: 'Español (Cuba)', country: 'Cuba', flag: '🇨🇺' },
   { code: 'pt-BR', name: 'Português (Brasil)', country: 'Brazil', flag: '🇧🇷' },
+  { code: 'qu', name: 'Runasimi (Quechua)', country: 'Andes', flag: '🇵🇪' },
+  { code: 'ay', name: 'Aymar aru (Aymara)', country: 'Bolivia / Peru', flag: '🇧🇴' },
+  { code: 'gn', name: "Avañe'ẽ (Guarani)", country: 'Paraguay', flag: '🇵🇾' },
+  { code: 'ht', name: 'Kreyòl ayisyen', country: 'Haiti', flag: '🇭🇹' },
+  { code: 'pap', name: 'Papiamentu', country: 'Aruba / Curaçao / Bonaire', flag: '🇨🇼' },
   { code: 'br', name: 'Brezhoneg', country: 'France', flag: '🇫🇷' },
   { code: 'oc', name: 'Occitan', country: 'France', flag: '🇫🇷' },
   { code: 'co', name: 'Corsu', country: 'France', flag: '🇫🇷' },
@@ -304,6 +307,13 @@ export const LANGUAGES = [
   { code: 'to', name: 'Lea Faka-Tonga', country: 'Tonga', flag: '🇹🇴' },
   { code: 'sm', name: 'Gagana Sāmoa', country: 'Samoa', flag: '🇼🇸' },
   { code: 'fj', name: 'Vosa Vakaviti', country: 'Fiji', flag: '🇫🇯' },
+  { code: 'mi', name: 'Te reo Māori', country: 'New Zealand', flag: '🇳🇿' },
+  { code: 'tpi', name: 'Tok Pisin', country: 'Papua New Guinea', flag: '🇵🇬' },
+  { code: 'bi', name: 'Bislama', country: 'Vanuatu', flag: '🇻🇺' },
+  { code: 'pis', name: 'Pijin', country: 'Solomon Islands', flag: '🇸🇧' },
+  { code: 'chk', name: 'Chuukese', country: 'Micronesia', flag: '🇫🇲' },
+  { code: 'yap', name: 'Yapese', country: 'Micronesia', flag: '🇫🇲' },
+  { code: 'rar', name: 'Māori Kūki Airani', country: 'Cook Islands', flag: '🇨🇰' },
   { code: 'crs', name: 'Seselwa', country: 'Seychelles', flag: '🇸🇨' },
   { code: 'mfe', name: 'Morisyen', country: 'Mauritius', flag: '🇲🇺' },
   { code: 'et', name: 'Eesti keel', country: 'Estonia', flag: '🇪🇪' },
@@ -483,6 +493,14 @@ export const COUNTRY_LANGUAGES: Record<string, string[]> = {
   'do': ['es-DO'],
   'pr': ['es-PR'],
   'cu': ['es-CU'],
+  'ht': ['fr', 'ht'],
+  'sr': ['nl'],
+  'gy': ['en'],
+  'gf': ['fr'],
+  'bq': ['nl', 'pap', 'en'],
+  'aw': ['nl', 'pap', 'en'],
+  'cw': ['nl', 'pap', 'en'],
+  'sx': ['nl', 'en'],
   'at': ['de-AT', 'de'],
   'ch': ['de-CH', 'de', 'fr', 'it', 'rm'],
   'be': ['nl', 'fr', 'de', 'wa', 'vls'],
@@ -502,6 +520,18 @@ export const COUNTRY_LANGUAGES: Record<string, string[]> = {
   'to': ['en', 'to'],
   'ws': ['en', 'sm'],
   'fj': ['en', 'fj', 'hi'],
+  'pg': ['en', 'tpi'],
+  'vu': ['bi', 'en', 'fr'],
+  'sb': ['en', 'pis'],
+  'fm': ['en', 'chk', 'yap'],
+  'nf': ['en'],
+  'cx': ['en'],
+  'cc': ['en'],
+  'ck': ['en', 'rar'],
+  'tk': ['tkl', 'en'],
+  'nu': ['niu', 'en'],
+  'pn': ['en'],
+  'aq': ['en'],
   'sc': ['en', 'crs', 'fr'],
   'mu': ['en', 'mfe', 'fr'],
   'bb': ['en-BB', 'en'],
@@ -511,7 +541,7 @@ export const COUNTRY_LANGUAGES: Record<string, string[]> = {
   'vc': ['en-VC', 'en'],
   'ag': ['en-AG', 'en'],
   'bs': ['en-BS', 'en'],
-  'bz': ['en-BZ', 'en'],
+  'bz': ['en-BZ', 'en', 'es'],
   'id': ['id'],
   'ph': ['tl', 'en-PH', 'en'],
   'vn': ['vi'],
@@ -535,6 +565,19 @@ export const COUNTRY_LANGUAGES: Record<string, string[]> = {
   'ir': ['fa', 'az', 'ku'],
   'az': ['az'],
   'il': ['he', 'ar-SA', 'en'],
+  'km': ['fr', 'ar'],
+  'dj': ['fr', 'ar'],
+  'er': ['ti', 'en'],
+  'et': ['am', 'en'],
+  'ke': ['en', 'sw'],
+  'mg': ['fr'],
+  'mw': ['en', 'ny'],
+  'rw': ['en', 'fr', 'sw'],
+  'so': ['so', 'ar', 'en'],
+  'ss': ['en'],
+  'tz': ['sw', 'en'],
+  'ug': ['en', 'sw'],
+  'zm': ['en', 'bem'],
   'kz': ['kk', 'ru'],
   'uz': ['uz', 'ru'],
   'kg': ['ky', 'ru'],
@@ -684,18 +727,7 @@ export async function formatAddress(details: any, lang: string = 'local', option
   // Fallback if no JSON spec found (legacy logic)
   if (!currentSpec && !formatDef) {
     const isBigToSmall = BIG_TO_SMALL_COUNTRIES.includes(c?.toLowerCase() || "");
-    const isNoPostal = NO_POSTAL_COUNTRIES.some(npc => npc.code === c);
     
-    const parts = {
-      poi: details.amenity || details.shop || details.office || details.tourism || details.leisure || details.railway || details.aeroway || details.historic || details.station || "",
-      country: details.country || "",
-      postcode: details.postcode || (isNoPostal && details.plus_code ? details.plus_code : ""),
-      state: details.state || details.province || details.region || "",
-      city: details.city || details.town || details.village || "",
-      suburb: details.suburb || details.neighbourhood || details.district || "",
-      road: details.road || details.street || "",
-      house: details.house_number || details.building || ""
-    };
 
     if (isBigToSmall && lang !== 'en' && !options.forceDomestic === false) {
        // ... existing legacy big-to-small logic ...

@@ -145,16 +145,7 @@
       "label": "BFPO NNN postal format",
       "required": true,
       "usage": "required"
-    },
-    "openSourceIds": [
-      "osm-nominatim",
-      "osm-overpass",
-      "openaddresses",
-      "geonames-postal",
-      "geonames-gazetteer",
-      "geoboundaries",
-      "upu-addressing"
-    ]
+    }
   },
   "openSourceIds": [
     "osm-nominatim",

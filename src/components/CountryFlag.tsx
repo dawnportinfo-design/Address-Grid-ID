@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { getFlagApiUrl, getFlagPngSrcSet } from '../lib/flagApi';
+import React,{ useState } from 'react';
+import { getFlagApiUrl,getFlagPngSrcSet } from '../lib/flagApi';
 import { cn } from '../lib/utils';
 
 interface CountryFlagProps {

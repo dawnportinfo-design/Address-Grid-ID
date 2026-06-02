@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { buildNaturalAddress, formatNaturalAddress } from './naturalAddress';
+import { buildNaturalAddress,formatNaturalAddress } from './naturalAddress';
 
 test('renders marine addresses with sea name, protected area, depth, plus code, and open sources', () => {
   const formatted = formatNaturalAddress({

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { buildDroneMissionPlan, buildDroneRouteSamples } from './droneMissionPlan';
+import { buildDroneMissionPlan,buildDroneRouteSamples } from './droneMissionPlan';
 
 test('builds a field-check flight plan from origin to target', () => {
   const plan = buildDroneMissionPlan({

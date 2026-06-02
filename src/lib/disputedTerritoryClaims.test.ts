@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  formatTerritoryClaimSummary,
-  getTerritoryClaimOptions,
-  resolveTerritoryClaimKey,
+formatTerritoryClaimSummary,
+getTerritoryClaimOptions,
+resolveTerritoryClaimKey,
 } from './disputedTerritoryClaims';
 
 test('Japanese territorial claim areas expose only the Japanese display view', () => {

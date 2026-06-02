@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { analyzeAddress, normalizeApiAddress, parseAddressText } from './addressIntelligence';
+import { analyzeAddress,normalizeApiAddress,parseAddressText } from './addressIntelligence';
 
 test('normalizes address fields from open geocoding APIs into canonical names', () => {
   assert.deepEqual(

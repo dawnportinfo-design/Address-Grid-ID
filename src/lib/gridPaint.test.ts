@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  getAgidGridCellFillPaint,
-  getAgidGridFocusFillPaint,
-  getAgidGridLinePaint,
-  getAgidSelectionFillPaint,
+getAgidGridCellFillPaint,
+getAgidGridFocusFillPaint,
+getAgidGridLinePaint,
+getAgidSelectionFillPaint,
 } from './gridPaint';
 
 test('renders unselected AGID grid cells with no fill', () => {

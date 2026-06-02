@@ -81,7 +81,7 @@ export async function fetchSouthAsiaContext(lat: number, lon: number): Promise<S
 /**
  * Fetches detailed India address using Postal Pincode API via server proxy.
  */
-export async function fetchIndiaOfficialAddress(lat: number, lon: number, pincode?: string): Promise<any | null> {
+export async function fetchIndiaOfficialAddress(pincode?: string): Promise<any | null> {
   if (!pincode) return null;
   
   try {

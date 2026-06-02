@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  buildAddressPid,
-  clusterAddressCandidates,
-  resolveAddressMorphism,
-  structuralDistance,
+buildAddressPid,
+clusterAddressCandidates,
+resolveAddressMorphism,
+structuralDistance,
 } from './addressMorphism';
 
 const tokyoStationNative = {

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname,join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
@@ -16,8 +16,8 @@ test('grid detail address language tabs use native-script labels', () => {
   assert.doesNotMatch(source, /font-black uppercase tracking-widest/);
 });
 
-test('English address tab renders from canonical data and compacts normal display text', () => {
-  assert.match(source, /clickedAddressTab === 'en'[\s\S]*?AddressRenderer\.render\('en', canonical\)/);
+test('English address tab renders international shipping English from canonical data', () => {
+  assert.match(source, /clickedAddressTab === 'en' \|\| isInternationalShippingEnglishTab\(clickedAddressTab\)[\s\S]*?AddressRenderer\.renderInternationalShippingEnglish\(canonical\)/);
   assert.match(source, /collectOpenSourceAddressEvidenceSources\(clickedAddressDetails\)/);
   assert.match(source, /assessAddressDisplayQuality\(rawAddressDisplay/);
   assert.match(source, /AddressRenderer\.renderPartialAddress\(clickedAddressTab, createCanonicalAddress\(clickedAddressDetails\)\)/);
@@ -40,6 +40,8 @@ test('disputed territory address display exposes selectable claim views', () => 
 });
 
 test('grid detail panel shows postal and geodata verification quality policy', () => {
+  assert.match(source, /executeVerifiedAddressTranslationSync/);
+  assert.match(source, /const addressValidation = verifiedAddressTranslation\?\.validation \|\| null/);
   assert.match(source, /<AddressQualitySummary validation=\{addressValidation\} \/>/);
   assert.match(addressQualitySummarySource, /getAddressQualitySummary\(validation\)/);
   assert.match(addressQualitySummarySource, /summary\.confidenceLabel/);

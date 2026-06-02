@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  getGridRenderPaddingRatio,
-  getMapViewportPoints,
-  getPaddedGridBounds,
-  getVisibleGridBounds,
-  shouldHidePartialGridForViewport,
+getGridRenderPaddingRatio,
+getMapViewportPoints,
+getPaddedGridBounds,
+getVisibleGridBounds,
+shouldHidePartialGridForViewport,
 } from './gridViewportController';
 
 test('map viewport controller samples the full viewport through the map projection', () => {

@@ -3,10 +3,10 @@
  * Global, CORDIC-rotated, Polar-ready, 12-character format.
  */
 
-import { SEA_REGIONS, LAND_REGIONS, COUNTRY_REGIONS } from './regions';
 import { COUNTRIES } from '../constants/countries';
-import { combineWasmU32Pair, getAgidWasmCore } from './agidWasm';
-export { SEA_REGIONS, LAND_REGIONS, COUNTRY_REGIONS };
+import { combineWasmU32Pair,getAgidWasmCore } from './agidWasm';
+import { COUNTRY_REGIONS,LAND_REGIONS,SEA_REGIONS } from './regions';
+export { COUNTRY_REGIONS,LAND_REGIONS,SEA_REGIONS };
 
 const BASE32_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
 const NUMBERS = "0123456789";
@@ -18,7 +18,6 @@ const OTHER_CODES = 100; // 10 Numbers * 10 Numbers
 
 const K = 2097152; // 2^21 divisions
 const M = 2097151; // 2^21 - 1
-const L = 21;
 
 /**
  * Equal-Area Transformation (E)
@@ -405,10 +404,6 @@ export interface AGIDResult {
   polygon: number[][];
 }
 
-interface AGIDOptions {
-  includePrefix?: boolean; // Setting to false skips region lookup for O(1) speed.
-  isSea?: boolean; // Override sea detection manually.
-}
 
 const CLAIM_AWARE_REGION_CODES = [
   "BT_T", "EH", "CRIM", "DONB", "KASH", "SCSD", "EEBD", "TRNC", "SLND", "PMR", "CYGL",

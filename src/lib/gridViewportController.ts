@@ -1,8 +1,8 @@
 import { gridCellsCoverBounds } from './gridGeometry';
 import {
-  GRID_VIEWPORT_RENDER_PADDING_RATIO,
-  getViewportGridBounds,
-  getViewportSamplePixelCoordinates,
+GRID_VIEWPORT_RENDER_PADDING_RATIO,
+getViewportGridBounds,
+getViewportSamplePixelCoordinates,
 } from './gridViewport';
 
 type MapViewportPoint = {

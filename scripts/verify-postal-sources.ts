@@ -1,5 +1,5 @@
-import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
+import { mkdirSync,readdirSync,readFileSync,statSync,writeFileSync } from 'node:fs';
+import { dirname,join,relative } from 'node:path';
 
 import { AFRICA_OPEN_GEO_SOURCES } from '../src/data/africaOpenGeoSources';
 import { AMERICAS_OPEN_GEO_SOURCES } from '../src/data/americasOpenGeoSources';

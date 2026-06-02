@@ -1,4 +1,4 @@
-import { agidFetch, type AgidApiResult } from '../lib/agidHttpClient';
+import { agidFetch,type AgidApiResult } from '../lib/agidHttpClient';
 
 export type CommunicationHealth = {
   rest: boolean;

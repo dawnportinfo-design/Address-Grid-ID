@@ -1,8 +1,8 @@
 
 import createGraph from 'ngraph.graph';
 import path from 'ngraph.path';
-import { fetchWithRetry } from '../lib/utils';
 import { calculateDistance } from '../lib/nav';
+import { fetchWithRetry } from '../lib/utils';
 
 export interface RouteNode {
   id: string;
@@ -124,7 +124,7 @@ export class RoutingService {
     }
 
     const pathFinder = path.nba(graph, {
-      distance(fromNode, toNode, link) { return link.data.weight; },
+      distance(link) { return link.data.weight; },
       heuristic(fromNode, toNode) {
         return calculateDistance(
           (fromNode.data as any).lat, (fromNode.data as any).lon,

@@ -1,38 +1,44 @@
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Menu, 
-  ArrowLeft, 
-  Search, 
-  QrCode, 
-  X, 
-  MapPin, 
-  ArrowUpRight, 
-  History, 
-  Clock, 
-  Sparkles, 
-  Flag, 
-  Navigation, 
-  MountainSnow, 
-  ChevronRight, 
-  Camera, 
-  Upload, 
-  ExternalLink, 
-  Truck, 
-  User, 
-  Zap, 
-  LocateFixed,
-  Globe,
-  SlidersHorizontal,
-  Crosshair,
-  Building2
+import {
+ArrowLeft,
+ArrowUpRight,
+Building2,
+Camera,
+ChevronRight,
+Clock,
+Crosshair,
+ExternalLink,
+Flag,
+Globe,
+History,
+LocateFixed,
+MapPin,
+Menu,
+MountainSnow,
+Navigation,
+QrCode,
+Search,
+SlidersHorizontal,
+Sparkles,
+Truck,
+User,
+X,
+Zap
 } from 'lucide-react';
-import { cn } from '../lib/utils';
 import maplibregl from 'maplibre-gl';
-import { AdvancedSearchOptions, AdvancedSearchCategory } from '../lib/advancedSearch';
+import { AnimatePresence,motion } from 'motion/react';
+import React,{ useState } from 'react';
+import { AdvancedSearchCategory,AdvancedSearchOptions } from '../lib/advancedSearch';
+import { cn } from '../lib/utils';
 import type { CarNavigationDestination } from '../services/NavigationDestinationService';
 import type { travelMode } from '../services/RoutingService';
+import type {
+Coordinates,
+PhotonFeature,
+RouteFeatureCollection,
+RouteStop,
+SearchResultFeature,
+} from '../types/navigation';
 
 interface SearchSidebarProps {
   t: (key: string) => string;
@@ -44,15 +50,15 @@ interface SearchSidebarProps {
   setIsGuidanceActive: (a: boolean) => void;
   searchQuery: string;
   setSearchQuery: (q: string) => void;
-  searchResults: any[];
-  setSearchResults: (r: any[]) => void;
+  searchResults: SearchResultFeature[];
+  setSearchResults: React.Dispatch<React.SetStateAction<SearchResultFeature[]>>;
   isSearching: boolean;
   searchHistory: string[];
   clearHistory: () => void;
   removeFromHistory: (q: string) => void;
   performSearch: (q: string) => void;
   handleSearch: (e: React.FormEvent) => void;
-  selectSearchResult: (r: any) => void;
+  selectSearchResult: (r: SearchResultFeature) => void;
   getCurrentMapCenter: () => { lat: number, lng: number } | null;
   showCoordinateSearch: boolean;
   setShowCoordinateSearch: (s: boolean) => void;
@@ -65,17 +71,17 @@ interface SearchSidebarProps {
   toggleTracking: () => void;
   isTracking: boolean;
   isLocating: boolean;
-  userLocation: any;
-  destination: any;
-  setDestination: (d: any) => void;
+  userLocation: Coordinates | null;
+  destination: RouteStop | null;
+  setDestination: React.Dispatch<React.SetStateAction<RouteStop | null>>;
   destinationQuery: string;
   setDestinationQuery: (q: string) => void;
-  origin: any;
-  setOrigin: (o: any) => void;
+  origin: RouteStop | null;
+  setOrigin: React.Dispatch<React.SetStateAction<RouteStop | null>>;
   originQuery: string;
   setOriginQuery: (q: string) => void;
-  routeData: any;
-  setRouteData: (d: any) => void;
+  routeData: RouteFeatureCollection | null;
+  setRouteData: React.Dispatch<React.SetStateAction<RouteFeatureCollection | null>>;
   carNavigationDestination?: CarNavigationDestination | null;
   isNavigating: boolean;
   setIsNavigating: (n: boolean) => void;
@@ -86,10 +92,10 @@ interface SearchSidebarProps {
   isRoutingLoading: boolean;
   openExternalMap: (app: string) => void;
   defaultNavApp: string;
-  originResults: any[];
-  destinationResults: any[];
-  selectOrigin: (f: any) => void;
-  selectDestination: (f: any) => void;
+  originResults: PhotonFeature[];
+  destinationResults: PhotonFeature[];
+  selectOrigin: (f: PhotonFeature) => void;
+  selectDestination: (f: PhotonFeature) => void;
   mapRef: React.MutableRefObject<maplibregl.Map | null>;
 }
 
@@ -136,13 +142,11 @@ export const SearchSidebar: React.FC<SearchSidebarProps> = ({
   routeData,
   setRouteData,
   carNavigationDestination,
-  isNavigating,
   setIsNavigating,
   routingMode,
   setRoutingMode,
   useBidirectionalDijkstra,
   setUseBidirectionalDijkstra,
-  isRoutingLoading,
   openExternalMap,
   defaultNavApp,
   originResults,

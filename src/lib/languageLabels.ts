@@ -1,3 +1,5 @@
+import { normalizeLanguageCode } from './languageCodeRules';
+
 type EnglishTabMode = 'plain' | 'domestic' | 'international';
 type EnglishAddressCircle = 'inner' | 'outer' | 'expanding';
 
@@ -20,6 +22,7 @@ const LANGUAGE_NATIVE_LABEL_OVERRIDES: Record<string, string> = {
   ar: 'العربية',
   as: 'অসমীয়া',
   az: 'Azərbaycanca',
+  ay: 'Aymar aru',
   be: 'Беларуская',
   bem: 'IciBemba',
   bg: 'Български',
@@ -29,6 +32,7 @@ const LANGUAGE_NATIVE_LABEL_OVERRIDES: Record<string, string> = {
   brx: 'बड़ो',
   bs: 'Bosanski',
   ca: 'Català',
+  chk: 'Chuukese',
   cnr: 'Crnogorski',
   co: 'Corsu',
   crh: 'Qırımtatarca',
@@ -60,12 +64,14 @@ const LANGUAGE_NATIVE_LABEL_OVERRIDES: Record<string, string> = {
   gd: 'Gàidhlig',
   gil: 'Kiribati',
   gl: 'Galego',
+  gn: "Avañe'ẽ",
   gu: 'ગુજરાતી',
   ha: 'Hausa',
   he: 'עברית',
   hi: 'हिन्दी',
   hr: 'Hrvatski',
   hsb: 'Hornjoserbšćina',
+  ht: 'Kreyòl ayisyen',
   hu: 'Magyar',
   hy: 'Հայերեն',
   id: 'Bahasa Indonesia',
@@ -94,6 +100,7 @@ const LANGUAGE_NATIVE_LABEL_OVERRIDES: Record<string, string> = {
   mfe: 'Morisyen',
   mg: 'Malagasy',
   mh: 'Kajin M̧ajeļ',
+  mi: 'Te reo Māori',
   mk: 'Македонски',
   ml: 'മലയാളം',
   mn: 'Монгол',
@@ -112,12 +119,15 @@ const LANGUAGE_NATIVE_LABEL_OVERRIDES: Record<string, string> = {
   or: 'ଓଡ଼ିଆ',
   pap: 'Papiamentu',
   pau: 'Belau',
+  pis: 'Pijin',
   ps: 'پښتو',
   pt: 'Português',
+  qu: 'Runasimi',
   rm: 'Rumantsch',
   ro: 'Română',
   ru: 'Русский',
   rw: 'Ikinyarwanda',
+  rar: 'Māori Kūki Airani',
   sa: 'संस्कृतम्',
   sat: 'ᱥᱟᱱᱛᱟᱲᱤ',
   sc: 'Sardu',
@@ -144,6 +154,7 @@ const LANGUAGE_NATIVE_LABEL_OVERRIDES: Record<string, string> = {
   tl: 'Tagalog',
   tn: 'Setswana',
   to: 'Lea Faka-Tonga',
+  tpi: 'Tok Pisin',
   tr: 'Türkçe',
   tvl: 'Tuvalu',
   uk: 'Українська',
@@ -151,6 +162,7 @@ const LANGUAGE_NATIVE_LABEL_OVERRIDES: Record<string, string> = {
   uz: 'Oʻzbek',
   vi: 'Tiếng Việt',
   yue: '廣東話',
+  yap: 'Yapese',
   zh: '中文',
   'zh-Hans': '简体中文',
   'zh-Hant': '繁體中文',
@@ -158,23 +170,13 @@ const LANGUAGE_NATIVE_LABEL_OVERRIDES: Record<string, string> = {
   xh: 'isiXhosa',
 };
 
+const PRESERVED_LANGUAGE_LABEL_CODES = new Set([
+  ...Object.keys(SPECIAL_ADDRESS_TAB_LABELS),
+  ...Object.keys(LANGUAGE_NATIVE_LABEL_OVERRIDES),
+]);
+
 function normalizeLanguageLabelCode(code: string) {
-  const value = code.trim();
-  if (!value) return value;
-  if (SPECIAL_ADDRESS_TAB_LABELS[value]) return value;
-  if (LANGUAGE_NATIVE_LABEL_OVERRIDES[value]) return value;
-  if (value.startsWith('zh-Hans') || value === 'zh-CN' || value === 'zh-SG') return 'zh-Hans';
-  if (value.startsWith('zh-Hant') || value === 'zh-TW' || value === 'zh-HK' || value === 'zh-MO') return 'zh-Hant';
-  if (value.startsWith('en')) return 'en';
-  if (value.startsWith('pt')) return 'pt';
-  if (value.startsWith('es')) return 'es';
-  if (value.startsWith('fr')) return 'fr';
-  if (value.startsWith('de')) return 'de';
-  if (value.startsWith('ar')) return 'ar';
-  if (value.startsWith('fa')) return 'fa';
-  if (value === 'fil') return 'tl';
-  if (value === 'nb' || value === 'nn') return 'no';
-  return value.split('-')[0].toLowerCase();
+  return normalizeLanguageCode(code, { preserveExact: PRESERVED_LANGUAGE_LABEL_CODES });
 }
 
 function titleCaseLatinInitial(label: string) {

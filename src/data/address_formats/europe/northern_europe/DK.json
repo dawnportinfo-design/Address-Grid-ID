@@ -134,26 +134,7 @@
       "label": "4 digits required",
       "required": true,
       "usage": "required"
-    },
-    "openSourceIds": [
-      "dataforsyningen-denmark",
-      "osm-nominatim",
-      "osm-overpass",
-      "openaddresses",
-      "geonames-postal",
-      "geonames-gazetteer",
-      "geoboundaries",
-        "upu-addressing",
-      "danish-address-register-dar",
-      "geodanmark",
-      "copernicus-dem",
-      "copernicus-corine-land-cover",
-      "emodnet-bathymetry",
-      "emodnet-seabed-habitats",
-      "eea-natura-2000",
-      "eea-eunis-habitats",
-      "jrc-esdac-soils"
-    ]
+    }
   },
   "openSourceIds": [
     "dataforsyningen-denmark",
@@ -163,7 +144,7 @@
     "geonames-postal",
     "geonames-gazetteer",
     "geoboundaries",
-      "upu-addressing",
+    "upu-addressing",
     "danish-address-register-dar",
     "geodanmark",
     "copernicus-dem",

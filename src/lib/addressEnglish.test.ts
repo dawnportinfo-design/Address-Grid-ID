@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { normalizeEnglishAddressBuildingName, normalizeEnglishAddressPart, renderEnglishPostalAddress } from './addressEnglish';
+import { normalizeEnglishAddressBuildingName,normalizeEnglishAddressPart,renderEnglishPostalAddress } from './addressEnglish';
 
 test('romanizes Japanese address parts by script instead of country-code passthrough', () => {
   assert.equal(normalizeEnglishAddressPart('東京都', 'JP'), 'Tokyo');

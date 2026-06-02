@@ -2,12 +2,12 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  buildDroneObstacleOverpassQuery,
-  resolveDroneAltitudeConstraint,
-  resolveDroneNavigationPoint,
-  snapCentimetersToStep,
-  summarizeDroneObstacleRisk,
-  type DroneElevationData,
+buildDroneObstacleOverpassQuery,
+resolveDroneAltitudeConstraint,
+resolveDroneNavigationPoint,
+snapCentimetersToStep,
+summarizeDroneObstacleRisk,
+type DroneElevationData,
 } from './droneNavigation';
 import type { OsmElementLike } from './navigationDestination';
 

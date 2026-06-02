@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  buildRegisteredAddressQrPayload,
-  buildRegisteredAddressRecord,
-  buildSavedQrFromRegisteredAddress,
-  parseRegisteredAddressQrPayload,
+buildRegisteredAddressQrPayload,
+buildRegisteredAddressRecord,
+buildSavedQrFromRegisteredAddress,
+parseRegisteredAddressQrPayload,
 } from './registeredAddressQr';
 
 test('registered address records keep address data and round-trip through QR payloads', () => {

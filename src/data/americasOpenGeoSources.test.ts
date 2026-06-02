@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  AMERICAS_COUNTRY_CODES,
-  AMERICAS_OPEN_GEO_SOURCES,
-  getAmericasOpenSourceIds,
+AMERICAS_COUNTRY_CODES,
+AMERICAS_OPEN_GEO_SOURCES,
+getAmericasOpenSourceIds,
 } from './americasOpenGeoSources';
 
 const REQUIRED_AMERICAS_NATURAL_SOURCE_IDS = [

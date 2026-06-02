@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  fetchCountryBoundary,
-  fetchCountryCities,
-  fetchCountryStats,
-  fetchDataQualityReport,
-  searchOsmRegion,
+fetchCountryBoundary,
+fetchCountryCities,
+fetchCountryStats,
+fetchDataQualityReport,
+searchOsmRegion,
 } from './GeoAdminService';
 
 function jsonResponse(value: unknown) {

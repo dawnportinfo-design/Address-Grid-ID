@@ -1,4 +1,4 @@
-import { wgs84togcj02, wgs84tobd09 } from './coordTransform';
+import { wgs84tobd09,wgs84togcj02 } from './coordTransform';
 
 export type MapProvider = 'google' | 'apple' | 'amap' | 'baidu' | 'osmand' | 'organic_maps' | 'waze';
 

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { assessAddressDisplayQuality, formatAddressDisplayText, shouldPreserveAddressDisplayLines } from './addressDisplay';
+import { assessAddressDisplayQuality,formatAddressDisplayText,shouldPreserveAddressDisplayLines } from './addressDisplay';
 
 test('regular English address display is compact and removes needless line breaks', () => {
   assert.equal(

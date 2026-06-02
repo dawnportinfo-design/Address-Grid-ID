@@ -1,4 +1,5 @@
-import type { SyncQueueAction, SyncQueueRecord } from './appDatabase';
+import type { SyncQueueAction,SyncQueueRecord } from './appDatabase';
+import { getHybridSyncEntityPolicy } from './hybridArchitecture';
 
 export type SyncQueueInput = {
   entityType: SyncQueueRecord['entityType'];
@@ -75,3 +76,6 @@ export function getFlushableSyncQueueRecords(
     .slice(0, limit);
 }
 
+export function getSyncQueueHybridPolicy(entityType: SyncQueueRecord['entityType']) {
+  return getHybridSyncEntityPolicy(entityType);
+}

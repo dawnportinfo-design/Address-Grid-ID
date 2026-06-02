@@ -1,11 +1,11 @@
 import React from 'react';
 
 import {
-  loadAppDatabaseSnapshot,
-  persistAoids,
-  persistRegisteredAddresses,
-  persistSavedAgids,
-  persistSavedQrs,
+loadAppDatabaseSnapshot,
+persistAoids,
+persistRegisteredAddresses,
+persistSavedAgids,
+persistSavedQrs,
 } from '../lib/appDatabase';
 import type { RegisteredAddressRecord } from '../lib/registeredAddressQr';
 

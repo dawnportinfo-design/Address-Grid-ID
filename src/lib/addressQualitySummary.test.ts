@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import type { AddressValidationResult } from './addressValidation';
 import { getAddressQualitySummary } from './addressQualitySummary';
+import type { AddressValidationResult } from './addressValidation';
 
 const baseValidation: AddressValidationResult = {
   status: 'verified',

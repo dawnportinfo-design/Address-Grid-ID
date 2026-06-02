@@ -1,7 +1,7 @@
 import {
-  POLAR_OPEN_GEO_SOURCES,
-  getPolarOpenSourceIds,
-  type PolarOpenGeoSourceId,
+POLAR_OPEN_GEO_SOURCES,
+getPolarOpenSourceIds,
+type PolarOpenGeoSourceId,
 } from './polarOpenGeoSources';
 
 export type EuropeOpenGeoSourceId =
@@ -1722,29 +1722,29 @@ export const EUROPE_OPEN_GEO_SOURCES: Record<EuropeOpenGeoSourceId, EuropeOpenGe
   'postnord-greenland': {
     id: 'postnord-greenland',
     name: 'PostNord Greenland Postal Codes',
-    url: 'https://www.postnord.dk/en',
+    url: 'https://www.postnord.dk/en/tools/find-postcode',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
-    notes: 'Greenland postal-code reference through Danish/PostNord postal conventions.',
+    notes: 'PostNord postcode finder used for Greenland postal-code reference and addressing conventions.',
   },
   'postnord-faroe': {
     id: 'postnord-faroe',
     name: 'PostNord Faroe Islands Postal Codes',
-    url: 'https://www.postnord.dk/en',
+    url: 'https://www.postnord.dk/en/tools/find-postcode',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
-    notes: 'Faroe Islands postal-code reference through Danish/PostNord postal conventions.',
+    notes: 'PostNord postcode finder used for Faroe Islands postal-code reference and addressing conventions.',
   },
   'posten-norway-svalbard': {
     id: 'posten-norway-svalbard',
     name: 'Posten Norway Svalbard and Jan Mayen Postal Reference',
-    url: 'https://www.posten.no/en/',
+    url: 'https://adressesok.posten.no/',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
-    notes: 'Norwegian postal reference for Svalbard and Jan Mayen mail routing.',
+    notes: 'Posten address and postcode search tool used for Svalbard and Jan Mayen postal routing reference.',
   },
   'armstat-geodata': {
     id: 'armstat-geodata',

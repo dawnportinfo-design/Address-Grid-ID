@@ -1,6 +1,68 @@
-import { normalizeEnglishAddressBuildingName, normalizeEnglishAddressPart } from './addressEnglish';
 import { normalizeRegistrationAddressLanguage } from './addressRegistrationState';
+import {
+getAmericasAddressTranslationProfile,
+translateAmericasAddressField,
+} from './americasAddressTranslation';
+import {
+getCentralAfricaAddressTranslationProfile,
+translateCentralAfricaAddressField,
+} from './centralAfricaAddressTranslation';
+import {
+getCentralAsiaAddressTranslationProfile,
+translateCentralAsiaAddressField,
+} from './centralAsiaAddressTranslation';
+import {
+getCentralEuropeAddressTranslationProfile,
+translateCentralEuropeAddressField,
+} from './centralEuropeAddressTranslation';
+import {
+getEastAfricaAddressTranslationProfile,
+translateEastAfricaAddressField,
+} from './eastAfricaAddressTranslation';
+import { getEastAsiaAddressTranslationProfile,translateEastAsiaAddressField } from './eastAsiaAddressTranslation';
+import {
+getEasternEuropeAddressTranslationProfile,
+translateEasternEuropeAddressField,
+} from './easternEuropeAddressTranslation';
+import { normalizeEnglishAddressModeField } from './englishAddressMode';
+import {
+getNorthernEuropeAddressTranslationProfile,
+translateNorthernEuropeAddressField,
+} from './northernEuropeAddressTranslation';
+import {
+getOceaniaAddressTranslationProfile,
+translateOceaniaAddressField,
+} from './oceaniaAddressTranslation';
+import { shouldUseOpenSourceTranslationBeforeLocalFallback } from './openSourceAddressResolutionStrategy';
 import { translateWithOpenSource } from './openSourceTranslation';
+import {
+getSouthAsiaAddressTranslationProfile,
+translateSouthAsiaAddressField,
+} from './southAsiaAddressTranslation';
+import {
+getSoutheastAsiaAddressTranslationProfile,
+translateSoutheastAsiaAddressField,
+} from './southeastAsiaAddressTranslation';
+import {
+getSouthernAfricaAddressTranslationProfile,
+translateSouthernAfricaAddressField,
+} from './southernAfricaAddressTranslation';
+import {
+getSouthernEuropeAddressTranslationProfile,
+translateSouthernEuropeAddressField,
+} from './southernEuropeAddressTranslation';
+import {
+getWestAfricaAddressTranslationProfile,
+translateWestAfricaAddressField,
+} from './westAfricaAddressTranslation';
+import {
+getWestAsiaAddressTranslationProfile,
+translateWestAsiaAddressField,
+} from './westAsiaAddressTranslation';
+import {
+getWesternEuropeAddressTranslationProfile,
+translateWesternEuropeAddressField,
+} from './westernEuropeAddressTranslation';
 
 export type RegistrationFormRecord = Record<string, unknown> & {
   country?: string;
@@ -170,9 +232,14 @@ export async function buildPostcodeAutofillLanguageDrafts<T extends Registration
   const localDraft = mergePostcodeAutofill(options.formData, options.patch);
   const drafts: Record<string, T> = { local: localDraft };
   const uniqueTabs = Array.from(new Set(options.languageTabs.map(normalizeRegistrationAddressLanguage)));
+  const primaryLocalTab = uniqueTabs.find(tabCode => tabCode && tabCode !== 'local' && tabCode !== 'en') || null;
 
   await Promise.all(uniqueTabs.map(async (tabCode) => {
     if (!tabCode || tabCode === 'local') return;
+    if (tabCode === primaryLocalTab) {
+      drafts[tabCode] = localDraft;
+      return;
+    }
     drafts[tabCode] = await translateRegistrationFormFields({
       formData: localDraft,
       targetLanguage: tabCode,
@@ -203,10 +270,6 @@ function shouldTranslateField(key: string, value: unknown) {
   return true;
 }
 
-function shouldUseBuildingNameEnglish(key: string) {
-  return ['building', 'organization', 'company', 'poi', 'amenity', 'shop', 'office', 'tourism'].includes(key);
-}
-
 export async function translateRegistrationFormFields<T extends RegistrationFormRecord>(options: {
   formData: T;
   targetLanguage: string;
@@ -217,19 +280,297 @@ export async function translateRegistrationFormFields<T extends RegistrationForm
   const target = normalizeRegistrationAddressLanguage(options.targetLanguage);
   const countryCode = (options.countryCode || options.formData.country || '').toUpperCase();
   const translated: RegistrationFormRecord = { ...options.formData };
+  const eastAsiaProfile = getEastAsiaAddressTranslationProfile(countryCode);
+  const southeastAsiaProfile = getSoutheastAsiaAddressTranslationProfile(countryCode);
+  const southAsiaProfile = getSouthAsiaAddressTranslationProfile(countryCode);
+  const centralAsiaProfile = getCentralAsiaAddressTranslationProfile(countryCode);
+  const westAsiaProfile = getWestAsiaAddressTranslationProfile(countryCode);
+  const americasProfile = getAmericasAddressTranslationProfile(countryCode);
+  const oceaniaProfile = getOceaniaAddressTranslationProfile(countryCode);
+  const westernEuropeProfile = getWesternEuropeAddressTranslationProfile(countryCode);
+  const southernEuropeProfile = getSouthernEuropeAddressTranslationProfile(countryCode);
+  const centralEuropeProfile = getCentralEuropeAddressTranslationProfile(countryCode);
+  const northernEuropeProfile = getNorthernEuropeAddressTranslationProfile(countryCode);
+  const easternEuropeProfile = getEasternEuropeAddressTranslationProfile(countryCode);
+  const eastAfricaProfile = getEastAfricaAddressTranslationProfile(countryCode);
+  const southernAfricaProfile = getSouthernAfricaAddressTranslationProfile(countryCode);
+  const centralAfricaProfile = getCentralAfricaAddressTranslationProfile(countryCode);
+  const westAfricaProfile = getWestAfricaAddressTranslationProfile(countryCode);
 
   if (target === 'local') return translated as T;
 
   const translator = options.translator || defaultTranslator;
+  const hasCustomTranslator = Boolean(options.translator);
 
   await Promise.all(Object.entries(options.formData).map(async ([key, value]) => {
     if (!shouldTranslateField(key, value)) return;
     const text = clean(value);
 
+    if (shouldUseOpenSourceTranslationBeforeLocalFallback({
+      hasCustomTranslator,
+      fieldKey: key,
+      text,
+      sourceLanguage: options.sourceLanguage,
+      targetLanguage: target,
+    })) {
+      const openSourceTranslated = await translator({
+        text,
+        target,
+        source: options.sourceLanguage,
+      });
+      if (openSourceTranslated?.trim()) {
+        translated[key] = openSourceTranslated.trim();
+        return;
+      }
+    }
+
+    if (eastAsiaProfile) {
+      const eastAsiaTranslated = await translateEastAsiaAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (eastAsiaTranslated?.text.trim()) {
+        translated[key] = eastAsiaTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (southeastAsiaProfile) {
+      const southeastAsiaTranslated = await translateSoutheastAsiaAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (southeastAsiaTranslated?.text.trim()) {
+        translated[key] = southeastAsiaTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (southAsiaProfile) {
+      const southAsiaTranslated = await translateSouthAsiaAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (southAsiaTranslated?.text.trim()) {
+        translated[key] = southAsiaTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (centralAsiaProfile) {
+      const centralAsiaTranslated = await translateCentralAsiaAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (centralAsiaTranslated?.text.trim()) {
+        translated[key] = centralAsiaTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (westAsiaProfile) {
+      const westAsiaTranslated = await translateWestAsiaAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (westAsiaTranslated?.text.trim()) {
+        translated[key] = westAsiaTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (americasProfile) {
+      const americasTranslated = await translateAmericasAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (americasTranslated?.text.trim()) {
+        translated[key] = americasTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (oceaniaProfile) {
+      const oceaniaTranslated = await translateOceaniaAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (oceaniaTranslated?.text.trim()) {
+        translated[key] = oceaniaTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (westernEuropeProfile) {
+      const westernEuropeTranslated = await translateWesternEuropeAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (westernEuropeTranslated?.text.trim()) {
+        translated[key] = westernEuropeTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (southernEuropeProfile) {
+      const southernEuropeTranslated = await translateSouthernEuropeAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (southernEuropeTranslated?.text.trim()) {
+        translated[key] = southernEuropeTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (centralEuropeProfile) {
+      const centralEuropeTranslated = await translateCentralEuropeAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (centralEuropeTranslated?.text.trim()) {
+        translated[key] = centralEuropeTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (northernEuropeProfile) {
+      const northernEuropeTranslated = await translateNorthernEuropeAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (northernEuropeTranslated?.text.trim()) {
+        translated[key] = northernEuropeTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (easternEuropeProfile) {
+      const easternEuropeTranslated = await translateEasternEuropeAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (easternEuropeTranslated?.text.trim()) {
+        translated[key] = easternEuropeTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (eastAfricaProfile) {
+      const eastAfricaTranslated = await translateEastAfricaAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (eastAfricaTranslated?.text.trim()) {
+        translated[key] = eastAfricaTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (southernAfricaProfile) {
+      const southernAfricaTranslated = await translateSouthernAfricaAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (southernAfricaTranslated?.text.trim()) {
+        translated[key] = southernAfricaTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (centralAfricaProfile) {
+      const centralAfricaTranslated = await translateCentralAfricaAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (centralAfricaTranslated?.text.trim()) {
+        translated[key] = centralAfricaTranslated.text.trim();
+      }
+      return;
+    }
+
+    if (westAfricaProfile) {
+      const westAfricaTranslated = await translateWestAfricaAddressField({
+        countryCode,
+        fieldKey: key,
+        text,
+        sourceLanguage: options.sourceLanguage,
+        targetLanguage: target,
+        translator,
+      });
+      if (westAfricaTranslated?.text.trim()) {
+        translated[key] = westAfricaTranslated.text.trim();
+      }
+      return;
+    }
+
     if (target === 'en' || target === 'en_domestic') {
-      const english = shouldUseBuildingNameEnglish(key)
-        ? normalizeEnglishAddressBuildingName(text, countryCode)
-        : normalizeEnglishAddressPart(text, countryCode);
+      const english = normalizeEnglishAddressModeField({
+        countryCode,
+        fieldKey: key,
+        text,
+        mode: target === 'en_domestic' ? 'domestic' : 'international-shipping',
+      });
       if (english) translated[key] = english;
       return;
     }

@@ -1,5 +1,7 @@
 /// <reference types="vite/client" />
 
+import { hydrateAddressFormat } from './addressFormatCommon';
+
 export interface AddressField {
   key: string;
   label: string;
@@ -88,7 +90,7 @@ export async function getAddressFormat(countryCode: string): Promise<AddressForm
 
   try {
     const module = await formatModules[path]() as any;
-    return module.default as AddressFormat;
+    return hydrateAddressFormat(module.default as AddressFormat);
   } catch (error) {
     console.warn(`Address format for ${code} failed to load:`, error);
     return null;

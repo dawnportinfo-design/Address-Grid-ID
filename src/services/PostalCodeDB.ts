@@ -1,13 +1,11 @@
-import https from 'https';
-import http from 'http';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import AdmZip from 'adm-zip';
-import KDBush from 'kdbush';
+import fs from 'fs';
 import * as geokdbush from 'geokdbush';
+import http from 'http';
+import https from 'https';
+import KDBush from 'kdbush';
+import path from 'path';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.join(process.cwd(), 'data', 'postal_codes');
 
 // Supported countries for this feature (Asia, Spanish-speaking regions)

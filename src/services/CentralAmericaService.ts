@@ -16,7 +16,7 @@ export interface CentralAmericaContext {
 /**
  * Fetches regional context for Central America using Overpass API.
  */
-export async function fetchCentralAmericaContext(lat: number, lon: number, cc: string): Promise<CentralAmericaContext | null> {
+export async function fetchCentralAmericaContext(lat: number, lon: number): Promise<CentralAmericaContext | null> {
   const radius = 2500;
   
   // Query for administrative boundaries (Department/Province, Municipality) and landmarks

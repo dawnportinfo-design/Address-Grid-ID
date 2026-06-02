@@ -77,24 +77,13 @@ export function latLonToOSGrid(lat: number, lon: number): OSGridRef | null {
 function formatGridRef(E: number, N: number): string {
   if (E < 0 || E >= 700000 || N < 0 || N >= 1300000) return "";
 
-  const gridChars = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
-  const e1 = Math.floor(E / 500000);
-  const n1 = Math.floor(N / 500000);
   
   // First letter
-  const tmp = e1 + n1 * 5;
-  const f1 = 19 - Math.floor(tmp / 5) * 5 + (tmp % 5);
-  const char1 = gridChars.charAt(f1 - 1); // This is a bit complex, using a simpler mapping for now
   
   // Standard OS Grid Letters mapping
-  const l1 = Math.floor(E / 500000) + Math.floor(N / 500000) * 0.5; // Placeholder logic
   
   // Real OS Grid Letter Logic
-  const eGrid = Math.floor(E / 100000);
-  const nGrid = Math.floor(N / 100000);
   
-  const grid1 = Math.floor(eGrid / 5) + Math.floor(nGrid / 5) * 5;
-  const grid2 = (eGrid % 5) + (nGrid % 5) * 5;
   
   // Mapping for the two-letter prefix
   // This is a standard 100km square identification

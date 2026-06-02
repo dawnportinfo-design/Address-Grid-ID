@@ -1,5 +1,5 @@
-import { getEnglishAddressCircle, isEnglishAddressCountry, type EnglishAddressCircle } from './languageTabs';
 import { getAddressLanguageTabLabel } from './languageLabels';
+import { getEnglishAddressCircle,isEnglishAddressCountry,type EnglishAddressCircle } from './languageTabs';
 
 const REGISTRATION_UI_LANGUAGES = new Set(['en', 'ja', 'de', 'zh-Hant', 'zh-Hans', 'es', 'pt', 'fr', 'ar']);
 
@@ -237,12 +237,11 @@ export function selectRegistrationAddressFormat(
 
   const nativeCode = inferLanguageCodeFromName(format.native?.name);
   if (nativeCode && normalizeRegistrationAddressLanguage(nativeCode) === normalized) {
-    return format.native || findFormatByLanguage(format.domestic, normalized) || findFormatByLanguage(format.international, normalized);
+    return format.native || findFormatByLanguage(format.domestic, normalized);
   }
 
   return (
     findFormatByLanguage(format.domestic, normalized) ||
-    findFormatByLanguage(format.international, normalized) ||
     format.native ||
     format.english
   );

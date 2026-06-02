@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
-import { afterEach, test } from 'node:test';
+import { afterEach,test } from 'node:test';
 
 import {
-  resolveDroneNavigationPoint,
-  shouldUseDroneNavigation,
+resolveDroneNavigationPoint,
+shouldUseDroneNavigation,
 } from './DroneNavigationService';
 
 const originalFetch = globalThis.fetch;

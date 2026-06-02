@@ -1,7 +1,7 @@
 import type {
-  DroneAltitudeMode,
-  DroneSafetyLevel,
-  ResolvedDroneNavigationPoint,
+DroneAltitudeMode,
+DroneSafetyLevel,
+ResolvedDroneNavigationPoint,
 } from '../lib/droneNavigation';
 import type { AppNavigationPoint } from './NavigationDestinationService';
 

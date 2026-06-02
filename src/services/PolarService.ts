@@ -1,11 +1,11 @@
 
-import { RegionalLandmark } from './WestAsiaService';
-import { fetchWithRetry } from '../lib/utils';
 import {
-  type PolarOpenGeoSource,
-  getPolarOpenGeoSourcesForCoordinate,
-  getPolarOpenSourceIdsForCoordinate,
+type PolarOpenGeoSource,
+getPolarOpenGeoSourcesForCoordinate,
+getPolarOpenSourceIdsForCoordinate,
 } from '../data/polarOpenGeoSources';
+import { fetchWithRetry } from '../lib/utils';
+import { RegionalLandmark } from './WestAsiaService';
 
 export interface PolarContext {
   region: string;

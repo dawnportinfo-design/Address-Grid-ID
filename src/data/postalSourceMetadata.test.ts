@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { readdirSync,readFileSync,statSync } from 'node:fs';
+import { join,relative } from 'node:path';
 import { test } from 'node:test';
 
 import { AFRICA_OPEN_GEO_SOURCES } from './africaOpenGeoSources';

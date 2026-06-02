@@ -88,7 +88,7 @@ export type RegularMetricGridMetrics = {
   lonStep: number;
 };
 
-export function getRegularMetricGridMetrics(zoom: number, anchorLat: number): RegularMetricGridMetrics {
+export function getRegularMetricGridMetrics(zoom: number, _anchorLat: number): RegularMetricGridMetrics {
   const step = getDisplayGridStep(zoom);
   const cellMeters = AGID_BASE_CELL_METERS * step;
   const latStep = cellMeters / EARTH_METERS_PER_DEGREE;

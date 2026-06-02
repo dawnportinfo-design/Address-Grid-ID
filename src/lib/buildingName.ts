@@ -371,8 +371,6 @@ export function buildBuildingNameOverpassQuery(lat: number, lon: number, radius 
 
 export function buildingNameCandidateFromOsmElement(
   element: any,
-  originLat: number,
-  originLon: number,
   langCode = '',
   distanceMeters?: number,
 ): BuildingNameCandidate | null {

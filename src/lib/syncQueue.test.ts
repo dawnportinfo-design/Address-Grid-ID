@@ -2,11 +2,12 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  buildSyncQueueRecord,
-  getFlushableSyncQueueRecords,
-  getSyncBackoffMs,
-  markSyncQueueRecordFailed,
-  markSyncQueueRecordSending,
+buildSyncQueueRecord,
+getFlushableSyncQueueRecords,
+getSyncBackoffMs,
+getSyncQueueHybridPolicy,
+markSyncQueueRecordFailed,
+markSyncQueueRecordSending,
 } from './syncQueue';
 
 test('builds stable local-first sync queue records', () => {
@@ -52,3 +53,8 @@ test('sync backoff is capped for repeated failures', () => {
   assert.equal(getSyncBackoffMs(99), 5 * 60 * 1000);
 });
 
+test('sync queue exposes the central/device hybrid policy for each entity type', () => {
+  assert.equal(getSyncQueueHybridPolicy('savedAgid').centralRole, 'none');
+  assert.equal(getSyncQueueHybridPolicy('registeredAddress').centralRole, 'optional-private-sync');
+  assert.equal(getSyncQueueHybridPolicy('settings').privacyScope, 'settings');
+});

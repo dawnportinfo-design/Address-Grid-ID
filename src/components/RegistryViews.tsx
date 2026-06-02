@@ -1,14 +1,14 @@
 
-import React, { useState, useMemo } from 'react';
-import { motion } from 'motion/react';
-import { 
-  X, 
-  Search, 
-  ArrowLeft, 
-  ChevronRight, 
-  Waves, 
-  Globe 
+import {
+ArrowLeft,
+ChevronRight,
+Globe,
+Search,
+Waves,
+X
 } from 'lucide-react';
+import { motion } from 'motion/react';
+import { useMemo,useState } from 'react';
 
 // --- Utility: Get major category for countries ---
 const MAJOR_CATEGORIES = [

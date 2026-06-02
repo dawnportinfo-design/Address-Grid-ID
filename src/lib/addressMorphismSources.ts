@@ -1,7 +1,7 @@
 import type { AddressFormat } from '../data/address_formats';
+import { normalizeEnglishAddressPart } from './addressEnglish';
 import type { CanonicalAddressParts } from './addressIntelligence';
 import type { AddressMorphismCandidate } from './addressMorphism';
-import { normalizeEnglishAddressPart } from './addressEnglish';
 
 export type NaturalAddressKind = 'sea' | 'water' | 'waterfront' | 'mountain' | 'island' | 'rural' | 'land';
 

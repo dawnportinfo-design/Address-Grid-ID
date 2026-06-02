@@ -1,6 +1,6 @@
+import { ArrowRight,Database,Globe } from 'lucide-react';
+import { AnimatePresence,motion } from 'motion/react';
 import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, Database, Globe } from 'lucide-react';
 
 interface ResourcesSideMenuProps {
   show: boolean;

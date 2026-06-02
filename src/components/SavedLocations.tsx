@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  X, 
-  Search, 
-  Bookmark, 
-  History, 
-  ShieldCheck as ShieldIcon, 
-  BookOpen, 
-  Trash2, 
-  MapPin, 
-  Navigation,
-  User,
-  Phone,
-  Home as HomeIcon,
-  QrCode,
-  Camera
+import {
+Bookmark,
+BookOpen,
+Camera,
+History,
+Home as HomeIcon,
+MapPin,
+Navigation,
+Phone,
+QrCode,
+Search,
+ShieldCheck as ShieldIcon,
+Trash2,
+User,
+X
 } from 'lucide-react';
-import { cn } from '../lib/utils';
-import { TranslationKey } from '../constants/translations';
+import { AnimatePresence,motion } from 'motion/react';
 import { QRCodeCanvas } from 'qrcode.react';
+import React from 'react';
+import { TranslationKey } from '../constants/translations';
+import { cn } from '../lib/utils';
 
 interface SavedLocationsProps {
   show: boolean;

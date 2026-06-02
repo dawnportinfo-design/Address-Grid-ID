@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Mail, Sparkles, ShieldAlert, Copy, RefreshCw, X, Check, Save, Brain, Info, Search, MapPin, Globe, ChevronLeft, ChevronRight, Users, BarChart3, Settings2, Zap, History, Menu, ArrowLeft } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-import { cn } from '../lib/utils';
+import { ArrowLeft,BarChart3,Check,Copy,Globe,History,MapPin,Menu,Search,Settings2,ShieldAlert,Sparkles,X,Zap } from 'lucide-react';
+import { AnimatePresence,motion } from 'motion/react';
+import React,{ useEffect,useMemo,useState } from 'react';
 import { encodeAGID } from '../lib/agid';
-import { getPatternForPrefix, applySmartPattern, PostalPattern, NO_POSTAL_COUNTRIES, POSTAL_PATTERNS } from '../lib/postalPatterns';
-import { fetchCountryBoundary, fetchCountryCities, fetchCountryStats, type CountryStats } from '../services/GeoAdminService';
+import { applySmartPattern,getPatternForPrefix,NO_POSTAL_COUNTRIES,POSTAL_PATTERNS } from '../lib/postalPatterns';
+import { cn } from '../lib/utils';
+import { fetchCountryBoundary,fetchCountryCities,fetchCountryStats,type CountryStats } from '../services/GeoAdminService';
 
 interface PostalCodeLabProps {
   isOpen: boolean;
@@ -23,7 +23,6 @@ export const PostalCodeLab: React.FC<PostalCodeLabProps> = ({
   onJumpTo,
   onSelectCountry,
   currentAgid, 
-  currentAddress,
   lat,
   lng
 }) => {
@@ -31,15 +30,13 @@ export const PostalCodeLab: React.FC<PostalCodeLabProps> = ({
   const [selectedCountry, setSelectedCountry] = useState<typeof NO_POSTAL_COUNTRIES[number] | null>(null);
   const [countryBoundary, setCountryBoundary] = useState<any>(null);
   const [countryStats, setCountryStats] = useState<CountryStats | null>(null);
-  const [isLoadingBoundary, setIsLoadingBoundary] = useState(false);
-  const [isLoadingStats, setIsLoadingStats] = useState(false);
+  const [, setIsLoadingBoundary] = useState(false);
+  const [, setIsLoadingStats] = useState(false);
   const [style, setStyle] = useState<'numeric' | 'alphanumeric' | 'hybrid' | 'smart'>('smart');
   const [customDigitCount, setCustomDigitCount] = useState<number>(5);
   const [isSaved, setIsSaved] = useState(false);
   const [cities, setCities] = useState<any[]>([]);
-  const [isLoadingCities, setIsLoadingCities] = useState(false);
-  const [citySearch, setCitySearch] = useState('');
-  const [isCustomizing, setIsCustomizing] = useState(true);
+  const [, setIsLoadingCities] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   
   // Local AGID state for the selected country preview
@@ -73,12 +70,6 @@ export const PostalCodeLab: React.FC<PostalCodeLabProps> = ({
     );
   }, [searchQuery]);
 
-  const filteredCities = useMemo(() => {
-    return cities.filter(city => 
-      city.name?.toLowerCase().includes(citySearch.toLowerCase()) ||
-      city.nameEn?.toLowerCase().includes(citySearch.toLowerCase())
-    );
-  }, [cities, citySearch]);
 
   // Fetch cities, boundary and stats when country is selected
   useEffect(() => {

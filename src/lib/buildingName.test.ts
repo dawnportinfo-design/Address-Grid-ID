@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  buildBuildingNameOverpassQuery,
-  buildingNameCandidateFromOpenMapFeature,
-  extractBuildingNameFromOsmTags,
-  extractBuildingNameFromReverseGeocode,
-  queryOpenFreeMapBuildingNameCandidates,
-  rankBuildingNameCandidates,
+buildBuildingNameOverpassQuery,
+buildingNameCandidateFromOpenMapFeature,
+extractBuildingNameFromOsmTags,
+extractBuildingNameFromReverseGeocode,
+queryOpenFreeMapBuildingNameCandidates,
+rankBuildingNameCandidates,
 } from './buildingName';
 
 test('extracts the strongest building name from OSM tags', () => {

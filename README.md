@@ -7,6 +7,7 @@ The goal is practical: make land, sea, mountain, waterfront, disputed-area, and 
 ## Project Resume
 
 For a deeper project summary, architecture map, validation strategy, and roadmap, see [Project Resume](docs/project-resume.md).
+For the address translation theory behind the native and international-English address tabs, see [Verified Address Translation Theory](docs/verified-address-translation-theory.md).
 
 ## Core Capabilities
 

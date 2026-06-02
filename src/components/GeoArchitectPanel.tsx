@@ -1,24 +1,20 @@
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Globe, 
-  Map as MapIcon, 
-  Users, 
-  Hash, 
-  Layout, 
-  Sparkles, 
-  Check, 
-  X, 
-  Info,
-  Maximize2,
-  Minimize2,
-  ChevronRight,
-  Loader2,
-  Zap
+import {
+ChevronRight,
+Globe,
+Hash,
+Layout,
+Loader2,
+Map as MapIcon,
+Sparkles,
+Users,
+X,
+Zap
 } from 'lucide-react';
-import { proposeAddressingScheme, AddressingProposal } from '../services/AddressDesignAI';
+import { AnimatePresence,motion } from 'motion/react';
+import React,{ useEffect,useState } from 'react';
 import { cn } from '../lib/utils';
+import { AddressingProposal,proposeAddressingScheme } from '../services/AddressDesignAI';
 import { searchOsmRegion } from '../services/GeoAdminService';
 
 interface GeoArchitectPanelProps {

@@ -1,18 +1,18 @@
 
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  X, 
-  Globe, 
-  Bookmark, 
-  Shield as ShieldIcon, 
-  Home as HomeIcon, 
-  History, 
-  Settings, 
-  HelpCircle, 
-  Share2, 
-  Search 
+import {
+Bookmark,
+Globe,
+HelpCircle,
+History,
+Home as HomeIcon,
+Search,
+Settings,
+Share2,
+Shield as ShieldIcon,
+X
 } from 'lucide-react';
+import { AnimatePresence,motion } from 'motion/react';
+import React from 'react';
 import { cn } from '../lib/utils';
 
 interface SideMenuProps {
@@ -44,10 +44,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   setShowSettings,
   setSettingsTab,
   handleShare,
-  isSearchVisible,
   setSearchVisible,
-  appLanguage,
-  setAppLanguage,
   t
 }) => {
   return (

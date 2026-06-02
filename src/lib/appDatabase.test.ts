@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  EMPTY_APP_DATABASE_SNAPSHOT,
-  isClientDatabaseSupported,
-  mergeRecordsById,
-  sanitizeDatabaseRecords,
+EMPTY_APP_DATABASE_SNAPSHOT,
+isClientDatabaseSupported,
+mergeRecordsById,
+sanitizeDatabaseRecords,
 } from './appDatabase';
 
 test('database record merge prefers IndexedDB records and backfills local fallback records', () => {

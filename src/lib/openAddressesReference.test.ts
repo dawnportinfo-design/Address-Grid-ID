@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { matchOpenAddressesReference } from './openAddressesReference';
 import { validateAddressWithOpenSourceRules } from './addressValidation';
+import { matchOpenAddressesReference } from './openAddressesReference';
 
 test('matches OpenAddresses reference records without adding a package dependency', () => {
   const match = matchOpenAddressesReference(

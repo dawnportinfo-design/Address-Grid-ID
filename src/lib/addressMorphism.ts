@@ -1,6 +1,6 @@
 import type { CanonicalAddressParts } from './addressIntelligence';
 import type { NaturalAddressContext } from './addressMorphismSources';
-import { expandSearchQuery, normalizeSearchText, scoreSearchCandidate } from './searchQuery';
+import { expandSearchQuery,normalizeSearchText,scoreSearchCandidate } from './searchQuery';
 import { sha256Hex } from './sha256';
 
 export type AddressMorphismStatus = 'verified' | 'partial' | 'ambiguous' | 'unresolved';

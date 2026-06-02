@@ -1,12 +1,12 @@
-import React from 'react';
-import { AlertTriangle, CheckCircle2, Clock, CloudSun, Compass, MountainSnow, RadioTower, Route, ShieldAlert, Wind, X } from 'lucide-react';
+import { AlertTriangle,CheckCircle2,Clock,CloudSun,Compass,MountainSnow,RadioTower,Route,ShieldAlert,Wind,X } from 'lucide-react';
 import { motion } from 'motion/react';
+import React from 'react';
 
 import type { DroneLandingAssessment } from '../lib/droneAssessment';
 import type { DroneCorridorReport } from '../lib/droneCorridor';
 import type { DroneMissionPlan } from '../lib/droneMissionPlan';
-import type { DroneNavigationPoint } from '../services/DroneNavigationService';
 import { cn } from '../lib/utils';
+import type { DroneNavigationPoint } from '../services/DroneNavigationService';
 
 type DronePlanningPanelProps = {
   isOpen: boolean;

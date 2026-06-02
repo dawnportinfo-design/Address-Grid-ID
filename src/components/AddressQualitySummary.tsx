@@ -1,7 +1,7 @@
+import { CheckCircle2,Info,ShieldAlert } from 'lucide-react';
 import React from 'react';
-import { CheckCircle2, Info, ShieldAlert } from 'lucide-react';
-import type { AddressValidationResult } from '../lib/addressValidation';
 import { getAddressQualitySummary } from '../lib/addressQualitySummary';
+import type { AddressValidationResult } from '../lib/addressValidation';
 import { cn } from '../lib/utils';
 
 type AddressQualitySummaryProps = {

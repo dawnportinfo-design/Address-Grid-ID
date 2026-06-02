@@ -1,6 +1,6 @@
-import Dexie, { Table } from 'dexie';
+import Dexie,{ Table } from 'dexie';
 
-import type { RegisteredAddressRecord, SavedRegisteredAddressQr } from './registeredAddressQr';
+import type { RegisteredAddressRecord,SavedRegisteredAddressQr } from './registeredAddressQr';
 
 export type SavedAgidRecord = {
   id: string;

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import { translateRegistrationFormFields } from './addressRegistrationAutomation';
-import { AddressRenderer, type CanonicalAddress } from './addressRendering';
+import { AddressRenderer,type CanonicalAddress } from './addressRendering';
 
 function escapedRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -133,8 +133,8 @@ test('native-language tab translation preserves shared routing fields between mu
     assert.equal(translated.postcode, '3003');
     assert.equal(translated.phone, '+41 31 322 11 11');
     assert.equal(translated.houseNumber, '3');
-    assert.equal(translated.street, `de->${targetLanguage}:Bundesgasse`);
-    assert.equal(translated.city, `de->${targetLanguage}:Bern`);
-    assert.equal(translated.organization, `de->${targetLanguage}:Bundeshaus`);
+    assert.equal(translated.street, `en->${targetLanguage}:Bundesgasse`);
+    assert.equal(translated.city, `en->${targetLanguage}:Bern`);
+    assert.equal(translated.organization, `en->${targetLanguage}:Bundeshaus`);
   }
 });

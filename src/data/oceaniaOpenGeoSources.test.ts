@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  OCEANIA_COUNTRY_AND_TERRITORY_CODES,
-  OCEANIA_OPEN_GEO_SOURCES,
-  type OceaniaOpenGeoSourceId,
-  getOceaniaOpenSourceIds,
+OCEANIA_COUNTRY_AND_TERRITORY_CODES,
+OCEANIA_OPEN_GEO_SOURCES,
+type OceaniaOpenGeoSourceId,
+getOceaniaOpenSourceIds,
 } from './oceaniaOpenGeoSources';
 
 const REQUIRED_OCEANIA_NATURAL_SOURCE_IDS: OceaniaOpenGeoSourceId[] = [

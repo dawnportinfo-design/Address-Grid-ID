@@ -1,6 +1,6 @@
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
-import { join, relative } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { existsSync,mkdirSync,readFileSync,unlinkSync,writeFileSync } from 'node:fs';
+import { join,relative } from 'node:path';
 
 import { AFRICA_OPEN_GEO_SOURCES } from '../src/data/africaOpenGeoSources';
 import { AMERICAS_OPEN_GEO_SOURCES } from '../src/data/americasOpenGeoSources';

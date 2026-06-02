@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  OPEN_SOURCE_TRANSLATION_PROVIDERS,
-  detectOpenSourceTranslationLanguage,
-  normalizeTranslationLanguage,
-  translateWithOpenSource,
+OPEN_SOURCE_TRANSLATION_PROVIDERS,
+detectOpenSourceTranslationLanguage,
+normalizeTranslationLanguage,
+translateWithOpenSource,
 } from './openSourceTranslation';
 
 test('documents open-source translation engines and compatible services', () => {

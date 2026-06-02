@@ -49,18 +49,13 @@ export function kmToNm(km: number): number {
  * Formats distance based on unit system.
  */
 export function formatDistance(km: number, unit: 'metric' | 'nautical' | 'automatic' | 'kilometers' | 'miles'): string {
-  if (unit === 'nautical') {
-    const nm = kmToNm(km);
-    return nm.toFixed(2) + ' NM';
-  }
-  if (unit === 'miles') {
-    const miles = km * 0.621371;
-    return miles.toFixed(2) + ' mi';
-  }
-  if (unit === 'kilometers') {
-    return km.toFixed(2) + ' km';
-  }
-  // Default or 'automatic'
-  // For now, automatic defaults to metric (km)
-  return km.toFixed(2) + ' km';
+  const formatters: Record<typeof unit, (value: number) => string> = {
+    metric: value => value.toFixed(2) + ' km',
+    automatic: value => value.toFixed(2) + ' km',
+    kilometers: value => value.toFixed(2) + ' km',
+    nautical: value => kmToNm(value).toFixed(2) + ' NM',
+    miles: value => (value * 0.621371).toFixed(2) + ' mi',
+  };
+
+  return formatters[unit](km);
 }

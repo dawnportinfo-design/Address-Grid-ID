@@ -1,14 +1,14 @@
 import {
-  AGID_BASE_CELL_METERS,
-  type GridFeatureResult,
-  getRegularMetricGridMetrics,
-  latitudeToAbsoluteGridY,
-  lonLatToAbsoluteGridMeters,
-  longitudeToAbsoluteGridX,
-  metricSquareCellFromCenter,
-  normalizeLongitude,
-  regularMetricPointAt,
-  toUndirectedSegmentKey,
+AGID_BASE_CELL_METERS,
+type GridFeatureResult,
+getRegularMetricGridMetrics,
+latitudeToAbsoluteGridY,
+lonLatToAbsoluteGridMeters,
+longitudeToAbsoluteGridX,
+metricSquareCellFromCenter,
+normalizeLongitude,
+regularMetricPointAt,
+toUndirectedSegmentKey,
 } from './gridDisplay';
 
 export type PackedGridBuildInput = {

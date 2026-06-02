@@ -1,7 +1,7 @@
+import type { DroneNavigationPoint } from '../services/DroneNavigationService';
 import type { DroneLandingAssessment } from './droneAssessment';
 import type { DroneCorridorReport } from './droneCorridor';
-import type { DroneMissionPlan, DroneMissionPoint } from './droneMissionPlan';
-import type { DroneNavigationPoint } from '../services/DroneNavigationService';
+import type { DroneMissionPlan,DroneMissionPoint } from './droneMissionPlan';
 
 export type DroneMissionRecord = {
   type: 'DRONE_MISSION';

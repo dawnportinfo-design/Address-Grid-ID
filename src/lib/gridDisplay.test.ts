@@ -1,15 +1,15 @@
 import assert from 'node:assert/strict';
-import { describe, it } from 'node:test';
+import { describe,it } from 'node:test';
 import {
-  getDisplayCellSizeMeters,
-  getDisplayGridStep,
-  getCloseDistanceGridFade,
-  getEffectiveGridOpacityLevel,
-  getGridRenderRange,
-  metricSquareCellFromCenter,
-  regularMetricCellFromPoint,
-  shouldShowDisplayGrid,
-  toUndirectedSegmentKey,
+getCloseDistanceGridFade,
+getDisplayCellSizeMeters,
+getDisplayGridStep,
+getEffectiveGridOpacityLevel,
+getGridRenderRange,
+metricSquareCellFromCenter,
+regularMetricCellFromPoint,
+shouldShowDisplayGrid,
+toUndirectedSegmentKey,
 } from './gridDisplay';
 
 describe('grid display shared utilities', () => {

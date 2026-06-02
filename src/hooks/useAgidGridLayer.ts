@@ -1,36 +1,36 @@
-import React from 'react';
 import maplibregl from 'maplibre-gl';
+import React from 'react';
 
 import { type AGIDResult } from '../lib/agid';
 import {
-  findContainingGridCellPolygon,
-  getGridHighlightFrame,
-  gridCellsCoverBounds,
-  resolveGridHighlightPolygons,
-  shouldDisplayGridResponse,
-  shouldRefreshGridForViewport,
-  type GridRenderFrame,
+W3W_STYLE_GRID_MIN_ZOOM,
+getCloseDistanceGridFade,
+getEffectiveGridOpacityLevel,
+normalizeLongitude,
+shouldShowDisplayGrid,
+} from '../lib/gridDisplay';
+import {
+findContainingGridCellPolygon,
+getGridHighlightFrame,
+gridCellsCoverBounds,
+resolveGridHighlightPolygons,
+shouldDisplayGridResponse,
+shouldRefreshGridForViewport,
+type GridRenderFrame,
 } from '../lib/gridGeometry';
 import {
-  W3W_STYLE_GRID_MIN_ZOOM,
-  getCloseDistanceGridFade,
-  getEffectiveGridOpacityLevel,
-  normalizeLongitude,
-  shouldShowDisplayGrid,
-} from '../lib/gridDisplay';
+getAgidGridCellFillPaint,
+getAgidGridFocusFillPaint,
+getAgidGridLinePaint,
+getAgidSelectionFillPaint,
+} from '../lib/gridPaint';
 import { shouldShowGridForViewport } from '../lib/gridViewport';
 import {
-  getMapViewportPoints,
-  getPaddedGridBounds,
-  getVisibleGridBounds,
-  shouldHidePartialGridForViewport,
+getMapViewportPoints,
+getPaddedGridBounds,
+getVisibleGridBounds,
+shouldHidePartialGridForViewport,
 } from '../lib/gridViewportController';
-import {
-  getAgidGridCellFillPaint,
-  getAgidGridFocusFillPaint,
-  getAgidGridLinePaint,
-  getAgidSelectionFillPaint,
-} from '../lib/gridPaint';
 
 type EnsureSourceAndLayer = (
   id: string,

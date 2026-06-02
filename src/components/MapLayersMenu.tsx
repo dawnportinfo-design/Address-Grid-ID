@@ -1,23 +1,23 @@
 
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  X, 
-  Layers, 
-  Check, 
-  BarChart3, 
-  Landmark, 
-  Anchor, 
-  Waves, 
-  AlertOctagon, 
-  MountainSnow, 
-  Globe, 
-  Map as MapIcon, 
-  Grid3X3 
+import {
+AlertOctagon,
+Anchor,
+BarChart3,
+Check,
+Globe,
+Grid3X3,
+Landmark,
+Layers,
+Map as MapIcon,
+MountainSnow,
+Waves,
+X
 } from 'lucide-react';
-import { cn } from '../lib/utils';
-import { MAP_STYLES } from '../constants/appConstants';
 import maplibregl from 'maplibre-gl';
+import { AnimatePresence,motion } from 'motion/react';
+import React from 'react';
+import { MAP_STYLES } from '../constants/appConstants';
+import { cn } from '../lib/utils';
 
 interface MapLayersMenuProps {
   show: boolean;

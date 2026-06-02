@@ -1,7 +1,7 @@
 import {
-  distanceMeters,
-  type NavigationDestinationInput,
-  type OsmElementLike,
+distanceMeters,
+type NavigationDestinationInput,
+type OsmElementLike,
 } from './navigationDestination';
 
 export type DroneAltitudeMode = 'agl' | 'msl';

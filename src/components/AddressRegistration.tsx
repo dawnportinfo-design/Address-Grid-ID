@@ -1,112 +1,88 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  MapPin, 
-  Search, 
-  X, 
-  Globe, 
-  Building2, 
-  Mail, 
-  Map as MapIcon, 
-  Navigation,
-  Loader2,
-  CheckCircle2,
-  AlertCircle,
-  ArrowRight,
-  Snowflake,
-  Anchor,
-  Waves,
-  Mountain,
-  Palmtree,
-  Ship,
-  Sun,
-  Trees,
-  Fish,
-  Square as AgidIcon,
-  ShieldCheck as ShieldIcon,
-  Landmark,
-  History,
-  QrCode,
-  Upload,
-  Camera,
-  ChevronRight,
-  Hash,
-  ListFilter,
-  Wand2
-} from 'lucide-react';
-import { Html5QrcodeScanner, Html5Qrcode } from 'html5-qrcode';
-import { cn } from '../lib/utils';
-import { encodeAGID, decodeAGID, calculateMountainClass, calculateConsensusMetrics } from '../lib/agid';
-import { regionalReverseGeocode } from '../services/GeocodingService';
-import { PolarContext } from '../services/PolarService';
-import { NatureContext } from '../services/NatureService';
-import { SeaContext } from '../services/SeaService';
-import { HeritageContext } from '../services/HeritageService';
-import { JapaneseGeoContext } from '../services/JapaneseGeoService';
-import { normalizeAddressText } from '../lib/addressUtils';
-import { AddressRenderer, createCanonicalAddress } from '../lib/addressRendering';
-import { toSimplified, toTraditional, detectChineseScript } from '../lib/chineseAddressUtils';
-import { COUNTRIES } from '../constants/countries';
-import { getAddressFormat, AddressFormat } from '../data/address_formats';
-import { PostcodeInput } from './PostcodeInput';
-import { CountryFlag } from './CountryFlag';
-import { wgs84togcj02, wgs84tobd09 } from '../lib/coordTransform';
-import { lookupJapaneseZip } from '../services/JapaneseZipService';
-import { generateAOID } from '../lib/aoid';
-import { buildRegisteredAddressRecord } from '../lib/registeredAddressQr';
-import { getPostcodeInputConfig } from '../lib/postcodeControl';
 import {
-  buildPostcodeAutofillLanguageDrafts,
-  isPostcodeReadyForAutofill,
-  lookupPostcodeAutofill,
-  mergePostcodeAutofill,
-  translateRegistrationFormFields,
+Square as AgidIcon,
+AlertCircle,
+Building2,
+CheckCircle2,
+ChevronRight,
+Globe,
+Hash,
+ListFilter,
+Loader2,
+Mail,
+MapPin,
+Mountain,
+QrCode,
+ShieldCheck as ShieldIcon,
+Wand2,
+X
+} from 'lucide-react';
+import { AnimatePresence,motion } from 'motion/react';
+import React,{ useEffect,useMemo,useState } from 'react';
+import { COUNTRIES } from '../constants/countries';
+import { AddressFormat,getAddressFormat } from '../data/address_formats';
+import {
+buildPostcodeAutofillLanguageDrafts,
+isPostcodeReadyForAutofill,
+lookupPostcodeAutofill,
+mergePostcodeAutofill,
+translateRegistrationFormFields,
 } from '../lib/addressRegistrationAutomation';
 import {
-  buildRegistrationAddressLanguageTabs,
-  normalizeRegistrationAddressLanguage,
-  normalizeRegistrationUiLanguage,
-  selectRegistrationAddressFormat,
-  selectRegistrationCountry,
+buildRegistrationAddressLanguageTabs,
+normalizeRegistrationAddressLanguage,
+normalizeRegistrationUiLanguage,
+selectRegistrationAddressFormat,
+selectRegistrationCountry,
 } from '../lib/addressRegistrationState';
 import {
-  REGISTRATION_COUNTRY_TABS,
-  RegistrationCountryTabId,
-  getRegistrationCountryTabId,
-  groupRegistrationCountriesByTab,
-} from '../lib/registrationCountryTabs';
-import {
-  ARABIC_TERRITORIES,
-  ANGLOSPHERE_TERRITORIES,
-  AUSTRALIAN_TERRITORIES,
-  BALKAN_TERRITORIES,
-  BALTIC_TERRITORIES,
-  BRITISH_TERRITORIES,
-  CANADIAN_TERRITORIES,
-  CARIBBEAN_TERRITORIES,
-  CENTRAL_EUROPE_TERRITORIES,
-  CENTRAL_SOUTH_ASIA_TERRITORIES,
-  CHILE_TERRITORIES,
-  DANISH_TERRITORIES,
-  DUTCH_TERRITORIES,
-  EURASIAN_TERRITORIES,
-  FRANCOPHONIE_TERRITORIES,
-  FRENCH_TERRITORIES,
-  GERMAN_REGIONS,
-  GREATER_CHINA_TERRITORIES,
-  HISPANOSPHERE_TERRITORIES,
-  ITALIAN_TERRITORIES,
-  LUSOSPHERE_TERRITORIES,
-  MICROSTATES_TERRITORIES,
-  NEW_ZEALAND_TERRITORIES,
-  NORDIC_TERRITORIES,
-  NORWEGIAN_TERRITORIES,
-  OCEANIA_TERRITORIES,
-  PORTUGUESE_TERRITORIES,
-  SOUTHEAST_ASIA_TERRITORIES,
-  SPANISH_TERRITORIES,
-  US_TERRITORIES,
+ANGLOSPHERE_TERRITORIES,
+ARABIC_TERRITORIES,
+AUSTRALIAN_TERRITORIES,
+BALKAN_TERRITORIES,
+BALTIC_TERRITORIES,
+BRITISH_TERRITORIES,
+CANADIAN_TERRITORIES,
+CARIBBEAN_TERRITORIES,
+CENTRAL_EUROPE_TERRITORIES,
+CENTRAL_SOUTH_ASIA_TERRITORIES,
+CHILE_TERRITORIES,
+DANISH_TERRITORIES,
+DUTCH_TERRITORIES,
+EURASIAN_TERRITORIES,
+FRANCOPHONIE_TERRITORIES,
+FRENCH_TERRITORIES,
+GERMAN_REGIONS,
+GREATER_CHINA_TERRITORIES,
+HISPANOSPHERE_TERRITORIES,
+ITALIAN_TERRITORIES,
+LUSOSPHERE_TERRITORIES,
+MICROSTATES_TERRITORIES,
+NEW_ZEALAND_TERRITORIES,
+NORDIC_TERRITORIES,
+NORWEGIAN_TERRITORIES,
+OCEANIA_TERRITORIES,
+PORTUGUESE_TERRITORIES,
+SOUTHEAST_ASIA_TERRITORIES,
+SPANISH_TERRITORIES,
+US_TERRITORIES,
 } from '../lib/addressRegistrationTerritories';
+import { AddressRenderer,createCanonicalAddress } from '../lib/addressRendering';
+import { normalizeAddressText } from '../lib/addressUtils';
+import { calculateMountainClass,decodeAGID } from '../lib/agid';
+import { generateAOID } from '../lib/aoid';
+import { detectChineseScript,toSimplified,toTraditional } from '../lib/chineseAddressUtils';
+import { wgs84tobd09,wgs84togcj02 } from '../lib/coordTransform';
+import { getPostcodeInputConfig } from '../lib/postcodeControl';
+import { buildRegisteredAddressRecord } from '../lib/registeredAddressQr';
+import {
+REGISTRATION_COUNTRY_TABS,
+RegistrationCountryTabId,
+getRegistrationCountryTabId,
+groupRegistrationCountriesByTab,
+} from '../lib/registrationCountryTabs';
+import { cn } from '../lib/utils';
+import { CountryFlag } from './CountryFlag';
+import { PostcodeInput } from './PostcodeInput';
 
 interface AddressRegistrationProps {
   isOpen: boolean;
@@ -121,22 +97,6 @@ interface AddressRegistrationProps {
   addressLanguage?: string;
 }
 
-interface AddressMetadata {
-  fmt: string;
-  lfmt?: string;
-  require: string;
-  upper: string;
-  zip_name?: string;
-  state_name?: string;
-  sub_name?: string;
-  locality_name?: string;
-  name_name?: string;
-  org_name?: string;
-  addr_name?: string;
-  languages?: string;
-  zip?: string;
-  lang?: string;
-}
 
 const UI_STRINGS: Record<string, Record<string, string>> = {
   ja: {
@@ -823,285 +783,22 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
   }
 };
 
-const LANGUAGE_NAMES: Record<string, string> = {
-  'local': 'Local',
-  'en': 'English',
-  'en-GB': 'English (UK)',
-  'en-US': 'English (US)',
-  'en-AU': 'English (AU)',
-  'en-CA': 'English (CA)',
-  'en-NZ': 'English (NZ)',
-  'en-IE': 'English (IE)',
-  'en-ZA': 'English (ZA)',
-  'en-IN': 'English (IN)',
-  'en-SG': 'English (SG)',
-  'en-PH': 'English (PH)',
-  'en-JM': 'English (JM)',
-  'en-BS': 'English (BS)',
-  'en-BB': 'English (BB)',
-  'en-GD': 'English (GD)',
-  'en-GY': 'English (GY)',
-  'en-TT': 'English (TT)',
-  'en-NG': 'English (NG)',
-  'en-GH': 'English (GH)',
-  'en-KE': 'English (KE)',
-  'en-BZ': 'English (BZ)',
-  'en-MY': 'English (MY)',
-  'en-PK': 'English (PK)',
-  'en-BD': 'English (BD)',
-  'en-LK': 'English (LK)',
-  'en-NP': 'English (NP)',
-  'en-MV': 'English (MV)',
-  'en-AG': 'English (AG)',
-  'en-KN': 'English (KN)',
-  'en-LC': 'English (LC)',
-  'en-VC': 'English (VC)',
-  'ja': '日本語',
-  'zh-Hans': '简体中文 (中国)',
-  'zh-Hant': '繁體中文',
-  'zh-Hant-TW': '繁體中文 (台灣)',
-  'zh-Hant-HK': '繁體中文 (香港)',
-  'zh-Hant-MO': '繁體中文 (澳門)',
-  'ko': '한국어',
-  'fr': 'Français',
-  'de': 'Deutsch',
-  'it': 'Italiano',
-  'es': 'Español',
-  'pt': 'Português',
-  'es-MX': 'Español (México)',
-  'es-AR': 'Español (Argentina)',
-  'es-CO': 'Español (Colombia)',
-  'es-PE': 'Español (Perú)',
-  'es-VE': 'Español (Venezuela)',
-  'es-CL': 'Español (Chile)',
-  'es-EC': 'Español (Ecuador)',
-  'es-BO': 'Español (Bolivia)',
-  'es-PY': 'Español (Paraguay)',
-  'es-UY': 'Español (Uruguay)',
-  'es-PA': 'Español (Panamá)',
-  'es-CR': 'Español (Costa Rica)',
-  'es-NI': 'Español (Nicaragua)',
-  'es-HN': 'Español (Honduras)',
-  'es-SV': 'Español (El Salvador)',
-  'es-GT': 'Español (Guatemala)',
-  'es-DO': 'Español (Rep. Dominicana)',
-  'es-PR': 'Español (Puerto Rico)',
-  'es-CU': 'Español (Cuba)',
-  'pt-AO': 'Português (Angola)',
-  'pt-MZ': 'Português (Moçambique)',
-  'pt-CV': 'Português (Cabo Verde)',
-  'pt-GW': 'Português (Guiné-Bissau)',
-  'pt-ST': 'Português (São Tomé e Príncipe)',
-  'es-GQ': 'Español (Guinea Ecuatorial)',
-  'ru': 'Русский',
-  'tr': 'Türkçe',
-  'vi': 'Tiếng Việt',
-  'th': 'ไทย',
-  'ar': 'العربية',
-  'hi': 'हिन्दी (Hindi)',
-  'bn': 'বাংলা (Bengali)',
-  'ta': 'தமிழ் (Tamil)',
-  'te': 'తెలుగు (Telugu)',
-  'mr': 'मराठी (Marathi)',
-  'gu': 'ગુજરાતી (Gujarati)',
-  'kn': 'ಕನ್ನಡ (Kannada)',
-  'ml': 'മലയാളം (Malayalam)',
-  'pa': 'ਪੰਜਾਬੀ (Punjabi)',
-  'ur': 'اردو (Urdu)',
-  'fa': 'فارسی',
-  'he': 'עברית',
-  'sw': 'Kiswahili',
-  'am': 'አማርኛ',
-  'kk': 'Қазақ тілі',
-  'uz': 'Oʻzbek',
-  'mn': 'Монгол',
-  'is': 'Íslenska',
-  'cs': 'Čeština',
-  'sk': 'Slovenčina',
-  'ro': 'Română',
-  'bg': 'Български',
-  'hr': 'Hrvatski',
-  'sr': 'Српски',
-  'el': 'Ελληνικά',
-  'ca': 'Català',
-  'mt': 'Malti',
-  'lb': 'Lëtzebuergesch',
-  'fo': 'Føroyskt',
-  'kl': 'Kalaallisut',
-  'dv': 'ދިވެހި',
-  'mh': 'Kajin M̧ajeļ',
-  'pau': 'Belau',
-  'na': 'Dorerin Naoero',
-  'gil': 'Kiribati',
-  'tvl': 'Tuvalu',
-  'to': 'Lea Faka-Tonga',
-  'sm': 'Gagana Sāmoa',
-  'fj': 'Vosa Vakaviti',
-  'crs': 'Seselwa',
-  'mfe': 'Morisyen',
-  'in-regional': 'Indian Languages',
-  'za-regional': 'South African Languages',
-  'ms': 'Bahasa Melayu',
-  'id': 'Bahasa Indonesia',
-  'tl': 'Tagalog',
-  'romaji': 'Romaji'
-};
 
-const COUNTRY_DEFAULT_LANGS: Record<string, string> = {
-  'JP': 'ja',
-  'CN': 'zh-Hans',
-  'KR': 'ko',
-  'TW': 'zh-Hant-TW',
-  'HK': 'zh-Hant-HK',
-  'MO': 'zh-Hant-MO',
-  'TH': 'th',
-  'VN': 'vi',
-  'FR': 'fr',
-  'DE': 'de',
-  'IT': 'it',
-  'ES': 'es',
-  'MX': 'es-MX',
-  'AR': 'es-AR',
-  'CL': 'es-CL',
-  'CO': 'es-CO',
-  'PE': 'es-PE',
-  'VE': 'es-VE',
-  'EC': 'es-EC',
-  'BO': 'es-BO',
-  'PY': 'es-PY',
-  'UY': 'es-UY',
-  'RU': 'ru',
-  'SA': 'ar-SA',
-  'AE': 'ar-AE',
-  'EG': 'ar-EG',
-  'MA': 'ar-MA',
-  'DZ': 'ar-DZ',
-  'TN': 'ar-TN',
-  'IQ': 'ar-IQ',
-  'JO': 'ar-JO',
-  'KW': 'ar-KW',
-  'LB': 'ar-LB',
-  'LY': 'ar-LY',
-  'OM': 'ar-OM',
-  'PS': 'ar-PS',
-  'QA': 'ar-QA',
-  'SD': 'ar-SD',
-  'SY': 'ar-SY',
-  'YE': 'ar-YE',
-  'BH': 'ar-BH',
-  'MR': 'ar-MR',
-  'SO': 'ar-SO',
-  'DJ': 'ar-DJ',
-  'KM': 'ar-KM',
-  'GQ': 'es-GQ',
-  'IL': 'he',
-  'GR': 'el',
-  'CY': 'el',
-  'RO': 'ro',
-  'BG': 'bg',
-  'RS': 'sr',
-  'HR': 'hr',
-  'BA': 'bs',
-  'AL': 'sq',
-  'MK': 'mk',
-  'ME': 'sr',
-  'PL': 'pl',
-  'CZ': 'cs',
-  'HU': 'hu',
-  'SK': 'sk',
-  'SI': 'sl',
-  'EE': 'et',
-  'LV': 'lv',
-  'LT': 'lt',
-  'UA': 'uk',
-  'BY': 'be',
-  'MD': 'ro',
-  'GE': 'ka',
-  'AM': 'hy',
-  'TR': 'tr',
-  'BT': 'dz',
-  'AF': 'ps',
-  'KZ': 'kk',
-  'UZ': 'uz',
-  'KG': 'ky',
-  'TJ': 'tg',
-  'TM': 'tk',
-  'NL': 'nl',
-  'SE': 'sv',
-  'NO': 'no',
-  'DK': 'da',
-  'FI': 'fi',
-  'PT': 'pt-PT',
-  'BR': 'pt-BR',
-  'AO': 'pt-AO',
-  'MZ': 'pt-MZ',
-  'CV': 'pt-CV',
-  'GW': 'pt-GW',
-  'ST': 'pt-ST',
-  'PA': 'es-PA',
-  'CR': 'es-CR',
-  'NI': 'es-NI',
-  'HN': 'es-HN',
-  'SV': 'es-SV',
-  'GT': 'es-GT',
-  'DO': 'es-DO',
-  'PR': 'es-PR',
-  'CU': 'es-CU',
-  'AD': 'ca',
-  'MC': 'fr',
-  'SM': 'it',
-  'VA': 'it',
-  'LI': 'de',
-  'MT': 'mt',
-  'LU': 'lb',
-  'SG': 'en-SG',
-  'AU': 'en-AU',
-  'NZ': 'en-NZ',
-  'IE': 'en-IE',
-  'GB': 'en-GB',
-  'US': 'en',
-  'CA': 'en-CA',
-  'ZA': 'en-ZA',
-  'IN': 'en-IN',
-  'PH': 'en-PH',
-  'JM': 'en-JM',
-  'BS': 'en-BS',
-  'BB': 'en-BB',
-  'GY': 'en-GY',
-  'TT': 'en-TT',
-  'NG': 'en-NG',
-  'GH': 'en-GH',
-  'KE': 'en-KE',
-  'BZ': 'en-BZ',
-  'MY': 'en-MY',
-  'PK': 'en-PK',
-  'BD': 'en-BD',
-  'LK': 'en-LK',
-  'NP': 'en-NP',
-  'MV': 'en-MV',
-  'AG': 'en-AG',
-  'KN': 'en-KN',
-  'LC': 'en-LC',
-  'VC': 'en-VC',
-  'GD': 'en-GD',
-};
 
 export const AddressRegistration: React.FC<AddressRegistrationProps> = ({ 
   isOpen, 
   onClose, 
   onRegister,
   initialAgid,
-  initialAddress,
   initialAddressDetails,
   currentCoords,
   forceAoidMode,
   appLanguage = 'en',
   addressLanguage = 'local'
 }) => {
-  const [agidInput, setAgidInput] = useState(initialAgid || '');
-  const [isSearching, setIsSearching] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const [agidInput] = useState(initialAgid || '');
+  const [, setError] = useState<string | null>(null);
+  const [, setSuccess] = useState(false);
   
   const [formData, setFormData] = useState({
     country: 'JP',
@@ -1123,8 +820,8 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
   const [localFormat, setLocalFormat] = useState<AddressFormat | null>(null);
   const [postcodeLookupStatus, setPostcodeLookupStatus] = useState<'idle' | 'loading' | 'filled' | 'empty' | 'error'>('idle');
   const [addressTranslationStatus, setAddressTranslationStatus] = useState<'idle' | 'translating' | 'translated' | 'error'>('idle');
-  const [consensus, setConsensus] = useState<{ confidence: number, entropy: number } | null>(null);
-  const [elevationData, setElevationData] = useState<{ elevation: number, source: string } | null>(null);
+  const [consensus] = useState<{ confidence: number, entropy: number } | null>(null);
+  const [elevationData] = useState<{ elevation: number, source: string } | null>(null);
   const [agidData, setAgidData] = useState<any>(null);
   const languageDraftsRef = React.useRef<Record<string, typeof formData>>({});
   const lastPostcodeLookupRef = React.useRef('');

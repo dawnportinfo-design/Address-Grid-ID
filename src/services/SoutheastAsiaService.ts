@@ -17,7 +17,7 @@ export interface SoutheastAsiaContext {
 /**
  * Fetches regional context for Southeast Asia using Overpass API.
  */
-export async function fetchSoutheastAsiaContext(lat: number, lon: number, cc: string): Promise<SoutheastAsiaContext | null> {
+export async function fetchSoutheastAsiaContext(lat: number, lon: number): Promise<SoutheastAsiaContext | null> {
   const radius = 2000;
   
   // Query for administrative boundaries (Province, City/Regency, District) and landmarks

@@ -169,7 +169,7 @@ export function transliterateJapanese(text: string): string {
   });
   
   // 2. Handle Doubled Consonants (っ/ッ)
-  result = result.replace(/([っッ])(.)/g, (match, sokuon, nextChar) => {
+  result = result.replace(/([っッ])(.)/g, (_match, _sokuon, nextChar) => {
     const nextRomaji = ROMAJI_TABLE[nextChar] || nextChar;
     const consonant = nextRomaji.charAt(0);
     // Special case for 'ch' -> 'tch'
@@ -178,9 +178,8 @@ export function transliterateJapanese(text: string): string {
   });
 
   // 3. Handle Long Vowels (ー)
-  result = result.replace(/(.)ー/g, (match, prevChar) => {
+  result = result.replace(/(.)ー/g, (_match, prevChar) => {
     const prevRomaji = ROMAJI_TABLE[prevChar] || prevChar;
-    const lastVowel = prevRomaji.slice(-1);
     // ISO 3602 Hepburn varies on macrons, but for geographic names like Tokyo, 
     // it's often omitted in loose Hepburn or written with macrons (ō).
     // The user example "Tokyo" suggests omitting macrons or using common spelling.

@@ -1,226 +1,168 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { bearing,distance } from '@turf/turf';
+import {
+Compass,
+Globe,
+LocateFixed,
+Ruler,
+Trash2} from 'lucide-react';
 import maplibregl from 'maplibre-gl';
-import { fetchWithRetry } from './lib/utils';
-import { buildMapLibreOptions, OPENFREEMAP_STYLES, registerPmtilesProtocol, resolveMapStyle } from './lib/mapEngine';
-import { bearing, distance, polygon, bboxPolygon, difference, featureCollection, area } from '@turf/turf';
-import { TRANSLATIONS, TranslationKey } from './constants/translations';
-import { 
-  encodeAGID, 
-  decodeAGID, 
-  SEA_REGIONS, 
-  COUNTRY_REGIONS, 
-  LAND_REGIONS, 
-  AGIDResult, 
-  getRegionInfo, 
-  getGridFeatures, 
-  calculateTotalSeaAreas,
-  generatePrefix,
-  generateFullSeaRegistry,
-  generateFullCountryRegistry
-} from './lib/agid';
-import { calculateDistance, calculateBearing, formatDistance } from './lib/nav';
+import React,{ useEffect,useMemo,useRef,useState } from 'react';
+import { TranslationKey,TRANSLATIONS } from './constants/translations';
 import legalData from './data/legal.json';
-import disputedTerritories from './data/disputed_territories.json';
-import { AdvancedSearchOptions, DEFAULT_ADVANCED_SEARCH_OPTIONS } from './lib/advancedSearch';
-import { 
-  X, 
-  Menu, 
-  Search, 
-  History, 
-  Settings, 
-  Info, 
-  ChevronRight, 
-  MapPin, 
-  Share2, 
-  Layers, 
-  Target, 
-  ArrowUpRight, 
-  Truck, 
-  User, 
-  Zap, 
-  LocateFixed, 
-  ChevronDown, 
-  Check, 
-  Copy, 
-  Maximize2, 
-  Key, 
-  QrCode, 
-  ExternalLink, 
-  ArrowLeft, 
-  Clock, 
-  Sparkles, 
-  Flag, 
-  MountainSnow, 
-  Camera, 
-  Upload, 
-  BarChart3, 
-  Landmark, 
-  Anchor, 
-  Waves, 
-  AlertOctagon, 
-  Globe, 
-  Map as MapIcon, 
-  Grid3X3, 
-  RotateCcw, 
-  Plus, 
-  Minus, 
-  Smartphone, 
-  ShieldCheck, 
-  Download, 
-  FileDown, 
-  FileText, 
-  Bookmark, 
-  Database, 
-  Trash2, 
-  BookOpen, 
-  ArrowRight, 
-  Scale, 
-  Activity, 
-  Box,
-  ChevronUp,
-  HelpCircle,
-  RefreshCw,
-  ArrowUpDown,
-  Compass,
-  Ruler,
-  Coffee,
-  Train,
-  ShoppingBag,
-  Phone,
-  Home as HomeIcon,
-  Snowflake,
-  Trees,
-  Palmtree,
-  Ship,
-  Sun,
-  Building2,
-  CheckCircle2,
-  Settings2,
-  ShieldAlert
-} from 'lucide-react';
+import { AdvancedSearchOptions,DEFAULT_ADVANCED_SEARCH_OPTIONS } from './lib/advancedSearch';
+import {
+AGIDResult,
+COUNTRY_REGIONS,
+decodeAGID,
+encodeAGID,
+generateFullCountryRegistry,
+generateFullSeaRegistry,
+LAND_REGIONS,
+SEA_REGIONS
+} from './lib/agid';
+import { buildMapLibreOptions,OPENFREEMAP_STYLES,registerPmtilesProtocol,resolveMapStyle } from './lib/mapEngine';
+import { calculateBearing,calculateDistance,formatDistance } from './lib/nav';
+import { fetchWithRetry } from './lib/utils';
 
 // Extracted Components
+import { GridDetailPanel } from './components/GridDetailPanel';
 import { MapControls } from './components/MapControls';
 import { MapLayersMenu } from './components/MapLayersMenu';
-import { GridDetailPanel } from './components/GridDetailPanel';
+import { SearchSidebar } from './components/SearchSidebar';
 import { SettingsPanel } from './components/SettingsPanel';
 import { SideMenu } from './components/SideMenu';
-import { SearchSidebar } from './components/SearchSidebar';
 
-import { QRCodeCanvas } from 'qrcode.react';
-import { Html5QrcodeScanner, Html5Qrcode } from 'html5-qrcode';
-import { motion, AnimatePresence } from 'motion/react';
-import { cn } from './lib/utils';
-import { 
-  LANGUAGES,
-  COUNTRY_LANGUAGES,
-  BIG_TO_SMALL_COUNTRIES,
-  formatAddress,
-  translateAddressOpenSource,
-  normalizeAddressText,
-  fastJapaneseTransliterate
-} from './lib/addressUtils';
-import { getAgidAddressTabLanguages } from './lib/languageTabs';
-import { getAgidCoordinates } from './lib/agidSelection';
+import { Html5Qrcode,Html5QrcodeScanner } from 'html5-qrcode';
+import { AnimatePresence,motion } from 'motion/react';
+import { COUNTRIES,CountryInfo } from './constants/countries';
 import { useAgidGridLayer } from './hooks/useAgidGridLayer';
 import { useAppDatabasePersistence } from './hooks/useAppDatabasePersistence';
 import { useMapLibreLayerSync } from './hooks/useMapLibreLayerSync';
-import { normalizeLongitude } from './lib/gridDisplay';
-import { 
-  normalizeAddress, 
-  parseAddress, 
-  fetchNearbyOSMPlaces, 
-  fetchNearestRoad,
-  smartSearch, 
-  regionalReverseGeocode,
-  db as placeDb 
-} from './services/GeocodingService';
-import { getPatternForPrefix, applySmartPattern, NO_POSTAL_COUNTRIES } from './lib/postalPatterns';
-import { getLanguageDirection, translateUi } from './lib/i18n';
-import { normalizeAppLanguage } from './lib/languageSettings';
-import { resolveInitialMapView } from './lib/initialMapView';
-import { translateWithOpenSource } from './lib/openSourceTranslation';
 import {
-  queryOpenFreeMapBuildingNameCandidates,
-  rankBuildingNameCandidates,
-  type BuildingNameCandidate,
+BIG_TO_SMALL_COUNTRIES,
+COUNTRY_LANGUAGES,
+fastJapaneseTransliterate,
+formatAddress,
+LANGUAGES,
+normalizeAddressText,
+translateAddressOpenSource
+} from './lib/addressUtils';
+import { getAgidCoordinates } from './lib/agidSelection';
+import {
+queryOpenFreeMapBuildingNameCandidates,
+rankBuildingNameCandidates,
+type BuildingNameCandidate,
 } from './lib/buildingName';
+import type { DroneLandingAssessment } from './lib/droneAssessment';
+import type { DroneCorridorReport } from './lib/droneCorridor';
 import {
-  buildRegisteredAddressQrPayload,
-  buildSavedQrFromRegisteredAddress,
-  parseRegisteredAddressQrPayload,
-  type RegisteredAddressRecord,
+buildDroneMissionQrPayload,
+buildDroneMissionRecord,
+buildSavedQrFromDroneMission,
+parseDroneMissionQrPayload,
+} from './lib/droneMissionPackage';
+import { buildDroneMissionPlan } from './lib/droneMissionPlan';
+import { normalizeLongitude } from './lib/gridDisplay';
+import { GuidanceEngine,MapProvider } from './lib/guidanceEngine';
+import { getLanguageDirection,translateUi } from './lib/i18n';
+import { resolveInitialMapView } from './lib/initialMapView';
+import { normalizeAppLanguage } from './lib/languageSettings';
+import { getAgidAddressTabLanguages } from './lib/languageTabs';
+import { translateWithOpenSource } from './lib/openSourceTranslation';
+import { applySmartPattern,getPatternForPrefix } from './lib/postalPatterns';
+import {
+buildRegisteredAddressQrPayload,
+buildSavedQrFromRegisteredAddress,
+parseRegisteredAddressQrPayload,
+type RegisteredAddressRecord,
 } from './lib/registeredAddressQr';
+import { cn } from './lib/utils';
+import { fetchDroneCorridorReport } from './services/DroneCorridorService';
+import {
+resolveDroneNavigationPoint,
+shouldUseDroneNavigation,
+type DroneNavigationPoint,
+} from './services/DroneNavigationService';
+import { fetchDroneLandingAssessment } from './services/DroneService';
+import {
+fetchCountryBoundary,
+fetchCountryCities,
+fetchCountryStats,
+fetchDataQualityReport,
+} from './services/GeoAdminService';
+import {
+fetchNearbyOSMPlaces,
+fetchNearestRoad,
+regionalReverseGeocode,
+smartSearch
+} from './services/GeocodingService';
+import {
+resolveCarNavigationDestination,
+shouldUseCarNavigationDestination,
+type CarNavigationDestination,
+} from './services/NavigationDestinationService';
+import {
+fetchOsrmRoute,
+fetchPhotonFeatures,
+photonFeatureToNamedCoordinates,
+prependCurrentLocationSuggestion,
+} from './services/RouteSearchService';
+import { RoutingService,type travelMode } from './services/RoutingService';
+import type { AddressDetails } from './types/address';
+import type {
+NearestRoad,
+PhotonFeature,
+RouteFeatureCollection,
+RouteStop,
+SearchResultFeature,
+} from './types/navigation';
 const AddressRegistration = React.lazy(() => import('./components/AddressRegistration').then(m => ({ default: m.AddressRegistration })));
 const PostalCodeLab = React.lazy(() => import('./components/PostalCodeLab').then(m => ({ default: m.PostalCodeLab })));
 const GeoArchitectPanel = React.lazy(() => import('./components/GeoArchitectPanel').then(m => ({ default: m.GeoArchitectPanel })));
-import { wgs84togcj02, wgs84tobd09 } from './lib/coordTransform';
-import { GuidanceEngine, MapProvider } from './lib/guidanceEngine';
-import { generateAOID, AOIDData } from './lib/aoid';
-import { RoutingService, type travelMode } from './services/RoutingService';
-import {
-  resolveCarNavigationDestination,
-  shouldUseCarNavigationDestination,
-  type CarNavigationDestination,
-} from './services/NavigationDestinationService';
-import {
-  resolveDroneNavigationPoint,
-  shouldUseDroneNavigation,
-  type DroneNavigationPoint,
-} from './services/DroneNavigationService';
-import { fetchDroneLandingAssessment } from './services/DroneService';
-import type { DroneLandingAssessment } from './lib/droneAssessment';
-import type { DroneCorridorReport } from './lib/droneCorridor';
-import { buildDroneMissionPlan } from './lib/droneMissionPlan';
-import {
-  buildDroneMissionQrPayload,
-  buildDroneMissionRecord,
-  buildSavedQrFromDroneMission,
-  parseDroneMissionQrPayload,
-} from './lib/droneMissionPackage';
-import { fetchDroneCorridorReport } from './services/DroneCorridorService';
-import {
-  fetchCountryBoundary,
-  fetchCountryCities,
-  fetchCountryStats,
-  fetchDataQualityReport,
-} from './services/GeoAdminService';
-import { COUNTRIES, CountryInfo } from './constants/countries';
 
-import { 
-  RESOURCE_CATEGORIES, 
-  SYSTEMATIC_THEMES, 
-  REGIONAL_THEMES, 
-  MAJOR_CATEGORIES 
+import {
+MAJOR_CATEGORIES
 } from './constants/appConstants';
 
-const getMajorCategory = (c: CountryInfo) => {
-  if (c.type === 'Disputed') return 'Disputed';
-  if (c.type === 'Territory' || c.type === 'Autonomous') return 'Territories';
-  
-  const r = c.region;
-  if (r.includes('Asia') || r.includes('Middle East')) return 'Asia';
-  if (r.includes('Africa')) return 'Africa';
-  if (r.includes('Oceania')) return 'Oceania';
-  if (r.includes('America') || r.includes('Caribbean')) return 'Americas';
-  if (r.includes('Europe')) return 'Europe';
-  if (r.includes('Caucasus')) return 'Asia'; // Or Europe? Usually transcontinental, but keeping Asia/MidEast together
-  return 'Other';
+const COUNTRY_TYPE_MAJOR_CATEGORY: Partial<Record<NonNullable<CountryInfo['type']>, string>> = {
+  Disputed: 'Disputed',
+  Territory: 'Territories',
+  Autonomous: 'Territories',
 };
 
-import { FullSeaRegistryView, FullCountryRegistryView } from './components/RegistryViews';
-import { LicensesOverlay, LegalOverlay, ConfirmModal, CustomAlert, CenterActionButton } from './components/Overlays';
-import { QualityReportModal } from './components/modals/QualityReportModal';
+const REGION_MAJOR_CATEGORY_RULES = [
+  { category: 'Asia', matches: ['Asia', 'Middle East'] },
+  { category: 'Africa', matches: ['Africa'] },
+  { category: 'Oceania', matches: ['Oceania'] },
+  { category: 'Americas', matches: ['America', 'Caribbean'] },
+  { category: 'Europe', matches: ['Europe'] },
+  { category: 'Asia', matches: ['Caucasus'] },
+];
+
+const DEVICE_ZOOM_BREAKPOINTS = [
+  { maxWidth: 640, zoom: 20.2 },
+  { maxWidth: 1024, zoom: 19.8 },
+];
+
+const getMajorCategory = (c: CountryInfo) => {
+  const categoryByType = COUNTRY_TYPE_MAJOR_CATEGORY[c.type];
+  const categoryByRegion = REGION_MAJOR_CATEGORY_RULES.find(rule =>
+    rule.matches.some(keyword => c.region.includes(keyword))
+  )?.category;
+
+  return categoryByType ?? categoryByRegion ?? 'Other';
+};
+
 import { QrScannerModal } from './components/modals/QrScannerModal';
+import { QualityReportModal } from './components/modals/QualityReportModal';
 import { ResourcesSideMenu } from './components/modals/ResourcesSideMenu';
+import { CenterActionButton,ConfirmModal,CustomAlert,LegalOverlay,LicensesOverlay } from './components/Overlays';
+import { FullCountryRegistryView,FullSeaRegistryView } from './components/RegistryViews';
 import { SavedLocations } from './components/SavedLocations';
-import { ExportService, ExportData } from './services/ExportService';
-import { saveAs } from 'file-saver';
 
 export default function App() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const gridUpdateTimer = useRef<any>(null);
   const gridWorker = useRef<Worker | null>(null);
   const isSelectingResult = useRef(false);
   const preserveDroneCorridorOnTargetChangeRef = useRef(false);
@@ -256,13 +198,9 @@ export default function App() {
     };
   }, []);
   
-  // Device-specific zoom determination
   const getDeviceZoom = () => {
     const w = window.innerWidth;
-    // Area size is fixed by device (~120m viewport width)
-    if (w < 640) return 20.2; // Smartphone: ~110m width
-    if (w < 1024) return 19.8; // Tablet: ~130m width
-    return 19.5; // PC: ~160m width
+    return DEVICE_ZOOM_BREAKPOINTS.find(({ maxWidth }) => w < maxWidth)?.zoom ?? 19.5;
   };
 
   const initialMapView = resolveInitialMapView({
@@ -296,7 +234,6 @@ export default function App() {
     } catch { return 3; }
   });
   const [showResources, setShowResources] = useState(false);
-  const [resourceSearch, setResourceSearch] = useState("");
   const [isGridVisible, setIsGridVisible] = useState(true);
   const [isManualSelection, setIsManualSelection] = useState(false);
   const [isNauticalMode, setIsNauticalMode] = useState(() => {
@@ -325,7 +262,7 @@ export default function App() {
       return localStorage.getItem('agid_address_language') || 'en';
     } catch { return 'en'; }
   });
-  const [defaultAddrTab, setDefaultAddrTab] = useState<'local' | 'en'>(() => {
+  const [defaultAddrTab] = useState<'local' | 'en'>(() => {
     try {
       return (localStorage.getItem('agid_default_addr_tab') as 'local' | 'en') || 'local';
     } catch { return 'local'; }
@@ -335,32 +272,31 @@ export default function App() {
   const [isNavigating, setIsNavigating] = useState(false);
   const [isGuidanceActive, setIsGuidanceActive] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number, lng: number } | null>(null);
-  const [routeData, setRouteData] = useState<any>(null);
+  const [routeData, setRouteData] = useState<RouteFeatureCollection | null>(null);
   const [carNavigationDestination, setCarNavigationDestination] = useState<CarNavigationDestination | null>(null);
   const [droneNavigationPoint, setDroneNavigationPoint] = useState<DroneNavigationPoint | null>(null);
-  const [isRulerMode, setIsRulerMode] = useState(false);
+  const [isRulerMode] = useState(false);
   const [rulerPoints, setRulerPoints] = useState<[number, number][]>([]);
   const [isRoutePlanning, setIsRoutePlanning] = useState(false);
   const [originQuery, setOriginQuery] = useState("");
   const [destinationQuery, setDestinationQuery] = useState("");
-  const [originResults, setOriginResults] = useState<any[]>([]);
-  const [destinationResults, setDestinationResults] = useState<any[]>([]);
-  const [origin, setOrigin] = useState<{ lat: number, lng: number, name: string } | null>(null);
-  const [destination, setDestination] = useState<{ lat: number, lng: number, name: string } | null>(null);
-  const [isSearchingOrigin, setIsSearchingOrigin] = useState(false);
-  const [isSearchingDestination, setIsSearchingDestination] = useState(false);
+  const [originResults, setOriginResults] = useState<PhotonFeature[]>([]);
+  const [destinationResults, setDestinationResults] = useState<PhotonFeature[]>([]);
+  const [origin, setOrigin] = useState<RouteStop | null>(null);
+  const [destination, setDestination] = useState<RouteStop | null>(null);
+  const [, setIsSearchingOrigin] = useState(false);
+  const [, setIsSearchingDestination] = useState(false);
   const [clickedAgid, setClickedAgid] = useState<AGIDResult | null>(null);
   const [clickedAddress, setClickedAddress] = useState<string>("");
-  const [clickedAddressEn, setClickedAddressEn] = useState<string>("");
+  const [, setClickedAddressEn] = useState<string>("");
   const [clickedAddressTranslated, setClickedAddressTranslated] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResultFeature[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showCoordinateSearch, setShowCoordinateSearch] = useState(false);
   const [advancedSearchOptions, setAdvancedSearchOptions] = useState<AdvancedSearchOptions>(DEFAULT_ADVANCED_SEARCH_OPTIONS);
-  const [isFlying, setIsFlying] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
   const [locationPermissionState, setLocationPermissionState] = useState<PermissionState | 'unsupported' | 'unknown'>(() => (
@@ -379,12 +315,12 @@ export default function App() {
   }, [isManualSelection, clickedAgid, isGuidanceActive, isTracking]);
   const [isAgidPinnedToGps, setIsAgidPinnedToGps] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const [isGridRegenerating, setIsGridRegenerating] = useState(false);
+  const [, setIsGridRegenerating] = useState(false);
   const [isStyleLoading, setIsStyleLoading] = useState(false);
 
-  const [nearbyPlaces, setNearbyPlaces] = useState<any[]>([]);
+  const [, setNearbyPlaces] = useState<any[]>([]);
   const [showSettings, setShowSettings] = useState(false);
-  const [clickedAddressDetails, setClickedAddressDetails] = useState<any>(null);
+  const [clickedAddressDetails, setClickedAddressDetails] = useState<AddressDetails | null>(null);
   const [clickedAddressMap, setClickedAddressMap] = useState<Record<string, string>>({});
   const [clickedActiveLangs, setClickedActiveLangs] = useState<string[]>(() => {
     const base = ['en'];
@@ -425,7 +361,7 @@ export default function App() {
       return localStorage.getItem('agid_home_agid') || "";
     } catch { return ""; }
   });
-  const [isShippingMode, setIsShippingMode] = useState(() => {
+  const [isShippingMode] = useState(() => {
     try {
       const saved = localStorage.getItem('agid_shipping_mode');
       return saved !== null ? JSON.parse(saved) : false;
@@ -448,12 +384,12 @@ export default function App() {
   const [isQualityLoading, setIsQualityLoading] = useState(false);
   const [aoidModeForced, setAoidModeForced] = useState(false);
   const [showPostalCodeLab, setShowPostalCodeLab] = useState(false);
-  const [isTerritoryLabOpen, setIsTerritoryLabOpen] = useState(false);
-  const [postalLabStyle, setPostalLabStyle] = useState<'smart' | 'numeric' | 'alphanumeric' | 'hybrid'>('smart');
-  const [postalDigitCount, setPostalDigitCount] = useState<number>(4);
+  const [isTerritoryLabOpen] = useState(false);
+  const [postalLabStyle] = useState<'smart' | 'numeric' | 'alphanumeric' | 'hybrid'>('smart');
+  const [postalDigitCount] = useState<number>(4);
   const [labCountryStats, setLabCountryStats] = useState<any>(null);
-  const [labGeneratedCode, setLabGeneratedCode] = useState("");
-  const [isLoadingLabStats, setIsLoadingLabStats] = useState(false);
+  const [, setLabGeneratedCode] = useState("");
+  const [, setIsLoadingLabStats] = useState(false);
   const [selectedCountryBoundary, setSelectedCountryBoundary] = useState<any | null>(null);
   const [selectedRegionBoundary, setSelectedRegionBoundary] = useState<any | null>(null);
   const [showGeoArchitect, setShowGeoArchitect] = useState(false);
@@ -463,15 +399,15 @@ export default function App() {
       return saved ? JSON.parse(saved) : [];
     } catch { return []; }
   });
-  const [nearestRoad, setNearestRoad] = useState<any>(null);
+  const [nearestRoad, setNearestRoad] = useState<NearestRoad | null>(null);
   const [useBidirectionalDijkstra, setUseBidirectionalDijkstra] = useState(false);
   const [isRoutingLoading, setIsRoutingLoading] = useState(false);
   const [routingMode, setRoutingMode] = useState<travelMode>('driving');
   const [isDroneMode, setIsDroneMode] = useState(false);
   const [droneAssessment, setDroneAssessment] = useState<DroneLandingAssessment | null>(null);
-  const [isDroneAssessmentLoading, setIsDroneAssessmentLoading] = useState(false);
+  const [, setIsDroneAssessmentLoading] = useState(false);
   const [droneCorridorReport, setDroneCorridorReport] = useState<DroneCorridorReport | null>(null);
-  const [isDroneCorridorLoading, setIsDroneCorridorLoading] = useState(false);
+  const [, setIsDroneCorridorLoading] = useState(false);
   const [defaultNavApp, setDefaultNavApp] = useState<string>(() => {
     return localStorage.getItem('agid_default_nav_app') || 'google';
   });
@@ -541,7 +477,6 @@ export default function App() {
       setLabGeneratedCode(code);
     }
   }, [clickedAgid?.id, postalLabStyle, postalDigitCount]);
-  const [isStyleMenuOpen, setIsStyleMenuOpen] = useState(false);
 
   const registryStats = useMemo(() => {
     const regionStats: Record<string, any> = {};
@@ -567,10 +502,10 @@ export default function App() {
     return { regionStats, globalStats };
   }, []);
 
-  const [geoConfig, setGeoConfig] = useState<any>(null);
+  const [, setGeoConfig] = useState<any>(null);
   const [savedSearch, setSavedSearch] = useState("");
   const [showMenu, setShowMenu] = useState(false);
-  const [coordFormat, setCoordFormat] = useState<'decimal' | 'dms'>(() => {
+  const [coordFormat] = useState<'decimal' | 'dms'>(() => {
     try {
       return (localStorage.getItem('agid_coord_format') as 'decimal' | 'dms') || 'decimal';
     } catch { return 'decimal'; }
@@ -596,28 +531,90 @@ export default function App() {
     };
   }, [clickedAgid?.id, clickedAgid?.lat, clickedAgid?.lon, lat, lng]);
 
-  const refreshDroneAssessment = React.useCallback(async () => {
-    setIsDroneAssessmentLoading(true);
-    try {
-      const [assessmentResult, dronePointResult] = await Promise.allSettled([
-        fetchDroneLandingAssessment({
-          lat: droneTarget.lat,
-          lon: droneTarget.lon,
-        }),
-        resolveDroneNavigationPoint(
-          { lat: droneTarget.lat, lng: droneTarget.lon, name: droneTarget.label },
-          { altitudeM: 30, minAltitudeM: 0, maxAltitudeM: 120, stepCm: 10, mode: 'agl', radiusMeters: 250 },
-        ),
-      ]);
-      setDroneAssessment(assessmentResult.status === 'fulfilled' ? assessmentResult.value : null);
-      setDroneNavigationPoint(dronePointResult.status === 'fulfilled' ? dronePointResult.value : null);
-    } catch (error) {
-      console.warn('[Drone] Landing assessment failed:', error);
-      setDroneAssessment(null);
-    } finally {
-      setIsDroneAssessmentLoading(false);
+  const droneMissionOrigin = useMemo(() => {
+    if (origin) {
+      return { lat: origin.lat, lon: origin.lng, label: origin.name };
     }
-  }, [droneTarget.key, droneTarget.label, droneTarget.lat, droneTarget.lon]);
+    if (userLocation) {
+      return { lat: userLocation.lat, lon: userLocation.lng, label: 'Current location' };
+    }
+    return { lat, lon: lng, label: 'Map center' };
+  }, [origin, userLocation, lat, lng]);
+
+  const droneMissionPlan = useMemo(() => {
+    if (!isDroneMode) return null;
+    return buildDroneMissionPlan({
+      origin: droneMissionOrigin,
+      target: { lat: droneTarget.lat, lon: droneTarget.lon, label: droneTarget.label },
+      landingAssessment: droneAssessment,
+      navigationPoint: droneNavigationPoint,
+    });
+  }, [
+    isDroneMode,
+    droneMissionOrigin,
+    droneTarget.lat,
+    droneTarget.lon,
+    droneTarget.label,
+    droneAssessment,
+    droneNavigationPoint,
+  ]);
+
+  const checkDroneCorridor = React.useCallback(async () => {
+    if (!droneMissionPlan) return null;
+    setIsDroneCorridorLoading(true);
+    try {
+      const report = await fetchDroneCorridorReport({
+        origin: droneMissionOrigin,
+        target: { lat: droneTarget.lat, lon: droneTarget.lon, label: droneTarget.label },
+      });
+      setDroneCorridorReport(report);
+      return report;
+    } catch (error) {
+      console.warn('[Drone] Corridor check failed:', error);
+      setDroneCorridorReport(null);
+      return null;
+    } finally {
+      setIsDroneCorridorLoading(false);
+    }
+  }, [droneMissionOrigin, droneMissionPlan, droneTarget.lat, droneTarget.lon, droneTarget.label]);
+
+  const saveDroneMissionPlan = React.useCallback(() => {
+    if (!droneMissionPlan) return null;
+    const record = buildDroneMissionRecord({
+      agid: clickedAgid?.id,
+      origin: droneMissionOrigin,
+      target: { lat: droneTarget.lat, lon: droneTarget.lon, label: droneTarget.label },
+      plan: droneMissionPlan,
+      corridorReport: droneCorridorReport,
+      assessment: droneAssessment,
+      navigationPoint: droneNavigationPoint,
+    });
+    const payload = buildDroneMissionQrPayload(record);
+    const savedQr = buildSavedQrFromDroneMission(record, payload);
+    const newSaved = [savedQr, ...savedQrs.filter(q => q.id !== savedQr.id)];
+    setSavedQrs(newSaved);
+    localStorage.setItem('saved_qrs', JSON.stringify(newSaved));
+    return record;
+  }, [
+    clickedAgid?.id,
+    droneAssessment,
+    droneCorridorReport,
+    droneMissionOrigin,
+    droneMissionPlan,
+    droneNavigationPoint,
+    droneTarget.lat,
+    droneTarget.lon,
+    droneTarget.label,
+    savedQrs,
+    setSavedQrs,
+  ]);
+
+  const droneInternalActionsRef = useRef({ saveDroneMissionPlan, checkDroneCorridor });
+
+  useEffect(() => {
+    droneInternalActionsRef.current = { saveDroneMissionPlan, checkDroneCorridor };
+  }, [saveDroneMissionPlan, checkDroneCorridor]);
+
 
   useEffect(() => {
     if (!isDroneMode) return;
@@ -653,29 +650,7 @@ export default function App() {
     };
   }, [isDroneMode, droneTarget.key, droneTarget.label, droneTarget.lat, droneTarget.lon]);
 
-  const droneMissionOrigin = useMemo(() => {
-    if (origin) return { lat: origin.lat, lon: origin.lng, label: origin.name || 'Route origin' };
-    if (userLocation) return { lat: userLocation.lat, lon: userLocation.lng, label: 'Current location' };
-    return { lat, lon: lng, label: 'Map center' };
-  }, [origin?.lat, origin?.lng, origin?.name, userLocation?.lat, userLocation?.lng, lat, lng]);
 
-  const droneMissionPlan = useMemo(() => {
-    if (!isDroneMode) return null;
-    return buildDroneMissionPlan({
-      origin: droneMissionOrigin,
-      target: { lat: droneTarget.lat, lon: droneTarget.lon, label: droneTarget.label },
-      landingAssessment: droneAssessment,
-      navigationPoint: droneNavigationPoint,
-    });
-  }, [
-    isDroneMode,
-    droneMissionOrigin,
-    droneTarget.lat,
-    droneTarget.lon,
-    droneTarget.label,
-    droneAssessment,
-    droneNavigationPoint,
-  ]);
 
   useEffect(() => {
     if (preserveDroneCorridorOnTargetChangeRef.current) {
@@ -685,60 +660,7 @@ export default function App() {
     setDroneCorridorReport(null);
   }, [droneTarget.key]);
 
-  const checkDroneCorridor = React.useCallback(async () => {
-    if (!droneMissionPlan) return;
-    setIsDroneCorridorLoading(true);
-    try {
-      const report = await fetchDroneCorridorReport({
-        origin: droneMissionOrigin,
-        target: { lat: droneTarget.lat, lon: droneTarget.lon, label: droneTarget.label },
-        sampleCount: 5,
-      });
-      setDroneCorridorReport(report);
-    } catch (error) {
-      console.warn('[Drone] Corridor check failed:', error);
-      setDroneCorridorReport(null);
-    } finally {
-      setIsDroneCorridorLoading(false);
-    }
-  }, [
-    droneMissionOrigin,
-    droneMissionPlan,
-    droneTarget.lat,
-    droneTarget.lon,
-    droneTarget.label,
-  ]);
 
-  const saveDroneMissionPlan = React.useCallback(() => {
-    if (!droneMissionPlan) return;
-    const record = buildDroneMissionRecord({
-      agid: clickedAgid?.id,
-      origin: droneMissionOrigin,
-      target: { lat: droneTarget.lat, lon: droneTarget.lon, label: droneTarget.label },
-      plan: droneMissionPlan,
-      corridorReport: droneCorridorReport,
-      assessment: droneAssessment,
-      navigationPoint: droneNavigationPoint,
-    });
-    const payload = buildDroneMissionQrPayload(record);
-    const savedQr = buildSavedQrFromDroneMission(record, payload);
-    const nextSavedQrs = [savedQr, ...savedQrs.filter(q => q.id !== savedQr.id)];
-    setSavedQrs(nextSavedQrs);
-    localStorage.setItem('saved_qrs', JSON.stringify(nextSavedQrs));
-    setSavedTab('qr');
-    showAlert('Drone Mission Saved', 'Drone mission plan has been saved as a QR card.');
-  }, [
-    clickedAgid?.id,
-    droneCorridorReport,
-    droneAssessment,
-    droneMissionOrigin,
-    droneMissionPlan,
-    droneNavigationPoint,
-    droneTarget.lat,
-    droneTarget.lon,
-    droneTarget.label,
-    savedQrs,
-  ]);
 
   const [showFullSeaRegistry, setShowFullSeaRegistry] = useState(false);
   const [showFullCountryRegistry, setShowFullCountryRegistry] = useState(false);
@@ -831,7 +753,7 @@ export default function App() {
     }
   }, [addressLanguage]);
 
-  const [showHubs, setShowHubs] = useState(() => {
+  const [showHubs] = useState(() => {
     try {
       const saved = localStorage.getItem('agid_show_hubs');
       return saved !== null ? JSON.parse(saved) : false;
@@ -861,31 +783,31 @@ export default function App() {
       return saved !== null ? JSON.parse(saved) : false;
     } catch { return false; }
   });
-  const [isDeepSeaMode, setIsDeepSeaMode] = useState(() => {
+  const [isDeepSeaMode] = useState(() => {
     try {
       const saved = localStorage.getItem('agid_deep_sea_mode');
       return saved !== null ? JSON.parse(saved) : false;
     } catch { return false; }
   });
-  const [isWaterlessEarthMode, setIsWaterlessEarthMode] = useState(() => {
+  const [isWaterlessEarthMode] = useState(() => {
     try {
       const saved = localStorage.getItem('agid_waterless_earth_mode');
       return saved !== null ? JSON.parse(saved) : false;
     } catch { return false; }
   });
-  const [isHeritageMode, setIsHeritageMode] = useState(() => {
+  const [isHeritageMode] = useState(() => {
     try {
       const saved = localStorage.getItem('agid_heritage_mode');
       return saved !== null ? JSON.parse(saved) : false;
     } catch { return false; }
   });
-  const [isGisMode, setIsGisMode] = useState(() => {
+  const [isGisMode] = useState(() => {
     try {
       const saved = localStorage.getItem('agid_gis_mode');
       return saved !== null ? JSON.parse(saved) : false;
     } catch { return false; }
   });
-  const [gisLayer, setGisLayer] = useState<'population' | 'landuse' | 'soil'>(() => {
+  const [gisLayer] = useState<'population' | 'landuse' | 'soil'>(() => {
     try {
       return (localStorage.getItem('agid_gis_layer') as any) || 'population';
     } catch { return 'population'; }
@@ -893,12 +815,12 @@ export default function App() {
   const [isSystematicMode, setIsSystematicMode] = useState(() => {
     return false;
   });
-  const [systematicCategory, setSystematicCategory] = useState<'physical' | 'human'>(() => {
+  const [systematicCategory] = useState<'physical' | 'human'>(() => {
     try {
       return (localStorage.getItem('agid_systematic_category') as any) || 'physical';
     } catch { return 'physical'; }
   });
-  const [systematicSubCategory, setSystematicSubCategory] = useState<string>(() => {
+  const [systematicSubCategory] = useState<string>(() => {
     try {
       return localStorage.getItem('agid_systematic_subcategory') || 'climatology';
     } catch { return 'climatology'; }
@@ -911,7 +833,7 @@ export default function App() {
   const [isRegionalMode, setIsRegionalMode] = useState(() => {
     return false;
   });
-  const [regionalType, setRegionalType] = useState<'static' | 'dynamic'>(() => {
+  const [regionalType] = useState<'static' | 'dynamic'>(() => {
     try {
       return (localStorage.getItem('agid_regional_type') as any) || 'static';
     } catch { return 'static'; }
@@ -932,7 +854,7 @@ export default function App() {
     } catch { return 'mercator'; }
   });
   const [showStyleMenu, setShowStyleMenu] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
+  const [, setShowHistory] = useState(false);
 
   // Custom UI for alerts and confirms
   const [alertConfig, setAlertConfig] = useState<{ show: boolean, title: string, message: string } | null>(null);
@@ -1116,9 +1038,6 @@ export default function App() {
     setAlertConfig({ show: true, title, message });
   };
 
-  const showConfirm = (title: string, message: string, onConfirm: () => void) => {
-    setConfirmConfig({ show: true, title, message, onConfirm });
-  };
 
   const jumpToAgid = React.useCallback((agidStr: string) => {
     try {
@@ -1241,13 +1160,6 @@ export default function App() {
     ]
   };
 
-  const MAP_STYLES = [
-    { id: 'bright', name: 'Bright', url: OPENFREEMAP_STYLES.bright, icon: Globe, thumb: 'https://picsum.photos/seed/map-bright/100/100' },
-    { id: 'liberty', name: 'Liberty', url: OPENFREEMAP_STYLES.liberty, icon: Layers, thumb: 'https://picsum.photos/seed/map-liberty/100/100' },
-    { id: 'positron', name: 'Light', url: OPENFREEMAP_STYLES.positron, icon: Compass, thumb: 'https://picsum.photos/seed/map-light/100/100' },
-    { id: 'dark', name: 'Dark', url: OPENFREEMAP_STYLES.dark, icon: Waves, thumb: 'https://picsum.photos/seed/map-dark/100/100' },
-    { id: 'satellite', name: 'Satellite', url: 'satellite', icon: Globe, thumb: 'https://picsum.photos/seed/satellite-view/100/100' },
-  ];
 
   const changeStyle = (url: string) => {
     setMapStyle(url);
@@ -1297,17 +1209,7 @@ export default function App() {
     }
   };
 
-  const openInOsmAnd = () => {
-    if (!navigationTarget) return;
-    const url = `osmand://go?lat=${navigationTarget.lat}&lon=${navigationTarget.lng}&z=15`;
-    window.open(url, '_blank');
-  };
 
-  const openInOrganicMaps = () => {
-    if (!navigationTarget) return;
-    const url = `om://map?v=1&ll=${navigationTarget.lat},${navigationTarget.lng}&n=Destination`;
-    window.open(url, '_blank');
-  };
 
   const openExternalMap = (provider: MapProvider) => {
     const dest = routingMode === 'driving'
@@ -1729,12 +1631,9 @@ export default function App() {
 
       // Default: OSRM Routing API via Proxy
       const profile = routingMode === 'walking' ? 'foot' : 'driving';
-      const url = `/api/osrm/route?start=${startPoint.lng},${startPoint.lat}&end=${endPoint.lng},${endPoint.lat}&profile=${profile}`;
-      const res = await fetch(url);
-      const data = await res.json();
+      const route = await fetchOsrmRoute(startPoint, endPoint, profile);
 
-      if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
-        const route = data.routes[0];
+      if (route) {
         setRouteData(prev => {
           const next = {
             type: 'FeatureCollection' as const,
@@ -1825,24 +1724,11 @@ export default function App() {
       return;
     }
     
-    // Add "Current Location" as a suggestion if query is "my" or similar
-    const showMyLocation = "my location".includes(originQuery.toLowerCase()) || originQuery.toLowerCase().includes("current");
-
     const timer = setTimeout(async () => {
       setIsSearchingOrigin(true);
       try {
-        const res = await fetch(`/api/photon?q=${encodeURIComponent(originQuery)}&limit=5`);
-        const data = await res.json();
-        let features = data.features || [];
-        
-        if (showMyLocation && userLocation) {
-          features = [{
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: [userLocation.lng, userLocation.lat] },
-            properties: { name: "My Location", city: "Current GPS Position" }
-          }, ...features];
-        }
-        
+        const searchFeatures = await fetchPhotonFeatures(originQuery, 5);
+        const features = prependCurrentLocationSuggestion(originQuery, searchFeatures, userLocation);
         setOriginResults(features);
       } catch (err) {
         console.error("Origin search error:", err);
@@ -1860,24 +1746,11 @@ export default function App() {
       return;
     }
 
-    // Add "Current Location" as a suggestion if query is "my" or similar
-    const showMyLocation = "my location".includes(destinationQuery.toLowerCase()) || destinationQuery.toLowerCase().includes("current");
-
     const timer = setTimeout(async () => {
       setIsSearchingDestination(true);
       try {
-        const res = await fetch(`/api/photon?q=${encodeURIComponent(destinationQuery)}&limit=5`);
-        const data = await res.json();
-        let features = data.features || [];
-
-        if (showMyLocation && userLocation) {
-          features = [{
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: [userLocation.lng, userLocation.lat] },
-            properties: { name: "My Location", city: "Current GPS Position" }
-          }, ...features];
-        }
-
+        const searchFeatures = await fetchPhotonFeatures(destinationQuery, 5);
+        const features = prependCurrentLocationSuggestion(destinationQuery, searchFeatures, userLocation);
         setDestinationResults(features);
       } catch (err) {
         console.error("Destination search error:", err);
@@ -1888,29 +1761,20 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [destinationQuery, userLocation]);
 
-  const selectOrigin = (feature: any) => {
-    const [lng, lat] = feature.geometry.coordinates;
-    const name = feature.properties.name + (feature.properties.city ? `, ${feature.properties.city}` : "");
-    setOrigin({ lat, lng, name });
-    setOriginQuery(name);
+  const selectOrigin = (feature: PhotonFeature) => {
+    const point = photonFeatureToNamedCoordinates(feature);
+    setOrigin(point);
+    setOriginQuery(point.name);
     setOriginResults([]);
   };
 
-  const selectDestination = (feature: any) => {
-    const [lng, lat] = feature.geometry.coordinates;
-    const name = feature.properties.name + (feature.properties.city ? `, ${feature.properties.city}` : "");
-    setDestination({ lat, lng, name });
-    setDestinationQuery(name);
+  const selectDestination = (feature: PhotonFeature) => {
+    const point = photonFeatureToNamedCoordinates(feature);
+    setDestination(point);
+    setDestinationQuery(point.name);
     setDestinationResults([]);
   };
 
-  const swapOriginDestination = () => {
-    const temp = origin;
-    setOrigin(destination);
-    setDestination(temp);
-    setOriginQuery(destination?.name || "");
-    setDestinationQuery(origin?.name || "");
-  };
 
   const jumpToSaved = (saved: any) => {
     if (!map.current) return;
@@ -1929,17 +1793,6 @@ export default function App() {
     setShowSaved(false);
   };
 
-  const formatCoord = (val: number, isLat: boolean) => {
-    if (coordFormat === 'decimal') return `${val.toFixed(5)}°`;
-    
-    const absVal = Math.abs(val);
-    const degrees = Math.floor(absVal);
-    const minutes = Math.floor((absVal - degrees) * 60);
-    const seconds = ((absVal - degrees - minutes / 60) * 3600).toFixed(1);
-    const direction = isLat ? (val >= 0 ? 'N' : 'S') : (val >= 0 ? 'E' : 'W');
-    
-    return `${degrees}°${minutes}'${seconds}"${direction}`;
-  };
 
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
@@ -1947,10 +1800,6 @@ export default function App() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const shareMap = () => {
-    const url = `${window.location.origin}${window.location.pathname}?lat=${lat}&lng=${lng}&zoom=${zoom}`;
-    copyToClipboard(url, 'share');
-  };
 
   const enrichAddressWithRenderedBuildingName = React.useCallback((address: any, l: number, n: number, langCode: string) => {
     const renderedBuildingCandidates = queryOpenFreeMapBuildingNameCandidates(map.current, l, n, langCode, 28);
@@ -2046,7 +1895,6 @@ export default function App() {
     lastGeocodeRequestRef.current = currentKey;
 
     // Helper to wait
-    const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
     try {
       // Determine languages based on AGID prefix and sea status
@@ -2282,23 +2130,6 @@ export default function App() {
     }
   };
 
-  const jumpToSelected = () => {
-    if (!clickedAgid || !map.current) return;
-    setIsFlying(true);
-    const { minLat, maxLat, minLon, maxLon } = clickedAgid.bounds;
-    const centerLat = (minLat + maxLat) / 2;
-    const centerLon = (minLon + maxLon) / 2;
-    
-    map.current.flyTo({
-      center: [centerLon, centerLat],
-      zoom: getDeviceZoom(),
-      pitch: mapPitch,
-      essential: true,
-      duration: 1500
-    });
-    
-    setTimeout(() => setIsFlying(false), 1500);
-  };
 
   // Debounced search for fuzzy matching and ambiguity handling
   useEffect(() => {

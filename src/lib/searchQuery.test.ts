@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  expandSearchQuery,
-  normalizeSearchText,
-  scoreSearchCandidate,
+expandSearchQuery,
+normalizeSearchText,
+scoreSearchCandidate,
 } from './searchQuery';
 
 test('expands multilingual place queries into English and native search candidates', () => {

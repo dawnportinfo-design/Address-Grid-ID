@@ -1,26 +1,22 @@
 
-import { transliterate } from './transliteration';
-import { applyShippingAbbreviations } from './addressUtils';
 import {
-  normalizeEnglishAddressBuildingName,
-  normalizeEnglishAddressPart,
-  renderDomesticEnglishPostalAddress,
-  renderEnglishPostalAddress,
-  renderStreetAddressLine,
-  uniqueAddressParts,
-  countryName,
+countryName,
+normalizeEnglishAddressBuildingName,
+normalizeEnglishAddressPart,
+renderStreetAddressLine,
+uniqueAddressParts,
 } from './addressEnglish';
 import { mergeOpenSourceAddressEvidence } from './addressEvidence';
-import { isEnglishAddressCountry, isInternationalShippingEnglishTab } from './languageTabs';
-import { 
-  renderDomesticCN, 
-  renderInternationalCN, 
-  renderTW, 
-  renderHK, 
-  renderMO,
-  toSimplified, 
-  toTraditional 
+import { applyShippingAbbreviations } from './addressUtils';
+import {
+renderDomesticCN,
+renderHK,
+renderInternationalCN,
+renderMO,
+renderTW
 } from './chineseAddressUtils';
+import { renderEnglishAddressMode } from './englishAddressMode';
+import { isEnglishAddressCountry,isInternationalShippingEnglishTab } from './languageTabs';
 
 export interface CanonicalAddress {
   country_code: string;
@@ -266,14 +262,14 @@ export class AddressRenderer {
    * Standard English formatting for domestic use
    */
   private static renderDomesticEnglish(data: CanonicalAddress): string {
-    return renderDomesticEnglishPostalAddress(data);
+    return renderEnglishAddressMode(data, 'domestic');
   }
 
   /**
    * International standard English (Small-to-Big, ASCII, Capitalized Country)
    */
   private static renderInternationalEnglish(data: CanonicalAddress): string {
-    return renderEnglishPostalAddress(data);
+    return renderEnglishAddressMode(data, 'international-shipping');
   }
 
   static renderInternationalShippingEnglish(data: CanonicalAddress): string {

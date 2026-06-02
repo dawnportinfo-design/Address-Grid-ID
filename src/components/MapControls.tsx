@@ -1,14 +1,14 @@
 
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Layers, 
-  LocateFixed, 
-  Plus, 
-  Minus 
+import {
+Layers,
+LocateFixed,
+Minus,
+Plus
 } from 'lucide-react';
-import { cn } from '../lib/utils';
 import maplibregl from 'maplibre-gl';
+import { AnimatePresence,motion } from 'motion/react';
+import React from 'react';
+import { cn } from '../lib/utils';
 
 interface MapControlsProps {
   mapBearing: number;

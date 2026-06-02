@@ -1,8 +1,8 @@
 import enTerritories from 'cldr-localenames-modern/main/en/territories.json';
-import jaTerritories from 'cldr-localenames-modern/main/ja/territories.json';
-import frTerritories from 'cldr-localenames-modern/main/fr/territories.json';
 import esTerritories from 'cldr-localenames-modern/main/es/territories.json';
-import type { AddressFormat, AddressField } from '../data/address_formats';
+import frTerritories from 'cldr-localenames-modern/main/fr/territories.json';
+import jaTerritories from 'cldr-localenames-modern/main/ja/territories.json';
+import type { AddressField,AddressFormat } from '../data/address_formats';
 
 type LibaddressinputMetadata = {
   fmt?: string;

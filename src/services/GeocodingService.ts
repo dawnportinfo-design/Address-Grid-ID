@@ -1,47 +1,47 @@
-import Dexie, { Table } from 'dexie';
-import { fetchWestAsiaContext, RegionalLandmark } from './WestAsiaService';
-import { fetchRussiaContext, RussiaContext } from './RussiaService';
-import { fetchCentralAsiaContext, CentralAsiaContext } from './CentralAsiaService';
-import { fetchSouthAsiaContext, SouthAsiaContext, fetchIndiaOfficialAddress } from './SouthAsiaService';
-import { fetchUKIrelandContext, UKIrelandContext, fetchUKPostcodeDetails } from './UKIrelandService';
-import { fetchNordicContext, NordicContext, fetchNordicWeather, fetchDanishAddress, fetchNorwegianAddress, fetchFinnishAddress } from './NordicService';
-import { fetchFrenchAddress, fetchDutchAddress, fetchGermanAddress, fetchBelgianAddress, fetchSwissAddress, fetchAustrianAddress, fetchSwedishAddress, fetchEstonianAddress, fetchLatvianAddress, fetchLithuanianAddress, fetchIcelandicAddress, fetchItalianAddress, fetchSpanishAddress, fetchPortugueseAddress, fetchGreekAddress, fetchMalteseAddress, fetchCypriotAddress, fetchMicrostateAddress, fetchEEBalkanAddress, fetchBelgiumBestAddress, fetchCzechRuianAddress, fetchSpainCatastroAddress, fetchIrelandAddress, fetchLuxembourgAddress, fetchUKAddress, fetchPolishAddress } from './EuropePostalService';
-import { fetchAsiaOceaniaAddress } from './AsiaOceaniaService';
-import { fetchOceaniaContext, OceaniaContext } from './OceaniaService';
-import { fetchEastAsiaContext, EastAsiaContext, fetchKoreaOfficialAddress, fetchHKOfficialAddress } from './EastAsiaService';
-import { fetchNorthAmericaContext, NorthAmericaContext, fetchUSCensusData, fetchCanadaOfficialAddress, fetchMexicoOfficialAddress } from './NorthAmericaService';
-import { fetchSouthAmericaContext, SouthAmericaContext, fetchBrazilOfficialAddress, fetchSouthAmericaOfficialAddress, fetchBrazilViaCEP } from './SouthAmericaService';
-import { fetchCaribbeanContext, CaribbeanContext, fetchCaribbeanOfficialAddress } from './CaribbeanService';
-import { fetchCentralAmericaContext, CentralAmericaContext, fetchCentralAmericaOfficialAddress } from './CentralAmericaService';
-import { fetchSoutheastAsiaContext, SoutheastAsiaContext, fetchSoutheastAsiaOfficialAddress } from './SoutheastAsiaService';
-import { fetchAfricaContext, AfricaContext, fetchAfricaOfficialAddress, fetchSouthAfricaAddress, fetchEgyptAddress } from './AfricaService';
-import { fetchPolarContext, fetchPolarOfficialData, PolarContext } from './PolarService';
-import { fetchNatureContext, NatureContext } from './NatureService';
-import { fetchSeaContext, SeaContext } from './SeaService';
-import { fetchHeritageContext, HeritageContext } from './HeritageService';
-import { fetchJapaneseGeoContext, JapaneseGeoContext } from './JapaneseGeoService';
-import { latLonToOSGrid } from '../lib/osgrid';
-import { analyzeAddress } from '../lib/addressIntelligence';
-import { parseAddressWithOptionalLibpostal } from '../lib/libpostalGateway';
-import { expandSearchQuery, normalizeSearchText, scoreSearchCandidate } from '../lib/searchQuery';
-import {
-  AdvancedSearchOptions,
-  buildNominatimSearchUrl,
-  matchesAdvancedSearchCategory,
-  matchesAdvancedSearchLocation,
-  normalizeAdvancedSearchOptions,
-} from '../lib/advancedSearch';
-import { rankAddressCandidatesByMorphism, type AddressMorphismCandidate } from '../lib/addressMorphism';
-import { buildMorphismCandidateFromSources, detectNaturalAddressContext } from '../lib/addressMorphismSources';
+import Dexie,{ Table } from 'dexie';
 import { getAddressFormat } from '../data/address_formats';
+import { analyzeAddress } from '../lib/addressIntelligence';
+import { rankAddressCandidatesByMorphism,type AddressMorphismCandidate } from '../lib/addressMorphism';
+import { buildMorphismCandidateFromSources,detectNaturalAddressContext } from '../lib/addressMorphismSources';
 import {
-  buildBuildingNameOverpassQuery,
-  buildingNameCandidateFromOsmElement,
-  extractBuildingNameFromReverseGeocode,
-  rankBuildingNameCandidates,
-  type BuildingNameCandidate,
+AdvancedSearchOptions,
+buildNominatimSearchUrl,
+matchesAdvancedSearchCategory,
+matchesAdvancedSearchLocation,
+normalizeAdvancedSearchOptions,
+} from '../lib/advancedSearch';
+import {
+buildBuildingNameOverpassQuery,
+buildingNameCandidateFromOsmElement,
+extractBuildingNameFromReverseGeocode,
+rankBuildingNameCandidates,
+type BuildingNameCandidate,
 } from '../lib/buildingName';
+import { parseAddressWithOptionalLibpostal } from '../lib/libpostalGateway';
+import { latLonToOSGrid } from '../lib/osgrid';
 import { buildingNameCandidateFromOvertureFeature } from '../lib/overtureMaps';
+import { expandSearchQuery,normalizeSearchText,scoreSearchCandidate } from '../lib/searchQuery';
+import { AfricaContext,fetchAfricaContext,fetchAfricaOfficialAddress,fetchEgyptAddress,fetchSouthAfricaAddress } from './AfricaService';
+import { fetchAsiaOceaniaAddress } from './AsiaOceaniaService';
+import { CaribbeanContext,fetchCaribbeanContext,fetchCaribbeanOfficialAddress } from './CaribbeanService';
+import { CentralAmericaContext,fetchCentralAmericaContext,fetchCentralAmericaOfficialAddress } from './CentralAmericaService';
+import { CentralAsiaContext,fetchCentralAsiaContext } from './CentralAsiaService';
+import { EastAsiaContext,fetchEastAsiaContext,fetchHKOfficialAddress,fetchKoreaOfficialAddress } from './EastAsiaService';
+import { fetchAustrianAddress,fetchBelgianAddress,fetchBelgiumBestAddress,fetchCypriotAddress,fetchCzechRuianAddress,fetchDutchAddress,fetchEEBalkanAddress,fetchEstonianAddress,fetchFrenchAddress,fetchGermanAddress,fetchGreekAddress,fetchIcelandicAddress,fetchIrelandAddress,fetchItalianAddress,fetchLatvianAddress,fetchLithuanianAddress,fetchLuxembourgAddress,fetchMalteseAddress,fetchMicrostateAddress,fetchPolishAddress,fetchPortugueseAddress,fetchSpainCatastroAddress,fetchSpanishAddress,fetchSwedishAddress,fetchSwissAddress,fetchUKAddress } from './EuropePostalService';
+import { fetchHeritageContext,HeritageContext } from './HeritageService';
+import { fetchJapaneseGeoContext,JapaneseGeoContext } from './JapaneseGeoService';
+import { fetchNatureContext,NatureContext } from './NatureService';
+import { fetchDanishAddress,fetchFinnishAddress,fetchNordicContext,fetchNordicWeather,fetchNorwegianAddress,NordicContext } from './NordicService';
+import { fetchCanadaOfficialAddress,fetchMexicoOfficialAddress,fetchNorthAmericaContext,fetchUSCensusData,NorthAmericaContext } from './NorthAmericaService';
+import { fetchOceaniaContext,OceaniaContext } from './OceaniaService';
+import { fetchPolarContext,fetchPolarOfficialData,PolarContext } from './PolarService';
+import { fetchRussiaContext,RussiaContext } from './RussiaService';
+import { fetchSeaContext,SeaContext } from './SeaService';
+import { fetchBrazilOfficialAddress,fetchBrazilViaCEP,fetchSouthAmericaContext,fetchSouthAmericaOfficialAddress,SouthAmericaContext } from './SouthAmericaService';
+import { fetchIndiaOfficialAddress,fetchSouthAsiaContext,SouthAsiaContext } from './SouthAsiaService';
+import { fetchSoutheastAsiaContext,fetchSoutheastAsiaOfficialAddress,SoutheastAsiaContext } from './SoutheastAsiaService';
+import { fetchUKIrelandContext,fetchUKPostcodeDetails,UKIrelandContext } from './UKIrelandService';
+import { fetchWestAsiaContext,RegionalLandmark } from './WestAsiaService';
 
 // --- Types ---
 
@@ -59,9 +59,9 @@ export interface OSMPlace {
   lastUpdated: number;
 }
 
-import { calculateMountainClass, calculateConsensusMetrics } from '../lib/agid';
+import { calculateMountainClass } from '../lib/agid';
 
-import { fetchGlobalContext, GlobalWeather, LocalTimeInfo, fetchGlobalPostcodeDetails, fetchPlusCode } from './GlobalContextService';
+import { fetchGlobalContext,fetchGlobalPostcodeDetails,fetchPlusCode,GlobalWeather,LocalTimeInfo } from './GlobalContextService';
 
 async function enrichAnalysisWithOptionalLibpostal(analysis: ReturnType<typeof analyzeAddress>, displayName?: string, countryCode?: string) {
   if (!displayName) return analysis;
@@ -486,7 +486,7 @@ async function fetchNearbyOsmBuildingName(
         const elLat = element.lat || element.center?.lat;
         const elLon = element.lon || element.center?.lon;
         const distanceMeters = elLat && elLon ? Math.round(calculateDistance(lat, lon, elLat, elLon) * 1000) : undefined;
-        return buildingNameCandidateFromOsmElement(element, lat, lon, langCode, distanceMeters);
+        return buildingNameCandidateFromOsmElement(element, langCode, distanceMeters);
       })
       .filter(Boolean) as BuildingNameCandidate[];
 
@@ -764,7 +764,7 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
         promises.push(fetchPolishAddress(lat, lon));
       }
     } else if (['us', 'ca', 'mx', 'gl'].includes(cc)) {
-      promises.push(fetchNorthAmericaContext(lat, lon, cc));
+      promises.push(fetchNorthAmericaContext(lat, lon));
       if (cc === 'us') {
         promises.push(fetchUSCensusData(lat, lon));
       } else if (cc === 'ca') {
@@ -773,25 +773,25 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
         promises.push(fetchMexicoOfficialAddress(lat, lon));
       }
     } else if (cc === 'br') {
-      promises.push(fetchSouthAmericaContext(lat, lon, cc));
+      promises.push(fetchSouthAmericaContext(lat, lon));
       promises.push(fetchBrazilOfficialAddress(lat, lon));
     } else if (['ar', 'cl', 'co', 'pe', 've', 'ec', 'bo', 'py', 'uy', 'sr', 'gy', 'gf'].includes(cc)) {
-      promises.push(fetchSouthAmericaContext(lat, lon, cc));
+      promises.push(fetchSouthAmericaContext(lat, lon));
       promises.push(fetchSouthAmericaOfficialAddress(lat, lon, cc));
     } else if (['cu', 'do', 'pr', 'jm', 'tt', 'bs', 'bb', 'lc', 'gd', 'vc', 'ag', 'kn', 'dm', 'ht', 'ky', 'tc', 'vg', 'vi', 'bm', 'gp', 'mq', 'cw', 'aw', 'sx', 'bl', 'mf'].includes(cc)) {
-      promises.push(fetchCaribbeanContext(lat, lon, cc));
+      promises.push(fetchCaribbeanContext(lat, lon));
       promises.push(fetchCaribbeanOfficialAddress(lat, lon, cc));
       if (cc === 'pr' || cc === 'vi') {
         promises.push(fetchUSCensusData(lat, lon));
       }
     } else if (['gt', 'bz', 'sv', 'hn', 'ni', 'cr', 'pa'].includes(cc)) {
-      promises.push(fetchCentralAmericaContext(lat, lon, cc));
+      promises.push(fetchCentralAmericaContext(lat, lon));
       promises.push(fetchCentralAmericaOfficialAddress(lat, lon, cc));
     } else if (['th', 'id', 'vn', 'my', 'ph', 'sg', 'mm', 'kh', 'la', 'bn', 'tl'].includes(cc)) {
-      promises.push(fetchSoutheastAsiaContext(lat, lon, cc));
+      promises.push(fetchSoutheastAsiaContext(lat, lon));
       promises.push(fetchSoutheastAsiaOfficialAddress(lat, lon, cc));
     } else if (['za', 'ng', 'ke', 'eg', 'ma', 'dz', 'tn', 'ly', 'sd', 'et', 'gh', 'ci', 'sn', 'ug', 'tz', 'zm', 'zw', 'na', 'bw', 'ao', 'mz', 'cm', 'ga', 'cd', 'cg', 'rw', 'bi', 'mw', 'mg', 'mu', 'sc', 'cv', 'gm', 'gn', 'sl', 'lr', 'bf', 'ne', 'td', 'ml', 'mr', 'eh', 'dj', 'er', 'so', 'sz', 'ls', 'km', 'st', 'gq', 'bj', 'tg'].includes(cc)) {
-      promises.push(fetchAfricaContext(lat, lon, cc));
+      promises.push(fetchAfricaContext(lat, lon));
       promises.push(fetchAfricaOfficialAddress(lat, lon, cc));
     } else if (asiaOceaniaCountries.includes(cc)) {
       promises.push(fetchAsiaOceaniaAddress(lat, lon, cc));
@@ -1071,7 +1071,7 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
 
         // For India, use Pincode API
         if (cc === 'in') {
-          const inPcRes = await fetchIndiaOfficialAddress(lat, lon, pc);
+          const inPcRes = await fetchIndiaOfficialAddress(pc);
           if (inPcRes) {
             officialRegionalData = inPcRes;
           }

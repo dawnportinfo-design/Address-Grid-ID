@@ -1,7 +1,6 @@
 
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Trash2, Info, Target } from 'lucide-react';
+import { Info,Target,Trash2,X } from 'lucide-react';
+import { AnimatePresence,motion } from 'motion/react';
 
 export function CustomAlert({ config, onClose }: { config: { title: string; message: string; show: boolean } | null; onClose: () => void }) {
   return (

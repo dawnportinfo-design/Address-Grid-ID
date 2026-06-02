@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
-import { basename, join, relative } from 'node:path';
+import { readdirSync,readFileSync } from 'node:fs';
+import { basename,join,relative } from 'node:path';
 import { test } from 'node:test';
 import { parse } from 'yaml';
 

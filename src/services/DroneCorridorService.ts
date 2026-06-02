@@ -1,9 +1,9 @@
 import {
-  buildDroneCorridorReport,
-  type DroneCorridorReport,
-  type DroneCorridorSampleAssessment,
+buildDroneCorridorReport,
+type DroneCorridorReport,
+type DroneCorridorSampleAssessment,
 } from '../lib/droneCorridor';
-import { buildDroneRouteSamples, type DroneMissionPoint } from '../lib/droneMissionPlan';
+import { buildDroneRouteSamples,type DroneMissionPoint } from '../lib/droneMissionPlan';
 import { fetchDroneLandingAssessment } from './DroneService';
 
 export async function fetchDroneCorridorReport(input: {

@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  AFRICA_COUNTRY_CODES,
-  AFRICA_OPEN_GEO_SOURCES,
-  type AfricaOpenGeoSourceId,
-  getAfricaOpenSourceIds,
+AFRICA_COUNTRY_CODES,
+AFRICA_OPEN_GEO_SOURCES,
+type AfricaOpenGeoSourceId,
+getAfricaOpenSourceIds,
 } from './africaOpenGeoSources';
 
 const REQUIRED_AFRICA_NATURAL_SOURCE_IDS: AfricaOpenGeoSourceId[] = [

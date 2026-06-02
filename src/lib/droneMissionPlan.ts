@@ -1,5 +1,5 @@
-import type { DroneLandingAssessment } from './droneAssessment';
 import type { DroneNavigationPoint } from '../services/DroneNavigationService';
+import type { DroneLandingAssessment } from './droneAssessment';
 
 export type DroneMissionStatus = 'field-check' | 'hold' | 'avoid';
 

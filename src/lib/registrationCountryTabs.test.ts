@@ -3,9 +3,9 @@ import { test } from 'node:test';
 
 import { COUNTRIES } from '../constants/countries';
 import {
-  REGISTRATION_COUNTRY_TABS,
-  getRegistrationCountryTabId,
-  groupRegistrationCountriesByTab,
+REGISTRATION_COUNTRY_TABS,
+getRegistrationCountryTabId,
+groupRegistrationCountriesByTab,
 } from './registrationCountryTabs';
 
 test('groups address registration countries into continent tabs', () => {

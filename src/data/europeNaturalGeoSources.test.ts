@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  EUROPE_COUNTRY_AND_TERRITORY_CODES,
-  EUROPE_OPEN_GEO_SOURCES,
-  getEuropeOpenSourceIds,
-  type EuropeOpenGeoSourceId,
+EUROPE_COUNTRY_AND_TERRITORY_CODES,
+EUROPE_OPEN_GEO_SOURCES,
+getEuropeOpenSourceIds,
+type EuropeOpenGeoSourceId,
 } from './europeOpenGeoSources';
 
 const REQUIRED_NATURAL_SOURCE_IDS: EuropeOpenGeoSourceId[] = [

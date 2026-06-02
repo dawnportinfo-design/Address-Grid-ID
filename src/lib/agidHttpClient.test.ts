@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { AgidHttpError, agidFetch, normalizeAgidApiResult } from './agidHttpClient';
+import { AgidHttpError,agidFetch,normalizeAgidApiResult } from './agidHttpClient';
 
 test('normalizes legacy API JSON into a standard AGID result', () => {
   const result = normalizeAgidApiResult<{ name: string }>(

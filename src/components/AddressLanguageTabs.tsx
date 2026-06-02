@@ -1,12 +1,12 @@
+import { MapPin,Truck } from 'lucide-react';
 import React from 'react';
-import { MapPin, Truck } from 'lucide-react';
 import { LANGUAGES } from '../lib/addressUtils';
-import {
-  getEnglishAddressCircle,
-  isEnglishAddressCountry,
-  isInternationalShippingEnglishTab,
-} from '../lib/languageTabs';
 import { getAddressLanguageTabLabel } from '../lib/languageLabels';
+import {
+getEnglishAddressCircle,
+isEnglishAddressCountry,
+isInternationalShippingEnglishTab,
+} from '../lib/languageTabs';
 import { cn } from '../lib/utils';
 
 type AddressLanguageTabsProps = {
@@ -22,9 +22,10 @@ function getTabLabel(langCode: string, countryCode: string) {
     langCode === 'en_domestic' && isEnglishAddressCountry(countryCode)
       ? getEnglishAddressCircle(countryCode)
       : undefined;
+  const isInternationalEnglish = langCode === 'en' || isInternationalShippingEnglishTab(langCode);
 
   return getAddressLanguageTabLabel(langCode, lang?.name, {
-    englishMode: isInternationalShippingEnglishTab(langCode)
+    englishMode: isInternationalEnglish
       ? 'international'
       : langCode === 'en_domestic'
         ? 'domestic'
@@ -41,7 +42,7 @@ export const AddressLanguageTabs: React.FC<AddressLanguageTabsProps> = ({
 }) => (
   <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
     {tabs.map(langCode => {
-      const isIntlEn = isInternationalShippingEnglishTab(langCode);
+      const isIntlEn = langCode === 'en' || isInternationalShippingEnglishTab(langCode);
       const isActive = activeTab === langCode;
       const Icon = isIntlEn ? Truck : MapPin;
 

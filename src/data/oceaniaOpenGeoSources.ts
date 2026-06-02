@@ -1,7 +1,7 @@
 import {
-  POLAR_OPEN_GEO_SOURCES,
-  getPolarOpenSourceIds,
-  type PolarOpenGeoSourceId,
+POLAR_OPEN_GEO_SOURCES,
+getPolarOpenSourceIds,
+type PolarOpenGeoSourceId,
 } from './polarOpenGeoSources';
 
 export type OceaniaOpenGeoSourceId =

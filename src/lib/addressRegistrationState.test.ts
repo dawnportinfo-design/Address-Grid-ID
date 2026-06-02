@@ -2,11 +2,11 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  buildRegistrationAddressLanguageTabs,
-  normalizeRegistrationAddressLanguage,
-  normalizeRegistrationUiLanguage,
-  selectRegistrationAddressFormat,
-  selectRegistrationCountry,
+buildRegistrationAddressLanguageTabs,
+normalizeRegistrationAddressLanguage,
+normalizeRegistrationUiLanguage,
+selectRegistrationAddressFormat,
+selectRegistrationCountry,
 } from './addressRegistrationState';
 
 test('normalizes app UI language separately from address display language', () => {
@@ -349,6 +349,56 @@ test('does not add delivery-only languages to Address Language tabs', () => {
     buildRegistrationAddressLanguageTabs(format).map(tab => tab.code),
     ['de', 'fr', 'en']
   );
+});
+
+test('does not expose non-English international translation packs as Address Language tabs', () => {
+  const format = {
+    countryCode: 'JP',
+    name: 'Japan',
+    native: {
+      name: 'Japanese',
+      addressFormat: '',
+      ordering: 'big-to-small',
+      fields: [{ key: 'city', label: '市区町村' }],
+    },
+    english: {
+      name: 'International English',
+      addressFormat: '',
+      ordering: 'small-to-big',
+      fields: [{ key: 'city', label: 'City' }],
+    },
+    international: {
+      fr: {
+        name: 'French',
+        addressFormat: '',
+        ordering: 'small-to-big',
+        fields: [{ key: 'city', label: 'Ville' }],
+      },
+      es: {
+        name: 'Spanish',
+        addressFormat: '',
+        ordering: 'small-to-big',
+        fields: [{ key: 'city', label: 'Ciudad' }],
+      },
+    },
+    addressRules: {
+      languages: [{ code: 'ja', name: 'Japanese' }],
+      deliveryLanguages: [
+        { code: 'fr', name: 'French' },
+        { code: 'es', name: 'Spanish' },
+      ],
+      nativeOrder: [],
+      englishOrder: [],
+      regionalHierarchy: [],
+      postalCode: null,
+    },
+  } as const;
+
+  const tabs = buildRegistrationAddressLanguageTabs(format);
+
+  assert.deepEqual(tabs.map(tab => tab.code), ['ja', 'en']);
+  assert.deepEqual(tabs.map(tab => tab.kind), ['domestic', 'international']);
+  assert.equal(selectRegistrationAddressFormat(format, 'fr')?.fields[0].label, '市区町村');
 });
 
 test('country selection changes only country-specific form data', () => {

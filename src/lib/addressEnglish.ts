@@ -1,8 +1,8 @@
-import { transliterate, deaccent } from './transliteration';
+import type { CanonicalAddress } from './addressRendering';
 import { normalizeMainlandChineseAddressPart } from './chineseAddressUtils';
 import { normalizeIndianAddressPart } from './indiaAddressEnglish';
 import { normalizeSouthAfricanAddressPart } from './southAfricaAddressEnglish';
-import type { CanonicalAddress } from './addressRendering';
+import { deaccent,transliterate } from './transliteration';
 
 const COUNTRY_TRANSLITERATION_LANGUAGE: Record<string, string> = {
   JP: 'ja',
@@ -691,6 +691,8 @@ const ENGLISH_ADDRESS_PHRASE_NORMALIZATIONS: Record<string, string> = {
 
 const BUILDING_NAME_EXONYMS: Record<string, string> = {
   中央合同庁舎: 'Chuo Godo Chosha',
+  グラントウキョウサウスタワー: 'GranTokyo South Tower',
+  グラントウキョウノースタワー: 'GranTokyo North Tower',
   渋谷スクランブルスクエア: 'Shibuya Scramble Square',
   上海中心大厦: 'Shanghai Zhongxin Building',
   上海中心大廈: 'Shanghai Zhongxin Building',

@@ -19,7 +19,7 @@ export interface AfricaContext {
 /**
  * Fetches geographic context for a point in Africa.
  */
-export async function fetchAfricaContext(lat: number, lon: number, countryCode: string): Promise<AfricaContext | null> {
+export async function fetchAfricaContext(lat: number, lon: number): Promise<AfricaContext | null> {
   const isSahara = lat > 18 && lat < 30 && lon > -15 && lon < 35;
   const isSahel = lat > 12 && lat <= 18 && lon > -15 && lon < 35;
   const isSubSaharan = lat <= 15;

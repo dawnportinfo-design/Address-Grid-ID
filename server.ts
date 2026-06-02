@@ -1,27 +1,31 @@
-import express from 'express';
-import { createServer as createViteServer } from 'vite';
-import path from 'path';
-import { execFile as execFileCallback } from 'child_process';
-import { promisify } from 'util';
-import rateLimit from 'express-rate-limit';
-import { initPostalCodeDB, getNearestPostalCode } from './src/services/PostalCodeDB';
 import { GoogleGenAI } from "@google/genai";
-import { normalizeTranslationLanguage, detectOpenSourceTranslationLanguage } from './src/lib/openSourceTranslation';
+import { execFile as execFileCallback } from 'child_process';
+import express from 'express';
+import rateLimit from 'express-rate-limit';
+import path from 'path';
+import { promisify } from 'util';
+import { createServer as createViteServer } from 'vite';
 import { parseAddressText } from './src/lib/addressIntelligence';
 import {
-  DEFAULT_OVERTURE_RELEASE,
-  buildOvertureBuildingNameDuckDbSql,
-  buildingNameCandidateFromOvertureFeature,
-} from './src/lib/overtureMaps';
-import {
-  buildCarStoppableOverpassQuery,
-  resolveCarStoppableDestination,
-} from './src/lib/navigationDestination';
-import {
-  buildDroneObstacleOverpassQuery,
-  resolveDroneNavigationPoint,
+buildDroneObstacleOverpassQuery,
+resolveDroneNavigationPoint,
 } from './src/lib/droneNavigation';
-
+import {
+getHybridPolicy,
+isHybridWorkflow,
+resolveHybridRuntime,
+} from './src/lib/hybridArchitecture';
+import {
+buildCarStoppableOverpassQuery,
+resolveCarStoppableDestination,
+} from './src/lib/navigationDestination';
+import { detectOpenSourceTranslationLanguage,normalizeTranslationLanguage } from './src/lib/openSourceTranslation';
+import {
+DEFAULT_OVERTURE_RELEASE,
+buildOvertureBuildingNameDuckDbSql,
+buildingNameCandidateFromOvertureFeature,
+} from './src/lib/overtureMaps';
+import { getNearestPostalCode,initPostalCodeDB } from './src/services/PostalCodeDB';
 const execFile = promisify(execFileCallback);
 
 const ai = new GoogleGenAI({
@@ -41,7 +45,7 @@ async function startServer() {
   app.set('trust proxy', 1);
 
   // Extra Security Headers / Compatibility Headers
-  app.use((req, res, next) => {
+  app.use((_req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'ALLOWALL'); 
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -113,7 +117,7 @@ async function startServer() {
   }
 
   // API Routes
-  app.get('/api/health', (req, res) => {
+  app.get('/api/health', (_req, res) => {
     console.log('[API] Health check');
     res.json({ status: 'ok' });
   });
@@ -130,6 +134,51 @@ async function startServer() {
       confidence: 1,
       sources: ['agid-server'],
       warnings: [],
+      cache: 'none',
+    });
+  });
+
+  app.post('/api/hybrid/quality', (req, res) => {
+    const workflow = req.body?.workflow;
+    if (!isHybridWorkflow(workflow)) {
+      return sendAgidResult(req, res, {
+        ok: false,
+        error: 'Unsupported hybrid workflow',
+        sources: ['agid-central-quality'],
+        warnings: ['workflow must be one of the AGID hybrid workflow ids'],
+        cache: 'none',
+      }, 400);
+    }
+
+    const confidence = Number(req.body?.centralConfidence);
+    const centralConfidence = Number.isFinite(confidence)
+      ? Math.max(0, Math.min(1, confidence))
+      : undefined;
+    const decision = resolveHybridRuntime({
+      workflow,
+      online: true,
+      centralConfidence,
+      hasLocalRecord: req.body?.hasLocalRecord === true,
+      hasOpenDataPack: req.body?.hasOpenDataPack === true,
+      userOptedInToSync: req.body?.userOptedInToSync === true,
+    });
+    const responseConfidence = {
+      verified: Math.max(0.9, centralConfidence ?? 0.9),
+      partial: Math.max(0.62, centralConfidence ?? 0.62),
+      local: Math.max(0.42, centralConfidence ?? 0.42),
+    }[decision.qualityTier];
+
+    sendAgidResult(req, res, {
+      ok: true,
+      data: {
+        decision,
+        policy: getHybridPolicy(workflow),
+      },
+      confidence: responseConfidence,
+      sources: ['agid-central-quality', 'hybrid-policy'],
+      warnings: decision.privacyScope === 'private-record' && req.body?.userOptedInToSync !== true
+        ? ['Private address sync is local-first unless the user explicitly opts in.']
+        : [],
       cache: 'none',
     });
   });
@@ -260,7 +309,7 @@ async function startServer() {
   });
 
   // AI Data Quality Analysis Route (Stub)
-  app.get('/api/data-quality/report', async (req, res) => {
+  app.get('/api/data-quality/report', async (_req, res) => {
     res.json({ 
       timestamp: Date.now(),
       report: "Backend AI analysis is disabled. Please trigger this check from the frontend.",
@@ -1129,7 +1178,7 @@ Primary language: ${lang}. Output ONLY valid JSON.`;
     return [];
   }
 
-  app.get('/api/overpass', (req, res) => {
+  app.get('/api/overpass', (_req, res) => {
     res.json({ message: 'Overpass proxy is active. Use POST to query.' });
   });
 
@@ -2018,7 +2067,7 @@ Primary language: ${lang}. Output ONLY valid JSON.`;
 
   // --- Nominatim Proxy ---
   app.get('/api/nominatim/reverse', async (req, res) => {
-    const { lat, lon, zoom, addressdetails, lang, cc } = req.query;
+    const { lat, lon, zoom, lang, cc } = req.query;
     try {
       const l = parseFloat(lat as string);
       const n = parseFloat(lon as string);
@@ -2965,7 +3014,7 @@ Primary language: ${lang}. Output ONLY valid JSON.`;
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
+    app.get('*', (_req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { afterEach, test } from 'node:test';
+import { afterEach,test } from 'node:test';
 
 import { fetchNearbyBuildingName } from './GeocodingService';
 
@@ -58,7 +58,7 @@ test('fetchNearbyBuildingName uses Overpass OSM data and prefers named buildings
 });
 
 test('fetchNearbyBuildingName can prefer Overture Maps named buildings over nearby OSM POIs', async () => {
-  globalThis.fetch = async (url, init) => {
+  globalThis.fetch = async (url) => {
     if (String(url).includes('/api/overture/building-name')) {
       return new Response(JSON.stringify({
         candidates: [{

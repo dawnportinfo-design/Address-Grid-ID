@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  getViewportGridBounds,
-  getViewportSamplePixelCoordinates,
-  getViewportSpanMeters,
-  shouldShowGridForViewport,
+getViewportGridBounds,
+getViewportSamplePixelCoordinates,
+getViewportSpanMeters,
+shouldShowGridForViewport,
 } from './gridViewport';
 
 function closeTo(actual: number, expected: number, epsilon = 1e-12) {

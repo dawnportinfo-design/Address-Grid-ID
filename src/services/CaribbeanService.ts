@@ -16,7 +16,7 @@ export interface CaribbeanContext {
 /**
  * Fetches regional context for the Caribbean using Overpass API.
  */
-export async function fetchCaribbeanContext(lat: number, lon: number, cc: string): Promise<CaribbeanContext | null> {
+export async function fetchCaribbeanContext(lat: number, lon: number): Promise<CaribbeanContext | null> {
   const radius = 3000;
   
   // Query for islands, beaches, resorts, and administrative boundaries (Parish/District)

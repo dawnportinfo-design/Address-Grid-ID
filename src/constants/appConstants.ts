@@ -1,4 +1,4 @@
-import { Globe, ShieldCheck, AlertOctagon } from 'lucide-react';
+import { AlertOctagon,Globe,ShieldCheck } from 'lucide-react';
 
 export const RESOURCE_CATEGORIES = [
   {

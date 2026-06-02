@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname,join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
@@ -30,4 +30,14 @@ test('country admin API URL construction stays out of UI components', () => {
     assert.doesNotMatch(source, /fetch\('\/api\/data-quality\/report'/);
     assert.doesNotMatch(source, /fetch\(`\/api\/osm-search/);
   }
+});
+
+test('route search API URL construction stays out of App', () => {
+  const app = read('App.tsx');
+  const service = read('services/RouteSearchService.ts');
+
+  assert.doesNotMatch(app, /fetch\(`\/api\/photon/);
+  assert.doesNotMatch(app, /fetch\(`\/api\/osrm\/route/);
+  assert.match(service, /fetchPhotonFeatures/);
+  assert.match(service, /fetchOsrmRoute/);
 });

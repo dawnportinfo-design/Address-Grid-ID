@@ -1,5 +1,5 @@
+import { agidFetch,type AgidFetchOptions } from '../lib/agidHttpClient';
 import { apiEndpoints } from '../lib/apiEndpoints';
-import { agidFetch, type AgidFetchOptions } from '../lib/agidHttpClient';
 
 export type CountryCity = {
   name?: string;

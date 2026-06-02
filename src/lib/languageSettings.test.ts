@@ -5,8 +5,8 @@ import { test } from 'node:test';
 
 import { TRANSLATIONS } from '../constants/translations';
 import { LANGUAGES } from './addressUtils';
-import { hasUiTranslation, translateUi } from './i18n';
-import { ADDRESS_LANGUAGES, APP_LANGUAGES, normalizeAppLanguage } from './languageSettings';
+import { hasUiTranslation,translateUi } from './i18n';
+import { ADDRESS_LANGUAGES,APP_LANGUAGES,normalizeAppLanguage } from './languageSettings';
 
 const CURRENT_APP_UI_LANGUAGE_CODES = [
   'ja',

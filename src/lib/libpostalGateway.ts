@@ -1,4 +1,4 @@
-import { normalizeApiAddress, parseAddressText, type CanonicalAddressParts } from './addressIntelligence';
+import { normalizeApiAddress,parseAddressText,type CanonicalAddressParts } from './addressIntelligence';
 
 export type LibpostalComponent = {
   label: string;

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  SOUTHEAST_ASIA_ADDRESS_RULES,
-  getSoutheastAsiaAddressRule,
+SOUTHEAST_ASIA_ADDRESS_RULES,
+getSoutheastAsiaAddressRule,
 } from './southeastAsiaAddressRules';
 
 test('covers the Southeast Asia English-tab address countries from the reference table', () => {

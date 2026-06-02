@@ -1,5 +1,5 @@
 import type { DroneRiskLabel } from './droneAssessment';
-import type { DroneMissionStatus, DroneRouteSample } from './droneMissionPlan';
+import type { DroneMissionStatus,DroneRouteSample } from './droneMissionPlan';
 
 export type DroneCorridorSampleAssessment = {
   sampleIndex: number;

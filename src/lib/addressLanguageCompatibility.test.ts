@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
-import { basename, join } from 'node:path';
+import { readdirSync,readFileSync } from 'node:fs';
+import { basename,join } from 'node:path';
 import { test } from 'node:test';
 
 import { LANGUAGES } from './addressUtils';
 import {
-  getAgidAddressTabLanguages,
-  normalizeAgidLanguageCode,
+getAgidAddressTabLanguages,
+normalizeAgidLanguageCode,
 } from './languageTabs';
 
 const addressFormatDir = join(process.cwd(), 'src', 'data', 'address_formats');

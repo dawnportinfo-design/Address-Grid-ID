@@ -12,24 +12,6 @@ const s2hk = OpenCC.Converter({ from: 'cn', to: 'hk' });
 const t2s = OpenCC.Converter({ from: 'tw', to: 'cn' });
 
 // Shipping English Dictionary (as requested)
-const SHIPPING_ENGLISH_DICT: Record<string, string> = {
-  '省': 'Province',
-  '自治区': 'Autonomous Region',
-  '市': '', // Usually omitted in international shipping for cities like Shenzhen
-  '区': 'District',
-  '县': 'County',
-  '路': 'Rd',
-  '街': 'St',
-  '道': 'Ave',
-  '号': 'No.',
-  '楼': 'Bldg',
-  '室': 'Rm',
-  '大厦': 'Building',
-  '公寓': 'Apartment',
-  '村': 'Village',
-  '镇': 'Town',
-  '乡': 'Township'
-};
 
 const MAINLAND_CHINA_ENGLISH_PLACE_NAMES: Record<string, string> = {
   北京市: 'Beijing',
@@ -416,7 +398,7 @@ export function renderDomesticCN(details: any): string {
 export function renderInternationalCN(details: any): string {
   const c = canonicalizeCN(details);
   
-  const translateField = (text: string, isMajorInternal?: boolean) => {
+  const translateField = (text: string) => {
     if (!text) return "";
     return normalizeMainlandChineseAddressPart(text);
   };

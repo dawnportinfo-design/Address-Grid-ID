@@ -1,10 +1,10 @@
-import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
+import { mkdirSync,readdirSync,readFileSync,statSync,writeFileSync } from 'node:fs';
+import { dirname,join,relative } from 'node:path';
 
 import {
-  classifyAddressCoveragePolicy,
-  summarizeAddressCoveragePolicies,
-  type AddressCoverageFormatLike,
+classifyAddressCoveragePolicy,
+summarizeAddressCoveragePolicies,
+type AddressCoverageFormatLike,
 } from '../src/lib/addressCoveragePolicy';
 
 type AddressCoverageReportEntry = {

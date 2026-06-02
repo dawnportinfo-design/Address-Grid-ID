@@ -1,20 +1,20 @@
 import assert from 'node:assert/strict';
-import { describe, it } from 'node:test';
+import { describe,it } from 'node:test';
 import { encodeAGID } from './agid';
 import {
-  findContainingGridCellPolygon,
-  gridBoundsCoverBounds,
-  gridCellsCoverBounds,
-  getGridCellsRenderBounds,
-  getDisplayCellPolygon,
-  getDisplayGridStep,
-  getGridCellMetricSummary,
-  getGridHighlightFrame,
-  polygonToRightAngleCell,
-  resolveGridHighlightPolygons,
-  rightAngleCellLines,
-  shouldDisplayGridResponse,
-  shouldRefreshGridForViewport,
+findContainingGridCellPolygon,
+getDisplayCellPolygon,
+getDisplayGridStep,
+getGridCellMetricSummary,
+getGridCellsRenderBounds,
+getGridHighlightFrame,
+gridBoundsCoverBounds,
+gridCellsCoverBounds,
+polygonToRightAngleCell,
+resolveGridHighlightPolygons,
+rightAngleCellLines,
+shouldDisplayGridResponse,
+shouldRefreshGridForViewport,
 } from './gridGeometry';
 import { buildRegularMetricGridFeatures } from './gridWorkerWasm';
 

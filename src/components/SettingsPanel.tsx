@@ -1,57 +1,46 @@
 
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  X, 
-  Settings, 
-  Home, 
-  Smartphone, 
-  ShieldCheck, 
-  Download, 
-  FileDown, 
-  FileText, 
-  Info, 
-  ChevronRight, 
-  Bookmark, 
-  History, 
-  MapPin, 
-  Share2, 
-  Globe, 
-  Ruler, 
-  Navigation, 
-  Layers, 
-  RotateCcw, 
-  Database, 
-  Trash2, 
-  BookOpen, 
-  ArrowRight, 
-  Scale, 
-  Grid3X3, 
-  Activity, 
-  Sparkles, 
-  BarChart3, 
-  Box, 
-  Search, 
-  LocateFixed, 
-  Check,
-  Search as SearchIcon,
-  Map as MapIcon,
-  Compass
-} from 'lucide-react';
-import { cn } from '../lib/utils';
-import {
-  ADDRESS_LANGUAGES,
-  APP_LANGUAGES,
-  LanguageOption,
-  groupLanguageOptions,
-} from '../lib/languageSettings';
-import { MAJOR_CATEGORIES, MAP_STYLES } from '../constants/appConstants';
-import { ExportService, ExportData } from '../services/ExportService';
 import { saveAs } from 'file-saver';
+import {
+Activity,
+ArrowRight,
+BookOpen,
+Bookmark,
+Check,
+ChevronRight,
+Database,
+Download,
+FileDown,
+FileText,
+Globe,
+History,
+Home,
+Info,
+Layers,
+Map as MapIcon,
+MapPin,
+Navigation,
+RotateCcw,
+Ruler,
+Settings,
+Share2,
+ShieldCheck,
+Smartphone,
+Trash2,
+X
+} from 'lucide-react';
 import maplibregl from 'maplibre-gl';
-import { LAND_REGIONS, SEA_REGIONS, COUNTRY_REGIONS } from '../lib/regions';
-import { AGID_MAP_ENGINES } from '../lib/mapEngine';
+import { AnimatePresence,motion } from 'motion/react';
+import React from 'react';
 import { getHelpCenterContent } from '../lib/helpFaq';
+import {
+ADDRESS_LANGUAGES,
+APP_LANGUAGES,
+LanguageOption,
+groupLanguageOptions,
+} from '../lib/languageSettings';
+import { AGID_MAP_ENGINES } from '../lib/mapEngine';
+import { cn } from '../lib/utils';
+import { ExportData,ExportService } from '../services/ExportService';
 
 interface SettingsPanelProps {
   show: boolean;
@@ -123,7 +112,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   gridOpacityLevel,
   setGridOpacityLevel,
   savedAgids,
-  setSavedAgids,
   searchHistory,
   setSearchHistory,
   clearHistory,
@@ -133,52 +121,16 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   setActiveLegalDoc,
   isQualityLoading,
   fetchQualityReport,
-  registryStats,
-  setShowResources,
   setShowLicenses,
   mapRef,
   jumpToAgid,
   t
 }) => {
   // Local state for searching codes
-  const [codeSearch, setCodeSearch] = React.useState('');
-  const [codeFilter, setCodeFilter] = React.useState<'ALL' | 'LAND' | 'SEA'>('ALL');
+  const [] = React.useState('');
+  const [] = React.useState<'ALL' | 'LAND' | 'SEA'>('ALL');
 
-  const filteredCodes = React.useMemo(() => {
-    let all = [...COUNTRY_REGIONS, ...SEA_REGIONS];
-    if (codeFilter === 'LAND') all = COUNTRY_REGIONS;
-    if (codeFilter === 'SEA') all = SEA_REGIONS;
 
-    const query = codeSearch.toLowerCase();
-    
-    // Map sea long codes to short codes for searching
-    const seaShortMap: { [key: string]: string } = {
-      'NPAC': 'P1', 'NEPC': 'P0', 'SPAC': 'P3', 'SEPC': 'P2',
-      'NATL': 'A1', 'SATL': 'A2', 'NIND': 'I1', 'SIND': 'I2',
-      'SOUT': 'S0', 'ARCT': 'R0'
-    };
-
-    if (!query) return all.slice(0, 50);
-
-    return all.filter(r => {
-      const id = (r.id || r.code || '').toLowerCase();
-      const name = r.name.toLowerCase();
-      const short = isSeaRegion(r) ? (seaShortMap[r.id || ''] || '').toLowerCase() : id;
-      
-      return id.includes(query) || name.includes(query) || short === query;
-    }).sort((a, b) => {
-      // Prioritize exact matches on code
-      const aId = (a.id || a.code || '').toLowerCase();
-      const bId = (b.id || b.code || '').toLowerCase();
-      if (aId === query) return -1;
-      if (bId === query) return 1;
-      return a.name.localeCompare(b.name);
-    }).slice(0, 100);
-  }, [codeSearch, codeFilter]);
-
-  function isSeaRegion(r: any): boolean {
-    return !!r.isSea || !COUNTRY_REGIONS.some(c => c.id === r.id || c.code === (r.id || r.code));
-  }
 
   const [selectedAppBaseLang, setSelectedAppBaseLang] = React.useState<string | null>(null);
   const [selectedAddressBaseLang, setSelectedAddressBaseLang] = React.useState<string | null>(null);

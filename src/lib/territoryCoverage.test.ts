@@ -1,11 +1,10 @@
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { readdirSync,readFileSync } from 'node:fs';
+import { dirname,join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
 
-import { encodeAGID, getRegionInfo } from './agid';
+import { encodeAGID,getRegionInfo } from './agid';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const addressFormatsDir = join(here, '..', 'data', 'address_formats');

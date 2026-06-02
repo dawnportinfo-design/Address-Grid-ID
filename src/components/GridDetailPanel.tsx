@@ -1,53 +1,57 @@
 
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  MapPin, 
-  Target, 
-  ChevronDown, 
-  X, 
-  Check, 
-  Copy, 
-  Maximize2, 
-  Key, 
-  QrCode, 
-  ArrowUpRight, 
-  Waves, 
-  Flag, 
-  Bookmark, 
-  Zap, 
-  Download
-} from 'lucide-react';
-import { cn } from '../lib/utils';
-import { QRCodeCanvas } from 'qrcode.react';
-import { LANGUAGES, COUNTRY_LANGUAGES, generateInternationalShippingLabel } from '../lib/addressUtils';
-import { AddressRenderer, createCanonicalAddress } from '../lib/addressRendering';
 import {
-  getAgidAddressDisplayTabs,
-  getAgidAddressTabLanguages,
-  isInternationalShippingEnglishTab,
-} from '../lib/languageTabs';
-import { getAddressFormat, type AddressFormat } from '../data/address_formats';
-import { validateAddressWithOpenSourceRules } from '../lib/addressValidation';
-import { assessAddressDisplayQuality, formatAddressDisplayText, shouldPreserveAddressDisplayLines } from '../lib/addressDisplay';
+ArrowUpRight,
+Bookmark,
+Check,
+ChevronDown,
+Copy,
+Download,
+Flag,
+Key,
+MapPin,
+Maximize2,
+QrCode,
+Target,
+Waves,
+X,
+Zap
+} from 'lucide-react';
+import type maplibregl from 'maplibre-gl';
+import { AnimatePresence,motion } from 'motion/react';
+import { QRCodeCanvas } from 'qrcode.react';
+import React from 'react';
+import { getAddressFormat,type AddressFormat } from '../data/address_formats';
+import { assessAddressDisplayQuality,formatAddressDisplayText,shouldPreserveAddressDisplayLines } from '../lib/addressDisplay';
 import { collectOpenSourceAddressEvidenceSources } from '../lib/addressEvidence';
+import { AddressRenderer,createCanonicalAddress } from '../lib/addressRendering';
+import { COUNTRY_LANGUAGES,generateInternationalShippingLabel,LANGUAGES } from '../lib/addressUtils';
+import type { AGIDResult } from '../lib/agid';
+import {
+formatTerritoryClaimSummary,
+getTerritoryClaimOptions,
+type TerritoryClaimOption,
+} from '../lib/disputedTerritoryClaims';
+import {
+getAgidAddressDisplayTabs,
+getAgidAddressTabLanguages,
+isInternationalShippingEnglishTab,
+} from '../lib/languageTabs';
+import { cn } from '../lib/utils';
+import { executeVerifiedAddressTranslationSync } from '../lib/verifiedAddressTranslation';
+import type { AddressDetails } from '../types/address';
+import type { RouteStop } from '../types/navigation';
 import { AddressLanguageTabs } from './AddressLanguageTabs';
 import { AddressQualitySummary } from './AddressQualitySummary';
-import {
-  formatTerritoryClaimSummary,
-  getTerritoryClaimOptions,
-  type TerritoryClaimOption,
-} from '../lib/disputedTerritoryClaims';
 
 interface GridDetailPanelProps {
-  clickedAgid: any;
+  clickedAgid: AGIDResult | null;
   isAgidPanelCollapsed: boolean;
   setIsAgidPanelCollapsed: (c: boolean) => void;
   isAgidPinnedToGps: boolean;
   setIsAgidPinnedToGps: (p: boolean) => void;
   isManualSelection: boolean;
   setIsManualSelection: (m: boolean) => void;
-  setClickedAgid: (a: any) => void;
+  setClickedAgid: (a: AGIDResult | null) => void;
   setClickedAddress: (addr: string) => void;
   isQrVisible: boolean;
   setIsQrVisible: (v: boolean) => void;
@@ -56,26 +60,26 @@ interface GridDetailPanelProps {
   clickedAddressTab: string;
   setClickedAddressTab: (t: string) => void;
   clickedAddressTranslated: string;
-  clickedAddressDetails: any;
+  clickedAddressDetails: AddressDetails | null;
   clickedActiveLangs: string[];
   copied: string | null;
   setCopied: (s: string | null) => void;
   userLocation: { lat: number, lng: number } | null;
-  mapRef: React.MutableRefObject<any>;
+  mapRef: React.MutableRefObject<maplibregl.Map | null>;
   mapPitch: number;
   getDeviceZoom: () => number;
-  encodeAGID: (lat: number, lng: number) => any;
+  encodeAGID: (lat: number, lng: number) => AGIDResult;
   reverseGeocode: (lat: number, lng: number, prefix: string, isSea: boolean, force?: boolean) => void;
   fetchAddressForLang: (lat: number, lon: number, langCode: string, isNative: boolean, countryCode: string, force?: boolean) => void;
-  saveAgid: (agid: any) => void;
+  saveAgid: (agid: AGIDResult) => void;
   setShowLocationAnalysis: (s: boolean) => void;
   showLocationAnalysis: boolean;
   saveQrCode: () => void;
-  setDestination: (d: any) => void;
+  setDestination: React.Dispatch<React.SetStateAction<RouteStop | null>>;
   setDestinationQuery: (q: string) => void;
   setIsRoutePlanning: (r: boolean) => void;
   setIsNavigating: (n: boolean) => void;
-  setOrigin: (o: any) => void;
+  setOrigin: React.Dispatch<React.SetStateAction<RouteStop | null>>;
   setOriginQuery: (q: string) => void;
   fastJapaneseTransliterate: (text: string) => string;
   showAlert: (title: string, message: string) => void;
@@ -92,7 +96,6 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
   setIsAgidPanelCollapsed,
   isAgidPinnedToGps,
   setIsAgidPinnedToGps,
-  isManualSelection,
   setIsManualSelection,
   setClickedAgid,
   setClickedAddress,
@@ -104,7 +107,6 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
   setClickedAddressTab,
   clickedAddressTranslated,
   clickedAddressDetails,
-  clickedActiveLangs,
   copied,
   setCopied,
   userLocation,
@@ -113,7 +115,6 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
   getDeviceZoom,
   encodeAGID,
   reverseGeocode,
-  fetchAddressForLang,
   saveAgid,
   setShowLocationAnalysis,
   showLocationAnalysis,
@@ -193,27 +194,27 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
     }
   }, [selectedTerritoryClaimId, territoryClaimOptions]);
 
-  const addressValidation = React.useMemo(() => {
+  const verifiedAddressTranslation = React.useMemo(() => {
     if (!clickedAddressDetails) return null;
     try {
-      const canonical = createCanonicalAddress(clickedAddressDetails);
       const evidenceSources = collectOpenSourceAddressEvidenceSources(clickedAddressDetails);
-      return validateAddressWithOpenSourceRules(
-        canonical,
-        addressFormat,
-        [
+      return executeVerifiedAddressTranslationSync({
+        countryCode,
+        language: clickedAddressTab,
+        details: clickedAddressDetails as unknown as Record<string, unknown>,
+        format: addressFormat,
+        sources: [
           ...(clickedAddressDetails?.address_analysis?.sources || []),
           ...evidenceSources,
         ],
-        {
-          referenceMatches: clickedAddressDetails?.address_analysis?.referenceMatches || clickedAddressDetails?.openaddresses_matches || [],
-        }
-      );
+        referenceMatches: clickedAddressDetails?.address_analysis?.referenceMatches || clickedAddressDetails?.openaddresses_matches || [],
+      });
     } catch (error) {
-      console.warn('Address validation fallback:', error);
+      console.warn('Verified address translation fallback:', error);
       return null;
     }
-  }, [clickedAddressDetails, addressFormat]);
+  }, [clickedAddressDetails, addressFormat, countryCode, clickedAddressTab]);
+  const addressValidation = verifiedAddressTranslation?.validation || null;
 
   React.useEffect(() => {
     if (clickedAddressTab === 'shipping_label' && clickedAddressDetails) {
@@ -239,16 +240,22 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
 
   const getAddressDisplay = () => {
     if (clickedAddressTab === 'shipping_label') {
-      return shippingLabel || "Generating shipping label...";
+      return verifiedAddressTranslation?.renderings.shippingLabel || shippingLabel || "Generating shipping label...";
+    }
+
+    if (clickedAddressDetails && verifiedAddressTranslation) {
+      if (clickedAddressTab === 'en' || isInternationalShippingEnglishTab(clickedAddressTab)) {
+        return verifiedAddressTranslation.renderings.internationalEnglish;
+      }
+      if (!clickedAddressTab.startsWith('en') && verifiedAddressTranslation.renderings.native) {
+        return verifiedAddressTranslation.renderings.native;
+      }
     }
 
     if (clickedAddressDetails) {
       const canonical = createCanonicalAddress(clickedAddressDetails);
-      if (isInternationalShippingEnglishTab(clickedAddressTab)) {
+      if (clickedAddressTab === 'en' || isInternationalShippingEnglishTab(clickedAddressTab)) {
         return AddressRenderer.renderInternationalShippingEnglish(canonical);
-      }
-      if (clickedAddressTab === 'en') {
-        return AddressRenderer.render('en', canonical);
       }
       if (!clickedAddressTab.startsWith('en') && addressValidation?.displays.native) {
         return addressValidation.displays.native;
@@ -524,7 +531,7 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
                          <div className={cn(
                            "p-2 rounded-lg border border-white/5 font-mono text-[10px] leading-relaxed",
                            preserveAddressDisplayLines ? "whitespace-pre-line" : "whitespace-normal",
-                           (isInternationalShippingEnglishTab(clickedAddressTab) || clickedAddressTab === 'ascii' || clickedAddressTab === 'shipping_label') ? "bg-slate-800/80 uppercase" : "bg-white/5"
+                           (clickedAddressTab === 'en' || isInternationalShippingEnglishTab(clickedAddressTab) || clickedAddressTab === 'ascii' || clickedAddressTab === 'shipping_label') ? "bg-slate-800/80 uppercase" : "bg-white/5"
                          )}>
                            {addressDisplayText}
                          </div>

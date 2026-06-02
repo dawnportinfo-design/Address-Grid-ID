@@ -1,3 +1,5 @@
+import { normalizeLanguageCode } from './languageCodeRules';
+
 type AgidAddressTabLanguageOptions = {
   countryCode: string;
   preferredLanguage?: string;
@@ -29,13 +31,14 @@ export const EXPANDING_CIRCLE_ENGLISH_COUNTRIES = [
   'th', 'vn', 'id', 'kh', 'la', 'mn',
   'de', 'fr', 'es', 'it', 'nl', 'be', 'ch', 'at',
   'se', 'no', 'dk', 'fi', 'is',
-  'bq', 'aw', 'cw', 'sx', 'gl', 'fo', 'sj_sva', 'sj_jan', 'es_bal', 'es_can', 'pt_azo', 'pt_mad',
+  'bq', 'aw', 'cw', 'sx', 'gl', 'fo', 'ax', 'sj_sva', 'sj_jan', 'es_bal', 'es_can', 'pt_azo', 'pt_mad',
   'ci', 'sn', 'bf', 'ml', 'ne', 'tg', 'bj', 'gn', 'gw', 'cv',
-  'pl', 'cz', 'sk', 'hu', 'ro', 'bg', 'gr',
+  'pl', 'cz', 'sk', 'hu', 'si', 'hr', 'ro', 'bg', 'gr',
   'tr', 'ru', 'ua', 'md', 'by', 'rs', 'ba', 'me', 'xk', 'al', 'mk',
   'am', 'az', 'ge',
   'br', 'mx', 'ar', 'cl', 'co', 'pe', 'uy',
   'sa', 'kw', 'om', 'jo', 'lb', 'il', 'eg', 'dz', 'ma', 'tn', 'ly', 'sd', 'mr', 'eh',
+  'cf', 'td', 'cg', 'cd', 'gq', 'ga', 'st', 'ao',
 ] as const;
 
 export const ENGLISH_ADDRESS_COUNTRIES = [
@@ -44,6 +47,11 @@ export const ENGLISH_ADDRESS_COUNTRIES = [
 ] as const;
 
 export type EnglishAddressCircle = 'inner' | 'outer' | 'expanding';
+
+const ENGLISH_CIRCLE_BY_COUNTRY: Record<string, EnglishAddressCircle> = {
+  ...Object.fromEntries(INNER_CIRCLE_ENGLISH_COUNTRIES.map(code => [code, 'inner' as const])),
+  ...Object.fromEntries(OUTER_CIRCLE_ENGLISH_COUNTRIES.map(code => [code, 'outer' as const])),
+};
 
 export type ExpandingCirclePreparationStage = {
   id: 'native-format' | 'script-conversion' | 'english-exonyms' | 'open-source-validation';
@@ -88,27 +96,28 @@ const DEFAULT_NATIVE_LANGUAGES_BY_COUNTRY: Record<string, string[]> = {
   kw: ['ar'],
   om: ['ar'],
   ye: ['ar'],
-  kz: ['kk'],
-  uz: ['uz'],
-  tm: ['tk'],
-  kg: ['ky'],
-  tj: ['tg'],
-  fj: ['en'],
-  pg: ['en'],
+  kz: ['kk', 'ru'],
+  uz: ['uz', 'ru'],
+  tm: ['tk', 'ru'],
+  kg: ['ky', 'ru'],
+  tj: ['tg', 'ru'],
+  nz: ['en', 'mi'],
+  fj: ['en', 'fj', 'hi'],
+  pg: ['en', 'tpi'],
   ws: ['sm'],
   to: ['to'],
-  vu: ['bi'],
-  sb: ['en'],
-  fm: ['en'],
-  pw: ['en'],
-  mh: ['mh'],
-  ki: ['gil'],
-  tv: ['tvl'],
-  nr: ['na'],
+  vu: ['bi', 'fr', 'en'],
+  sb: ['en', 'pis'],
+  fm: ['en', 'chk', 'yap'],
+  pw: ['en', 'pau'],
+  mh: ['mh', 'en'],
+  ki: ['gil', 'en'],
+  tv: ['tvl', 'en'],
+  nr: ['na', 'en'],
   nf: ['en'],
   cx: ['en'],
   cc: ['en'],
-  ck: ['en'],
+  ck: ['en', 'rar'],
   tk: ['tkl'],
   nu: ['niu'],
   pn: ['en'],
@@ -141,6 +150,7 @@ const DEFAULT_NATIVE_LANGUAGES_BY_COUNTRY: Record<string, string[]> = {
   ee: ['et'],
   lt: ['lt'],
   is: ['is'],
+  ax: ['sv', 'fi'],
   it: ['it'],
   es: ['es', 'ca', 'gl', 'eu'],
   pt: ['pt'],
@@ -152,6 +162,12 @@ const DEFAULT_NATIVE_LANGUAGES_BY_COUNTRY: Record<string, string[]> = {
   ad: ['ca'],
   cy: ['el', 'tr'],
   lu: ['lb', 'fr', 'de'],
+  pl: ['pl'],
+  cz: ['cs'],
+  sk: ['sk'],
+  hu: ['hu'],
+  si: ['sl'],
+  hr: ['hr'],
   ro: ['ro'],
   bg: ['bg'],
   ua: ['uk'],
@@ -164,9 +180,9 @@ const DEFAULT_NATIVE_LANGUAGES_BY_COUNTRY: Record<string, string[]> = {
   xk: ['sq', 'sr'],
   al: ['sq'],
   mk: ['mk'],
-  bq: ['nl', 'en'],
-  aw: ['nl', 'en'],
-  cw: ['nl', 'en'],
+  bq: ['nl', 'pap', 'en'],
+  aw: ['nl', 'pap', 'en'],
+  cw: ['nl', 'pap', 'en'],
   sx: ['nl', 'en'],
   gl: ['kl', 'da'],
   fo: ['fo', 'da'],
@@ -179,6 +195,30 @@ const DEFAULT_NATIVE_LANGUAGES_BY_COUNTRY: Record<string, string[]> = {
   am: ['hy'],
   az: ['az'],
   ge: ['ka'],
+  mx: ['es'],
+  gt: ['es'],
+  hn: ['es'],
+  sv: ['es'],
+  ni: ['es'],
+  cr: ['es'],
+  pa: ['es'],
+  cu: ['es'],
+  do: ['es'],
+  pr: ['es', 'en'],
+  br: ['pt'],
+  ar: ['es'],
+  cl: ['es'],
+  co: ['es'],
+  pe: ['es', 'qu', 'ay'],
+  ec: ['es', 'qu'],
+  bo: ['es', 'qu', 'ay'],
+  py: ['es', 'gn'],
+  uy: ['es'],
+  ve: ['es'],
+  ht: ['fr', 'ht'],
+  sr: ['nl'],
+  gy: ['en'],
+  bz: ['en', 'es'],
   eg: ['ar'],
   dz: ['ar', 'fr'],
   ma: ['ar', 'fr'],
@@ -194,44 +234,44 @@ const DEFAULT_NATIVE_LANGUAGES_BY_COUNTRY: Record<string, string[]> = {
   ne: ['fr'],
   tg: ['fr'],
   bj: ['fr'],
+  cm: ['fr', 'en'],
   gn: ['fr'],
   gw: ['pt'],
   cv: ['pt'],
+  cf: ['fr', 'sg'],
+  td: ['fr', 'ar'],
+  cg: ['fr'],
+  cd: ['fr'],
+  gq: ['es', 'fr', 'pt'],
+  ga: ['fr'],
+  st: ['pt'],
+  za: ['en', 'af', 'zu', 'xh'],
+  na: ['en', 'af', 'kj'],
+  bw: ['en', 'tn'],
+  zw: ['en', 'sn', 'nd'],
   km: ['fr', 'ar'],
   dj: ['fr', 'ar'],
   er: ['ti', 'en'],
   et: ['am', 'en'],
   ke: ['en', 'sw'],
   mg: ['fr'],
-  mw: ['en'],
+  mw: ['en', 'ny'],
   mu: ['en', 'fr'],
   mz: ['pt'],
   rw: ['en', 'fr', 'sw'],
-  sc: ['en', 'fr'],
+  sc: ['en', 'fr', 'crs'],
   so: ['so', 'ar', 'en'],
   ss: ['en'],
   tz: ['sw', 'en'],
   ug: ['en', 'sw'],
-  zm: ['en'],
+  zm: ['en', 'bem'],
   ls: ['en', 'st'],
   sz: ['en', 'ss'],
   ao: ['pt'],
 };
 
 export function normalizeAgidLanguageCode(code: string | undefined | null): string {
-  const value = (code || '').trim();
-  if (!value || value === 'local') return value || 'local';
-  if (value.startsWith('en')) return 'en';
-  if (value.startsWith('zh-Hans') || value === 'zh-CN' || value === 'zh-SG') return 'zh-Hans';
-  if (value.startsWith('zh-Hant') || value === 'zh-TW' || value === 'zh-HK' || value === 'zh-MO') return 'zh-Hant';
-  if (value.startsWith('pt')) return 'pt';
-  if (value.startsWith('es')) return 'es';
-  if (value.startsWith('fr')) return 'fr';
-  if (value.startsWith('de')) return 'de';
-  if (value.startsWith('fa')) return 'fa';
-  if (value === 'fil') return 'tl';
-  if (value === 'nb' || value === 'nn') return 'no';
-  return value.split('-')[0].toLowerCase();
+  return normalizeLanguageCode(code, { emptyFallback: 'local' });
 }
 
 const englishBase = normalizeAgidLanguageCode;
@@ -243,19 +283,75 @@ const EUROPEAN_MULTILINGUAL_ADDRESS_MARKETS = new Set([
   'be',
   'lu',
   'fi',
+  'ax',
+  'gl',
+  'fo',
   'es',
   'cy',
+  'by',
   'ba',
+  'xk',
 ]);
+
+const CENTRAL_ASIA_MULTILINGUAL_ADDRESS_MARKETS = new Set([
+  'kz',
+  'uz',
+  'tm',
+  'kg',
+  'tj',
+]);
+
+const WEST_ASIA_MULTILINGUAL_ADDRESS_MARKETS = new Set([
+  'il',
+]);
+
+const AMERICAS_MULTILINGUAL_ADDRESS_MARKETS = new Set([
+  'pe',
+  'ec',
+  'bo',
+  'py',
+  'ht',
+  'bq',
+  'aw',
+  'cw',
+]);
+
+const CENTRAL_AFRICA_MULTILINGUAL_ADDRESS_MARKETS = new Set([
+  'cm',
+  'cf',
+  'td',
+  'gq',
+]);
+
+const SOUTHERN_AFRICA_MULTILINGUAL_ADDRESS_MARKETS = new Set([
+  'km',
+]);
+
+const EAST_AFRICA_MULTILINGUAL_ADDRESS_MARKETS = new Set([
+  'km',
+  'dj',
+  'so',
+]);
+
+const OCEANIA_MULTILINGUAL_ADDRESS_MARKETS = new Set([
+  'vu',
+]);
+
+const ENGLISH_PRIMARY_EXTRA_TABS_BY_COUNTRY: Record<string, string[]> = {
+  us: ['es'],
+  ca: ['fr'],
+  ie: ['ga'],
+  mu: ['fr'],
+  sc: ['fr'],
+  ls: ['st'],
+  sz: ['ss'],
+};
 
 export const isEnglishAddressCountry = (countryCode: string) =>
   (ENGLISH_ADDRESS_COUNTRIES as readonly string[]).includes(countryCode.toLowerCase());
 
 export function getEnglishAddressCircle(countryCode: string): EnglishAddressCircle {
-  const code = countryCode.toLowerCase();
-  if ((INNER_CIRCLE_ENGLISH_COUNTRIES as readonly string[]).includes(code)) return 'inner';
-  if ((OUTER_CIRCLE_ENGLISH_COUNTRIES as readonly string[]).includes(code)) return 'outer';
-  return 'expanding';
+  return ENGLISH_CIRCLE_BY_COUNTRY[countryCode.toLowerCase()] ?? 'expanding';
 }
 
 export function getExpandingCircleEnglishPreparation(countryCode: string): ExpandingCirclePreparationStage[] {
@@ -286,10 +382,13 @@ export function getExpandingCircleEnglishPreparation(countryCode: string): Expan
   ];
 }
 
+const normalizedKnownLanguageSet = (knownLanguageCodes: Iterable<string>) =>
+  new Set([...knownLanguageCodes].map(normalizeAgidLanguageCode));
+
 const uniqueKnownLanguages = (codes: string[], knownLanguageCodes: Set<string>) => {
   const seen = new Set<string>();
   const unique: string[] = [];
-  const normalizedKnown = new Set([...knownLanguageCodes].map(normalizeAgidLanguageCode));
+  const normalizedKnown = normalizedKnownLanguageSet(knownLanguageCodes);
 
   for (const code of codes) {
     const base = normalizeAgidLanguageCode(code);
@@ -302,9 +401,8 @@ const uniqueKnownLanguages = (codes: string[], knownLanguageCodes: Set<string>) 
   return unique;
 };
 
-const addIfKnown = (tabs: string[], code: string, knownLanguageCodes: Set<string>) => {
+const addIfKnown = (tabs: string[], code: string, normalizedKnown: Set<string>) => {
   const normalized = normalizeAgidLanguageCode(code);
-  const normalizedKnown = new Set([...knownLanguageCodes].map(normalizeAgidLanguageCode));
   if (normalizedKnown.has(normalized) && !tabs.includes(normalized)) {
     tabs.push(normalized);
   }
@@ -317,7 +415,7 @@ export function getAgidAddressTabLanguages({
   knownLanguageCodes,
 }: AgidAddressTabLanguageOptions): string[] {
   const known = new Set(knownLanguageCodes);
-  const normalizedKnown = new Set(knownLanguageCodes.map(normalizeAgidLanguageCode));
+  const normalizedKnown = normalizedKnownLanguageSet(knownLanguageCodes);
   const normalizedCountryCode = countryCode.toLowerCase();
   const isEnglishAddressMarket = isEnglishAddressCountry(normalizedCountryCode);
   const nativeCandidates = uniqueKnownLanguages(countryLanguages, known);
@@ -345,7 +443,16 @@ export function getAgidAddressTabLanguages({
     : nativeCandidates[0] || (normalizedKnown.has('en') ? 'en' : normalizeAgidLanguageCode(knownLanguageCodes[0]) || 'en');
   const tabs = [primaryNative];
 
-  if (EUROPEAN_MULTILINGUAL_ADDRESS_MARKETS.has(normalizedCountryCode)) {
+  if (
+    EUROPEAN_MULTILINGUAL_ADDRESS_MARKETS.has(normalizedCountryCode) ||
+    CENTRAL_ASIA_MULTILINGUAL_ADDRESS_MARKETS.has(normalizedCountryCode) ||
+    WEST_ASIA_MULTILINGUAL_ADDRESS_MARKETS.has(normalizedCountryCode) ||
+    AMERICAS_MULTILINGUAL_ADDRESS_MARKETS.has(normalizedCountryCode) ||
+    CENTRAL_AFRICA_MULTILINGUAL_ADDRESS_MARKETS.has(normalizedCountryCode) ||
+    SOUTHERN_AFRICA_MULTILINGUAL_ADDRESS_MARKETS.has(normalizedCountryCode) ||
+    EAST_AFRICA_MULTILINGUAL_ADDRESS_MARKETS.has(normalizedCountryCode) ||
+    OCEANIA_MULTILINGUAL_ADDRESS_MARKETS.has(normalizedCountryCode)
+  ) {
     for (const code of nativeCandidates) {
       if (!tabs.some(tab => englishBase(tab) === englishBase(code))) {
         tabs.push(code);
@@ -366,30 +473,15 @@ export function getAgidAddressTabLanguages({
   if (isEnglishPrimaryCountry) {
     for (const code of nativeCandidates) {
       if (!isEnglish(code)) {
-        addIfKnown(tabs, code, known);
+        addIfKnown(tabs, code, normalizedKnown);
       }
     }
-    if (normalizedCountryCode === 'us') {
-      addIfKnown(tabs, 'es', known);
-    }
-    if (normalizedCountryCode === 'ca') {
-      addIfKnown(tabs, 'fr', known);
-    }
-    if (normalizedCountryCode === 'ie') {
-      addIfKnown(tabs, 'ga', known);
-    }
-    if (normalizedCountryCode === 'mu' || normalizedCountryCode === 'sc') {
-      addIfKnown(tabs, 'fr', known);
-    }
-    if (normalizedCountryCode === 'ls') {
-      addIfKnown(tabs, 'st', known);
-    }
-    if (normalizedCountryCode === 'sz') {
-      addIfKnown(tabs, 'ss', known);
+    for (const code of ENGLISH_PRIMARY_EXTRA_TABS_BY_COUNTRY[normalizedCountryCode] ?? []) {
+      addIfKnown(tabs, code, normalizedKnown);
     }
   }
 
-  if (!isEnglish(tabs[0]) && normalizedKnown.has('en')) {
+  if (!isEnglish(tabs[0]) && normalizedKnown.has('en') && !tabs.some(isEnglish)) {
     tabs.push('en');
   }
 
@@ -401,17 +493,36 @@ export function getAgidAddressTabLanguages({
 }
 
 export function getAgidAddressDisplayTabs(languages: string[]) {
-  const tabs = Array.from(new Set(
+  const canonicalTabs = Array.from(new Set(
     languages.map(language =>
-      language === LEGACY_CARRIER_ENGLISH_TAB ? INTERNATIONAL_SHIPPING_ENGLISH_TAB : language
+      language === LEGACY_CARRIER_ENGLISH_TAB || language === INTERNATIONAL_SHIPPING_ENGLISH_TAB
+        ? 'en'
+        : language
     )
   ));
+  const hasDomesticEnglish = canonicalTabs.includes('en_domestic');
+  const hasInternationalEnglish = canonicalTabs.includes('en');
 
-  if (tabs.includes('en_domestic') && !tabs.includes(INTERNATIONAL_SHIPPING_ENGLISH_TAB)) {
-    tabs.push(INTERNATIONAL_SHIPPING_ENGLISH_TAB);
+  if (!hasDomesticEnglish) {
+    return canonicalTabs;
   }
 
-  return tabs;
+  const displayTabs: string[] = [];
+  const add = (tab: string) => {
+    if (!displayTabs.includes(tab)) displayTabs.push(tab);
+  };
+
+  for (const tab of canonicalTabs) {
+    if (tab === 'en') {
+      add('en_domestic');
+      continue;
+    }
+    add(tab);
+  }
+
+  if (hasInternationalEnglish) add('en');
+
+  return displayTabs;
 }
 
 export function isInternationalShippingEnglishTab(tabCode: string) {

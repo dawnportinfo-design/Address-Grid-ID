@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { readdirSync,readFileSync,statSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 
 import {
-  ADDRESS_COVERAGE_POLICY_IDS,
-  classifyAddressCoveragePolicy,
-  summarizeAddressCoveragePolicies,
+ADDRESS_COVERAGE_POLICY_IDS,
+classifyAddressCoveragePolicy,
+summarizeAddressCoveragePolicies,
 } from './addressCoveragePolicy';
 
 const root = join(process.cwd(), 'src', 'data', 'address_formats');

@@ -3,11 +3,11 @@ import africaData from '../data/africa_regions.json';
 import americasData from '../data/americas_regions.json';
 import asiaData from '../data/asia_regions.json';
 import caribbeanData from '../data/caribbean_regions.json';
+import disputedTerritoriesData from '../data/disputed_territories.json';
 import europeData from '../data/europe_regions.json';
 import oceaniaData from '../data/oceania_regions.json';
-import southAmericaData from '../data/south_america_regions.json';
-import disputedTerritoriesData from '../data/disputed_territories.json';
 import seasData from '../data/seas.json';
+import southAmericaData from '../data/south_america_regions.json';
 
 /**
  * AGID Geographic Region Data

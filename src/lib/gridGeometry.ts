@@ -1,7 +1,7 @@
 import { type AGIDResult } from './agid';
 import { regularMetricCellFromPoint } from './gridDisplay';
 
-export { getDisplayCellSizeMeters, getDisplayGridStep, metricSquareCellFromCenter } from './gridDisplay';
+export { getDisplayCellSizeMeters,getDisplayGridStep,metricSquareCellFromCenter } from './gridDisplay';
 
 export type GridRenderFrame = {
   anchorLat: number;

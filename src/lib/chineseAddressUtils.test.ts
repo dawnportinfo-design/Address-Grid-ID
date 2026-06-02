@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  buildChineseAddressProfile,
-  renderChineseLocaleAddress,
-  renderInternationalCN,
+buildChineseAddressProfile,
+renderChineseLocaleAddress,
+renderInternationalCN,
 } from './chineseAddressUtils';
 
 test('renders Mainland China international addresses with readable Pinyin and translated administrative suffixes', () => {

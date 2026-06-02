@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { AddressRenderer, createCanonicalAddress, type CanonicalAddress } from './addressRendering';
+import { AddressRenderer,createCanonicalAddress,type CanonicalAddress } from './addressRendering';
 
 const japaneseAddress: CanonicalAddress = {
   country_code: 'JP',

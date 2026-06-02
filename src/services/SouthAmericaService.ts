@@ -15,7 +15,7 @@ export interface SouthAmericaContext {
 /**
  * Fetches regional context for South America using Overpass API.
  */
-export async function fetchSouthAmericaContext(lat: number, lon: number, cc: string): Promise<SouthAmericaContext | null> {
+export async function fetchSouthAmericaContext(lat: number, lon: number): Promise<SouthAmericaContext | null> {
   const radius = 2000;
   
   const query = `

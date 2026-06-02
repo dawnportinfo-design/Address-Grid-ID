@@ -1,6 +1,6 @@
-import type { CanonicalAddressParts } from './addressIntelligence';
+import { classifyAddressCoveragePolicy,hasAddressPostalCodeMetadata } from './addressCoveragePolicy';
 import { normalizeEnglishAddressPart } from './addressEnglish';
-import { classifyAddressCoveragePolicy, hasAddressPostalCodeMetadata } from './addressCoveragePolicy';
+import type { CanonicalAddressParts } from './addressIntelligence';
 
 type AddressFieldRule = {
   key: string;

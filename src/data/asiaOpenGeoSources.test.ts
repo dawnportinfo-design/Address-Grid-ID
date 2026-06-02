@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  ASIA_COUNTRY_CODES,
-  ASIA_OPEN_GEO_SOURCES,
-  getAsiaOpenSourceIds,
+ASIA_COUNTRY_CODES,
+ASIA_OPEN_GEO_SOURCES,
+getAsiaOpenSourceIds,
 } from './asiaOpenGeoSources';
 
 const REQUIRED_ASIA_NATURAL_SOURCE_IDS = [

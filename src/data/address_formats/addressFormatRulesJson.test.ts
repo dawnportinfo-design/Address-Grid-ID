@@ -1,14 +1,15 @@
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync,readFileSync } from 'node:fs';
+import { dirname,join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
 
-import { AFRICA_COUNTRY_CODES, AFRICA_OPEN_GEO_SOURCES } from '../africaOpenGeoSources';
-import { AMERICAS_COUNTRY_CODES, AMERICAS_OPEN_GEO_SOURCES } from '../americasOpenGeoSources';
-import { ASIA_COUNTRY_CODES, ASIA_OPEN_GEO_SOURCES } from '../asiaOpenGeoSources';
-import { EUROPE_COUNTRY_AND_TERRITORY_CODES, EUROPE_OPEN_GEO_SOURCES } from '../europeOpenGeoSources';
-import { OCEANIA_COUNTRY_AND_TERRITORY_CODES, OCEANIA_OPEN_GEO_SOURCES } from '../oceaniaOpenGeoSources';
+import { AFRICA_COUNTRY_CODES,AFRICA_OPEN_GEO_SOURCES } from '../africaOpenGeoSources';
+import { AMERICAS_COUNTRY_CODES,AMERICAS_OPEN_GEO_SOURCES } from '../americasOpenGeoSources';
+import { ASIA_COUNTRY_CODES,ASIA_OPEN_GEO_SOURCES } from '../asiaOpenGeoSources';
+import { EUROPE_COUNTRY_AND_TERRITORY_CODES,EUROPE_OPEN_GEO_SOURCES } from '../europeOpenGeoSources';
+import { OCEANIA_COUNTRY_AND_TERRITORY_CODES,OCEANIA_OPEN_GEO_SOURCES } from '../oceaniaOpenGeoSources';
+import { hydrateAddressFormat } from './addressFormatCommon';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -112,16 +113,7 @@ type AddressRules = {
   postalCode: { label: string; required: boolean; usage: string } | null;
 };
 
-const loadRules = (countryCode: string): AddressRules => {
-  const filePath = findAddressFormatPath(countryCode);
-  assert.ok(filePath, `${countryCode}.json should exist under continent/subregion address formats`);
-  const raw = readFileSync(filePath, 'utf8');
-  const format = JSON.parse(raw) as { addressRules?: AddressRules };
-  assert.ok(format.addressRules, `${countryCode}.json should include addressRules`);
-  return format.addressRules;
-};
-
-const loadFormat = (countryCode: string): {
+type AddressFormatFixture = {
   openSourceIds?: string[];
   native?: { fields: { key: string; label: string; required?: boolean }[] };
   english?: { fields: { key: string; label: string; required?: boolean }[] };
@@ -129,11 +121,22 @@ const loadFormat = (countryCode: string): {
   international?: Record<string, { name?: string; addressFormat: string; fields: { key: string; label: string; placeholder?: string }[] }>;
   postalCode?: { api?: string | null; source?: string };
   addressRules?: AddressRules;
-} => {
+};
+
+const loadRules = (countryCode: string): AddressRules => {
   const filePath = findAddressFormatPath(countryCode);
   assert.ok(filePath, `${countryCode}.json should exist under continent/subregion address formats`);
   const raw = readFileSync(filePath, 'utf8');
-  return JSON.parse(raw) as { postalCode?: { api?: string | null } };
+  const format = hydrateAddressFormat(JSON.parse(raw) as { openSourceIds?: string[]; addressRules?: AddressRules });
+  assert.ok(format.addressRules, `${countryCode}.json should include addressRules`);
+  return format.addressRules;
+};
+
+const loadFormat = (countryCode: string): AddressFormatFixture => {
+  const filePath = findAddressFormatPath(countryCode);
+  assert.ok(filePath, `${countryCode}.json should exist under continent/subregion address formats`);
+  const raw = readFileSync(filePath, 'utf8');
+  return hydrateAddressFormat(JSON.parse(raw) as AddressFormatFixture);
 };
 
 test('East Asia address JSON files expose table-derived addressRules metadata', () => {

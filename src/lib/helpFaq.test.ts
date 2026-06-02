@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  getHelpCenterContent,
-  getHelpFaqItems,
-  getHelpSelfServiceSections,
-  getHelpSourceNotes,
+getHelpCenterContent,
+getHelpFaqItems,
+getHelpSelfServiceSections,
+getHelpSourceNotes,
 } from './helpFaq';
 
 test('help FAQ covers the questions that usually become support inquiries', () => {

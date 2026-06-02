@@ -1,6 +1,6 @@
+import { Activity,Sparkles,X } from 'lucide-react';
+import { AnimatePresence,motion } from 'motion/react';
 import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Activity, Sparkles } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface QualityReportModalProps {

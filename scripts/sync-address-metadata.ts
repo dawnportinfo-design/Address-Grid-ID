@@ -1,8 +1,8 @@
-import { mkdir, readdir, writeFile } from 'node:fs/promises';
+import { mkdir,readdir,writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import {
-  convertLibaddressinputMetadata,
-  resolveAddressFormatMetadataPath,
+convertLibaddressinputMetadata,
+resolveAddressFormatMetadataPath,
 } from '../src/lib/openSourceAddressMetadata';
 
 const ADDRESS_DATA_BASE = 'https://chromium-i18n.appspot.com/ssl-address/data';

@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  buildNominatimSearchUrl,
-  matchesAdvancedSearchCategory,
-  matchesAdvancedSearchLocation,
-  normalizeAdvancedSearchOptions,
+buildNominatimSearchUrl,
+matchesAdvancedSearchCategory,
+matchesAdvancedSearchLocation,
+normalizeAdvancedSearchOptions,
 } from './advancedSearch';
 
 test('normalizes advanced search country codes, radius, and limit', () => {

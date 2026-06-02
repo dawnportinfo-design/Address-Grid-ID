@@ -2,13 +2,13 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  AGID_MAP_ENGINE,
-  AGID_MAP_ENGINES,
-  OPENFREEMAP_STYLES,
-  buildMapLibreOptions,
-  getAgidMapEngine,
-  registerPmtilesProtocol,
-  resolveMapStyle,
+AGID_MAP_ENGINE,
+AGID_MAP_ENGINES,
+OPENFREEMAP_STYLES,
+buildMapLibreOptions,
+getAgidMapEngine,
+registerPmtilesProtocol,
+resolveMapStyle,
 } from './mapEngine';
 
 const satelliteStyle = {
