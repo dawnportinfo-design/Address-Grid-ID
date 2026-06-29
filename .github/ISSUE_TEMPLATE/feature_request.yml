@@ -1,0 +1,47 @@
+name: Feature request
+description: Propose a new AGID feature, data pack, SDK, or workflow.
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user, developer, operator, or data-maintainer problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Describe the smallest useful version.
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Open-source mode
+      options:
+        - Local-only
+        - Self-hosted
+        - Offline-first
+        - Data/country pack
+        - SDK/spec/conformance
+        - Optional connector
+        - Optional ZK/Web3
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Suggested tests or release gates
+      placeholder: npm run verify:...
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Boundaries
+      options:
+        - label: This proposal can work without raw address data in public logs, examples, fixtures, or downloads.
+          required: true
+        - label: This proposal can degrade safely when external APIs or hosted services are unavailable.
+          required: true

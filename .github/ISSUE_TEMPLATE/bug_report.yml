@@ -1,0 +1,63 @@
+name: Bug report
+description: Report a reproducible AGID bug with synthetic or redacted data.
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve AGID. Do not include real addresses, recipient names, phone numbers, proof codes, private keys, witness material, or production logs.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Use synthetic AGID, alias, commitment, or receipt values.
+      placeholder: |
+        1. Open ...
+        2. Enter synthetic value ...
+        3. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - Map / grid
+        - Address registration
+        - Address display / language tabs
+        - Secure QR / receipt
+        - POS / field handoff
+        - Developer console / SDK
+        - Country pack / postal data
+        - ZK / Web3
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I used only synthetic or redacted data.
+          required: true
