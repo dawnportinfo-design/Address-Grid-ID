@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
 import {
@@ -56,6 +57,12 @@ function officialMunicipalityDatasetFixture(): OfficialMunicipalityDataset {
       },
     ],
   };
+}
+
+function readOfficialMunicipalityDataset(countryCode: string): OfficialMunicipalityDataset {
+  return JSON.parse(
+    readFileSync(`data/official_municipalities/${countryCode.toLowerCase()}.json`, 'utf8'),
+  ) as OfficialMunicipalityDataset;
 }
 
 test('builds a Fiji AGID Postal Country Pack with required country-specific layers', () => {
@@ -160,6 +167,35 @@ test('builds mature postal countries as reference packs instead of replacement d
   assert.ok(pack.countryProfile.sourceNote.includes('Mature postal code system'));
   assert.ok(pack.recommendation.preseededRecords.some(record => record.includes('without replacing official codes')));
   assert.ok(pack.postalSystemPriors.every(prior => prior.recommendedUse === 'official-postal-reference-pack'));
+  assert.ok(pack.testVectors.length >= 1);
+  assert.ok(pack.testVectors.every(vector => vector.expected.candidateCodePrefix === null));
+  assert.ok(pack.testVectors.every(vector => vector.expected.replacementBlocked === true));
+  assert.ok(pack.testVectors.every(vector => vector.expected.blockedReason === 'mature-postal-country-new-code-replacement-blocked'));
+  assert.equal(validateAgidPostalCountryPack(pack).valid, true);
+});
+
+test('builds the United States pack from state-level official geography metadata', () => {
+  const pack = buildAgidPostalCountryPack({
+    countryCode: 'US',
+    officialMunicipalityDataset: readOfficialMunicipalityDataset('US'),
+  });
+  const sourceIds = new Set(pack.sourceCatalog.map(source => source.sourceId));
+  const localityNames = new Set(pack.localityIndex.map(locality => locality.name));
+
+  assert.equal(pack.manifest.countryCode, 'US');
+  assert.equal(pack.recommendation.tier, 'mature-reliable-postal-code');
+  assert.equal(pack.recommendation.recommendedUse, 'official-postal-reference-pack');
+  assert.equal(pack.officialMunicipalitySummary.mode, 'official-dataset');
+  assert.equal(pack.officialMunicipalitySummary.municipalityCount, 51);
+  assert.ok(sourceIds.has('usps-web-tools'));
+  assert.ok(sourceIds.has('us-census-tiger-line'));
+  assert.ok(sourceIds.has('us-census-geocoder'));
+  assert.ok(sourceIds.has('hud-usps-zip-crosswalk'));
+  assert.ok(localityNames.has('California'));
+  assert.ok(localityNames.has('District of Columbia'));
+  assert.ok(pack.testVectors.length >= 3);
+  assert.ok(pack.testVectors.every(vector => vector.expected.replacementBlocked === true));
+  assert.ok(pack.testVectors.every(vector => vector.expected.officialPostalPattern === '^\\d{5}(-\\d{4})?$'));
   assert.equal(validateAgidPostalCountryPack(pack).valid, true);
 });
 

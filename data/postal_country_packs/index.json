@@ -1901,7 +1901,7 @@
         "routeEvidence": 55,
         "qualityEvidence": 41,
         "officialMunicipalityRecords": 0,
-        "testVectors": 0
+        "testVectors": 3
       },
       "relativePath": "./jp/agid-postal-country-pack.json"
     },
@@ -3872,15 +3872,20 @@
       "officialStatus": "draft",
       "recommendationSource": "postal-zone-designer-fallback",
       "officialMunicipalitySummary": {
-        "mode": "synthetic-fixture",
+        "mode": "official-dataset",
         "countryCode": "US",
-        "sourceCount": 0,
-        "recordCount": 0,
-        "municipalityCount": 0,
+        "sourceCount": 4,
+        "recordCount": 51,
+        "municipalityCount": 51,
         "townCount": 0,
         "blockCount": 0,
-        "sourceIds": [],
-        "coverageNote": "No normalized official municipality dataset was provided; AGID uses safe synthetic planning fixtures only."
+        "sourceIds": [
+          "us-census-tiger-line",
+          "us-census-geocoder",
+          "hud-usps-zip-crosswalk",
+          "usps-web-tools"
+        ],
+        "coverageNote": "Official municipality records are loaded from a normalized local dataset and remain subject to source license and freshness review."
       },
       "terrain": "mixed",
       "region": "North America",
@@ -3903,17 +3908,17 @@
         "test-vectors"
       ],
       "counts": {
-        "sources": 3,
-        "localities": 48,
-        "boundaries": 12,
+        "sources": 7,
+        "localities": 153,
+        "boundaries": 102,
         "landforms": 1,
-        "settlementClusters": 6,
-        "vplSeeds": 3,
+        "settlementClusters": 51,
+        "vplSeeds": 6,
         "planningCells": 226,
         "routeEvidence": 57,
-        "qualityEvidence": 42,
-        "officialMunicipalityRecords": 0,
-        "testVectors": 0
+        "qualityEvidence": 90,
+        "officialMunicipalityRecords": 51,
+        "testVectors": 3
       },
       "relativePath": "./us/agid-postal-country-pack.json"
     },

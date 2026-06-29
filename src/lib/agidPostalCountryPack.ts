@@ -165,9 +165,12 @@ export type AgidPostalCountryPackTestVector = {
     chomeId: string | null;
   };
   expected: {
-    candidateCodePrefix: string;
+    candidateCodePrefix: string | null;
     sameMunicipalityOnly: true;
     containsPersonalData: false;
+    replacementBlocked?: boolean;
+    blockedReason?: 'mature-postal-country-new-code-replacement-blocked';
+    officialPostalPattern?: string;
   };
 };
 
@@ -461,6 +464,58 @@ function flattenLocalities(
   return localities;
 }
 
+function officialDatasetSourceRole(source: OfficialMunicipalityDataset['sourceCatalog'][number]) {
+  if (source.sourceId === 'usps-web-tools') {
+    return 'credentialed postal authority validation source; metadata only and not bundled';
+  }
+  if (source.sourceId === 'hud-usps-zip-crosswalk') {
+    return 'ZIP-to-geography crosswalk evidence for statistical compatibility checks';
+  }
+  if (source.sourceId === 'us-census-geocoder') {
+    return 'geospatial lookup evidence; raw query and response payloads are not bundled';
+  }
+  return 'official municipality, locality, boundary, or administrative unit evidence';
+}
+
+function officialDatasetTransformedFields(source: OfficialMunicipalityDataset['sourceCatalog'][number]) {
+  if (source.sourceId === 'usps-web-tools') {
+    return ['sourceId', 'apiRole', 'officialPostalPattern', 'credentialRequirement'];
+  }
+  if (source.sourceId === 'hud-usps-zip-crosswalk') {
+    return ['sourceId', 'crosswalkRole', 'postalGeographyRelation'];
+  }
+  if (source.sourceId === 'us-census-geocoder') {
+    return ['sourceId', 'geographyLookupRole', 'benchmarkRole'];
+  }
+  return ['officialId', 'name', 'kind', 'parentOfficialId', 'codePart', 'geometryRef'];
+}
+
+function officialDatasetConfidenceNotes(source: OfficialMunicipalityDataset['sourceCatalog'][number]) {
+  const commonNotes = [...source.notes];
+  if (source.sourceId === 'usps-web-tools') {
+    return [
+      ...commonNotes,
+      'USPS is the postal authority path for delivery-point validation; this pack stores source metadata only.',
+    ];
+  }
+  if (source.sourceId === 'hud-usps-zip-crosswalk') {
+    return [
+      ...commonNotes,
+      'Crosswalk evidence helps compare postal and statistical geography, but is not a delivery-point validity claim.',
+    ];
+  }
+  if (source.sourceId === 'us-census-geocoder') {
+    return [
+      ...commonNotes,
+      'Geocoder evidence may support geography compatibility checks, but raw lookup payloads remain outside the pack.',
+    ];
+  }
+  return [
+    ...commonNotes,
+    'Official municipality records are used as locality planning references, not as a claim of postal-code official status.',
+  ];
+}
+
 function createSourceCatalog(
   countryCode: string,
   officialMunicipalityDataset: OfficialMunicipalityDataset | null,
@@ -523,12 +578,9 @@ function createSourceCatalog(
           : source.redistributionStatus === 'review-required'
             ? 'license-review-required'
             : 'not-bundled',
-      role: 'official municipality, locality, boundary, or administrative unit evidence',
-      transformedFields: ['officialId', 'name', 'kind', 'parentOfficialId', 'codePart', 'geometryRef'],
-      confidenceNotes: [
-        ...source.notes,
-        'Official municipality records are used as locality planning references, not as a claim of postal-code official status.',
-      ],
+      role: officialDatasetSourceRole(source),
+      transformedFields: officialDatasetTransformedFields(source),
+      confidenceNotes: officialDatasetConfidenceNotes(source),
     }))
     : [];
 
@@ -836,7 +888,7 @@ function createTestVectors(
   workspace: PostalZoneDesignerWorkspace,
   localityChoices: PostalZoneDesignerMunicipalityOption[],
 ): AgidPostalCountryPackTestVector[] {
-  return workspace.exampleGeneration.candidates
+  const generatedVectors: AgidPostalCountryPackTestVector[] = workspace.exampleGeneration.candidates
     .filter(candidate => candidate.code)
     .map((candidate, index) => {
       const municipality = localityChoices[index] || localityChoices[0];
@@ -857,6 +909,32 @@ function createTestVectors(
         },
       };
     });
+
+  if (generatedVectors.length > 0 || workspace.designPlan.classification.class !== 'A') {
+    return generatedVectors;
+  }
+
+  return localityChoices.slice(0, 3).map((municipality, index) => {
+    const town = municipality.towns[index] || municipality.towns[0];
+    const chome = town.chomes[index + 1] || town.chomes[0];
+    return {
+      id: stablePackId(workspace.country.code, 'test-vector', 'mature-blocked', String(index + 1)),
+      input: {
+        countryCode: workspace.country.code,
+        municipalityId: municipality.id,
+        townId: town.id,
+        chomeId: chome?.id || null,
+      },
+      expected: {
+        candidateCodePrefix: null,
+        sameMunicipalityOnly: true,
+        containsPersonalData: false,
+        replacementBlocked: true,
+        blockedReason: 'mature-postal-country-new-code-replacement-blocked',
+        officialPostalPattern: workspace.country.profileOverrides?.existingPostalPattern,
+      },
+    };
+  });
 }
 
 function createPostalPriors(
@@ -1095,7 +1173,14 @@ export function validateAgidPostalCountryPack(
 
   for (const vector of pack.testVectors) {
     if (vector.expected.containsPersonalData !== false) errors.push(`test-vector-personal-data:${vector.id}`);
-    if (!vector.expected.candidateCodePrefix.startsWith(pack.manifest.countryCode)) {
+    if (vector.expected.candidateCodePrefix) {
+      if (!vector.expected.candidateCodePrefix.startsWith(pack.manifest.countryCode)) {
+        errors.push(`test-vector-country-prefix-mismatch:${vector.id}`);
+      }
+    } else if (
+      vector.expected.replacementBlocked !== true
+      || vector.expected.blockedReason !== 'mature-postal-country-new-code-replacement-blocked'
+    ) {
       errors.push(`test-vector-country-prefix-mismatch:${vector.id}`);
     }
   }

@@ -48,6 +48,10 @@ test('classifies official postal APIs and government address APIs as strong evid
     countryCode: 'JP',
     source: 'Japan Post Postal Code and Digital Address API',
   });
+  const uspsAddresses = classifyPostalSourceTrust({
+    countryCode: 'US',
+    source: 'USPS Addresses 3.0 API ZIP Code lookup',
+  });
   const franceBan = classifyPostalSourceTrust({
     countryCode: 'FR',
     source: 'API Adresse Base Adresse Nationale data.gouv.fr',
@@ -59,8 +63,23 @@ test('classifies official postal APIs and government address APIs as strong evid
 
   assert.equal(japanPost.strength, 'strong');
   assert.equal(japanPost.tier, 'authoritative');
+  assert.equal(uspsAddresses.strength, 'strong');
+  assert.equal(uspsAddresses.tier, 'authoritative');
   assert.equal(franceBan.strength, 'strong');
   assert.equal(singaporeOneMap.strength, 'strong');
+});
+
+test('separates United States postal authority, geography, and crosswalk sources', () => {
+  const usSources = getOfficialPostalSourcesForCountry('US');
+  const usSourceIds = usSources.map(source => source.id);
+
+  assert.equal(usSources[0]?.id, 'usps-web-tools');
+  assert.ok(usSourceIds.includes('us-census-tiger-line'));
+  assert.ok(usSourceIds.includes('us-census-geocoder'));
+  assert.ok(usSourceIds.includes('hud-usps-zip-crosswalk'));
+  assert.equal(usSources.find(source => source.id === 'usps-web-tools')?.depth, 'delivery-point');
+  assert.equal(usSources.find(source => source.id === 'us-census-tiger-line')?.depth, 'geo-only');
+  assert.equal(usSources.find(source => source.id === 'hud-usps-zip-crosswalk')?.depth, 'postcode');
 });
 
 test('keeps weak third-party postal lists below official and official-derived sources', () => {

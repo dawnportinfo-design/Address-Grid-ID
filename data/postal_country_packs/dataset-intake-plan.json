@@ -2754,11 +2754,15 @@
       "sourceReadiness": "license-review-required",
       "preferredSourceIds": [
         "usps-web-tools",
-        "hud-usps-zip-crosswalk"
+        "hud-usps-zip-crosswalk",
+        "us-census-geocoder",
+        "us-census-tiger-line"
       ],
       "sourceUrls": [
-        "https://www.usps.com/business/web-tools-apis/",
-        "https://www.huduser.gov/portal/dataset/uspszip-api.html"
+        "https://developers.usps.com/apis",
+        "https://www.huduser.gov/portal/dataset/uspszip-api.html",
+        "https://geocoding.geo.census.gov/geocoder/Geocoding_Services_API.html",
+        "https://www.census.gov/programs-surveys/geography/guidance/tiger-data-products-guide.html"
       ],
       "containsPersonalData": false,
       "containsRawThirdPartyData": false,
