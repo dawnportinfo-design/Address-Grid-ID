@@ -2,6 +2,7 @@ export const AGID_POSTAL_COUNTRY_PACK_STRATEGY_VERSION =
   'agid-postal-country-pack-strategy-v0.1';
 
 export type AgidPostalCountryPackTier =
+  | 'mature-reliable-postal-code'
   | 'no-or-not-required-postal-code'
   | 'weak-coarse-postal-code'
   | 'fragile-address-infrastructure'
@@ -19,6 +20,7 @@ export type AgidPostalCountryPackWeight =
   | 'heavy-pack';
 
 export type AgidPostalCountryPackUse =
+  | 'official-postal-reference-pack'
   | 'primary-agid-postal-draft'
   | 'supplemental-agid-postal-draft'
   | 'high-risk-coarse-draft'
@@ -104,6 +106,7 @@ export type AgidPostalCountryPackIndex = {
   version: typeof AGID_POSTAL_COUNTRY_PACK_STRATEGY_VERSION;
   totalCountries: number;
   byTier: {
+    matureReliablePostalCode: number;
     noOrNotRequiredPostalCode: number;
     weakCoarsePostalCode: number;
     fragileAddressInfrastructure: number;
@@ -288,6 +291,7 @@ const TIER_PRIORITY: Record<AgidPostalCountryPackTier, number> = {
   'rapid-growth-address-pressure': 3,
   'weak-coarse-postal-code': 2,
   'no-or-not-required-postal-code': 1,
+  'mature-reliable-postal-code': 0,
 };
 
 function buildCandidateIndex() {
@@ -320,6 +324,7 @@ export function listAgidPostalCountryPackCandidates(): AgidPostalCountryPackCand
 }
 
 function packWeightFor(candidate: AgidPostalCountryPackCandidate): AgidPostalCountryPackWeight {
+  if (candidate.tier === 'mature-reliable-postal-code') return 'standard-pack';
   if (candidate.tier === 'fragile-address-infrastructure') return 'thin-pack';
   if (candidate.tier === 'rapid-growth-address-pressure') return 'heavy-pack';
   if (STANDARD_PACK_COUNTRY_CODES.has(candidate.countryCode)) return 'standard-pack';
@@ -328,6 +333,7 @@ function packWeightFor(candidate: AgidPostalCountryPackCandidate): AgidPostalCou
 }
 
 function recommendedUseFor(candidate: AgidPostalCountryPackCandidate): AgidPostalCountryPackUse {
+  if (candidate.tier === 'mature-reliable-postal-code') return 'official-postal-reference-pack';
   if (candidate.tier === 'fragile-address-infrastructure') return 'high-risk-coarse-draft';
   if (candidate.tier === 'rapid-growth-address-pressure') return 'growth-pressure-supplement';
   if (candidate.tier === 'weak-coarse-postal-code') return 'supplemental-agid-postal-draft';
@@ -351,7 +357,7 @@ function requiredLayersFor(candidate: AgidPostalCountryPackCandidate): AgidPosta
   if (ROUTE_CORRIDOR_COUNTRY_CODES.has(candidate.countryCode)) {
     insertAfter('settlement-cluster-index', 'road-and-route-corridors');
   }
-  if (candidate.tier !== 'weak-coarse-postal-code') {
+  if (candidate.tier !== 'weak-coarse-postal-code' && candidate.tier !== 'mature-reliable-postal-code') {
     insertAfter('settlement-cluster-index', 'vpl-seed-regions');
   }
   return base;
@@ -372,6 +378,10 @@ function preseededRecordsFor(candidate: AgidPostalCountryPackCandidate) {
   }
   if (candidate.tier === 'rapid-growth-address-pressure') {
     records.push('growth-pressure priors: informal settlements, urban expansion corridors, EC delivery pressure, and future capacity reserves');
+  }
+  if (candidate.tier === 'mature-reliable-postal-code') {
+    records.push('official postal reference slots: authoritative postal format, API/source metadata, license ledger, and AGID compatibility fixtures only');
+    records.push('non-replacement boundary: AGID must not mint public substitute postal codes where a reliable official postal system exists');
   }
   return records;
 }
@@ -453,6 +463,7 @@ export function recommendAgidPostalCountryPack(
 function createAgidPostalCountryPackIndex(): AgidPostalCountryPackIndex {
   const recommendations = listPrecomputedRecommendations();
   const byTier = {
+    matureReliablePostalCode: 0,
     noOrNotRequiredPostalCode: 0,
     weakCoarsePostalCode: 0,
     fragileAddressInfrastructure: 0,
@@ -477,6 +488,7 @@ function createAgidPostalCountryPackIndex(): AgidPostalCountryPackIndex {
       if (item.tier === 'weak-coarse-postal-code') byTier.weakCoarsePostalCode += 1;
       if (item.tier === 'fragile-address-infrastructure') byTier.fragileAddressInfrastructure += 1;
       if (item.tier === 'rapid-growth-address-pressure') byTier.rapidGrowthAddressPressure += 1;
+      if (item.tier === 'mature-reliable-postal-code') byTier.matureReliablePostalCode += 1;
       byRegion[regionForCountryCode(item.countryCode)] += 1;
       byPackWeight[item.packWeight] += 1;
       lookup[item.countryCode] = {

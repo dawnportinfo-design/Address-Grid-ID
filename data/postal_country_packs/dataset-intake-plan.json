@@ -4,27 +4,27 @@
   "containsPersonalData": false,
   "containsRawThirdPartyData": false,
   "summary": {
-    "totalCountries": 67,
+    "totalCountries": 85,
     "p0Countries": 17,
-    "generatedPackCountries": 55,
-    "validPackCountries": 55,
-    "sourceCatalogOnlyCountries": 12,
-    "normalizedOfficialMunicipalityNeeded": 48,
+    "generatedPackCountries": 78,
+    "validPackCountries": 78,
+    "sourceCatalogOnlyCountries": 7,
+    "normalizedOfficialMunicipalityNeeded": 65,
     "byClass": {
       "strong-postcode": 8,
-      "no-postcode": 28,
+      "no-postcode": 30,
       "weak-postcode": 4,
-      "fragile": 4,
-      "rapid-growth": 0,
+      "fragile": 5,
+      "rapid-growth": 4,
       "island": 2,
       "polar": 1,
-      "source-catalog-only": 20
+      "source-catalog-only": 31
     },
     "byStage": {
-      "source-catalog-only": 12,
-      "synthetic-planning-fixture": 48,
+      "source-catalog-only": 7,
+      "synthetic-planning-fixture": 65,
       "normalized-official-municipality-needed": 0,
-      "open-geodata-ready": 7,
+      "open-geodata-ready": 13,
       "pilot-dataset-ready": 0
     }
   },
@@ -66,6 +66,41 @@
       "blockers": []
     },
     {
+      "countryCode": "AF",
+      "countryName": "Afghanistan",
+      "priority": "P1",
+      "datasetClass": "fragile",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-af",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "coarse-safe-regions",
+        "humanitarian-redaction-policy"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records",
+        "keep precision coarse and publish only humanitarian-safe regions"
+      ],
+      "blockers": [
+        "country-specific-source-needed",
+        "privacy-and-safety-review-required"
+      ]
+    },
+    {
       "countryCode": "AG",
       "countryName": "Antigua and Barbuda",
       "priority": "P1",
@@ -99,6 +134,42 @@
       "blockers": [
         "country-specific-source-needed"
       ]
+    },
+    {
+      "countryCode": "AO",
+      "countryName": "Angola",
+      "priority": "P1",
+      "datasetClass": "no-postcode",
+      "stage": "open-geodata-ready",
+      "packRepositoryName": "agid-postal-pack-ao",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "official-or-open-source-linked",
+      "preferredSourceIds": [
+        "correios-angola"
+      ],
+      "sourceUrls": [
+        "https://www.correiosdeangola.ao/"
+      ],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "agid-planning-cells",
+        "postal-equivalent-candidates",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "prepare postal-equivalent AGID region candidates and route evidence slots",
+        "run sample municipality import and compare against source catalog freshness"
+      ],
+      "blockers": []
     },
     {
       "countryCode": "AQ",
@@ -205,6 +276,39 @@
         "ingest normalized official municipality dataset when redistribution terms are reviewed",
         "attach open geodata source references without bundling raw third-party records",
         "prepare postal-equivalent AGID region candidates and route evidence slots"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
+      "countryCode": "BD",
+      "countryName": "Bangladesh",
+      "priority": "P1",
+      "datasetClass": "rapid-growth",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-bd",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
       ],
       "blockers": [
         "country-specific-source-needed"
@@ -482,6 +586,39 @@
         "ingest normalized official municipality dataset when redistribution terms are reviewed",
         "attach open geodata source references without bundling raw third-party records",
         "prepare postal-equivalent AGID region candidates and route evidence slots"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
+      "countryCode": "CD",
+      "countryName": "DR Congo",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-cd",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
       ],
       "blockers": [
         "country-specific-source-needed"
@@ -800,6 +937,41 @@
       ]
     },
     {
+      "countryCode": "ET",
+      "countryName": "Ethiopia",
+      "priority": "P1",
+      "datasetClass": "no-postcode",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-et",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "agid-planning-cells",
+        "postal-equivalent-candidates",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records",
+        "prepare postal-equivalent AGID region candidates and route evidence slots"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
       "countryCode": "FJ",
       "countryName": "Fiji",
       "priority": "P0",
@@ -990,10 +1162,10 @@
       "countryName": "Ghana",
       "priority": "P0",
       "datasetClass": "weak-postcode",
-      "stage": "source-catalog-only",
-      "packRepositoryName": null,
-      "packGenerated": false,
-      "packValid": false,
+      "stage": "open-geodata-ready",
+      "packRepositoryName": "agid-postal-pack-gh",
+      "packGenerated": true,
+      "packValid": true,
       "sourceReadiness": "official-or-open-source-linked",
       "preferredSourceIds": [
         "ghanapostgps"
@@ -1015,12 +1187,9 @@
         "route-evidence-slots"
       ],
       "nextActions": [
-        "add Postal Zone Designer country preset before generating a country pack"
+        "run sample municipality import and compare against source catalog freshness"
       ],
-      "blockers": [
-        "country-pack-generator-preset-missing",
-        "country-pack-validation-failed"
-      ]
+      "blockers": []
     },
     {
       "countryCode": "GM",
@@ -1127,6 +1296,72 @@
       "blockers": []
     },
     {
+      "countryCode": "IE",
+      "countryName": "Ireland",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-ie",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
+      "countryCode": "IN",
+      "countryName": "India",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-in",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
       "countryCode": "JM",
       "countryName": "Jamaica",
       "priority": "P1",
@@ -1164,10 +1399,10 @@
       "countryName": "Japan",
       "priority": "P0",
       "datasetClass": "strong-postcode",
-      "stage": "source-catalog-only",
-      "packRepositoryName": null,
-      "packGenerated": false,
-      "packValid": false,
+      "stage": "open-geodata-ready",
+      "packRepositoryName": "agid-postal-pack-jp",
+      "packGenerated": true,
+      "packValid": true,
       "sourceReadiness": "official-or-open-source-linked",
       "preferredSourceIds": [
         "japan-post-digital-address-api",
@@ -1193,23 +1428,20 @@
         "address-format-rules"
       ],
       "nextActions": [
-        "add Postal Zone Designer country preset before generating a country pack",
-        "keep country pack supplemental; do not replace official postcode authority"
+        "keep country pack supplemental; do not replace official postcode authority",
+        "run sample municipality import and compare against source catalog freshness"
       ],
-      "blockers": [
-        "country-pack-generator-preset-missing",
-        "country-pack-validation-failed"
-      ]
+      "blockers": []
     },
     {
       "countryCode": "KE",
       "countryName": "Kenya",
       "priority": "P0",
       "datasetClass": "weak-postcode",
-      "stage": "source-catalog-only",
-      "packRepositoryName": null,
-      "packGenerated": false,
-      "packValid": false,
+      "stage": "open-geodata-ready",
+      "packRepositoryName": "agid-postal-pack-ke",
+      "packGenerated": true,
+      "packValid": true,
       "sourceReadiness": "official-or-open-source-linked",
       "preferredSourceIds": [
         "posta-kenya"
@@ -1231,11 +1463,41 @@
         "route-evidence-slots"
       ],
       "nextActions": [
-        "add Postal Zone Designer country preset before generating a country pack"
+        "run sample municipality import and compare against source catalog freshness"
+      ],
+      "blockers": []
+    },
+    {
+      "countryCode": "KH",
+      "countryName": "Cambodia",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-kh",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
       ],
       "blockers": [
-        "country-pack-generator-preset-missing",
-        "country-pack-validation-failed"
+        "country-specific-source-needed"
       ]
     },
     {
@@ -1313,6 +1575,39 @@
       "datasetClass": "source-catalog-only",
       "stage": "synthetic-planning-fixture",
       "packRepositoryName": "agid-postal-pack-kp",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
+      "countryCode": "LA",
+      "countryName": "Laos",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-la",
       "packGenerated": true,
       "packValid": true,
       "sourceReadiness": "global-fallback-only",
@@ -1446,6 +1741,39 @@
       ]
     },
     {
+      "countryCode": "MM",
+      "countryName": "Myanmar",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-mm",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
       "countryCode": "MO",
       "countryName": "Macao",
       "priority": "P1",
@@ -1516,6 +1844,39 @@
       "blockers": []
     },
     {
+      "countryCode": "NG",
+      "countryName": "Nigeria",
+      "priority": "P1",
+      "datasetClass": "rapid-growth",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-ng",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
       "countryCode": "NL",
       "countryName": "Netherlands",
       "priority": "P0",
@@ -1557,6 +1918,39 @@
         "country-pack-generator-preset-missing",
         "country-pack-validation-failed",
         "license-or-credential-review-needed"
+      ]
+    },
+    {
+      "countryCode": "NP",
+      "countryName": "Nepal",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-np",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
       ]
     },
     {
@@ -1634,6 +2028,105 @@
         "country-pack-generator-preset-missing",
         "country-pack-validation-failed",
         "license-or-credential-review-needed"
+      ]
+    },
+    {
+      "countryCode": "PG",
+      "countryName": "Papua New Guinea",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-pg",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
+      "countryCode": "PH",
+      "countryName": "Philippines",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-ph",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
+      "countryCode": "PK",
+      "countryName": "Pakistan",
+      "priority": "P1",
+      "datasetClass": "rapid-growth",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-pk",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
       ]
     },
     {
@@ -2187,10 +2680,10 @@
       "countryName": "Tanzania",
       "priority": "P0",
       "datasetClass": "weak-postcode",
-      "stage": "source-catalog-only",
-      "packRepositoryName": null,
-      "packGenerated": false,
-      "packValid": false,
+      "stage": "open-geodata-ready",
+      "packRepositoryName": "agid-postal-pack-tz",
+      "packGenerated": true,
+      "packValid": true,
       "sourceReadiness": "official-or-open-source-linked",
       "preferredSourceIds": [
         "tcra-tanzania-postcode"
@@ -2212,11 +2705,41 @@
         "route-evidence-slots"
       ],
       "nextActions": [
-        "add Postal Zone Designer country preset before generating a country pack"
+        "run sample municipality import and compare against source catalog freshness"
+      ],
+      "blockers": []
+    },
+    {
+      "countryCode": "UG",
+      "countryName": "Uganda",
+      "priority": "P1",
+      "datasetClass": "rapid-growth",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-ug",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
       ],
       "blockers": [
-        "country-pack-generator-preset-missing",
-        "country-pack-validation-failed"
+        "country-specific-source-needed"
       ]
     },
     {
@@ -2224,10 +2747,10 @@
       "countryName": "United States",
       "priority": "P0",
       "datasetClass": "strong-postcode",
-      "stage": "source-catalog-only",
-      "packRepositoryName": null,
-      "packGenerated": false,
-      "packValid": false,
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-us",
+      "packGenerated": true,
+      "packValid": true,
       "sourceReadiness": "license-review-required",
       "preferredSourceIds": [
         "usps-web-tools",
@@ -2251,14 +2774,46 @@
         "address-format-rules"
       ],
       "nextActions": [
-        "add Postal Zone Designer country preset before generating a country pack",
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records",
         "resolve credential or redistribution terms before bundling derived data",
         "keep country pack supplemental; do not replace official postcode authority"
       ],
       "blockers": [
-        "country-pack-generator-preset-missing",
-        "country-pack-validation-failed",
         "license-or-credential-review-needed"
+      ]
+    },
+    {
+      "countryCode": "VN",
+      "countryName": "Vietnam",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-vn",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
       ]
     },
     {
@@ -2362,6 +2917,40 @@
         "country-specific-source-needed",
         "privacy-and-safety-review-required"
       ]
+    },
+    {
+      "countryCode": "ZM",
+      "countryName": "Zambia",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "open-geodata-ready",
+      "packRepositoryName": "agid-postal-pack-zm",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "official-or-open-source-linked",
+      "preferredSourceIds": [
+        "zampost"
+      ],
+      "sourceUrls": [
+        "https://www.zampost.com.zm/"
+      ],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "run sample municipality import and compare against source catalog freshness"
+      ],
+      "blockers": []
     },
     {
       "countryCode": "ZW",

@@ -105,6 +105,7 @@ const PRIORITY_DATASET_COUNTRIES: Array<{ countryCode: string; countryName: stri
 const P0_COUNTRY_CODES = new Set(PRIORITY_DATASET_COUNTRIES.map(country => country.countryCode));
 
 const TIER_TO_DATASET_CLASS: Record<AgidPostalCountryPackTier, AgidCountryPackDatasetClass> = {
+  'mature-reliable-postal-code': 'strong-postcode',
   'no-or-not-required-postal-code': 'no-postcode',
   'weak-coarse-postal-code': 'weak-postcode',
   'fragile-address-infrastructure': 'fragile',

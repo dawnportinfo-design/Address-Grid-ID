@@ -34,6 +34,7 @@ agid-postal-pack-fj
 
 | Tier | 意味 | 推奨 |
 | --- | --- | --- |
+| mature-reliable-postal-code | 郵便番号が成熟・信頼できる | 公式郵便体系の参照/互換pack |
 | no-or-not-required-postal-code | 郵便番号なし、または実質的に要求されない | 国別pack推奨 |
 | weak-coarse-postal-code | 郵便番号はあるが粗い | 補助コード用pack |
 | fragile-address-infrastructure | 住所制度や居住安定性が弱い | 薄い高リスクpack |

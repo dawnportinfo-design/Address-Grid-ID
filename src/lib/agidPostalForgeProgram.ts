@@ -331,6 +331,7 @@ export function evaluateAgidPostalForgeCountryPackRelease(input: {
 }
 
 function coveragePolicyForPack(pack: AgidPostalCountryPack): AddressCoveragePolicyId {
+  if (pack.recommendation.tier === 'mature-reliable-postal-code') return 'postal-reliable-api';
   if (pack.recommendation.tier === 'weak-coarse-postal-code') return 'postal-weak-api';
   if (pack.recommendation.tier === 'rapid-growth-address-pressure') return 'postal-weak-api';
   if (pack.recommendation.tier === 'fragile-address-infrastructure') return 'no-postal-weak-geo';

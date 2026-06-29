@@ -3486,5 +3486,101 @@
     "publicPrecision": "municipality",
     "sourceId": "agid-synthetic-country-pack-fixtures",
     "noRawAddress": true
+  },
+  {
+    "cellId": "gm-planning-cell-0219",
+    "agid": "GM01VK0P4W5Z",
+    "localityId": "GM-M1-T3",
+    "vplId": "gm-vpl-3",
+    "centroid": {
+      "lat": 13.25511,
+      "lng": -15.531271
+    },
+    "codeSeed": "GM-26-66-219",
+    "routeBucket": "GM-route-03",
+    "areaClass": "peri-urban",
+    "publicPrecision": "town",
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "noRawAddress": true
+  },
+  {
+    "cellId": "gm-planning-cell-0220",
+    "agid": "GM01VK76VQ5X",
+    "localityId": "GM-M2-T1",
+    "vplId": "gm-vpl-1",
+    "centroid": {
+      "lat": 13.197448,
+      "lng": -15.570989
+    },
+    "codeSeed": "GM-YN-ZB-220",
+    "routeBucket": "GM-route-04",
+    "areaClass": "rural",
+    "publicPrecision": "town",
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "noRawAddress": true
+  },
+  {
+    "cellId": "gm-planning-cell-0221",
+    "agid": "GM01VK776WTQ",
+    "localityId": "GM-M2-T2",
+    "vplId": "gm-vpl-2",
+    "centroid": {
+      "lat": 13.1772,
+      "lng": -15.570989
+    },
+    "codeSeed": "GM-WK-F4-221",
+    "routeBucket": "GM-route-05",
+    "areaClass": "urban-core",
+    "publicPrecision": "town",
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "noRawAddress": true
+  },
+  {
+    "cellId": "gm-planning-cell-0222",
+    "agid": "GM01VK79VCST",
+    "localityId": "GM-M2-T3",
+    "vplId": "gm-vpl-3",
+    "centroid": {
+      "lat": 13.197448,
+      "lng": -15.531271
+    },
+    "codeSeed": "GM-26-TR-222",
+    "routeBucket": "GM-route-06",
+    "areaClass": "peri-urban",
+    "publicPrecision": "town",
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "noRawAddress": true
+  },
+  {
+    "cellId": "gm-planning-cell-0223",
+    "agid": "GM01VJY08NMW",
+    "localityId": "GM-M3-T1",
+    "vplId": "gm-vpl-1",
+    "centroid": {
+      "lat": 13.25511,
+      "lng": -15.457882
+    },
+    "codeSeed": "GM-YN-HK-223",
+    "routeBucket": "GM-route-07",
+    "areaClass": "rural",
+    "publicPrecision": "town",
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "noRawAddress": true
+  },
+  {
+    "cellId": "gm-planning-cell-0224",
+    "agid": "GM01VJY852EK",
+    "localityId": "GM-M3-T2",
+    "vplId": "gm-vpl-2",
+    "centroid": {
+      "lat": 13.341406,
+      "lng": -15.361994
+    },
+    "codeSeed": "GM-WK-F7-224",
+    "routeBucket": "GM-route-08",
+    "areaClass": "peri-urban",
+    "publicPrecision": "town",
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "noRawAddress": true
   }
 ]

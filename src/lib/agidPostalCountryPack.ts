@@ -288,7 +288,9 @@ function fallbackRequiredLayersFor(country: PostalZoneDesignerCountryPreset): Ag
   const layers = [...DEFAULT_REQUIRED_LAYERS];
   if (country.terrain === 'archipelago') layers.splice(layers.indexOf('postal-system-priors'), 0, 'ports-airports-and-terminals');
   if (country.terrain === 'desert') layers.splice(layers.indexOf('postal-system-priors'), 0, 'road-and-route-corridors');
-  if (!layers.includes('vpl-seed-regions')) layers.splice(layers.indexOf('postal-system-priors'), 0, 'vpl-seed-regions');
+  if (country.classHint !== 'A' && !layers.includes('vpl-seed-regions')) {
+    layers.splice(layers.indexOf('postal-system-priors'), 0, 'vpl-seed-regions');
+  }
   return layers;
 }
 
@@ -308,20 +310,36 @@ function createFallbackRecommendation(
 ): AgidPostalCountryPackRecommendation {
   const repositoryName = countryPackRepositoryName(country.code);
   const highRisk = isHighRiskCountryPreset(country);
+  const maturePostal = country.classHint === 'A';
+  const weakPostal = country.classHint === 'B';
   return {
     version: AGID_POSTAL_COUNTRY_PACK_STRATEGY_VERSION,
     countryCode: country.code,
     countryName: country.name,
-    tier: highRisk ? 'fragile-address-infrastructure' : 'no-or-not-required-postal-code',
+    tier: maturePostal
+      ? 'mature-reliable-postal-code'
+      : weakPostal
+        ? 'weak-coarse-postal-code'
+        : highRisk
+          ? 'fragile-address-infrastructure'
+          : 'no-or-not-required-postal-code',
     repositoryMode: 'country-pack-recommended',
     repositoryName,
     packageName: `@agid/${repositoryName}`,
     packWeight: highRisk ? 'thin-pack' : country.terrain === 'archipelago' ? 'light-pack' : 'standard-pack',
-    recommendedUse: highRisk ? 'high-risk-coarse-draft' : 'primary-agid-postal-draft',
+    recommendedUse: maturePostal
+      ? 'official-postal-reference-pack'
+      : weakPostal
+        ? 'supplemental-agid-postal-draft'
+        : highRisk
+          ? 'high-risk-coarse-draft'
+          : 'primary-agid-postal-draft',
     requiredLayers: fallbackRequiredLayersFor(country),
     preseededRecords: [
       'country profile: population band, land area band, terrain class, postal maturity class',
-      'stable locality IDs independent of mutable city-name strings',
+      maturePostal
+        ? 'official postal format, API/source metadata, and AGID compatibility fixtures without replacing official codes'
+        : 'stable locality IDs independent of mutable city-name strings',
       'administrative boundary references and source freshness metadata',
       'landform and route evidence slots appropriate to the country terrain',
       'settlement clusters and VPL seed regions for draft postal-zone design',
@@ -356,7 +374,7 @@ function createFallbackRecommendation(
 }
 
 function findCountryPackTargetCountry(countryCode: string) {
-  return listPostalZoneDesignerCountries('C').find(country => country.code === countryCode) || null;
+  return listPostalZoneDesignerCountries().find(country => country.code === countryCode) || null;
 }
 
 function recommendationForTargetCountry(country: PostalZoneDesignerCountryPreset) {
@@ -364,7 +382,7 @@ function recommendationForTargetCountry(country: PostalZoneDesignerCountryPreset
 }
 
 export function listAgidPostalCountryPackTargetCountries(): AgidPostalCountryPackTargetCountry[] {
-  return listPostalZoneDesignerCountries('C').map(country => {
+  return listPostalZoneDesignerCountries().map(country => {
     const strategyRecommendation = recommendAgidPostalCountryPack(country.code);
     const recommendation = strategyRecommendation || createFallbackRecommendation(country);
     return {

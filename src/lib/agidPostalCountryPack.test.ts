@@ -140,12 +140,27 @@ test('lists every Postal Zone Designer target country for country-pack export', 
   const targets = listAgidPostalCountryPackTargetCountries();
   const codes = targets.map(target => target.countryCode);
 
-  assert.ok(targets.length >= 49);
+  assert.ok(targets.length >= 78);
   assert.equal(new Set(codes).size, targets.length);
+  assert.ok(codes.includes('JP'));
+  assert.ok(codes.includes('US'));
+  assert.ok(codes.includes('GH'));
   assert.ok(codes.includes('FJ'));
   assert.ok(codes.includes('AE'));
   assert.ok(codes.includes('ZW'));
   assert.ok(targets.some(target => target.recommendationSource === 'postal-zone-designer-fallback'));
+});
+
+test('builds mature postal countries as reference packs instead of replacement drafts', () => {
+  const pack = buildAgidPostalCountryPack({ countryCode: 'JP' });
+
+  assert.equal(pack.manifest.countryCode, 'JP');
+  assert.equal(pack.recommendation.tier, 'mature-reliable-postal-code');
+  assert.equal(pack.recommendation.recommendedUse, 'official-postal-reference-pack');
+  assert.ok(pack.countryProfile.sourceNote.includes('Mature postal code system'));
+  assert.ok(pack.recommendation.preseededRecords.some(record => record.includes('without replacing official codes')));
+  assert.ok(pack.postalSystemPriors.every(prior => prior.recommendedUse === 'official-postal-reference-pack'));
+  assert.equal(validateAgidPostalCountryPack(pack).valid, true);
 });
 
 test('builds all target country packs with no raw address or personal data flags', () => {

@@ -29,6 +29,7 @@
     "export:no-raw-address-kit": "tsx scripts/export-no-raw-address-compliance-kit.ts",
     "export:offline-field-kit": "tsx scripts/export-offline-field-kit.ts",
     "export:postal-country-pack": "tsx scripts/export-agid-postal-country-pack.ts",
+    "export:postal-country-pack:all": "tsx scripts/export-agid-postal-country-pack.ts --all",
     "export:country-pack-dataset-intake": "tsx scripts/export-agid-country-pack-dataset-intake.ts",
     "export:postal-forge-pack": "tsx scripts/export-agid-postal-forge-oss-dataset-pack.ts",
     "generate:global-repo-placement": "tsx scripts/generate-global-repository-placement.ts",

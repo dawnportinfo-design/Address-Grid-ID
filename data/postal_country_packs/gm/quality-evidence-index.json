@@ -613,5 +613,20 @@
       "area-class:rural",
       "no-personal-address-derived-score"
     ]
+  },
+  {
+    "evidenceId": "gm-quality-cell-038",
+    "subjectId": "gm-planning-cell-0223",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.51,
+    "boundaryQuality": 0.68,
+    "routeQuality": 0.55,
+    "populationQuality": 0.6,
+    "confidenceBand": "medium",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
   }
 ]

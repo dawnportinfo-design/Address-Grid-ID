@@ -30,9 +30,11 @@ AGID-created country metadata, stable locality IDs, locality aliases, landform
 slots, settlement clusters, VPL seeds, postal-system priors, source metadata,
 license metadata, privacy rules, and conformance test vectors.
 
-It is not an official postal authority dataset. Generated postal zones remain
-simulation or draft until public authority, local review, carrier pilot, data
-trust, privacy, and transition gates are satisfied.
+It is not an official postal authority dataset. For mature postal countries,
+this pack is a reference and compatibility layer around official postal systems,
+not a replacement. For weak or no-postal countries, generated postal zones
+remain simulation or draft until public authority, local review, carrier pilot,
+data trust, privacy, and transition gates are satisfied.
 
 ## Files
 
@@ -72,7 +74,7 @@ $env:AGID_POSTAL_COUNTRY_CODE="VU"; npm run export:postal-country-pack
 To generate every Postal Zone Designer target country pack:
 
 \`\`\`bash
-npm run export:postal-country-pack -- --all
+npm run export:postal-country-pack:all
 \`\`\`
 `;
 }
@@ -88,9 +90,9 @@ Version: ${AGID_POSTAL_COUNTRY_PACK_VERSION}
 Country pack count: ${packs.length}
 
 This directory contains draft AGID Postal Country Packs for target countries
-where postal codes are absent, not required, weak, or suitable for supplemental
-AGID postal-zone design. These packs are safe OSS planning artifacts, not
-official postal authority datasets.
+across mature postal systems, weak postal systems, no-postal countries, and
+supplemental AGID postal-zone design. These packs are safe OSS planning
+artifacts, not official postal authority datasets.
 
 ## Countries
 
@@ -104,11 +106,14 @@ ${countries}
   private AOID bodies, AGID-S payloads, proof codes, or raw third-party data.
 - Generated codes remain simulation or draft until official authority, carrier
   pilot, privacy, data-trust, and transition gates are satisfied.
+- Mature postal countries are stored as reference packs for source metadata,
+  validation compatibility, conformance tests, and AGID interoperability; they
+  must not claim to replace official postal codes.
 
 ## Regenerate
 
 \`\`\`bash
-npm run export:postal-country-pack -- --all
+npm run export:postal-country-pack:all
 \`\`\`
 `;
 }

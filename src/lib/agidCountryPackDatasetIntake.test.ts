@@ -27,7 +27,10 @@ test('keeps priority countries in explicit dataset classes and stages', () => {
   const records = new Map(buildAgidCountryPackDatasetIntakePlan().records.map(record => [record.countryCode, record]));
 
   assert.equal(records.get('JP')?.datasetClass, 'strong-postcode');
-  assert.equal(records.get('JP')?.stage, 'source-catalog-only');
+  assert.equal(records.get('JP')?.stage, 'open-geodata-ready');
+  assert.equal(records.get('JP')?.packGenerated, true);
+  assert.equal(records.get('US')?.datasetClass, 'strong-postcode');
+  assert.equal(records.get('US')?.packGenerated, true);
   assert.equal(records.get('HK')?.datasetClass, 'no-postcode');
   assert.equal(records.get('AE')?.packGenerated, true);
   assert.equal(records.get('FJ')?.datasetClass, 'island');
