@@ -59,8 +59,8 @@ english:
 postalCode:
   format: NNNNN
   regex: ^\d{5}$
-  api: https://datahub.io/logistics/postal-codes-ma
-  source: DataHub postal-codes-ma
+  api: https://codepostal.ma/default.aspx
+  source: Poste Maroc codepostal.ma
 addressRules:
   languages:
     - code: ar
@@ -91,6 +91,7 @@ addressRules:
     required: true
     usage: required
   openSourceIds:
+    - poste-maroc-codepostal
     - datahub-postal
     - osm-nominatim
     - osm-overpass
@@ -119,6 +120,7 @@ addressRules:
     - gbif-occurrence
     - rcmrd-gmes-africa-geoportal
 openSourceIds:
+  - poste-maroc-codepostal
   - datahub-postal
   - osm-nominatim
   - osm-overpass

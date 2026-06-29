@@ -955,7 +955,12 @@ test('North Africa address JSON files expose addressRules metadata and postal da
   assert.equal(loadRules('MR').postalCode?.label, '5 digits used');
   assert.equal(loadFormat('EG').postalCode?.api, 'https://github.com/Badawy403/Egy.List');
   assert.equal(loadFormat('EG').postalCode?.source, 'Badawy403/Egy.List / DataHub postal-codes-eg');
-  assert.equal(loadFormat('MA').postalCode?.api, 'https://datahub.io/logistics/postal-codes-ma');
+  assert.equal(loadFormat('DZ').postalCode?.api, 'https://www.poste.dz/customer/bureaux_postaux');
+  assert.equal(loadFormat('LY').postalCode?.api, 'https://libyapost.ly/en/services/');
+  assert.equal(loadFormat('MA').postalCode?.api, 'https://codepostal.ma/default.aspx');
+  assert.equal(loadFormat('MR').postalCode?.api, 'https://www.mauripost.mr/');
+  assert.equal(loadFormat('SD').postalCode?.api, 'https://sudapost.sd/wp/');
+  assert.equal(loadFormat('TN').postalCode?.api, 'https://www.laposte.tn/codes.php');
 });
 
 test('West Africa address JSON files expose addressRules metadata', () => {
@@ -1246,9 +1251,9 @@ test('British, Crown Dependency, and British Overseas Territory metadata exposes
     GI: ['royal-gibraltar-post', 'gibraltar-gis'],
     FK: ['falkland-islands-post', 'falkland-islands-gis'],
     GS: ['british-overseas-postal-reference', 'south-georgia-gis'],
-    SH: ['british-overseas-postal-reference', 'saint-helena-gov'],
-    AC: ['british-overseas-postal-reference', 'saint-helena-gov'],
-    TA: ['british-overseas-postal-reference', 'saint-helena-gov'],
+    SH: ['british-overseas-postal-reference', 'saint-helena-postal'],
+    AC: ['british-overseas-postal-reference', 'ascension-post-office'],
+    TA: ['british-overseas-postal-reference', 'tristan-post-office'],
     IO: ['british-overseas-postal-reference', 'biot-gov'],
     AI: ['british-overseas-postal-reference', 'anguilla-post', 'anguilla-gov-gis'],
     BM: ['british-overseas-postal-reference', 'bermuda-post', 'bermuda-gov-maps'],

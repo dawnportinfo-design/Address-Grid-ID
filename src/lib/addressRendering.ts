@@ -6,7 +6,9 @@ normalizeEnglishAddressPart,
 renderStreetAddressLine,
 uniqueAddressParts,
 } from './addressEnglish';
+import type { AddressFormat } from '../data/address_formats';
 import { mergeOpenSourceAddressEvidence } from './addressEvidence';
+import { renderAddressFormatTemplate } from './addressFormatRenderer';
 import { applyShippingAbbreviations } from './addressUtils';
 import {
 renderDomesticCN,
@@ -55,7 +57,7 @@ export function createCanonicalAddress(details: any): CanonicalAddress {
     ? { ...safeDetails, ...safeDetails.address_analysis.canonical }
     : safeDetails;
   const parts = {
-    poi: source.amenity || source.shop || source.office || source.tourism || source.leisure || source.railway || source.aeroway || source.historic || source.station || source.healthcare || source.poi || "",
+    poi: source.poi || source.map_feature_name || source.bridge || source.heritage_site || source.ruins || source.park || source.river || source.stream || source.canal || source.lake || source.salt_lake || source.reservoir || source.lagoon || source.oxbow || source.pond || source.bay || source.waterfall || source.water || source.waterway || source.mountain || source.peak || source.grassland || source.desert || source.dryland || source.wilderness || source.salt_flat || source.salt_pan || source.dry_lake || source.badlands || source.bare_rock || source.scree || source.shingle || source.forest || source.wetland || source.beach || source.island || source.islet || source.archipelago || source.island_group || source.atoll || source.cay || source.key || source.cave || source.valley || source.glacier || source.ice_field || source.reef || source.spring || source.natural_feature || source.amenity || source.shop || source.office || source.tourism || source.leisure || source.railway || source.aeroway || source.historic || source.station || source.healthcare || source.natural || "",
     country: source.country || "",
     country_code: (source.country_code || "").toUpperCase(),
     postcode: source.postcode || source.postal_code || source.zip || "",
@@ -108,22 +110,39 @@ function meaningfulAddressContextPart(value: string, country: string) {
   return meaningfulAddressTextPattern.test(cleaned) ? cleaned : '';
 }
 
+function uniqueCanonicalParts(parts: string[]) {
+  const seen = new Set<string>();
+  return parts
+    .map(part => normalizeUnicode(part))
+    .filter(Boolean)
+    .filter(part => {
+      const comparable = comparableAddressPart(part);
+      if (!comparable || seen.has(comparable)) return false;
+      seen.add(comparable);
+      return true;
+    });
+}
+
 /**
  * Address Rendering Engine for International Shipping
  */
 export class AddressRenderer {
-  
+
   /**
    * Main entry point for rendering an address based on specific tab/context
    */
-  static render(tab: string, data: CanonicalAddress): string {
+  static render(tab: string, data: CanonicalAddress, format?: AddressFormat | null): string {
     const canonical = this.normalizeCanonical(data);
-    
+    const formattedByCountryRules = format
+      ? renderAddressFormatTemplate(format, tab, canonical as unknown as Record<string, unknown>)
+      : '';
+    if (formattedByCountryRules) return formattedByCountryRules;
+
     // Check if it's the specialized International English tab
-    if (tab === 'intl_en') {
+    if (isInternationalShippingEnglishTab(tab)) {
       return this.renderInternationalEnglish(canonical);
     }
-    
+
     // Otherwise render by language code
     return this.renderByLanguage(tab, canonical);
   }
@@ -151,11 +170,11 @@ export class AddressRenderer {
       if (isEnglish) return renderInternationalCN(data);
       return renderDomesticCN(data);
     }
-    
+
     if (c === 'TW') {
       return renderTW(data, lang);
     }
-    
+
     if (c === 'HK' && isEnglish && lang === 'en_domestic') {
       return this.renderDomesticEnglish(data);
     }
@@ -178,7 +197,7 @@ export class AddressRenderer {
     }
 
     const isEastAsian = ['JP', 'KR', 'KP', 'VN', 'HU'].includes(c);
-    
+
     // If it's English domestic inside an Inner/Outer Circle English address market.
     if (isEnglish && isEnglishAddressCountry(c)) {
       return this.renderDomesticEnglish(data);
@@ -186,7 +205,7 @@ export class AddressRenderer {
 
     if (isEastAsian && !isEnglish) {
       // Big-to-Small for East Asian languages
-      const parts = [
+      const parts = uniqueCanonicalParts([
         data.postcode ? `〒${data.postcode}` : "",
         data.state,
         data.city,
@@ -194,8 +213,8 @@ export class AddressRenderer {
         data.subdistrict,
         data.road,
         data.house_number,
-        data.building
-      ].filter(Boolean);
+        data.building || data.poi
+      ]);
       return parts.join(data.country_code === 'JP' ? "" : " ");
     } else {
       // Small-to-Big for others
@@ -206,19 +225,20 @@ export class AddressRenderer {
       const t = (val: string) => isEnglish ? normalizeEnglishAddressPart(val, data.country_code) : val;
       const tb = (val: string) => isEnglish ? normalizeEnglishAddressBuildingName(val, data.country_code) : val;
 
-      const line1 = isRoadFirst 
+      const line1 = isRoadFirst
         ? `${t(data.road)} ${t(data.house_number)}`.trim()
         : `${t(data.house_number)} ${t(data.road)}`.trim();
 
-      const parts = [
-        tb(data.building),
+      const parts = uniqueCanonicalParts([
+        tb(data.building || data.poi),
         line1,
         t(data.subdistrict),
+        t(data.district),
         t(data.city),
         t(data.state),
         data.postcode
-      ].filter(Boolean);
-      
+      ]);
+
       // Don't include country name in domestic view (except maybe for English intl)
       return parts.join(", ");
     }
@@ -234,19 +254,19 @@ export class AddressRenderer {
 
     let housePart = t(data.house_number);
     let roadPart = t(data.road);
-    
+
     // Colombia specific: Add # separator if it's a grid coordinate pattern
     if (country === 'CO' && housePart && !housePart.includes('#') && /^\d/.test(housePart)) {
       housePart = `# ${housePart}`;
     }
 
     const line1 = `${roadPart} ${housePart}`.trim();
-    
+
     // Neighborhood is very important in MX (Colonia) and BR (Bairro)
     const neighborhood = t(data.subdistrict || data.suburb);
-    
+
     const parts = [
-      tb(data.building),
+      tb(data.building || data.poi),
       line1,
       neighborhood,
       t(data.city),

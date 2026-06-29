@@ -73,8 +73,8 @@
   "postalCode": {
     "format": "NNNNN",
     "regex": "^\\d{5}$",
-    "api": null,
-    "source": "No free postal OSS source configured"
+    "api": "https://www.poste.dz/customer/bureaux_postaux",
+    "source": "Algérie Poste bureaux de poste lookup"
   },
   "addressRules": {
     "languages": [
@@ -116,6 +116,7 @@
     }
   },
   "openSourceIds": [
+    "algerie-poste",
     "osm-nominatim",
     "osm-overpass",
     "openaddresses",

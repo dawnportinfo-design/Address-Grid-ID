@@ -198,6 +198,9 @@ export type EuropeOpenGeoSourceId =
   | 'falkland-islands-gis'
   | 'british-overseas-postal-reference'
   | 'south-georgia-gis'
+  | 'saint-helena-postal'
+  | 'ascension-post-office'
+  | 'tristan-post-office'
   | 'saint-helena-gov';
 
 export interface EuropeOpenGeoSource {
@@ -216,6 +219,7 @@ export interface EuropeOpenGeoSource {
     | 'bathymetry'
     | 'marine'
     | 'cryosphere'
+    | 'facility'
     | 'protected-area'
     | 'biodiversity'
     | 'topography';
@@ -1968,11 +1972,11 @@ export const EUROPE_OPEN_GEO_SOURCES: Record<EuropeOpenGeoSourceId, EuropeOpenGe
   'british-overseas-postal-reference': {
     id: 'british-overseas-postal-reference',
     name: 'British Overseas Territories Postal Reference',
-    url: 'https://www.royalmail.com/',
+    url: 'https://www.royalmail.com/sending/international/country-guides',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
-    notes: 'Fallback postal reference for UK overseas territories using assigned territory postcodes.',
+    notes: 'Royal Mail country guides provide current destination addressing and service reference for UK overseas territories using assigned territory postcodes.',
   },
   'south-georgia-gis': {
     id: 'south-georgia-gis',
@@ -1982,6 +1986,33 @@ export const EUROPE_OPEN_GEO_SOURCES: Record<EuropeOpenGeoSourceId, EuropeOpenGe
     coverage: 'territory',
     usage: 'reference',
     notes: 'Territory reference for South Georgia settlements, research stations, islands, and protected areas.',
+  },
+  'saint-helena-postal': {
+    id: 'saint-helena-postal',
+    name: 'St Helena Government Postal Service',
+    url: 'https://www.sainthelena.gov.sh/public-services/postal/',
+    kind: 'postal-code',
+    coverage: 'territory',
+    usage: 'reference',
+    notes: 'Official St Helena postal-service reference for Jamestown routing, postal operations, and STHL 1ZZ delivery conventions.',
+  },
+  'ascension-post-office': {
+    id: 'ascension-post-office',
+    name: 'Ascension Island Government Post Office',
+    url: 'https://www.ascension.gov.ac/postal-service/post-office',
+    kind: 'postal-code',
+    coverage: 'territory',
+    usage: 'reference',
+    notes: 'Official Ascension Island Post Office reference for ASCN 1ZZ routing, mail services, and settlement delivery handling.',
+  },
+  'tristan-post-office': {
+    id: 'tristan-post-office',
+    name: 'Tristan da Cunha Post Office',
+    url: 'https://www.tristandc.com/postoffice.php',
+    kind: 'postal-code',
+    coverage: 'territory',
+    usage: 'reference',
+    notes: 'Official Tristan da Cunha Post Office reference for TDCU 1ZZ routing, postage, and island mail handling.',
   },
   'saint-helena-gov': {
     id: 'saint-helena-gov',
@@ -2105,9 +2136,9 @@ const COUNTRY_SOURCE_IDS: Partial<Record<EuropeCountryOrTerritoryCode, EuropeOpe
   GI: ['royal-gibraltar-post', 'gibraltar-gis'],
   FK: ['falkland-islands-post', 'falkland-islands-gis'],
   GS: ['british-overseas-postal-reference', 'south-georgia-gis', ...getPolarOpenSourceIds('GS')],
-  SH: ['british-overseas-postal-reference', 'saint-helena-gov'],
-  AC: ['british-overseas-postal-reference', 'saint-helena-gov'],
-  TA: ['british-overseas-postal-reference', 'saint-helena-gov'],
+  SH: ['british-overseas-postal-reference', 'saint-helena-postal'],
+  AC: ['british-overseas-postal-reference', 'ascension-post-office'],
+  TA: ['british-overseas-postal-reference', 'tristan-post-office'],
 };
 
 export function getEuropeOpenSourceIds(countryCode: string): EuropeOpenGeoSourceId[] {

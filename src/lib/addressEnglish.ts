@@ -790,6 +790,8 @@ function cleanEnglish(value: string) {
 }
 
 const LATIN_ADDRESS_TERM_REPLACEMENTS: Array<[RegExp, string]> = [
+  [/\bcercle\s+de\s+([\p{L}\p{M}'’.\-\s]+)\b/giu, '$1 Cercle'],
+  [/\bcercle\b/giu, 'Cercle'],
   [/\bnumero\s+civico\b/giu, 'House Number'],
   [/\bnumero\b/giu, 'Number'],
   [/\bnum(?:ero)?\b/giu, 'Number'],
@@ -1323,14 +1325,18 @@ export function renderEnglishPostalAddress(data: CanonicalAddress, options: { in
   const city = t(data.city);
   const state = t(data.state);
   const postcode = String(data.postcode || '').trim();
+  const stateRepeatsLocality =
+    normalizeComparable(state) === normalizeComparable(city) ||
+    normalizeComparable(state) === normalizeComparable(sublocalityLine);
+  const regionState = stateRepeatsLocality ? '' : state;
   const localityLine = POSTCODE_BEFORE_CITY_COUNTRIES.has(code)
     ? sublocalityLine
     : localeLine(sublocalityLine, city);
   const regionLine = POSTCODE_BEFORE_CITY_COUNTRIES.has(code)
     ? line(postcode, city)
-    : line(state, postcode);
-  const stateLine = POSTCODE_BEFORE_CITY_COUNTRIES.has(code) && normalizeComparable(state) !== normalizeComparable(city)
-    ? state
+    : line(regionState, postcode);
+  const stateLine = POSTCODE_BEFORE_CITY_COUNTRIES.has(code) && !stateRepeatsLocality
+    ? regionState
     : '';
   const lines = [
     organization,

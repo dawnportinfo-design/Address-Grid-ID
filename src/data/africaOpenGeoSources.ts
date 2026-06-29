@@ -30,13 +30,21 @@ export type AfricaOpenGeoSourceId =
   | 'rcmrd-geoportal'
   | 'kenya-open-data'
   | 'nipost-postcode'
+  | 'algerie-poste'
+  | 'libya-post-services'
+  | 'poste-maroc-codepostal'
+  | 'mauripost'
+  | 'la-poste-tunisienne-codes'
+  | 'sudapost'
   | 'ngi-south-africa'
   | 'datahub-postal'
   | 'egy-list'
   | 'sapo-postcodes'
   | 'postafind-za'
   | 'british-overseas-postal-reference'
-  | 'saint-helena-gov'
+  | 'saint-helena-postal'
+  | 'ascension-post-office'
+  | 'tristan-post-office'
   | 'biot-gov';
 
 export interface AfricaOpenGeoSource {
@@ -362,6 +370,60 @@ export const AFRICA_OPEN_GEO_SOURCES: Record<AfricaOpenGeoSourceId, AfricaOpenGe
     usage: 'primary',
     notes: 'NIPOST postcode finder and national addressing reference for Nigerian state, city, street, and postcode validation.',
   },
+  'algerie-poste': {
+    id: 'algerie-poste',
+    name: 'Algerie Poste postal office directory',
+    url: 'https://www.poste.dz/customer/bureaux_postaux',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Algeria Post postal-office and postcode lookup by wilaya for code and locality confirmation.',
+  },
+  'poste-maroc-codepostal': {
+    id: 'poste-maroc-codepostal',
+    name: 'Poste Maroc postcode directory',
+    url: 'https://codepostal.ma/default.aspx',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'primary',
+    notes: 'Official Poste Maroc postcode search and directory for city, district, street, and postal-code validation.',
+  },
+  'la-poste-tunisienne-codes': {
+    id: 'la-poste-tunisienne-codes',
+    name: 'La Poste Tunisienne postcode search',
+    url: 'https://www.laposte.tn/codes.php',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'primary',
+    notes: 'Official Tunisian Post postcode search for locality and four-digit postal-code lookup.',
+  },
+  'libya-post-services': {
+    id: 'libya-post-services',
+    name: 'Libya Post services portal',
+    url: 'https://libyapost.ly/en/services/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Libya Post service portal covering postal boxes, mail, parcels, and postal-network service information for postcode/address validation fallback.',
+  },
+  mauripost: {
+    id: 'mauripost',
+    name: 'MAURIPOST official portal',
+    url: 'https://www.mauripost.mr/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official MAURIPOST portal for postal-network, service, and customer-information reference where public postcode tooling is limited.',
+  },
+  sudapost: {
+    id: 'sudapost',
+    name: 'Sudapost official site',
+    url: 'https://sudapost.sd/wp/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Sudan Post site with operator, service, and network information used as current postal-reference evidence.',
+  },
   'ngi-south-africa': {
     id: 'ngi-south-africa',
     name: 'National Geospatial Information South Africa',
@@ -411,20 +473,38 @@ export const AFRICA_OPEN_GEO_SOURCES: Record<AfricaOpenGeoSourceId, AfricaOpenGe
   'british-overseas-postal-reference': {
     id: 'british-overseas-postal-reference',
     name: 'British Overseas Territories Postal Reference',
-    url: 'https://www.royalmail.com/',
+    url: 'https://www.royalmail.com/sending/international/country-guides',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
-    notes: 'Fallback postal reference for UK overseas territories using assigned territory postcodes.',
+    notes: 'Royal Mail destination guide reference for UK overseas territories using assigned territory postcodes.',
   },
-  'saint-helena-gov': {
-    id: 'saint-helena-gov',
-    name: 'Saint Helena Government',
-    url: 'https://www.sainthelena.gov.sh/',
-    kind: 'gazetteer',
+  'saint-helena-postal': {
+    id: 'saint-helena-postal',
+    name: 'St Helena Government Postal Service',
+    url: 'https://www.sainthelena.gov.sh/public-services/postal/',
+    kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
-    notes: 'Government reference for Saint Helena, Ascension, and Tristan da Cunha settlements and delivery locations.',
+    notes: 'Official St Helena postal-service reference for Jamestown routing, postal operations, and STHL 1ZZ delivery conventions.',
+  },
+  'ascension-post-office': {
+    id: 'ascension-post-office',
+    name: 'Ascension Island Government Post Office',
+    url: 'https://www.ascension.gov.ac/postal-service/post-office',
+    kind: 'postal-code',
+    coverage: 'territory',
+    usage: 'reference',
+    notes: 'Official Ascension Island Post Office reference for ASCN 1ZZ routing, mail services, and settlement delivery handling.',
+  },
+  'tristan-post-office': {
+    id: 'tristan-post-office',
+    name: 'Tristan da Cunha Post Office',
+    url: 'https://www.tristandc.com/postoffice.php',
+    kind: 'postal-code',
+    coverage: 'territory',
+    usage: 'reference',
+    notes: 'Official Tristan da Cunha Post Office reference for TDCU 1ZZ routing, postage, and island mail handling.',
   },
   'biot-gov': {
     id: 'biot-gov',
@@ -527,9 +607,14 @@ const BASE_OPEN_SOURCE_IDS: AfricaOpenGeoSourceId[] = [
 ];
 
 const COUNTRY_POSTAL_SOURCE_IDS: Partial<Record<AfricaCountryCode, AfricaOpenGeoSourceId[]>> = {
+  DZ: ['algerie-poste'],
   EG: ['egy-list', 'datahub-postal'],
-  MA: ['datahub-postal'],
+  LY: ['libya-post-services'],
+  MA: ['poste-maroc-codepostal', 'datahub-postal'],
+  MR: ['mauripost'],
   NG: ['nipost-postcode', 'hot-osm-west-africa'],
+  SD: ['sudapost'],
+  TN: ['la-poste-tunisienne-codes'],
   GH: ['hot-osm-west-africa'],
   CI: ['hot-osm-west-africa'],
   SN: ['hot-osm-west-africa'],

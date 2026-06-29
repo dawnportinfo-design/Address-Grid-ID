@@ -73,8 +73,8 @@
   "postalCode": {
     "format": "NNNN",
     "regex": "^\\d{4}$",
-    "api": null,
-    "source": "No free postal OSS source configured"
+    "api": "https://www.laposte.tn/codes.php",
+    "source": "La Poste Tunisienne code postal search"
   },
   "addressRules": {
     "languages": [
@@ -116,6 +116,7 @@
     }
   },
   "openSourceIds": [
+    "la-poste-tunisienne-codes",
     "osm-nominatim",
     "osm-overpass",
     "openaddresses",

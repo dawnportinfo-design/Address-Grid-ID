@@ -84,6 +84,7 @@ export interface AmericasOpenGeoSource {
     | 'elevation'
     | 'marine'
     | 'hydrology'
+    | 'facility'
     | 'protected-area'
     | 'biodiversity'
     | 'land-cover'
@@ -361,16 +362,16 @@ export const AMERICAS_OPEN_GEO_SOURCES: Record<AmericasOpenGeoSourceId, Americas
   'british-overseas-postal-reference': {
     id: 'british-overseas-postal-reference',
     name: 'British Overseas Territories Postal Reference',
-    url: 'https://www.royalmail.com/',
+    url: 'https://www.royalmail.com/sending/international/country-guides',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
-    notes: 'Fallback postal reference for UK overseas territories using assigned territory postcodes.',
+    notes: 'Royal Mail country guides provide current destination addressing and service reference for UK overseas territories using assigned territory postcodes.',
   },
   'anguilla-post': {
     id: 'anguilla-post',
     name: 'Anguilla Postal Service',
-    url: 'https://www.gov.ai/',
+    url: 'https://gov.ai/ministry/ministry-of-finance-immigration-labour-home-affairs--constitutional-affairs/general-post-office',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
@@ -406,11 +407,11 @@ export const AMERICAS_OPEN_GEO_SOURCES: Record<AmericasOpenGeoSourceId, Americas
   'bvi-post': {
     id: 'bvi-post',
     name: 'British Virgin Islands Postal Service',
-    url: 'https://www.upu.int/UPU/media/upu/PostalEntitiesFiles/addressingUnit/vgbEn.pdf',
+    url: 'https://www.bvi.gov.vg/departments/bvi-post-0',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
-    notes: 'UPU addressing reference for BVI postal and delivery routing.',
+    notes: 'Official BVI Post department reference for postal and delivery routing.',
   },
   'bvi-gis': {
     id: 'bvi-gis',
@@ -442,7 +443,7 @@ export const AMERICAS_OPEN_GEO_SOURCES: Record<AmericasOpenGeoSourceId, Americas
   'montserrat-post': {
     id: 'montserrat-post',
     name: 'Montserrat Postal Service',
-    url: 'https://www.gov.ms/',
+    url: 'https://www.gov.ms/government/ministries/ministry-of-finance-economic-management/montserrat-postal-service/',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
@@ -460,7 +461,7 @@ export const AMERICAS_OPEN_GEO_SOURCES: Record<AmericasOpenGeoSourceId, Americas
   'turks-caicos-post': {
     id: 'turks-caicos-post',
     name: 'Turks and Caicos Islands Postal Service',
-    url: 'https://www.gov.tc/',
+    url: 'https://tcipostal.gov.tc/',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',

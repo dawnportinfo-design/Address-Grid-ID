@@ -20,9 +20,14 @@ export const OUTER_CIRCLE_ENGLISH_COUNTRIES = [
   'er', 'et', 'ke', 'mu', 'rw', 'sc', 'so', 'ss', 'tz', 'ug',
   'za', 'zw', 'zm', 'bw', 'na', 'mw', 'ls', 'sz',
   'jm', 'tt', 'bb', 'bs', 'bz', 'gy', 'ag', 'lc', 'gd', 'dm', 'vc', 'kn',
+  'bm', 'ai', 'ky', 'ms', 'tc', 'vg', 'vi',
   'pg', 'fj', 'sb', 'vu', 'ws', 'to',
   'fm', 'pw', 'mh', 'ki', 'tv', 'nr',
   'nf', 'cx', 'cc', 'ck', 'tk', 'nu', 'pn', 'aq',
+  'as', 'gu', 'mp', 'um',
+  'fk', 'gs',
+  'gg', 'im', 'je', 'gi', 'sba',
+  'io', 'sh', 'ac', 'ta',
   'ae', 'qa', 'bh',
 ] as const;
 

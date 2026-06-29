@@ -1,4 +1,4 @@
-import * as OpenCC from 'opencc-js';
+import * as OpenCCT2CN from 'opencc-js/t2cn';
 import { pinyin } from 'pinyin-pro';
 
 /**
@@ -6,10 +6,37 @@ import { pinyin } from 'pinyin-pro';
  * Implements the architecture requested for CN Mainland, HK, MO, and TW.
  */
 
-// Converters
-const s2tw = OpenCC.Converter({ from: 'cn', to: 'tw' });
-const s2hk = OpenCC.Converter({ from: 'cn', to: 'hk' });
-const t2s = OpenCC.Converter({ from: 'tw', to: 'cn' });
+// Keep the heavy full OpenCC dictionary out of the app shell. Address UI needs
+// reliable script compatibility for place names, not full-document conversion.
+const t2s = OpenCCT2CN.Converter({ from: 'tw', to: 'cn' });
+
+const SIMPLIFIED_TO_TRADITIONAL_TW: Record<string, string> = {
+  台: '臺',
+  广: '廣',
+  门: '門',
+  马: '馬',
+  湾: '灣',
+  龙: '龍',
+  义: '義',
+  区: '區',
+  县: '縣',
+  厦: '廈',
+  楼: '樓',
+  号: '號',
+  路: '路',
+  街: '街',
+  市: '市',
+  省: '省',
+};
+
+const SIMPLIFIED_TO_TRADITIONAL_HK_MO: Record<string, string> = {
+  ...SIMPLIFIED_TO_TRADITIONAL_TW,
+  台: '台',
+};
+
+function convertSimplifiedCharacters(text: string, map: Record<string, string>) {
+  return Array.from(text).map(char => map[char] ?? char).join('');
+}
 
 // Shipping English Dictionary (as requested)
 
@@ -330,9 +357,9 @@ export function toSimplified(text: string): string {
 export function toTraditional(text: string, region: 'TW' | 'HK' | 'MO' = 'TW'): string {
   if (!text) return "";
   if (region === 'HK' || region === 'MO') {
-    return s2hk(text);
+    return convertSimplifiedCharacters(text, SIMPLIFIED_TO_TRADITIONAL_HK_MO);
   }
-  return s2tw(text);
+  return convertSimplifiedCharacters(text, SIMPLIFIED_TO_TRADITIONAL_TW);
 }
 
 /**
@@ -340,10 +367,10 @@ export function toTraditional(text: string, region: 'TW' | 'HK' | 'MO' = 'TW'): 
  */
 export function detectChineseScript(text: string): 'simplified' | 'traditional' | 'mixed' | 'none' {
   if (!text || !/[\u4e00-\u9faf]/.test(text)) return 'none';
-  
+
   const simplified = toSimplified(text);
   const traditional = toTraditional(text);
-  
+
   if (text === simplified && text !== traditional) return 'simplified';
   if (text === traditional && text !== simplified) return 'traditional';
   if (text !== simplified && text !== traditional) return 'mixed';
@@ -361,12 +388,12 @@ export function canonicalizeCN(details: any): any {
   fields.forEach(f => {
     if (result[f]) result[f] = toSimplified(result[f]);
   });
-  
+
   // Clean common suffixes if they are redundant (Heuristic)
   if (result.city && result.city.endsWith('市') && result.city.length > 2) {
     // Keep it for domestic, but we might mark it for international
   }
-  
+
   return result;
 }
 
@@ -387,7 +414,7 @@ export function renderDomesticCN(details: any): string {
     c.building,
     c.amenity || c.shop
   ].filter(Boolean);
-  
+
   return parts.join("");
 }
 
@@ -397,7 +424,7 @@ export function renderDomesticCN(details: any): string {
  */
 export function renderInternationalCN(details: any): string {
   const c = canonicalizeCN(details);
-  
+
   const translateField = (text: string) => {
     if (!text) return "";
     return normalizeMainlandChineseAddressPart(text);
@@ -414,7 +441,7 @@ export function renderInternationalCN(details: any): string {
     c.postcode,
     "CHINA"
   ].filter(Boolean);
-  
+
   return parts.join(", ");
 }
 
@@ -530,7 +557,7 @@ export function renderHK(details: any, lang: string): string {
 export function renderMO(details: any, lang: string): string {
   const isEnglish = lang === 'en' || lang === 'international';
   const isPortuguese = lang === 'pt-PT' || lang === 'pt';
-  
+
   if (isPortuguese || isEnglish) {
     return renderMacaoPortuguese(details);
   } else {

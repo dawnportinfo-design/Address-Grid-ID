@@ -157,28 +157,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -340,31 +319,7 @@
                 "label": "AI-2640",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "british-overseas-postal-reference",
-                "anguilla-post",
-                "anguilla-gov-gis",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -498,34 +453,6 @@
                   "code": "en",
                   "name": "English"
                 }
-              ],
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
               ]
             },
             "openSourceIds": [
@@ -704,28 +631,7 @@
                 "label": "not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -842,37 +748,7 @@
                 "label": "97133 overseas collectivity postcode",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "la-poste-fr-overseas",
-                "data-gouv-fr-postcodes",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
-              ]
+              }
             },
             "openSourceIds": [
               "la-poste-fr-overseas",
@@ -1062,34 +938,6 @@
                   "code": "en",
                   "name": "English"
                 }
-              ],
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
               ]
             },
             "territoryProfiles": [
@@ -1275,28 +1123,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -1507,28 +1334,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -1662,34 +1468,6 @@
                   "code": "en",
                   "name": "English"
                 }
-              ],
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
               ]
             },
             "openSourceIds": [
@@ -1873,28 +1651,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -2105,28 +1862,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -2281,28 +2017,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -2419,37 +2134,7 @@
                 "label": "971xx overseas department postcode",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "la-poste-fr-overseas",
-                "data-gouv-fr-postcodes",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
-              ]
+              }
             },
             "openSourceIds": [
               "la-poste-fr-overseas",
@@ -2648,28 +2333,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -2819,28 +2483,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -2995,28 +2638,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -3178,31 +2800,7 @@
                 "label": "KYN-NNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "british-overseas-postal-reference",
-                "cayman-post",
-                "cayman-lands-survey",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -3342,28 +2940,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -3480,37 +3057,7 @@
                 "label": "97150 overseas collectivity postcode",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "la-poste-fr-overseas",
-                "data-gouv-fr-postcodes",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
-              ]
+              }
             },
             "openSourceIds": [
               "la-poste-fr-overseas",
@@ -3657,37 +3204,7 @@
                 "label": "972xx overseas department postcode",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "la-poste-fr-overseas",
-                "data-gouv-fr-postcodes",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
-              ]
+              }
             },
             "openSourceIds": [
               "la-poste-fr-overseas",
@@ -3865,31 +3382,7 @@
                 "label": "not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "british-overseas-postal-reference",
-                "montserrat-post",
-                "montserrat-gis",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -4103,28 +3596,7 @@
                 "label": "NNNNN[-NNNN]",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -4258,34 +3730,6 @@
                   "code": "en",
                   "name": "English"
                 }
-              ],
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
               ]
             },
             "openSourceIds": [
@@ -4476,31 +3920,7 @@
                 "label": "TKCA 1ZZ",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "british-overseas-postal-reference",
-                "turks-caicos-post",
-                "turks-caicos-gis",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -4640,28 +4060,7 @@
                 "label": "not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -4816,28 +4215,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -4999,31 +4377,7 @@
                 "label": "VG1110",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "british-overseas-postal-reference",
-                "bvi-post",
-                "bvi-gis",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -5180,28 +4534,7 @@
                 "label": "NNNNN[-NNNN]",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         }
@@ -5390,29 +4723,7 @@
                 "label": "optional",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "belize-statistical-institute",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -5629,30 +4940,7 @@
                 "label": "NNNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "correos-cr-postal",
-                "snit-cr",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -5868,29 +5156,7 @@
                 "label": "NNNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "segeplan-gt-ide",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -6105,28 +5371,7 @@
                 "label": "NNNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -6342,29 +5587,7 @@
                 "label": "NNNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "ineter-ni-ide",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -6579,28 +5802,7 @@
                 "label": "NNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -6815,28 +6017,7 @@
                 "label": "NNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         }
@@ -6892,28 +6073,7 @@
               "regionalHierarchy": [
                 "uninhabitedIslands"
               ],
-              "postalCode": null,
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              "postalCode": null
             },
             "openSourceIds": [
               "osm-nominatim",
@@ -7092,28 +6252,7 @@
                 "label": "NNNNNNN postal format",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             },
             "openSourceIds": [
               "osm-nominatim",
@@ -7288,28 +6427,7 @@
                 "label": "NNNNNNN postal format",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             },
             "openSourceIds": [
               "osm-nominatim",
@@ -7384,28 +6502,7 @@
               "regionalHierarchy": [
                 "uninhabitedIsland"
               ],
-              "postalCode": null,
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              "postalCode": null
             },
             "openSourceIds": [
               "osm-nominatim",
@@ -7478,37 +6575,7 @@
               "regionalHierarchy": [
                 "uninhabitedTerritory"
               ],
-              "postalCode": null,
-              "openSourceIds": [
-                "la-poste-fr-overseas",
-                "data-gouv-fr-postcodes",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
-              ]
+              "postalCode": null
             },
             "openSourceIds": [
               "la-poste-fr-overseas",
@@ -7789,29 +6856,7 @@
                 "label": "ANA NAN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "canada-post-postal",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -7947,46 +6992,7 @@
                 "label": "GL-9999 or 4 digits used",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "postnord-greenland",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils",
-                "arcticdem",
-                "ibcao-arctic-ocean",
-                "glims-glacier-db",
-                "npolar-data-centre",
-                "greenland-gimp",
-                "nsidc-polar-data",
-                "gebco-bathymetry",
-                "gmrt-topography",
-                "marine-regions",
-                "obis-marine-biodiversity"
-              ]
+              }
             },
             "openSourceIds": [
               "postnord-greenland",
@@ -8261,29 +7267,7 @@
                 "label": "NNNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "correos-mexico",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -8400,37 +7384,7 @@
                 "label": "97500 overseas collectivity postcode",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "la-poste-fr-overseas",
-                "data-gouv-fr-postcodes",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
-              ]
+              }
             },
             "openSourceIds": [
               "la-poste-fr-overseas",
@@ -8665,29 +7619,7 @@
                 "label": "NNNNN[-NNNN]",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "us-census-geocoder",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         }
@@ -8848,31 +7780,7 @@
                 "label": "AA 00",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "british-overseas-postal-reference",
-                "bermuda-post",
-                "bermuda-gov-maps",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         }
@@ -9095,29 +8003,7 @@
                 "label": "NNNN or ANNNNAAA",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "georef-ar",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -9329,28 +8215,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -9577,30 +8442,7 @@
                 "label": "NNNNN-NNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "viacep-br",
-                "brasilapi",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -9835,29 +8677,7 @@
                 "label": "NNNNNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "geoportal-cl",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -10093,29 +8913,7 @@
                 "label": "NNNNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "colombia-en-mapas",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -10331,29 +9129,7 @@
                 "label": "NNNNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "codigo-postal-ec",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -10521,37 +9297,7 @@
                 "label": "FIQQ 1ZZ",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "falkland-islands-post",
-                "falkland-islands-gis",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
-              ]
+              }
             }
           }
         },
@@ -10681,36 +9427,6 @@
                   "code": "en",
                   "name": "English"
                 }
-              ],
-              "openSourceIds": [
-                "la-poste-fr-overseas",
-                "data-gouv-fr-postcodes",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils"
               ]
             },
             "openSourceIds": [
@@ -10922,50 +9638,7 @@
                 "label": "SIQQ 1ZZ required",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "british-overseas-postal-reference",
-                "south-georgia-gis",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis",
-                "copernicus-dem",
-                "copernicus-corine-land-cover",
-                "emodnet-bathymetry",
-                "emodnet-seabed-habitats",
-                "eea-natura-2000",
-                "eea-eunis-habitats",
-                "jrc-esdac-soils",
-                "scar-add",
-                "scar-cga",
-                "quantarctica",
-                "rema-antarctica",
-                "bedmap3-antarctica",
-                "ibcso-southern-ocean",
-                "measures-antarctic-grounding-line",
-                "ats-antarctic-protected-areas",
-                "nsidc-polar-data",
-                "gebco-bathymetry",
-                "gmrt-topography",
-                "marine-regions",
-                "obis-marine-biodiversity"
-              ]
+              }
             }
           }
         },
@@ -11105,28 +9778,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -11342,29 +9994,7 @@
                 "label": "NNNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "geo-vivienda-pe",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -11579,29 +10209,7 @@
                 "label": "NNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "ide-py",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -11767,28 +10375,7 @@
                 "label": "country specific or not used",
                 "required": false,
                 "usage": "optional"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -12003,29 +10590,7 @@
                 "label": "NNNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "ide-uy",
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -12240,28 +10805,7 @@
                 "label": "NNNN",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         }
@@ -12426,28 +10970,7 @@
                 "label": "NNNNN[-NNNN]",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -12604,28 +11127,7 @@
                 "label": "NNNNN[-NNNN]",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -12784,28 +11286,7 @@
                 "label": "NNNNN[-NNNN]",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             }
           }
         },
@@ -12953,28 +11434,7 @@
                 "label": "NNNNN postal format",
                 "required": true,
                 "usage": "required"
-              },
-              "openSourceIds": [
-                "osm-nominatim",
-                "osm-overpass",
-                "openaddresses",
-                "geonames-postal",
-                "geonames-gazetteer",
-                "geoboundaries",
-                "upu-addressing",
-                "zippopotam",
-                "noaa-etopo",
-                "geobc-global-multi-resolution-topography",
-                "hydrosheds",
-                "protected-planet-wdpa",
-                "gbif-occurrence",
-                "esa-worldcover",
-                "usgs-3dep",
-                "nrcan-geospatial",
-                "conabio-geoportal",
-                "ibge-geosciences",
-                "inpe-terrabrasilis"
-              ]
+              }
             },
             "openSourceIds": [
               "osm-nominatim",
