@@ -1,0 +1,42 @@
+name: Security/privacy boundary
+description: Report a possible privacy, no-raw-address, or release-gate boundary issue without exploit details.
+title: "[Security boundary]: "
+labels: ["security", "privacy", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If this includes exploit details, private address material, secrets, or production data, do not submit this public issue. Use private vulnerability reporting or open only a minimal `Security contact needed` issue.
+  - type: dropdown
+    id: boundary
+    attributes:
+      label: Boundary area
+      options:
+        - No raw address release gate
+        - Secret or key handling
+        - QR / NFC / receipt replay
+        - POS / field handoff
+        - Connector / external API
+        - ZK witness / public signal
+        - Download / SDK / fixture package
+        - Documentation claim
+    validations:
+      required: true
+  - type: textarea
+    id: concern
+    attributes:
+      label: Concern
+      description: Describe the boundary issue using synthetic or redacted details only.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Potential impact
+  - type: checkboxes
+    id: no_private_data
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I did not include exploit details, private address material, secrets, private keys, witness material, proof codes, or production data.
+          required: true
