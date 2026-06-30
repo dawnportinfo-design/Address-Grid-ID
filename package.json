@@ -43,6 +43,7 @@
     "prepare:asia-index-repos": "tsx scripts/prepare-asia-index-repositories.ts",
     "prepare:europe-index-repos": "tsx scripts/prepare-europe-index-repositories.ts",
     "prepare:africa-index-repos": "tsx scripts/prepare-africa-index-repositories.ts",
+    "prepare:americas-index-repos": "tsx scripts/prepare-americas-index-repositories.ts",
     "prepare:oceania-index-repos": "tsx scripts/prepare-oceania-index-repositories.ts",
     "prepare:ocean-index-repos": "tsx scripts/prepare-ocean-index-repositories.ts",
     "verify:repository-split-allocation": "tsx --test src/address/repositorySplitAllocationAudit.test.ts src/address/repositoryCreationPreflight.test.ts scripts/generate-global-repository-placement.test.ts scripts/generate-ocean-repository-placement.test.ts scripts/build-ocean-repository-creation-plan.test.ts scripts/build-asia-repository-creation-plan.test.ts scripts/build-europe-repository-creation-plan.test.ts scripts/build-africa-repository-creation-plan.test.ts scripts/build-americas-repository-creation-plan.test.ts scripts/build-oceania-repository-creation-plan.test.ts scripts/build-country-repository-creation-plan.test.ts",
