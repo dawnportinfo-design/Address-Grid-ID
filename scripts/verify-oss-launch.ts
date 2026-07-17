@@ -10,6 +10,10 @@ const checks = [
     args: ['scripts/verify-open-source-repository-readiness.ts'],
   },
   {
+    label: 'verify:veygrit-address-login-packages',
+    args: ['scripts/verify-veygrit-address-login-packages.ts'],
+  },
+  {
     label: 'verify:no-raw-address',
     args: ['scripts/verify-no-raw-address-release-suite.ts'],
   },

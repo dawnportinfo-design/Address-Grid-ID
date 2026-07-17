@@ -43,3 +43,8 @@ test('oss launch includes release build asset gates', () => {
   assert.match(ossLaunchSource, /label: 'verify:release-build-assets'/);
   assert.match(ossLaunchSource, /scripts\/verify-release-build-assets\.ts/);
 });
+
+test('oss launch includes Veygrit Address Login package publication gate', () => {
+  assert.match(ossLaunchSource, /label: 'verify:veygrit-address-login-packages'/);
+  assert.match(ossLaunchSource, /scripts\/verify-veygrit-address-login-packages\.ts/);
+});
