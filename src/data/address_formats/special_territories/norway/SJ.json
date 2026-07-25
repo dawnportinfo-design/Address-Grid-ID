@@ -1,0 +1,34 @@
+{
+  "countryCode": "SJ",
+  "name": "Svalbard and Jan Mayen",
+  "native": {
+    "name": "Svalbard og Jan Mayen",
+    "addressFormat": "{{postcode}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "postcode", "label": "Postnummer", "placeholder": "9170", "required": true, "type": "text" },
+      { "key": "city", "label": "Sted", "placeholder": "Longyearbyen", "required": true, "type": "text" },
+      { "key": "street", "label": "Gate", "placeholder": "Vei 100", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "Nummer", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Navn", "placeholder": "Ola", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{postcode}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}\nSVALBARD AND JAN MAYEN",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "city", "label": "City", "placeholder": "Longyearbyen", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Road 100", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "No.", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Ola", "required": false, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "9170", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": null,
+    "source": "Posten Norge"
+  }
+}

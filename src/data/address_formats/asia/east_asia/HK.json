@@ -1,0 +1,51 @@
+{
+  "countryCode": "HK",
+  "name": "Hong Kong",
+  "native": {
+    "name": "繁體中文",
+    "addressFormat": "{{city}}\n{{street}}\n{{organization}}\n{{floor}}\n{{room}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "city", "label": "區", "placeholder": "中西區" },
+      { "key": "street", "label": "街道", "placeholder": "皇后大道中" },
+      { "key": "organization", "label": "大廈", "placeholder": "某某大廈" },
+      { "key": "floor", "label": "樓層", "placeholder": "10樓" },
+      { "key": "room", "label": "室", "placeholder": "A室" },
+      { "key": "name", "label": "姓名", "placeholder": "陳大文" }
+    ]
+  },
+  "domestic": {
+    "en": {
+      "name": "English",
+      "addressFormat": "{{city}}\n{{street}}\n{{organization}}\n{{floor}}\n{{room}}\n{{name}}",
+      "ordering": "small-to-big",
+      "fields": [
+        { "key": "city", "label": "District", "placeholder": "Central and Western" },
+        { "key": "street", "label": "Street", "placeholder": "Queen's Road Central" },
+        { "key": "organization", "label": "Building", "placeholder": "Bldg A" },
+        { "key": "floor", "label": "Floor", "placeholder": "10/F" },
+        { "key": "room", "label": "Room", "placeholder": "A" },
+        { "key": "name", "label": "Name", "placeholder": "Chan Tai Man" }
+      ]
+    }
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{city}}\n{{street}}\n{{organization}}\n{{floor}}\n{{room}}\n{{name}}\nHONG KONG",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "city", "label": "District", "placeholder": "Central and Western" },
+      { "key": "street", "label": "Street", "placeholder": "Queen's Road Central" },
+      { "key": "organization", "label": "Building", "placeholder": "Bldg A" },
+      { "key": "floor", "label": "Floor", "placeholder": "10/F" },
+      { "key": "room", "label": "Room", "placeholder": "A" },
+      { "key": "name", "label": "Name", "placeholder": "Chan Tai Man" }
+    ]
+  },
+  "postalCode": {
+    "format": "None",
+    "regex": null,
+    "api": null,
+    "source": "Hongkong Post (No postal codes used)"
+  }
+}

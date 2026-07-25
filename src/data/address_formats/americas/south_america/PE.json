@@ -1,0 +1,41 @@
+{
+  "countryCode": "PE",
+  "name": "Peru",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{district}}\n{{city}}\n{{state}}\n{{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Nombre", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Av. Arequipa", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "district", "label": "Distrito", "placeholder": "Miraflores", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "Lima", "required": true, "type": "text" },
+      { "key": "state", "label": "Provincia / Región", "placeholder": "Lima", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "15001", "required": true, "type": "text" },
+      { "key": "country", "label": "País", "placeholder": "Perú", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{district}}\n{{city}}\n{{state}}\n{{postcode}}\nPERU",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Arequipa Ave", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "district", "label": "District", "placeholder": "Miraflores", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Lima", "required": true, "type": "text" },
+      { "key": "state", "label": "Province / Region", "placeholder": "Lima", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "15001", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=pe",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

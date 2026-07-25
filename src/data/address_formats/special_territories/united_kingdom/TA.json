@@ -1,0 +1,33 @@
+{
+  "countryCode": "SH",
+  "name": "Tristan da Cunha",
+  "native": {
+    "name": "Tristan da Cunha",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{settlement}}\n{{postcode}}\nTristan da Cunha",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Street address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "Edinburgh of the Seven Seas", "required": true, "type": "text" },
+      { "key": "settlement", "label": "Settlement", "placeholder": "Edinburgh of the Seven Seas", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "TDCU 1ZZ", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{settlement}}\n{{postcode}}\nTRISTAN DA CUNHA",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Street address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "Edinburgh of the Seven Seas", "required": true, "type": "text" },
+      { "key": "settlement", "label": "Settlement", "placeholder": "Edinburgh of the Seven Seas", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "TDCU 1ZZ", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "TDCU 1ZZ",
+    "regex": "^TDCU\\s?1ZZ$",
+    "api": null,
+    "source": "Tristan da Cunha Post Office"
+  }
+}

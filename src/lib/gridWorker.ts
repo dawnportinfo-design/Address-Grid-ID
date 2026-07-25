@@ -1,5 +1,69 @@
+import { getMercatorGridPolygons } from './mercatorGrid';
+
 const K = 2097152;
 const M = 2097151;
+
+function normalizeLongitude(lon: number): number {
+  let value = lon;
+  while (value > 180) value -= 360;
+  while (value < -180) value += 360;
+  return value;
+}
+
+function haversineMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const earthRadius = 6371008.8;
+  const phi1 = lat1 * Math.PI / 180;
+  const phi2 = lat2 * Math.PI / 180;
+  const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+  const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+  const sinHalfLat = Math.sin(deltaPhi / 2);
+  const sinHalfLon = Math.sin(deltaLambda / 2);
+  const a = sinHalfLat * sinHalfLat + Math.cos(phi1) * Math.cos(phi2) * sinHalfLon * sinHalfLon;
+  return 2 * earthRadius * Math.atan2(Math.sqrt(a), Math.sqrt(Math.max(0, 1 - a)));
+}
+
+function buildSquarePolygonFromCorners(corners: { lat: number; lon: number }[], scale: number = 1): [number, number][] {
+  if (corners.length !== 4) {
+    return corners.map(c => [c.lon, c.lat]) as [number, number][];
+  }
+
+  const refLon = corners[0].lon;
+  const unwrappedCorners = corners.map((corner) => {
+    let lon = corner.lon;
+    if (lon - refLon > 180) lon -= 360;
+    else if (lon - refLon < -180) lon += 360;
+    return { lat: corner.lat, lon };
+  });
+
+  const centerLat = unwrappedCorners.reduce((sum, corner) => sum + corner.lat, 0) / unwrappedCorners.length;
+  const centerLon = unwrappedCorners.reduce((sum, corner) => sum + corner.lon, 0) / unwrappedCorners.length;
+
+  const topWidth = haversineMeters(unwrappedCorners[0].lat, unwrappedCorners[0].lon, unwrappedCorners[1].lat, unwrappedCorners[1].lon);
+  const bottomWidth = haversineMeters(unwrappedCorners[3].lat, unwrappedCorners[3].lon, unwrappedCorners[2].lat, unwrappedCorners[2].lon);
+  const leftHeight = haversineMeters(unwrappedCorners[0].lat, unwrappedCorners[0].lon, unwrappedCorners[3].lat, unwrappedCorners[3].lon);
+  const rightHeight = haversineMeters(unwrappedCorners[1].lat, unwrappedCorners[1].lon, unwrappedCorners[2].lat, unwrappedCorners[2].lon);
+
+  const sideMeters = Math.max((topWidth + bottomWidth) / 2, (leftHeight + rightHeight) / 2);
+  const halfSideMeters = sideMeters / 2;
+
+  const latDelta = (halfSideMeters / 111320) * scale;
+  const cosLat = Math.max(0.0001, Math.cos(centerLat * Math.PI / 180));
+  const lonDelta = (halfSideMeters / (111320 * cosLat)) * scale;
+
+  return [
+    [normalizeLongitude(centerLon - lonDelta), centerLat - latDelta],
+    [normalizeLongitude(centerLon + lonDelta), centerLat - latDelta],
+    [normalizeLongitude(centerLon + lonDelta), centerLat + latDelta],
+    [normalizeLongitude(centerLon - lonDelta), centerLat + latDelta],
+    [normalizeLongitude(centerLon - lonDelta), centerLat - latDelta]
+  ];
+}
+
+function getGridStepForZoom(zoom: number): number {
+  const zoomLevel = Math.max(0, Math.min(17, Math.floor(zoom)));
+  const exponent = Math.max(0, 17 - zoomLevel);
+  return Math.pow(2, exponent);
+}
 
 self.onmessage = (e: MessageEvent) => {
   const { lat, lon, zoom, bounds } = e.data;
@@ -10,84 +74,23 @@ self.onmessage = (e: MessageEvent) => {
 
 function getGridFeaturesWorker(zoom: number, bounds: any, lat: number, lon: number) {
   if (!bounds) return { gridLines: [], gridCells: [] };
-
+  const finalStep = getGridStepForZoom(zoom);
   const gridCells: any[] = [];
-  const gridLines: any[][] = [];
-  const pointCache = new Map<string, { lat: number, lon: number }>();
-  const lineCache = new Set<string>();
+  const gridPolygons = getMercatorGridPolygons(bounds, finalStep);
 
-  // Helper to reuse points across adjacent cells
-  const getPointCached = (face: number, x: number, y: number) => {
-    const key = `${face}_${x}_${y}`;
-    let p = pointCache.get(key);
-    if (!p) {
-      p = (self as any).getFromQuantizedInternal(face, x, y);
-      pointCache.set(key, p!);
-    }
-    return p!;
-  };
+  gridPolygons.forEach((poly, index) => {
+    gridCells.push({
+      type: 'Feature',
+      geometry: { type: 'Polygon', coordinates: [poly] },
+      properties: { id: `cell_${finalStep}_${index}`, step: finalStep, isFocus: finalStep === 1 }
+    });
+  });
 
-  const { face, qx, qy } = (self as any).getQuantizedInternal(lat, lon);
-  
-  // Calculate ideal step based on zoom
-  let idealStep = Math.pow(2, Math.max(0, Math.floor(18.5 - zoom)));
-  let finalStep = 1;
-  while (finalStep * 2 <= idealStep && finalStep < 131072) finalStep *= 2;
-  
-  const range = zoom > 18 ? 100 : (zoom > 15 ? 70 : 40); 
-  
-  const startQX = Math.max(0, Math.floor(qx / finalStep) * finalStep - (finalStep * Math.floor(range/2)));
-  const endQX = Math.min(M, startQX + (finalStep * range));
-  const startQY = Math.max(0, Math.floor(qy / finalStep) * finalStep - (finalStep * Math.floor(range/2)));
-  const endQY = Math.min(M, startQY + (finalStep * range));
-
-  for (let y = startQY; y < endQY; y += finalStep) {
-    for (let x = startQX; x < endQX; x += finalStep) {
-      const cellId = `${face}_${x}_${y}_${finalStep}`;
-
-      // Get 4 corners
-      const p1 = getPointCached(face, x, y);
-      const p2 = getPointCached(face, x + finalStep, y);
-      const p3 = getPointCached(face, x + finalStep, y + finalStep);
-      const p4 = getPointCached(face, x, y + finalStep);
-
-      const pts = [p1, p2, p3, p4];
-      const refLon = p1.lon;
-      const adjusted = pts.map(p => {
-        let shiftLon = p.lon;
-        if (shiftLon - refLon > 180) shiftLon -= 360;
-        else if (shiftLon - refLon < -180) shiftLon += 360;
-        return [shiftLon, p.lat];
-      });
-
-      const poly = [...adjusted, adjusted[0]];
-
-      gridCells.push({
-        type: 'Feature',
-        geometry: { type: 'Polygon', coordinates: [poly] },
-        properties: { id: cellId, step: finalStep, isFocus: finalStep === 1 }
-      });
-
-      for (let i = 0; i < 4; i++) {
-        const ptA = poly[i];
-        const ptB = poly[i+1];
-        // Create a unique key for the segment
-        const segmentKey = ptA[0] < ptB[0] || (ptA[0] === ptB[0] && ptA[1] < ptB[1])
-          ? `${ptA[0].toFixed(8)}_${ptA[1].toFixed(8)}_${ptB[0].toFixed(8)}_${ptB[1].toFixed(8)}`
-          : `${ptB[0].toFixed(8)}_${ptB[1].toFixed(8)}_${ptA[0].toFixed(8)}_${ptA[1].toFixed(8)}`;
-          
-        if (!lineCache.has(segmentKey)) {
-          gridLines.push([ptA, ptB]);
-          lineCache.add(segmentKey);
-        }
-      }
-    }
+  if (gridCells.length === 0) {
+    return { gridLines: [], gridCells: [] };
   }
 
-  pointCache.clear();
-  lineCache.clear();
-
-  return { gridLines, gridCells };
+  return { gridLines: [], gridCells };
 }
 
 // Re-implementing projection logic inside worker for speed and independence

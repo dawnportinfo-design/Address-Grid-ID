@@ -1,0 +1,38 @@
+{
+  "countryCode": "VI",
+  "name": "United States Virgin Islands",
+  "native": {
+    "name": "English",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{aptSuite}}\n{{suburb}}\n{{city}}\n{{state}}\n{{postcode}}\nUnited States Virgin Islands",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Name", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Main Street", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "House No.", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "aptSuite", "label": "Apt / Suite", "placeholder": "Apt 4B", "required": false, "type": "text" },
+      { "key": "suburb", "label": "Suburb / Neighborhood", "placeholder": "Charlotte Amalie", "required": false, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "St. Thomas", "required": true, "type": "text" },
+      { "key": "state", "label": "VI", "placeholder": "VI", "required": true, "type": "text" },
+      { "key": "postcode", "label": "ZIP Code", "placeholder": "00802", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{aptSuite}}\n{{suburb}}\n{{city}}\n{{state}}\n{{postcode}}\nUnited States Virgin Islands",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Name", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Main Street", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "House No.", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "aptSuite", "label": "Apt / Suite", "placeholder": "Apt 4B", "required": false, "type": "text" },
+      { "key": "suburb", "label": "Suburb / Neighborhood", "placeholder": "Charlotte Amalie", "required": false, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "St. Thomas", "required": true, "type": "text" },
+      { "key": "state", "label": "VI", "placeholder": "VI", "required": true, "type": "text" },
+      { "key": "postcode", "label": "ZIP Code", "placeholder": "00802", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN or NNNNN-NNNN",
+    "regex": "^008\\d{2}(-\\d{4})?$"
+  }
+}

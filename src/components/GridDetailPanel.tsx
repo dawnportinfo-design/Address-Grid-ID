@@ -127,6 +127,31 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
     if ((countryCode === 'jp' || countryCodeFromDetails === 'jp') && !rawLangs.includes('ja')) {
       rawLangs.unshift('ja');
     }
+
+    const selectedCountryName = clickedAgid?.country || clickedAddressDetails?.country || '';
+    const isRelevantLang = (code: string) => {
+      if (!code) return false;
+      if (code === 'carrier' || code === 'intl_en') return true;
+      if (code === 'en' || code.startsWith('en-')) return true;
+      if (!selectedCountryName) return true;
+
+      const lang = LANGUAGES.find(l => l.code === code);
+      if (!lang) return true;
+      if (lang.country === selectedCountryName) return true;
+
+      // Keep the local script variants for the selected country even when the
+      // broader language metadata points to a neighboring market.
+      if (countryCode === 'hk' && (code === 'yue' || code === 'zh-Hant-HK')) return true;
+      if (countryCode === 'mo' && (code === 'yue' || code === 'zh-Hant-MO')) return true;
+      if (countryCode === 'tw' && code === 'zh-Hant-TW') return true;
+      if (countryCode === 'cn' && code === 'zh-Hans') return true;
+      if (countryCode === 'sg' && (code === 'en-SG' || code === 'zh-Hans' || code === 'ms' || code === 'ta')) return true;
+      if (countryCode === 'my' && (code === 'en-MY' || code === 'ms')) return true;
+      if (countryCode === 'ph' && (code === 'en-PH' || code === 'tl')) return true;
+      if (countryCode === 'in' && ['hi', 'bn', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'pa', 'ur', 'en-IN'].includes(code)) return true;
+
+      return false;
+    };
     
     // Deduplicate by base language to avoid multiple "English" tabs
     const seenBase = new Set<string>();
@@ -134,7 +159,7 @@ export const GridDetailPanel: React.FC<GridDetailPanelProps> = ({
     
     for (const code of rawLangs) {
       const base = code.startsWith('en') ? 'en' : code;
-      if (!seenBase.has(base)) {
+      if (!seenBase.has(base) && isRelevantLang(code)) {
         seenBase.add(base);
         uniqueLangs.push(code);
       }

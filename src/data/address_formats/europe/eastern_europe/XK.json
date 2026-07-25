@@ -1,0 +1,34 @@
+{
+  "countryCode": "XK",
+  "name": "Kosovo",
+  "native": {
+    "name": "Kosovë",
+    "addressFormat": "{{postcode}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "postcode", "label": "Kodi postar", "placeholder": "10000", "required": true, "type": "text" },
+      { "key": "city", "label": "Qyteti", "placeholder": "Prishtinë", "required": true, "type": "text" },
+      { "key": "street", "label": "Rruga", "placeholder": "Rruga B", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "Numri", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Emri", "placeholder": "Arben", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{postcode}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}\nKOSOVO",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "city", "label": "City", "placeholder": "Prishtina", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Rruga B", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "No.", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Arben", "required": false, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "10000", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=xk",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "countryCode": "BO",
+  "name": "Bolivia",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{zone}}\n{{city}}\n{{state}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Nombre", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Av. 6 de Agosto", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "zone", "label": "Zona", "placeholder": "Sopocachi", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "La Paz", "required": true, "type": "text" },
+      { "key": "state", "label": "Departamento", "placeholder": "La Paz", "required": true, "type": "text" },
+      { "key": "country", "label": "País", "placeholder": "Bolivia", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{zone}}\n{{city}}\n{{state}}\nBOLIVIA",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "6 de Agosto Ave", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "zone", "label": "Zone", "placeholder": "Sopocachi", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "La Paz", "required": true, "type": "text" },
+      { "key": "state", "label": "Department", "placeholder": "La Paz", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": null,
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=bo",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "countryCode": "PA",
+  "name": "Panama",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{sector}}\n{{city}}\n{{province}}\n{{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Nombre", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Avenida Balboa", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "sector", "label": "Sector / Barrio", "placeholder": "Bella Vista", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "Panamá", "required": true, "type": "text" },
+      { "key": "province", "label": "Provincia", "placeholder": "Panamá", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "0801", "required": true, "type": "text" },
+      { "key": "country", "label": "País", "placeholder": "Panamá", "required": false, "type": "text" }
+    ]
+  },
+  "domestic": {
+    "en": {
+      "name": "English",
+      "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{sector}}\n{{city}}\n{{province}}\n{{postcode}}\n{{country}}",
+      "ordering": "small-to-big",
+      "fields": [
+        { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+        { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+        { "key": "street", "label": "Street", "placeholder": "Balboa Avenue", "required": true, "type": "text" },
+        { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+        { "key": "sector", "label": "Sector / Neighborhood", "placeholder": "Bella Vista", "required": true, "type": "text" },
+        { "key": "city", "label": "City", "placeholder": "Panama City", "required": true, "type": "text" },
+        { "key": "province", "label": "Province", "placeholder": "Panama", "required": true, "type": "text" },
+        { "key": "postcode", "label": "Postal Code", "placeholder": "0801", "required": true, "type": "text" },
+        { "key": "country", "label": "Country", "placeholder": "Panama", "required": false, "type": "text" }
+      ]
+    }
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{sector}}\n{{city}}\n{{province}}\n{{postcode}}\nPANAMA",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Balboa Avenue", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "sector", "label": "Sector / Neighborhood", "placeholder": "Bella Vista", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Panama City", "required": true, "type": "text" },
+      { "key": "province", "label": "Province", "placeholder": "Panama", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "0801", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=pa",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

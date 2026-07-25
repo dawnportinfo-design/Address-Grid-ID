@@ -9,6 +9,123 @@ export interface TransliterationOptions {
   preserveUnknown?: boolean;
 }
 
+import { transliterate as transliterateUnicode } from 'transliteration';
+
+const transliterationCache = new Map<string, string>();
+
+const INDIA_PLACE_MAP: Record<string, string> = {
+  'मुंबई': 'Mumbai',
+  'बंबई': 'Mumbai',
+  'दिल्ली': 'Delhi',
+  'कोलकाता': 'Kolkata',
+  'कलकत्ता': 'Kolkata',
+  'चेन्नई': 'Chennai',
+  'मद्रास': 'Chennai',
+  'बेंगलुरु': 'Bengaluru',
+  'बंगळुरु': 'Bengaluru',
+  'हैदराबाद': 'Hyderabad',
+  'पुणे': 'Pune',
+  'अहमदाबाद': 'Ahmedabad',
+  'जयपुर': 'Jaipur',
+  'लखनऊ': 'Lucknow',
+  'सूरत': 'Surat',
+  'भोपाल': 'Bhopal',
+  'इंदौर': 'Indore',
+  'पटना': 'Patna',
+  'नागपुर': 'Nagpur',
+  'कोच्चि': 'Kochi',
+  'कोचीन': 'Kochi',
+  'तिरुवनंतपुरम': 'Thiruvananthapuram',
+  'त्रिवेंद्रम': 'Thiruvananthapuram',
+  'थिरुवनंतपुरम': 'Thiruvananthapuram',
+  'तिरुवनंतपुरम्': 'Thiruvananthapuram',
+  'उदयपुर': 'Udaipur',
+  'वाराणसी': 'Varanasi',
+  'आगरा': 'Agra',
+  'कानपुर': 'Kanpur',
+  'प्रयागराज': 'Prayagraj',
+  'इलाहाबाद': 'Prayagraj',
+  'गुवाहाटी': 'Guwahati',
+  'भुवनेश्वर': 'Bhubaneswar',
+  'कोयंबटूर': 'Coimbatore',
+  'मदुरै': 'Madurai',
+  'मंगलुरु': 'Mangaluru',
+  'मंगलौर': 'Mangaluru',
+  'मैसूरु': 'Mysuru',
+  'मैसूर': 'Mysuru',
+  'राजकोट': 'Rajkot',
+  'रांची': 'Ranchi',
+  'नासिक': 'Nashik',
+  'गुड़गांव': 'Gurugram',
+  'गुरुग्राम': 'Gurugram',
+  'फरीदाबाद': 'Faridabad',
+  'नोएडा': 'Noida',
+  'गाजियाबाद': 'Ghaziabad',
+  'अमृतसर': 'Amritsar',
+  'लुधियाना': 'Ludhiana',
+  'जोधपुर': 'Jodhpur',
+  'अलीगढ़': 'Aligarh',
+  'मेरठ': 'Meerut',
+  'उज्जैन': 'Ujjain',
+  'धारवाड़': 'Dharwad',
+  'हुबली': 'Hubballi',
+  'सिलिगुड़ी': 'Siliguri',
+  'शिमला': 'Shimla',
+  'देहरादून': 'Dehradun',
+  'श्रीनगर': 'Srinagar',
+  'जम्मू': 'Jammu',
+  'कोझिकोड': 'Kozhikode',
+  'कालिकट': 'Kozhikode',
+  'तंजावुर': 'Thanjavur',
+  'तिरुची': 'Tiruchirappalli',
+  'तिरुचिरापल्ली': 'Tiruchirappalli',
+  'त्रिची': 'Tiruchirappalli',
+  'तिरुपति': 'Tirupati',
+  'विशाखापत्तनम': 'Visakhapatnam',
+  'विजयवाड़ा': 'Vijayawada',
+  'भिलाई': 'Bhilai',
+  'धनबाद': 'Dhanbad',
+  'रायपुर': 'Raipur',
+  'जमशेदपुर': 'Jamshedpur',
+  'सलेम': 'Salem',
+  'तिरुनेलवेली': 'Tirunelveli',
+  'हरिद्वार': 'Haridwar',
+  'बद्रीनाथ': 'Badrinath',
+  'केदारनाथ': 'Kedarnath',
+  'सिक्किम': 'Sikkim',
+  'उत्तर प्रदेश': 'Uttar Pradesh',
+  'पश्चिम बंगाल': 'West Bengal',
+  'तमिल नाडु': 'Tamil Nadu',
+  'तमिलनाडु': 'Tamil Nadu',
+  'कर्नाटक': 'Karnataka',
+  'केरल': 'Kerala',
+  'राजस्थान': 'Rajasthan',
+  'गुजरात': 'Gujarat',
+  'महाराष्ट्र': 'Maharashtra',
+  'मध्य प्रदेश': 'Madhya Pradesh',
+  'बिहार': 'Bihar',
+  'झारखंड': 'Jharkhand',
+  'ओडिशा': 'Odisha',
+  'उड़ीसा': 'Odisha',
+  'असम': 'Assam',
+  'पंजाब': 'Punjab',
+  'हरियाणा': 'Haryana',
+  'छत्तीसगढ़': 'Chhattisgarh',
+  'उत्तराखंड': 'Uttarakhand',
+  'हिमाचल प्रदेश': 'Himachal Pradesh',
+  'तेलंगाना': 'Telangana',
+  'आंध्र प्रदेश': 'Andhra Pradesh',
+  'जम्मू और कश्मीर': 'Jammu and Kashmir'
+};
+
+function applyPhraseMap(text: string, map: Record<string, string>): string {
+  let result = text;
+  const keys = Object.keys(map).sort((a, b) => b.length - a.length);
+  for (const key of keys) {
+    result = result.replace(new RegExp(key, 'g'), map[key]);
+  }
+  return result;
+}
 /**
  * Japanese Transliteration (ISO 3602 - Hepburn Style)
  * Standard: ISO 3602
@@ -285,24 +402,41 @@ export function deaccent(text: string): string {
  */
 export function transliterate(text: string, lang: string): string {
   if (!text) return "";
-  
-  const l = lang.toLowerCase();
-  switch (l) {
-    case 'ja': return transliterateJapanese(text);
+
+  const normalizedLang = lang.toLowerCase();
+  const cacheKey = `${normalizedLang}::${text}`;
+  const cached = transliterationCache.get(cacheKey);
+  if (cached !== undefined) {
+    return cached;
+  }
+
+  const baseLang = normalizedLang.split('-')[0];
+  let result = text;
+
+  switch (baseLang) {
+    case 'in':
+      result = applyPhraseMap(text, INDIA_PLACE_MAP);
+      break;
+    case 'ja':
+      result = transliterateJapanese(text);
+      break;
     case 'zh':
-    case 'zh-hans':
-    case 'zh-hant':
-      return transliterateChinese(text);
-    case 'ko': return transliterateKorean(text);
-    case 'ru': 
+      result = transliterateChinese(text);
+      break;
+    case 'ko':
+      result = transliterateKorean(text);
+      break;
+    case 'ru':
     case 'uk':
     case 'be':
     case 'bg':
     case 'sr':
     case 'mk':
-      return transliterateCyrillic(text);
+      result = transliterateCyrillic(text);
+      break;
     case 'el':
-      return transliterateGreek(text);
+      result = transliterateGreek(text);
+      break;
     case 'pl':
     case 'cs':
     case 'hu':
@@ -314,14 +448,24 @@ export function transliterate(text: string, lang: string): string {
     case 'lv':
     case 'lt':
     case 'tr':
-    case 'vn':
-      return deaccent(text);
-    // Add more cases as needed
-    default: 
-      // General fallback for any other language: attempt deaccentuation if it looks like Latin-extended
+    case 'vi':
+      result = deaccent(text);
+      break;
+    default:
       if (/[À-ž]/.test(text)) {
-        return deaccent(text);
+        result = deaccent(text);
       }
-      return text;
+      break;
   }
+
+  if (result === text && /[^\x00-\x7F]/.test(text)) {
+    result = transliterateUnicode(text);
+  }
+
+  if (result === text && /[^\x00-\x7F]/.test(text)) {
+    result = text.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x00-\x7F]/g, '');
+  }
+
+  transliterationCache.set(cacheKey, result);
+  return result;
 }

@@ -955,10 +955,12 @@ export async function regionalReverseGeocode(lat: number, lon: number, langCode:
         const jg = japaneseGeoContext;
 
         if (jp) {
-          if (!nominatimData.address.state) nominatimData.address.state = jp.address1;
-          if (!nominatimData.address.city) nominatimData.address.city = jp.address2;
-          if (!nominatimData.address.suburb) nominatimData.address.suburb = jp.address3;
-          nominatimData.address.kana = `${jp.kana1} ${jp.kana2} ${jp.kana3}`;
+          // ZipCloud returns authoritative Japanese-script names — always prefer them
+          // over whatever Nominatim may have returned (which can be romanized English).
+          if (jp.address1) nominatimData.address.state = jp.address1;
+          if (jp.address2) nominatimData.address.city = jp.address2;
+          if (jp.address3 && !nominatimData.address.suburb) nominatimData.address.suburb = jp.address3;
+          nominatimData.address.kana = `${jp.kana1 || ''} ${jp.kana2 || ''} ${jp.kana3 || ''}`.trim();
         }
 
         // Overpass context is usually more precise for exact building/ward/block

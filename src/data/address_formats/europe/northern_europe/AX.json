@@ -1,0 +1,34 @@
+{
+  "countryCode": "AX",
+  "name": "Åland Islands",
+  "native": {
+    "name": "Åland",
+    "addressFormat": "{{postcode}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "postcode", "label": "Postnummer", "placeholder": "22100", "required": true, "type": "text" },
+      { "key": "city", "label": "Postort", "placeholder": "Mariehamn", "required": true, "type": "text" },
+      { "key": "street", "label": "Gata", "placeholder": "Torget", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "Nummer", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Namn", "placeholder": "Anna", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{postcode}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}\nÅLAND ISLANDS",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "city", "label": "City", "placeholder": "Mariehamn", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Torget", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "No.", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Anna", "required": false, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "22100", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNN NN",
+    "regex": "^\\d{3}\\s?\\d{2}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=ax",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

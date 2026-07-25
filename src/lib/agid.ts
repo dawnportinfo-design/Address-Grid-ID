@@ -125,6 +125,62 @@ function getFromQuantized(face: number, qx: number, qy: number) {
   return { lat, lon };
 }
 
+function normalizeLongitude(lon: number): number {
+  let value = lon;
+  while (value > 180) value -= 360;
+  while (value < -180) value += 360;
+  return value;
+}
+
+function haversineMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const earthRadius = 6371008.8;
+  const phi1 = lat1 * Math.PI / 180;
+  const phi2 = lat2 * Math.PI / 180;
+  const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+  const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+  const sinHalfLat = Math.sin(deltaPhi / 2);
+  const sinHalfLon = Math.sin(deltaLambda / 2);
+  const a = sinHalfLat * sinHalfLat + Math.cos(phi1) * Math.cos(phi2) * sinHalfLon * sinHalfLon;
+  return 2 * earthRadius * Math.atan2(Math.sqrt(a), Math.sqrt(Math.max(0, 1 - a)));
+}
+
+function buildSquarePolygonFromCorners(corners: { lat: number; lon: number }[], scale: number = 1): number[][] {
+  if (corners.length !== 4) {
+    return corners.map(c => [c.lon, c.lat]);
+  }
+
+  const refLon = corners[0].lon;
+  const unwrappedCorners = corners.map((corner) => {
+    let lon = corner.lon;
+    if (lon - refLon > 180) lon -= 360;
+    else if (lon - refLon < -180) lon += 360;
+    return { lat: corner.lat, lon };
+  });
+
+  const centerLat = unwrappedCorners.reduce((sum, corner) => sum + corner.lat, 0) / unwrappedCorners.length;
+  const centerLon = unwrappedCorners.reduce((sum, corner) => sum + corner.lon, 0) / unwrappedCorners.length;
+
+  const topWidth = haversineMeters(unwrappedCorners[0].lat, unwrappedCorners[0].lon, unwrappedCorners[1].lat, unwrappedCorners[1].lon);
+  const bottomWidth = haversineMeters(unwrappedCorners[3].lat, unwrappedCorners[3].lon, unwrappedCorners[2].lat, unwrappedCorners[2].lon);
+  const leftHeight = haversineMeters(unwrappedCorners[0].lat, unwrappedCorners[0].lon, unwrappedCorners[3].lat, unwrappedCorners[3].lon);
+  const rightHeight = haversineMeters(unwrappedCorners[1].lat, unwrappedCorners[1].lon, unwrappedCorners[2].lat, unwrappedCorners[2].lon);
+
+  const sideMeters = Math.max((topWidth + bottomWidth) / 2, (leftHeight + rightHeight) / 2);
+  const halfSideMeters = sideMeters / 2;
+
+  const latDelta = (halfSideMeters / 111320) * scale;
+  const cosLat = Math.max(0.0001, Math.cos(centerLat * Math.PI / 180));
+  const lonDelta = (halfSideMeters / (111320 * cosLat)) * scale;
+
+  return [
+    [normalizeLongitude(centerLon - lonDelta), centerLat - latDelta],
+    [normalizeLongitude(centerLon + lonDelta), centerLat - latDelta],
+    [normalizeLongitude(centerLon + lonDelta), centerLat + latDelta],
+    [normalizeLongitude(centerLon - lonDelta), centerLat + latDelta],
+    [normalizeLongitude(centerLon - lonDelta), centerLat - latDelta]
+  ];
+}
+
 /**
  * Prefix Generation Logic (2-character Alphanumeric)
  * Rules:
@@ -268,8 +324,9 @@ function rot(n: number, x: number, y: number, rx: number, ry: number) {
 function encodeHilbert(n: number, x: number, y: number): bigint {
   const wasmCore = getAgidWasmCore();
   if (wasmCore && n === K) {
-    const hi = wasmCore.agid_encode_hilbert_hi(x, y);
-    const lo = wasmCore.agid_encode_hilbert_lo(x, y);
+    // WASM returns i32 (JS signed number); use >>> 0 to reinterpret as uint32 before BigInt
+    const hi = wasmCore.agid_encode_hilbert_hi(x, y) >>> 0;
+    const lo = wasmCore.agid_encode_hilbert_lo(x, y) >>> 0;
     return (BigInt(hi) << 32n) | BigInt(lo);
   }
 
@@ -389,6 +446,8 @@ export interface AGIDResult {
   regionName: string;
   regionPolygon?: number[][];
   face: number;
+  qx: number;
+  qy: number;
   lat: number;
   lon: number;
   bounds: {
@@ -433,6 +492,8 @@ export function encodeAGID(lat: number, lon: number): AGIDResult {
     regionName: region.name,
     regionPolygon: region.polygon,
     face,
+    qx,
+    qy,
     lat,
     lon,
     bounds: getCellBounds(face, qx, qy),
@@ -441,32 +502,22 @@ export function encodeAGID(lat: number, lon: number): AGIDResult {
 }
 
 /**
- * Bounds Calculation for Cubed Sphere
+ * Bounds Calculation for the rendered display cell.
+ * The underlying AGID encoding remains unchanged; this only shapes the map overlay.
  */
-export function getCellPolygon(face: number, quantX: number, quantY: number, step: number = 1): number[][] {
+export function getCellPolygon(face: number, quantX: number, quantY: number, step: number = 1, scale: number = 1): number[][] {
   const p1 = getFromQuantized(face, quantX, quantY);
   const p2 = getFromQuantized(face, quantX + step, quantY);
   const p3 = getFromQuantized(face, quantX + step, quantY + step);
   const p4 = getFromQuantized(face, quantX, quantY + step);
 
-  const pts = [p1, p2, p3, p4];
-  const refLon = p1.lon;
-  
-  // Handle Longitudinal Wrap (IDL)
-  const adjusted = pts.map(p => {
-    let shiftedLon = p.lon;
-    if (shiftedLon - refLon > 180) shiftedLon -= 360;
-    else if (shiftedLon - refLon < -180) shiftedLon += 360;
-    return [shiftedLon, p.lat];
-  });
+  return buildSquarePolygonFromCorners([p1, p2, p3, p4], scale);
+}
 
-  return [
-    adjusted[0],
-    adjusted[1],
-    adjusted[2],
-    adjusted[3],
-    adjusted[0]
-  ];
+export function getGridStepForZoom(zoom: number): number {
+  const zoomLevel = Math.max(0, Math.min(17, Math.floor(zoom)));
+  const exponent = Math.max(0, 17 - zoomLevel);
+  return Math.pow(2, exponent);
 }
 
 export function getCellCorners(face: number, quantX: number, quantY: number, step: number = 1) {
@@ -478,21 +529,21 @@ export function getCellCorners(face: number, quantX: number, quantY: number, ste
   return [p1, p2, p3, p4];
 }
 
-export function getCellBounds(face: number, quantX: number, quantY: number, step: number = 1) {
-  const corners = getCellCorners(face, quantX, quantY, step);
+export function getCellBounds(face: number, quantX: number, quantY: number, step: number = 1, scale: number = 1) {
+  const polygon = getCellPolygon(face, quantX, quantY, step, scale);
   
   return {
-    minLat: Math.min(...corners.map(c => c.lat)),
-    maxLat: Math.max(...corners.map(c => c.lat)),
-    minLon: Math.min(...corners.map(c => c.lon)),
-    maxLon: Math.max(...corners.map(c => c.lon))
+    minLat: Math.min(...polygon.map(c => c[1])),
+    maxLat: Math.max(...polygon.map(c => c[1])),
+    minLon: Math.min(...polygon.map(c => c[0])),
+    maxLon: Math.max(...polygon.map(c => c[0]))
   };
 }
 
 /**
  * Core AGID Decoding
  */
-export function decodeAGID(id: string): { lat: number, lon: number, isSea: boolean, prefix: string, face: number } | null {
+export function decodeAGID(id: string): { lat: number, lon: number, isSea: boolean, prefix: string, face: number, qx: number, qy: number } | null {
   if (id.length !== 12) return null;
   const prefix = id.substring(0, 2);
   const hash = id.substring(2);
@@ -504,7 +555,7 @@ export function decodeAGID(id: string): { lat: number, lon: number, isSea: boole
 
     const { lat, lon } = getFromQuantized(face, quantX, quantY);
 
-    return { lat, lon, isSea: false, prefix, face };
+    return { lat, lon, isSea: false, prefix, face, qx: quantX, qy: quantY };
   } catch (e) {
     return null;
   }
@@ -669,7 +720,7 @@ export function getRegionInfo(lat: number, lon: number): { prefix: string, isSea
 
   // 4. LAND CHECK (Countries) - Strict Polygon Check
   // [PRIORITIZE JAPAN & DISPUTED]
-  const HIGH_PRIORITY_CODES = ["JP", "EH", "BT_T", "CRIM", "DONB", "KASH", "SCSD", "EEBD", "TRNC", "SLND", "PMR", "PHIS", "BAAR", "CYGL"];
+  const HIGH_PRIORITY_CODES = ["JP", "JP_NT", "JP_TK", "JP_SK", "EH", "BT_T", "CRIM", "DONB", "KASH", "SCSD", "EEBD", "TRNC", "SLND", "PMR", "PHIS", "BAAR", "CYGL"];
   const prioritized = cell.countries.filter(c => HIGH_PRIORITY_CODES.includes(c.code));
   const others = cell.countries.filter(c => !HIGH_PRIORITY_CODES.includes(c.code));
 
@@ -916,6 +967,7 @@ const gridCache = new Map<string, { gridLines: any[][], gridCells: any[] }>();
 export function getGridFeatures(lat: number, lon: number, range: number) {
   const centerResult = encodeAGID(lat, lon);
   const { face, qx: quantX, qy: quantY } = getQuantized(lat, lon);
+  const displayScale = 1;
   
   // Cache key
   const cacheKey = `${centerResult.id}_${range}`;
@@ -932,7 +984,7 @@ export function getGridFeatures(lat: number, lon: number, range: number) {
       const qx = quantX + dx;
       const qy = quantY + dy;
       
-      const polyCoords = getCellPolygon(face, qx, qy);
+      const polyCoords = getCellPolygon(face, qx, qy, 1, displayScale);
       const cellId = `${face},${qx},${qy}`;
       if (seenIds.has(cellId)) continue;
       seenIds.add(cellId);

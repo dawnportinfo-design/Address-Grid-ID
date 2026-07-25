@@ -1,0 +1,36 @@
+{
+  "countryCode": "GE",
+  "name": "Georgia",
+  "native": {
+    "name": "საქართველო",
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "postcode", "label": "საფოსტო კოდი", "placeholder": "0101", "required": true, "type": "text" },
+      { "key": "state", "label": "რეგიონი", "placeholder": "თბილისი", "required": true, "type": "text" },
+      { "key": "city", "label": "ქალაქი", "placeholder": "თბილისი", "required": true, "type": "text" },
+      { "key": "street", "label": "ქუჩა", "placeholder": "რუსთაველის გამზირი", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "ნომერი", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "სახელი", "placeholder": "გიორგი", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "state", "label": "Region", "placeholder": "Tbilisi", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Tbilisi", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Rustaveli Ave", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "No.", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Giorgi", "required": false, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "0101", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": null,
+    "source": "Georgian Post"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "countryCode": "BV",
+  "name": "Bouvet Island",
+  "native": {
+    "name": "Bouvetøya",
+    "addressFormat": "{{city}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "city", "label": "Area", "placeholder": "Bouvet Island", "required": true, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "N/A", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{city}}\n{{name}}\nBOUVET ISLAND",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "city", "label": "Area", "placeholder": "Bouvet Island", "required": true, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "N/A", "required": false, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "None",
+    "regex": null,
+    "api": "https://nominatim.openstreetmap.org/ui/search.html",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

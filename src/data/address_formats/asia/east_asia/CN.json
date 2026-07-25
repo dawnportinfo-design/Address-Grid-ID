@@ -1,0 +1,38 @@
+{
+  "countryCode": "CN",
+  "name": "China",
+  "native": {
+    "name": "中国",
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{district}}\n{{street}}\n{{organization}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "postcode", "label": "邮政编码", "placeholder": "100000", "required": true, "type": "text" },
+      { "key": "state", "label": "省/直辖市/自治区", "placeholder": "北京市", "required": true, "type": "text" },
+      { "key": "city", "label": "市", "placeholder": "北京市", "required": true, "type": "text" },
+      { "key": "district", "label": "区/县", "placeholder": "东城区", "required": true, "type": "text" },
+      { "key": "street", "label": "街道/路", "placeholder": "长安街", "required": false, "type": "text" },
+      { "key": "organization", "label": "详细地址", "placeholder": "某某大厦 101室", "required": false, "type": "text" },
+      { "key": "name", "label": "姓名", "placeholder": "张三", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{district}}\n{{street}}\n{{organization}}\n{{name}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "state", "label": "Province", "placeholder": "Beijing" },
+      { "key": "city", "label": "City", "placeholder": "Beijing" },
+      { "key": "district", "label": "District", "placeholder": "Dongcheng District" },
+      { "key": "street", "label": "Street", "placeholder": "Chang'an Avenue" },
+      { "key": "organization", "label": "Address", "placeholder": "Building 1, Room 101" },
+      { "key": "name", "label": "Name", "placeholder": "Zhang San" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "100000" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNNN",
+    "regex": "^\\d{6}$",
+    "api": "https://dey.11185.cn/web/#/idtoolkitAddress",
+    "source": "中国邮政业务官网"
+  }
+}

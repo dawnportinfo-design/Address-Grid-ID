@@ -1,0 +1,32 @@
+{
+  "countryCode": "XU",
+  "name": "Akrotiri",
+  "native": {
+    "name": "Akrotiri",
+    "addressFormat": "{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "city", "label": "Area", "placeholder": "Akrotiri", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Main Road", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "No.", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "John", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}\nCYPRUS",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "city", "label": "Area", "placeholder": "Akrotiri", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Main Road", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "No.", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "John", "required": false, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "None",
+    "regex": null,
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=cy",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

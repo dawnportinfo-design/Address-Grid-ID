@@ -1,0 +1,51 @@
+{
+  "countryCode": "ZA",
+  "name": "South Africa",
+  "native": {
+    "name": "English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}}\n{{postcode}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Building/Company", "placeholder": "" },
+      { "key": "houseNumber", "label": "House No.", "placeholder": "123" },
+      { "key": "street", "label": "Street", "placeholder": "Main Rd" },
+      { "key": "suburb", "label": "Suburb", "placeholder": "Sandton" },
+      { "key": "city", "label": "City/Town", "placeholder": "Johannesburg" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "2196" }
+    ]
+  },
+  "domestic": {
+    "af": {
+      "name": "Afrikaans",
+      "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}}\n{{postcode}}",
+      "ordering": "small-to-big",
+      "fields": [
+        { "key": "organization", "label": "Gebou/Maatskappy" },
+        { "key": "houseNumber", "label": "Huisnommer", "placeholder": "123" },
+        { "key": "street", "label": "Straat", "placeholder": "Main Weg" },
+        { "key": "suburb", "label": "Voorstad", "placeholder": "Sandton" },
+        { "key": "city", "label": "Stad", "placeholder": "Johannesburg" },
+        { "key": "postcode", "label": "Poskode", "placeholder": "2196" }
+      ]
+    }
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{suburb}}\n{{city}}\n{{postcode}}\nSOUTH AFRICA",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Building/Company", "placeholder": "" },
+      { "key": "houseNumber", "label": "House/Building No.", "placeholder": "123" },
+      { "key": "street", "label": "Street Address", "placeholder": "Main Rd" },
+      { "key": "suburb", "label": "Suburb/District", "placeholder": "Sandton" },
+      { "key": "city", "label": "City/Town", "placeholder": "Johannesburg" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "2196" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": "https://www.postoffice.co.za/Questions/postalcodes.txt",
+    "source": "South African Post Office"
+  }
+}

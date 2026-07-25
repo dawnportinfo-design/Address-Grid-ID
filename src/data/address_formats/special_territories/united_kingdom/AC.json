@@ -1,0 +1,33 @@
+{
+  "countryCode": "SH",
+  "name": "Ascension Island",
+  "native": {
+    "name": "Ascension Island",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{settlement}}\n{{postcode}}\nAscension Island",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Street address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "Georgetown", "required": true, "type": "text" },
+      { "key": "settlement", "label": "Settlement", "placeholder": "Georgetown", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "ASCN 1ZZ", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{settlement}}\n{{postcode}}\nASCENSION ISLAND",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Street address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "Georgetown", "required": true, "type": "text" },
+      { "key": "settlement", "label": "Settlement", "placeholder": "Georgetown", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "ASCN 1ZZ", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "ASCN 1ZZ",
+    "regex": "^ASCN\\s?1ZZ$",
+    "api": null,
+    "source": "Ascension Island Government"
+  }
+}

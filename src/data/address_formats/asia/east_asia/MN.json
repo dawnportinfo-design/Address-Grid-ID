@@ -1,0 +1,37 @@
+{
+  "countryCode": "MN",
+  "name": "Mongolia",
+  "native": {
+    "name": "Монгол улс",
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{district}}\n{{street}}\n{{organization}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "postcode", "label": "Шуудангийн код", "placeholder": "14210", "required": true, "type": "text" },
+      { "key": "state", "label": "Аймаг", "placeholder": "Улаанбаатар", "required": true, "type": "text" },
+      { "key": "city", "label": "Сум", "placeholder": "Сүхбаатар", "required": true, "type": "text" },
+      { "key": "district", "label": "Баг", "placeholder": "1-р хороо", "required": false, "type": "text" },
+      { "key": "street", "label": "Гудамж", "placeholder": "Энх тайвны өргөн чөлөө", "required": false, "type": "text" },
+      { "key": "organization", "label": "Байр", "placeholder": "10-24", "required": false, "type": "text" },
+      { "key": "name", "label": "Нэр", "placeholder": "Бат", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{district}}\n{{street}}\n{{organization}}\n{{name}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "state", "label": "Province", "placeholder": "Ulaanbaatar", "required": true, "type": "text" },
+      { "key": "city", "label": "Soum", "placeholder": "Sukhbaatar", "required": true, "type": "text" },
+      { "key": "district", "label": "Bag", "placeholder": "1st khoroo", "required": false, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Peace Avenue", "required": false, "type": "text" },
+      { "key": "organization", "label": "Building", "placeholder": "10-24", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Bat", "required": false, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "14210", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": "https://zipcode.mn/",
+    "source": "Mongol Post"
+  }
+}

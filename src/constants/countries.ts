@@ -1,13 +1,16 @@
+import { COUNTRY_LANGUAGES } from '../lib/addressUtils';
+
 export interface CountryInfo {
   code: string;
   name: string;
   nativeName?: string;
+  nativeLanguages?: string[];
   region: string;
   flag: string;
   type?: 'Country' | 'Territory' | 'Autonomous' | 'Disputed' | 'Special';
 }
 
-export const COUNTRIES: CountryInfo[] = [
+const COUNTRY_LIST: CountryInfo[] = [
   // East Asia
   { code: 'JP', name: 'Japan', nativeName: '日本', region: 'East Asia', flag: '🇯🇵' },
   { code: 'CN', name: 'China', nativeName: '中国', region: 'East Asia', flag: '🇨🇳' },
@@ -277,6 +280,9 @@ export const COUNTRIES: CountryInfo[] = [
 
   // Disputed & Special Territories
   { code: 'XK', name: 'Kosovo', nativeName: 'Kosovë', region: 'Europe', flag: '🇽🇰', type: 'Disputed' },
+  { code: 'JP_NT', name: 'Northern Territories', nativeName: '北方領土', region: 'East Asia', flag: '🇯🇵', type: 'Disputed' },
+  { code: 'JP_TK', name: 'Takeshima / Dokdo', nativeName: '竹島 / 独島', region: 'East Asia', flag: '🇯🇵', type: 'Disputed' },
+  { code: 'JP_SK', name: 'Senkaku Islands', nativeName: '尖閣諸島', region: 'East Asia', flag: '🇯🇵', type: 'Disputed' },
   { code: 'BT_T', name: 'Bir Tawil', nativeName: 'بير طويل', region: 'Africa', flag: '🏳️', type: 'Disputed' },
   { code: 'CRIM', name: 'Crimea', nativeName: 'Крим', region: 'Europe', flag: '🇷🇺/🇺🇦', type: 'Disputed' },
   { code: 'DONB', name: 'Donbas', nativeName: 'Донбас', region: 'Europe', flag: '🇷🇺/🇺🇦', type: 'Disputed' },
@@ -290,3 +296,8 @@ export const COUNTRIES: CountryInfo[] = [
   { code: 'BAAR', name: 'Baarle', nativeName: 'Baarle', region: 'Europe', flag: '🇧🇪/🇳🇱', type: 'Special' },
   { code: 'CYGL', name: 'UN Buffer Zone (Cyprus)', nativeName: 'Green Line', region: 'Europe', flag: '🇺🇳', type: 'Special' },
 ];
+
+export const COUNTRIES: CountryInfo[] = COUNTRY_LIST.map(country => ({
+  ...country,
+  nativeLanguages: COUNTRY_LANGUAGES[country.code.toLowerCase()] || [],
+}));

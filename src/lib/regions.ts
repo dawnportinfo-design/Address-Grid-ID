@@ -52,3 +52,14 @@ export const COUNTRY_REGIONS: GeoRegion[] = [
   ...flattenContinent(southAmericaData),
   ...(disputedTerritoriesData as GeoRegion[])
 ];
+
+export const AMERICAS_COUNTRY_CODES = new Set<string>([
+  ...flattenContinent(americasData).map((region: GeoRegion) => region.code).filter(Boolean) as string[],
+  ...flattenContinent(caribbeanData).map((region: GeoRegion) => region.code).filter(Boolean) as string[],
+  ...flattenContinent(southAmericaData).map((region: GeoRegion) => region.code).filter(Boolean) as string[]
+]);
+
+export const OCEANIA_COUNTRY_CODES = new Set<string>([
+  ...flattenContinent(oceaniaData).map((region: GeoRegion) => region.code).filter(Boolean) as string[],
+  'NC', 'PF', 'WF', 'AS', 'GU', 'MP', 'NF', 'CX', 'CC', 'PN'
+]);

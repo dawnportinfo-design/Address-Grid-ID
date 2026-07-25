@@ -1,0 +1,33 @@
+{
+  "countryCode": "GS",
+  "name": "South Georgia and the South Sandwich Islands",
+  "native": {
+    "name": "South Georgia and the South Sandwich Islands",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{researchStation}}\n{{postcode}}\nSouth Georgia and the South Sandwich Islands",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Station address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "King Edward Point", "required": true, "type": "text" },
+      { "key": "researchStation", "label": "Research Station", "placeholder": "King Edward Point", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "SIQQ 1ZZ", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{researchStation}}\n{{postcode}}\nSOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Station address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "King Edward Point", "required": true, "type": "text" },
+      { "key": "researchStation", "label": "Research Station", "placeholder": "King Edward Point", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "SIQQ 1ZZ", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "SIQQ 1ZZ",
+    "regex": "^SIQQ\\s?1ZZ$",
+    "api": null,
+    "source": "British Antarctic Survey"
+  }
+}

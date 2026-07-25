@@ -1,0 +1,38 @@
+{
+  "countryCode": "SR",
+  "name": "Suriname",
+  "native": {
+    "name": "Nederlands",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{city}}\n{{region}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Bedrijf", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Naam", "placeholder": "Jan de Vries", "required": true, "type": "text" },
+      { "key": "street", "label": "Straat", "placeholder": "Waterkant", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Nummer", "placeholder": "12", "required": true, "type": "text" },
+      { "key": "city", "label": "Stad / Town", "placeholder": "Paramaribo", "required": true, "type": "text" },
+      { "key": "region", "label": "District / Regio", "placeholder": "Paramaribo", "required": true, "type": "text" },
+      { "key": "country", "label": "Land", "placeholder": "Suriname", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{city}}\n{{region}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Jan de Vries", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Waterkant", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "12", "required": true, "type": "text" },
+      { "key": "city", "label": "Town", "placeholder": "Paramaribo", "required": true, "type": "text" },
+      { "key": "region", "label": "Region / District", "placeholder": "Paramaribo", "required": true, "type": "text" },
+      { "key": "country", "label": "Country", "placeholder": "Suriname", "required": false, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": null,
+    "regex": null,
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=sr",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

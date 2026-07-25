@@ -1,0 +1,25 @@
+{
+  "countryCode": "CP",
+  "name": "Clipperton",
+  "native": {
+    "name": "Clipperton",
+    "addressFormat": "{{recipient}}\nAucune adresse permanente\nClipperton",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Destinataire", "placeholder": "Nom complet", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\nNo permanent address\nCLIPPERTON",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": null,
+    "regex": null,
+    "api": null,
+    "source": "No permanent address"
+  }
+}

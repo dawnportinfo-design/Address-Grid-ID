@@ -1,0 +1,33 @@
+{
+  "countryCode": "BM",
+  "name": "Bermuda",
+  "native": {
+    "name": "Bermuda",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{parish}}\n{{postcode}}\nBermuda",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Street address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "Hamilton", "required": true, "type": "text" },
+      { "key": "parish", "label": "Parish", "placeholder": "Pembroke", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "AA 00", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{parish}}\n{{postcode}}\nBERMUDA",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Street address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "Hamilton", "required": true, "type": "text" },
+      { "key": "parish", "label": "Parish", "placeholder": "Pembroke", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "AA 00", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "AA 00",
+    "regex": "^[A-Z]{2}\\s?\\d{2}$",
+    "api": null,
+    "source": "Bermuda Postal Service"
+  }
+}

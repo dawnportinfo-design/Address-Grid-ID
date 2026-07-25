@@ -1,0 +1,42 @@
+{
+  "countryCode": "TW",
+  "name": "Taiwan",
+  "native": {
+    "name": "台灣",
+    "addressFormat": "{{postcode}}\n{{state}}{{city}}{{district}}\n{{street}}\n{{subdistrict}}\n{{lane}}\n{{alley}}\n{{houseNumber}}\n{{floor}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "postcode", "label": "郵遞區號", "placeholder": "100", "required": true, "type": "text" },
+      { "key": "state", "label": "縣/市", "placeholder": "台北市", "required": true, "type": "text" },
+      { "key": "city", "label": "鄉鎮市區", "placeholder": "中正區", "required": true, "type": "text" },
+      { "key": "street", "label": "路/街", "placeholder": "重慶南路", "required": true, "type": "text" },
+      { "key": "subdistrict", "label": "段", "placeholder": "一段", "required": false, "type": "text" },
+      { "key": "lane", "label": "巷", "placeholder": "1巷", "required": false, "type": "text" },
+      { "key": "alley", "label": "弄", "placeholder": "2弄", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "號", "placeholder": "122號", "required": true, "type": "text" },
+      { "key": "floor", "label": "樓", "placeholder": "3樓", "required": false, "type": "text" },
+      { "key": "name", "label": "姓名", "placeholder": "王小明", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{street}}\n{{subdistrict}}\n{{lane}}\n{{alley}}\n{{houseNumber}}\n{{floor}}\n{{name}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "state", "label": "City/County", "placeholder": "Taipei City", "required": true, "type": "text" },
+      { "key": "city", "label": "District/Township", "placeholder": "Zhongzheng Dist.", "required": true, "type": "text" },
+      { "key": "street", "label": "Road/Street", "placeholder": "Chongqing South Rd.", "required": true, "type": "text" },
+      { "key": "subdistrict", "label": "Section", "placeholder": "Sec. 1", "required": false, "type": "text" },
+      { "key": "lane", "label": "Lane", "placeholder": "Lane 1", "required": false, "type": "text" },
+      { "key": "alley", "label": "Alley", "placeholder": "Alley 2", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "No.", "placeholder": "122", "required": true, "type": "text" },
+      { "key": "floor", "label": "Floor", "placeholder": "3F", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Wang Xiao Ming", "required": false, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNN(NN)",
+    "regex": "^\\d{3}(\\d{2})?$",
+    "api": "https://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208",
+    "source": "Chunghwa Post"
+  }
+}

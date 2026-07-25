@@ -1,0 +1,35 @@
+{
+  "countryCode": "MO",
+  "name": "Macau",
+  "native": {
+    "name": "澳門",
+    "addressFormat": "{{city}}\n{{street}}\n{{organization}}\n{{floor}}\n{{room}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "city", "label": "區", "placeholder": "澳門", "required": true, "type": "text" },
+      { "key": "street", "label": "街道", "placeholder": "亞美打利庇盧大馬路", "required": true, "type": "text" },
+      { "key": "organization", "label": "大廈", "placeholder": "某某大廈", "required": false, "type": "text" },
+      { "key": "floor", "label": "樓層", "placeholder": "10樓", "required": false, "type": "text" },
+      { "key": "room", "label": "室", "placeholder": "A室", "required": false, "type": "text" },
+      { "key": "name", "label": "姓名", "placeholder": "陳大文", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{city}}\n{{street}}\n{{organization}}\n{{floor}}\n{{room}}\n{{name}}\nMACAU",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "city", "label": "District", "placeholder": "Macau", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Avenida de Almeida Ribeiro", "required": true, "type": "text" },
+      { "key": "organization", "label": "Building", "placeholder": "Building Name", "required": false, "type": "text" },
+      { "key": "floor", "label": "Floor", "placeholder": "10/F", "required": false, "type": "text" },
+      { "key": "room", "label": "Room", "placeholder": "A", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Chan Tai Man", "required": false, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "None",
+    "regex": null,
+    "api": null,
+    "source": "CTT (No postal codes used)"
+  }
+}

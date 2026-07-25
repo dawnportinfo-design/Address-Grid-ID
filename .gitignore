@@ -7,3 +7,8 @@ coverage/
 .env*
 !.env.example
 native/**/target/
+
+# Local GeoNames postal-code source snapshots. These include coordinate columns
+# and require a separate provenance, precision, and redistribution review.
+data/postal_codes/*.zip
+data/postal_codes/[A-Z][A-Z].txt

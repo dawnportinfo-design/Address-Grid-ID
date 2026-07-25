@@ -1,0 +1,59 @@
+{
+  "countryCode": "HN",
+  "name": "Honduras",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{colonia}}\n{{city}}\n{{state}}\n{{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Nombre", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Avenida Cervantes", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "colonia", "label": "Colonia / Barrio", "placeholder": "Centro", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "Tegucigalpa", "required": true, "type": "text" },
+      { "key": "state", "label": "Departamento", "placeholder": "Francisco Morazán", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "11101", "required": true, "type": "text" },
+      { "key": "country", "label": "País", "placeholder": "Honduras", "required": false, "type": "text" }
+    ]
+  },
+  "domestic": {
+    "en": {
+      "name": "English",
+      "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{colonia}}\n{{city}}\n{{state}}\n{{postcode}}\n{{country}}",
+      "ordering": "small-to-big",
+      "fields": [
+        { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+        { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+        { "key": "street", "label": "Street", "placeholder": "Cervantes Avenue", "required": true, "type": "text" },
+        { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+        { "key": "colonia", "label": "Neighborhood / District", "placeholder": "Centro", "required": true, "type": "text" },
+        { "key": "city", "label": "City", "placeholder": "Tegucigalpa", "required": true, "type": "text" },
+        { "key": "state", "label": "Department", "placeholder": "Francisco Morazan", "required": true, "type": "text" },
+        { "key": "postcode", "label": "Postal Code", "placeholder": "11101", "required": true, "type": "text" },
+        { "key": "country", "label": "Country", "placeholder": "Honduras", "required": false, "type": "text" }
+      ]
+    }
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{colonia}}\n{{city}}\n{{state}}\n{{postcode}}\nHONDURAS",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Cervantes Avenue", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "colonia", "label": "Neighborhood / District", "placeholder": "Centro", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Tegucigalpa", "required": true, "type": "text" },
+      { "key": "state", "label": "Department", "placeholder": "Francisco Morazan", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "11101", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=hn",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

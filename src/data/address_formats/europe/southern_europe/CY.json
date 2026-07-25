@@ -1,0 +1,34 @@
+{
+  "countryCode": "CY",
+  "name": "Cyprus",
+  "native": {
+    "name": "Κύπρος",
+    "addressFormat": "{{postcode}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "postcode", "label": "Ταχυδρομικός κώδικας", "placeholder": "1010", "required": true, "type": "text" },
+      { "key": "city", "label": "Πόλη", "placeholder": "Λευκωσία", "required": true, "type": "text" },
+      { "key": "street", "label": "Οδός", "placeholder": "Λεωφόρος Μακαρίου", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "Αριθμός", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Όνομα", "placeholder": "Γιάννης", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{postcode}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "city", "label": "City", "placeholder": "Nicosia", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Makariou Ave", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "No.", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Yiannis", "required": false, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "1010", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=cy",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

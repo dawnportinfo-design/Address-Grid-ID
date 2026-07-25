@@ -1,0 +1,36 @@
+{
+  "countryCode": "AZ",
+  "name": "Azerbaijan",
+  "native": {
+    "name": "Azərbaycan",
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "postcode", "label": "Poçt indeksi", "placeholder": "AZ1000", "required": true, "type": "text" },
+      { "key": "state", "label": "Rayon", "placeholder": "Bakı", "required": true, "type": "text" },
+      { "key": "city", "label": "Şəhər", "placeholder": "Bakı", "required": true, "type": "text" },
+      { "key": "street", "label": "Küçə", "placeholder": "Nizami küçəsi", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "Bina/Nömrə", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Ad", "placeholder": "Araz", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "state", "label": "Region", "placeholder": "Baku", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Baku", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Nizami St", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "Building No.", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Araz", "required": false, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "AZ1000", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^AZ\\d{4}$",
+    "api": null,
+    "source": "Azərpoçt"
+  }
+}

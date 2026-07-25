@@ -1,6 +1,5 @@
 import { getAddressFormat } from '../data/address_formats';
 import { NO_POSTAL_COUNTRIES } from './postalPatterns';
-// import { GoogleGenAI } from "@google/genai"; // Gemini removed per user request
 import { transliterate } from './transliteration';
 
 // --- Address Utilities ---
@@ -50,6 +49,21 @@ export function applyShippingAbbreviations(text: string): string {
   });
   
   return result;
+}
+
+function normalizeRenderedAddress(text: string, preserveLineBreaks: boolean): string {
+  if (!text) return "";
+
+  const lines = text
+    .split(/\r?\n+/)
+    .map((line) => line
+      .replace(/,\s*,/g, ',')
+      .replace(/^\s*,|,?\s*$/g, '')
+      .replace(/\s+/g, ' ')
+      .trim())
+    .filter(Boolean);
+
+  return preserveLineBreaks ? lines.join('\n') : lines.join(', ');
 }
 
 /**
@@ -178,10 +192,10 @@ export const LANGUAGES = [
   
   // Greater China
   { code: 'zh-Hans', name: '简体中文', country: 'China', flag: '🇨🇳' },
-  { code: 'zh-Hant-TW', name: '繁體中文 (台灣)', country: 'Taiwan', flag: '🇹🇼' },
-  { code: 'zh-Hant-HK', name: '繁體中文 (香港)', country: 'Hong Kong', flag: '🇭🇰' },
-  { code: 'zh-Hant-MO', name: '繁體中文 (澳門)', country: 'Macau', flag: '🇲🇴' },
-  { code: 'yue', name: '廣東話 (Cantonese)', country: 'Hong Kong', flag: '🇭🇰' },
+  { code: 'zh-Hant-TW', name: '繁體中文（台灣）', country: 'Taiwan', flag: '🇹🇼' },
+  { code: 'zh-Hant-HK', name: '繁體中文（香港）', country: 'Hong Kong', flag: '🇭🇰' },
+  { code: 'zh-Hant-MO', name: '繁體中文（澳門）', country: 'Macau', flag: '🇲🇴' },
+  { code: 'yue', name: '粵語', country: 'Hong Kong', flag: '🇭🇰' },
   
   // East Asia
   { code: 'ko', name: '한국어', country: 'South Korea', flag: '🇰🇷' },
@@ -189,11 +203,11 @@ export const LANGUAGES = [
   { code: 'th', name: 'ไทย', country: 'Thailand', flag: '🇹🇭' },
   { code: 'ms', name: 'Bahasa Melayu', country: 'Malaysia', flag: '🇲🇾' },
   { code: 'id', name: 'Bahasa Indonesia', country: 'Indonesia', flag: '🇮🇩' },
-  { code: 'tl', name: 'Tagalog', country: 'Philippines', flag: '🇵🇭' },
-  { code: 'lo', name: 'ພາສາลาว', country: 'Laos', flag: '🇱🇦' },
-  { code: 'km', name: 'ភាសាខ្មែរ', country: 'Cambodia', flag: '🇰🇭' },
-  { code: 'my', name: 'ဗမာစာ', country: 'Myanmar', flag: '🇲🇲' },
-  { code: 'mn', name: 'Монгол', country: 'Mongolia', flag: '🇲🇳' },
+  { code: 'tl', name: 'Filipino', country: 'Philippines', flag: '🇵🇭' },
+  { code: 'lo', name: 'ລາວ', country: 'Laos', flag: '🇱🇦' },
+  { code: 'km', name: 'ខ្មែរ', country: 'Cambodia', flag: '🇰🇭' },
+  { code: 'my', name: 'မြန်မာ', country: 'Myanmar', flag: '🇲🇲' },
+  { code: 'mn', name: 'Монгол хэл', country: 'Mongolia', flag: '🇲🇳' },
   
   // Europe
   { code: 'fr', name: 'Français', country: 'France', flag: '🇫🇷' },
@@ -280,7 +294,7 @@ export const LANGUAGES = [
   { code: 'hy', name: 'Հայერեն', country: 'Armenia', flag: '🇦🇲' },
   { code: 'be', name: 'Беларуская', country: 'Belarus', flag: '🇧🇾' },
   { code: 'ne', name: 'नेपाली', country: 'Nepal', flag: '🇳🇵' },
-  { code: 'dz', name: 'རྫོང་ཁ་', country: 'Bhutan', flag: '🇧🇹' },
+  { code: 'dz', name: 'རྫོང་ཁ', country: 'Bhutan', flag: '🇧🇹' },
   { code: 'dv', name: 'ދިވެހި', country: 'Maldives', flag: '🇲🇻' },
   { code: 'sl', name: 'Slovenščina', country: 'Slovenia', flag: '🇸🇮' },
   { code: 'mh', name: 'Kajin M̧ajeļ', country: 'Marshall Islands', flag: '🇲🇭' },
@@ -333,19 +347,19 @@ export const LANGUAGES = [
   
   // Central Asia
   { code: 'kk', name: 'Қазақ тілі', country: 'Kazakhstan', flag: '🇰🇿' },
-  { code: 'uz', name: 'Oʻzbek', country: 'Uzbekistan', flag: '🇺🇿' },
+  { code: 'uz', name: 'Oʻzbek tili', country: 'Uzbekistan', flag: '🇺🇿' },
   
   // India (Consolidated Group for screen transition)
-  { code: 'hi', name: 'हिन्दी (Hindi)', country: 'India', flag: '🇮🇳' },
-  { code: 'bn', name: 'বাংলা (Bengali)', country: 'India', flag: '🇮🇳' },
-  { code: 'ta', name: 'தமிழ் (Tamil)', country: 'India', flag: '🇮🇳' },
-  { code: 'te', name: 'తెలుగు (Telugu)', country: 'India', flag: '🇮🇳' },
-  { code: 'mr', name: 'मराठी (Marathi)', country: 'India', flag: '🇮🇳' },
-  { code: 'gu', name: 'ગુજરાતી (Gujarati)', country: 'India', flag: '🇮🇳' },
-  { code: 'kn', name: 'ಕನ್ನಡ (Kannada)', country: 'India', flag: '🇮🇳' },
-  { code: 'ml', name: 'മലയാളം (Malayalam)', country: 'India', flag: '🇮🇳' },
-  { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)', country: 'India', flag: '🇮🇳' },
-  { code: 'ur', name: 'اردو (Urdu)', country: 'India', flag: '🇮🇳' },
+  { code: 'hi', name: 'हिन्दी', country: 'India', flag: '🇮🇳' },
+  { code: 'bn', name: 'বাংলা', country: 'India', flag: '🇮🇳' },
+  { code: 'ta', name: 'தமிழ்', country: 'India', flag: '🇮🇳' },
+  { code: 'te', name: 'తెలుగు', country: 'India', flag: '🇮🇳' },
+  { code: 'mr', name: 'मराठी', country: 'India', flag: '🇮🇳' },
+  { code: 'gu', name: 'ગુજરાતી', country: 'India', flag: '🇮🇳' },
+  { code: 'kn', name: 'ಕನ್ನಡ', country: 'India', flag: '🇮🇳' },
+  { code: 'ml', name: 'മലയാളം', country: 'India', flag: '🇮🇳' },
+  { code: 'pa', name: 'ਪੰਜਾਬੀ', country: 'India', flag: '🇮🇳' },
+  { code: 'ur', name: 'اردو', country: 'India', flag: '🇮🇳' },
   
   // South Africa
   { code: 'af', name: 'Afrikaans', country: 'South Africa', flag: '🇿🇦' },
@@ -410,6 +424,10 @@ export const COUNTRY_LANGUAGES: Record<string, string[]> = {
   'mc': ['fr', 'it'],
   'sm': ['it'],
   'va': ['it', 'la'],
+  'no': ['no', 'en'],
+  'se': ['sv', 'en'],
+  'fi': ['fi', 'sv', 'en'],
+  'ax': ['sv', 'fi', 'en'],
   'mt': ['mt', 'en'],
   'mh': ['en', 'mh'],
   'pw': ['en', 'pau'],
@@ -440,7 +458,7 @@ export const COUNTRY_LANGUAGES: Record<string, string[]> = {
   'mm': ['my'],
   'bn': ['ms'],
   'in': ['hi', 'en-IN', 'en', 'bn', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'pa', 'ur'],
-  'za': ['en-ZA', 'en', 'af', 'zu', 'xh'],
+  'za': ['en-ZA', 'en'],
   'pk': ['ur', 'en-PK', 'en'],
   'bd': ['bn', 'en-BD', 'en'],
   'lk': ['si', 'ta', 'en-LK', 'en'],
@@ -558,13 +576,15 @@ export async function formatAddress(details: any, lang: string = 'local', option
   if (!details) return "";
 
   const c = details.country_code?.slice(0, 2).toUpperCase();
+  const normalizedLang = (lang || 'local').toLowerCase();
+  const isTargetEn = normalizedLang.startsWith('en') || normalizedLang === 'international';
   const formatDef = await (c ? getAddressFormat(c) : Promise.resolve(null));
 
   // Determine which specification to use from JSON
   let currentSpec: any = null;
   
   if (formatDef) {
-    if (lang === 'international') {
+    if (normalizedLang === 'international') {
       // Direct request for international
       currentSpec = formatDef.english || formatDef.native;
     } else if (options.forceDomestic) {
@@ -573,7 +593,7 @@ export async function formatAddress(details: any, lang: string = 'local', option
       // Check international record first
       if (formatDef.international && formatDef.international[lang]) {
         currentSpec = formatDef.international[lang];
-      } else if (lang === 'en' && formatDef.english) {
+      } else if (isTargetEn && formatDef.english) {
         currentSpec = formatDef.english;
       } else {
         currentSpec = formatDef.native;
@@ -605,7 +625,6 @@ export async function formatAddress(details: any, lang: string = 'local', option
 
   if (currentSpec) {
     let formatted = currentSpec.addressFormat;
-    const isTargetEn = lang === 'en' || lang === 'international';
       
     // Map details to format keys
     const mapping: Record<string, string> = {};
@@ -657,6 +676,23 @@ export async function formatAddress(details: any, lang: string = 'local', option
             : JP_PREFECTURES[details['ISO3166-2-lvl4']].ja;
         }
 
+        // For native Japanese display: if city field is Latin-only (romanized from Nominatim)
+        // but city_district has kanji, prefer city_district as the ward name.
+        if (!isTargetEn) {
+          const hasJP = (s: string) => /[\u3040-\u30ff\u4e00-\u9faf]/.test(s);
+          if (mapping.city && !hasJP(mapping.city)) {
+            const cdv = details.city_district || details.district || details.county || "";
+            if (cdv && hasJP(cdv)) mapping.city = cdv;
+          }
+          // Clean OSM semicolon-separated multi-values in organization/building
+          if (mapping.organization && mapping.organization.includes(';')) {
+            mapping.organization = mapping.organization.split(';')[0].trim();
+          }
+          if (mapping.houseNumber && mapping.houseNumber.includes(';')) {
+            mapping.houseNumber = mapping.houseNumber.split(';')[0].trim();
+          }
+        }
+
         // Special rule for Japan: Domestic format should NOT include country name
         if (!isTargetEn) {
           mapping.country = "";
@@ -673,23 +709,19 @@ export async function formatAddress(details: any, lang: string = 'local', option
       // But we respect the JSON format string. If it has {{country}}, it stays unless we manually cleared it above.
       // User says: "Domestic don't need country notation. Only International needs it."
       const countryLangs = COUNTRY_LANGUAGES[c?.toLowerCase() || ""] || [];
-      const isActuallyNative = countryLangs.includes(lang) && lang !== 'en';
+      const isActuallyNative = countryLangs.includes(lang) && !normalizedLang.startsWith('en');
       if (isActuallyNative) {
         formatted = formatted.replace(/{{country}}/g, "");
       }
 
-      // Cleanup
-      let result = formatted
-        .split('\n')
-        .map(line => line.replace(/,\s*,/g, ',').replace(/^\s*,|,?\s*$/g, '').trim())
-        .filter(line => line.length > 0 && line !== ',')
-        .join('\n')
-        .replace(/\s+/g, ' ');
+      // Cleanup without flattening line structure. Multiline layouts are important for
+      // domestic and shipping-friendly tabs, so preserve explicit line breaks.
+      let result = normalizeRenderedAddress(formatted, true);
 
       if (isTargetEn) {
         // Final Latin-only cleanup for strict English output
         result = result.replace(/[\u0400-\u04FF\u0370-\u03FF\u0590-\u05FF\u0600-\u06FF\u0E00-\u0E7F\u3040-\u30ff\u31f0-\u31ff\u4e00-\u9faf\uac00-\ud7af]/g, '').trim();
-        result = result.replace(/,\s*,/g, ',').replace(/^,|,$/g, '').replace(/\s+/g, ' ').trim();
+        result = normalizeRenderedAddress(result, true);
       }
 
       if (options.shipping && isTargetEn) {
@@ -711,7 +743,6 @@ export async function formatAddress(details: any, lang: string = 'local', option
     house: details.house_number || ""
   };
 
-  const isTargetEn = lang === 'en' || lang === 'international';
   if (isTargetEn) {
      Object.keys(parts).forEach(k => {
        const key = k as keyof typeof parts;
@@ -799,9 +830,9 @@ export async function translateAddressOpenSource(text: string, target: string, d
 
   // 1. Basic Transliteration (Local Logic)
   let processedText = sourceText;
-  if (target === 'en' || target === 'international') {
-    // Try local transliteration first for common scripts
-    processedText = transliterate(sourceText, 'ja'); // Try Japan specifically if it looks like it
+  if (target.startsWith('en') || target === 'international') {
+    // Try broad transliteration first so non-Latin place names can still be shown in English
+    processedText = transliterate(sourceText, 'en');
     if (processedText === sourceText) {
        // If no change, try a general run through translation if needed
     }
@@ -825,7 +856,7 @@ export async function translateAddressOpenSource(text: string, target: string, d
     }
   }
   
-  if (target === 'en') {
+  if (target.startsWith('en')) {
     // Final Latin-only cleanup for English
     processedText = processedText.replace(/[^\u0000-\u017F\s,.-]/g, '').trim();
     processedText = processedText.replace(/\s+/g, ' ').trim();

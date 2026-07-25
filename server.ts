@@ -2,25 +2,40 @@ import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import net from 'net';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { initPostalCodeDB, getNearestPostalCode } from './src/services/PostalCodeDB';
-import { GoogleGenAI, Type } from "@google/genai";
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      'User-Agent': 'aistudio-build',
-    }
-  }
-});
+import disputedTerritories from './src/data/disputed_territories.json';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+function isPortAvailable(port: number, host: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const server = net.createServer();
+
+    server.unref();
+    server.on('error', () => resolve(false));
+    server.listen({ port, host }, () => {
+      server.close(() => resolve(true));
+    });
+  });
+}
+
+async function getAvailablePort(preferredPort: number, host: string): Promise<number> {
+  for (let port = preferredPort; port < preferredPort + 20; port++) {
+    if (await isPortAvailable(port, host)) {
+      return port;
+    }
+  }
+
+  return 0;
+}
+
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const HOST = '0.0.0.0';
+  const PREFERRED_PORT = Number(process.env.PORT || 3000);
 
   // Trust proxy for rate limiting in Cloud Run environment (Setting to 1 for security)
   app.set('trust proxy', 1);
@@ -352,103 +367,16 @@ async function startServer() {
   const nominatimBlacklist = new Map<string, number>();
   const NOMINATIM_BLACKLIST_DURATION = 1000 * 60 * 30; // 30 mins
   /**
-   * Ultimate fallback using Gemini AI for reverse geocoding
+   * Final fallback when all reverse geocoding mirrors fail.
    */
   async function performGeminiReverseGeocode(lat: number, lon: number, lang: string = 'en') {
-    try {
-      const prompt = `Reverse geocode these coordinates: latitude ${lat}, longitude ${lon}.
-Return a JSON object ONLY with the following structure: 
-{ 
-  "place_id": 0, 
-  "display_name": "Full address string, e.g., Tokyo Station, Marunouchi, Chiyoda City, Tokyo 100-0005, Japan", 
-  "address": { 
-    "road": "Street/Place name", 
-    "city": "City/Sub-area", 
-    "state": "Prefecture/State", 
-    "postcode": "Postcode", 
-    "country": "Country", 
-    "country_code": "2-letter country code" 
-  } 
-}. 
-The primary language for address names should matches ${lang}. Use empty strings for missing fields. Output ONLY valid JSON.`;
-      
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-        }
-      });
-
-      const text = response.text;
-      if (text) {
-        const data = JSON.parse(text);
-        return {
-          ...data,
-          place_id: Math.floor(Math.random() * 1000000),
-          licence: "Gemini AI Reverse Geocoding",
-          osm_type: "node",
-          osm_id: 0,
-          lat: lat.toString(),
-          lon: lon.toString()
-        };
-      }
-    } catch (e) {
-      // Silent failure for Gemini fallback
-    }
     return null;
   }
 
   /**
-   * Search fallback using Gemini AI
+   * Final fallback when all search mirrors fail.
    */
   async function performGeminiSearch(q: string, lang: string = 'en', limit: number = 5) {
-    try {
-      const prompt = `Geocode the following search query: "${q}". 
-Return a JSON array of objects (max ${limit}) with the following structure: 
-[
-  { 
-    "place_id": 0, 
-    "display_name": "Full address string", 
-    "lat": "latitude as string", 
-    "lon": "longitude as string", 
-    "type": "place type (e.g., city, street, poi)",
-    "address": { 
-      "road": "Street/Place name", 
-      "city": "City", 
-      "state": "Province/State", 
-      "postcode": "Postcode", 
-      "country": "Country", 
-      "country_code": "2-letter CC" 
-    } 
-  }
-]. 
-Primary language: ${lang}. Output ONLY valid JSON.`;
-
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-        }
-      });
-
-      const text = response.text;
-      if (text) {
-        const data = JSON.parse(text);
-        if (Array.isArray(data)) {
-          return data.map((item: any) => ({
-            ...item,
-            place_id: item.place_id || Math.floor(Math.random() * 1000000),
-            licence: "Gemini AI Geocoding Search",
-            osm_type: "node",
-            osm_id: 0
-          }));
-        }
-      }
-    } catch (e) {
-      // Silent failure
-    }
     return [];
   }
 
@@ -588,10 +516,10 @@ Primary language: ${lang}. Output ONLY valid JSON.`;
       }
     }
     
-    // AI Fallback before returning coordinate label
+    // Final fallback before returning coordinate label
     const geminiResult = await performGeminiReverseGeocode(lat, lon, lang);
     if (geminiResult) {
-      console.log(`[API] Mirror failure at ${lat}, ${lon}. Recovered via Gemini AI.`);
+      console.log(`[API] Mirror failure at ${lat}, ${lon}. Recovered via fallback logic.`);
       return geminiResult;
     }
 
@@ -1968,10 +1896,10 @@ Primary language: ${lang}. Output ONLY valid JSON.`;
       }
     }
     
-    // AI Fallback before failure
+    // Final fallback before failure
     const geminiResults = await performGeminiSearch(q, accept_language || 'en', limit || 5);
     if (geminiResults.length > 0) {
-      console.log(`[API] Mirror failure for search "${q}". Recovered via Gemini AI.`);
+      console.log(`[API] Mirror failure for search "${q}". Recovered via fallback logic.`);
       return geminiResults;
     }
     
@@ -2426,9 +2354,27 @@ Primary language: ${lang}. Output ONLY valid JSON.`;
   app.get('/api/country-boundary', async (req, res) => {
     const { cc } = req.query;
     if (!cc) return res.status(400).json({ error: 'Missing country code' });
+
+    const code = cc.toString().toUpperCase();
+
+    const disputed = (disputedTerritories as any[]).find((item) => item.code === code);
+    if (disputed?.polygons?.length) {
+      const coordinates = disputed.polygons.map((polygon: number[][][]) => polygon.map((ring: number[][]) => ring.map(([lat, lon]) => [lon, lat])));
+      return res.json(coordinates.length === 1
+        ? { type: 'Polygon', coordinates: coordinates[0] }
+        : { type: 'MultiPolygon', coordinates });
+    }
+
+    if (code === 'AQ') {
+      const data = await performOsmSearch('Antarctica', { polygon_geojson: 1, limit: 1, countrycodes: 'aq' });
+      if (data && data[0] && data[0].geojson) {
+        return res.json(data[0].geojson);
+      }
+      return res.status(404).json({ error: 'Boundary not found' });
+    }
     
     try {
-      const data = await performOsmSearch('', { country: cc, polygon_geojson: 1, limit: 1 });
+      const data = await performOsmSearch('', { country: code, polygon_geojson: 1, limit: 1 });
       if (data && data[0] && data[0].geojson) {
         return res.json(data[0].geojson);
       }
@@ -2604,8 +2550,25 @@ Primary language: ${lang}. Output ONLY valid JSON.`;
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== 'production') {
+    const indexHtmlPath = path.join(process.cwd(), 'index.html');
+
+    app.get('*', (req, res, next) => {
+      if (
+        req.method !== 'GET' ||
+        !req.accepts('html') ||
+        req.path.startsWith('/api/') ||
+        req.path.startsWith('/@vite/') ||
+        req.path.startsWith('/@fs/') ||
+        path.extname(req.path)
+      ) {
+        return next();
+      }
+
+      res.sendFile(indexHtmlPath);
+    });
+
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, hmr: false },
       appType: 'spa',
     });
     app.use(vite.middlewares);
@@ -2617,9 +2580,17 @@ Primary language: ${lang}. Output ONLY valid JSON.`;
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[Server] Running on http://0.0.0.0:${PORT}`);
-    console.log(`[Server] Overpass Proxy: http://0.0.0.0:${PORT}/api/overpass`);
+  const PORT = await getAvailablePort(PREFERRED_PORT, HOST);
+  const server = app.listen(PORT, HOST, () => {
+    if (PORT !== PREFERRED_PORT) {
+      console.warn(`[Server] Port ${PREFERRED_PORT} was busy, switched to ${PORT}`);
+    }
+    console.log(`[Server] Running on http://${HOST}:${PORT}`);
+    console.log(`[Server] Overpass Proxy: http://${HOST}:${PORT}/api/overpass`);
+  });
+
+  server.on('error', (error) => {
+    console.error('[Server] Failed to start:', error);
   });
 }
 

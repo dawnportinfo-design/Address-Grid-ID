@@ -1,0 +1,33 @@
+{
+  "countryCode": "TC",
+  "name": "Turks and Caicos Islands",
+  "native": {
+    "name": "Turks and Caicos Islands",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{island}}\n{{postcode}}\nTurks and Caicos Islands",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Street address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "Providenciales", "required": true, "type": "text" },
+      { "key": "island", "label": "Island", "placeholder": "Providenciales", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "TKCA 1ZZ", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{island}}\n{{postcode}}\nTURKS AND CAICOS ISLANDS",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Street address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "Providenciales", "required": true, "type": "text" },
+      { "key": "island", "label": "Island", "placeholder": "Providenciales", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "TKCA 1ZZ", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "TKCA 1ZZ",
+    "regex": "^TKCA\\s?1ZZ$",
+    "api": null,
+    "source": "Turks and Caicos Islands Post"
+  }
+}

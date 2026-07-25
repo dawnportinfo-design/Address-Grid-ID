@@ -1,0 +1,59 @@
+{
+  "countryCode": "CR",
+  "name": "Costa Rica",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{district}}\n{{canton}}\n{{province}}\n{{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Nombre", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Avenida Central", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "district", "label": "Distrito", "placeholder": "Carmen", "required": true, "type": "text" },
+      { "key": "canton", "label": "Cantón", "placeholder": "San José", "required": true, "type": "text" },
+      { "key": "province", "label": "Provincia", "placeholder": "San José", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "10101", "required": true, "type": "text" },
+      { "key": "country", "label": "País", "placeholder": "Costa Rica", "required": false, "type": "text" }
+    ]
+  },
+  "domestic": {
+    "en": {
+      "name": "English",
+      "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{district}}\n{{canton}}\n{{province}}\n{{postcode}}\n{{country}}",
+      "ordering": "small-to-big",
+      "fields": [
+        { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+        { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+        { "key": "street", "label": "Street", "placeholder": "Central Avenue", "required": true, "type": "text" },
+        { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+        { "key": "district", "label": "District", "placeholder": "Carmen", "required": true, "type": "text" },
+        { "key": "canton", "label": "Canton", "placeholder": "San Jose", "required": true, "type": "text" },
+        { "key": "province", "label": "Province", "placeholder": "San Jose", "required": true, "type": "text" },
+        { "key": "postcode", "label": "Postal Code", "placeholder": "10101", "required": true, "type": "text" },
+        { "key": "country", "label": "Country", "placeholder": "Costa Rica", "required": false, "type": "text" }
+      ]
+    }
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{district}}\n{{canton}}\n{{province}}\n{{postcode}}\nCOSTA RICA",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Central Avenue", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "district", "label": "District", "placeholder": "Carmen", "required": true, "type": "text" },
+      { "key": "canton", "label": "Canton", "placeholder": "San Jose", "required": true, "type": "text" },
+      { "key": "province", "label": "Province", "placeholder": "San Jose", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "10101", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=cr",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

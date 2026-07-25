@@ -15,8 +15,10 @@ import {
   calculateTotalSeaAreas,
   generatePrefix,
   generateFullSeaRegistry,
-  generateFullCountryRegistry
+  generateFullCountryRegistry,
+  getGridStepForZoom
 } from './lib/agid';
+import { getMercatorCellBounds } from './lib/mercatorGrid';
 import { calculateDistance, calculateBearing, formatDistance } from './lib/nav';
 import legalData from './data/legal.json';
 import disputedTerritories from './data/disputed_territories.json';
@@ -225,12 +227,7 @@ export default function App() {
   const [lat, setLat] = useState(initialLat);
   const [zoom, setZoom] = useState(initialZoom);
   const [mapBearing, setMapBearing] = useState(0);
-  const [mapPitch, setMapPitch] = useState(() => {
-    try {
-      const saved = localStorage.getItem('agid_map_pitch');
-      return saved !== null ? parseInt(saved, 10) : 0;
-    } catch { return 0; }
-  });
+  const [mapPitch, setMapPitch] = useState(0);
   const [gridOpacityLevel, setGridOpacityLevel] = useState(() => {
     try {
       const saved = localStorage.getItem('agid_grid_opacity_level');
@@ -606,16 +603,6 @@ export default function App() {
     return () => { isMounted = false; };
   }, [clickedAddress, clickedActiveLangs.join(','), translateAddress, clickedAddressLang, addressLanguage]);
 
-  // Sync tab with preferred address language when it changes
-  useEffect(() => {
-    if (addressLanguage) {
-      setClickedAddressTab(addressLanguage);
-      if (addressLanguage !== 'local' && addressLanguage !== 'en' && !clickedActiveLangs.includes(addressLanguage)) {
-        setClickedActiveLangs(prev => [...prev, addressLanguage]);
-      }
-    }
-  }, [addressLanguage]);
-
   const [showHubs, setShowHubs] = useState(() => {
     try {
       const saved = localStorage.getItem('agid_show_hubs');
@@ -717,11 +704,7 @@ export default function App() {
       return localStorage.getItem('agid_map_style') || 'https://tiles.openfreemap.org/styles/liberty';
     } catch { return 'https://tiles.openfreemap.org/styles/liberty'; }
   });
-  const [projection, setProjection] = useState<'mercator' | 'globe'>(() => {
-    try {
-      return (localStorage.getItem('agid_projection') as 'mercator' | 'globe') || 'mercator';
-    } catch { return 'mercator'; }
-  });
+  const [projection, setProjection] = useState<'mercator' | 'globe'>('mercator');
   const [showStyleMenu, setShowStyleMenu] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
 
@@ -745,6 +728,20 @@ export default function App() {
       } else {
         const source: any = map.current.getSource(sourceId);
         if (source.setData) source.setData(data);
+
+        const existingLayer: any = map.current.getLayer(layerId);
+        const existingType = existingLayer?.type;
+        if (existingLayer && existingType && existingType !== type) {
+          map.current.removeLayer(layerId);
+          const layerConfig: any = { id: layerId, type: type as any, source: id, paint, layout };
+          if (filter !== undefined) layerConfig.filter = filter;
+          map.current.addLayer(layerConfig, (beforeId && map.current.getLayer(beforeId)) ? beforeId : undefined);
+          lastPropsRef.current[layerId] = { paint, layout };
+          if ((id.includes('selected') || id.includes('selection')) && map.current.getLayer(layerId)) {
+            map.current.moveLayer(layerId);
+          }
+          return;
+        }
 
         // Diff and update props ONLY if they changed to avoid MapLibre overhead
         const prevProps = lastPropsRef.current[layerId];
@@ -794,60 +791,83 @@ export default function App() {
     const isSatellite = mapStyle === 'satellite';
     const isDark = mapStyle.includes('dark');
     const isSeaGrid = activeResult?.isSea && zoom < 15;
+    const displayStep = getGridStepForZoom(zoom);
+    const opacityMultiplier = gridOpacityLevel / 3;
+    const gridLineWidth = [
+      'interpolate', ['linear'], ['zoom'],
+      1, 0.25,
+      10, 0.4,
+      15, 0.6,
+      18, 0.85,
+      20, 1.1
+    ];
+    const gridLineOpacity = [
+      'interpolate', ['linear'], ['zoom'],
+      1, 0.22 * opacityMultiplier,
+      10, 0.32 * opacityMultiplier,
+      15, 0.45 * opacityMultiplier,
+      18, 0.55 * opacityMultiplier,
+      20, 0.7 * opacityMultiplier
+    ];
+
+    const makeDisplayCell = (result?: AGIDResult) => {
+      if (!result) return null;
+      const bounds = getMercatorCellBounds(result.lon, result.lat, displayStep);
+      return {
+        type: 'Feature',
+        geometry: {
+          type: 'Polygon',
+          coordinates: [[
+            [bounds.minLon, bounds.minLat],
+            [bounds.maxLon, bounds.minLat],
+            [bounds.maxLon, bounds.maxLat],
+            [bounds.minLon, bounds.maxLat],
+            [bounds.minLon, bounds.minLat]
+          ]]
+        },
+        properties: {}
+      };
+    };
+
+    const sameCell = !!(activeResult && selectedResult && activeResult.id === selectedResult.id);
 
     // 1) Update Active Cell
-    const activeData: any = (shouldShowHighlight && activeResult?.polygon) ? {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [activeResult.polygon]
-      },
-      properties: {}
-    } : { type: 'FeatureCollection', features: [] };
+    const activeData: any = shouldShowHighlight && activeResult && !sameCell
+      ? (makeDisplayCell(activeResult) || { type: 'FeatureCollection', features: [] })
+      : { type: 'FeatureCollection', features: [] };
 
-    // Active Highlight (Red for Land, White/Cyan for Sea)
-    ensureSourceAndLayer(activeSourceId, 'fill', activeData, {
-      'fill-color': isSeaGrid ? '#ffffff' : '#ef4444', 
-      'fill-opacity': isSeaGrid ? 0.35 : 0.4,
-      'fill-outline-color': isSeaGrid ? '#cbd5e1' : '#dc2626'
+    // Active Highlight (outline only)
+    ensureSourceAndLayer(activeSourceId, 'line', activeData, {
+      'line-color': shouldShowHighlight && selectedResult ? '#cbd5e1' : (isSeaGrid ? '#cbd5e1' : '#dc2626'),
+      'line-width': 2,
+      'line-opacity': 0.95
     });
 
     // 2) Update Selected Cell
-    const selectedData: any = (shouldShowHighlight && selectedResult?.polygon) ? {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [selectedResult.polygon]
-      },
-      properties: {}
-    } : { type: 'FeatureCollection', features: [] };
+    const selectedData: any = shouldShowHighlight && selectedResult
+      ? (makeDisplayCell(selectedResult) || { type: 'FeatureCollection', features: [] })
+      : { type: 'FeatureCollection', features: [] };
 
-    // Selection Fill
-    ensureSourceAndLayer(selectedSourceId, 'fill', selectedData, {
-      'fill-color': '#ef4444',
-      'fill-opacity': 0.45,
+    // Selection outline only
+    ensureSourceAndLayer(selectedSourceId, 'line', selectedData, {
+      'line-color': '#ef4444',
+      'line-width': 3,
+      'line-opacity': 0.95
     });
 
     // Selection Outline
-    const selectedOutlineData: any = (shouldShowHighlight && selectedResult?.polygon) ? {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [selectedResult.polygon]
-      },
-      properties: {}
-    } : { type: 'FeatureCollection', features: [] };
+    const selectedOutlineData: any = shouldShowHighlight ? (makeDisplayCell(selectedResult) || { type: 'FeatureCollection', features: [] }) : { type: 'FeatureCollection', features: [] };
 
     ensureSourceAndLayer(selectedSourceId + '-outline', 'line', {
       type: 'Feature',
       geometry: {
         type: 'LineString',
-        coordinates: selectedResult?.polygon || []
+        coordinates: selectedOutlineData?.geometry?.coordinates?.[0] || []
       },
       properties: {}
     }, {
-      'line-color': '#dc2626',
-      'line-width': 3,
+      'line-color': '#ffffff',
+      'line-width': 2,
       'line-opacity': 0.9
     });
 
@@ -891,88 +911,37 @@ export default function App() {
 
     if (!shouldShow) {
       ensureSourceAndLayer(sourceId, 'line', { type: 'FeatureCollection', features: [] }, {});
-      ensureSourceAndLayer('grid-cells', 'fill', { type: 'FeatureCollection', features: [] }, {});
-      ensureSourceAndLayer('grid-cells-focus', 'fill', { type: 'FeatureCollection', features: [] }, {});
       return;
     }
 
     if (!refreshGrid) return;
-
-    const opacityMultiplier = gridOpacityLevel / 3; 
-    const gridColor = isSatellite || isDark ? '#94a3b8' : '#475569';
-    
-    const dynamicGridOpacity = [
-      'interpolate', ['linear'], ['zoom'],
-      1, 0.3 * opacityMultiplier, 
-      8, 0.4 * opacityMultiplier,
-      14, 0.5 * opacityMultiplier,
-      18, 0.7 * opacityMultiplier,
-      20, 0.8 * opacityMultiplier
-    ];
-
-    const dynamicGridWidth = [
-      'interpolate', ['linear'], ['zoom'],
-      1, 0.2,
-      10, 0.4,
-      15, 0.6,
-      18, 0.8,
-      20, 1.2
-    ];
 
     if (gridWorker.current) {
       setIsGridRegenerating(true);
       const isLargeGrid = effectiveGridSize >= 1000;
       
       gridWorker.current.onmessage = (e) => {
-        const { gridLines, gridCells } = e.data;
-        if (!gridLines || gridLines.length === 0) {
+        const { gridCells } = e.data;
+        if (!gridCells || gridCells.length === 0) {
           setIsGridRegenerating(false);
           return;
         }
 
-        ensureSourceAndLayer(sourceId, 'line', {
+        const cellData = {
           type: 'FeatureCollection',
-          features: [{
-            type: 'Feature',
-            geometry: { type: 'MultiLineString', coordinates: gridLines },
-            properties: {}
-          }]
-        }, {
-          'line-color': gridColor,
-          'line-width': dynamicGridWidth,
-          'line-opacity': dynamicGridOpacity
+          features: gridCells
+        };
+
+        ensureSourceAndLayer(sourceId, 'line', cellData, {
+          'line-color': '#6b7280',
+          'line-width': gridLineWidth,
+          'line-opacity': gridLineOpacity
         });
-
-        const cellsData = { type: 'FeatureCollection', features: gridCells };
-
-        ensureSourceAndLayer('grid-cells', 'fill', cellsData, {
-          'fill-color': isSatellite || isDark ? '#94a3b8' : '#475569', 
-          'fill-opacity': [
-            'interpolate', ['linear'], ['zoom'],
-            1, 0.15 * opacityMultiplier,
-            10, 0.25 * opacityMultiplier,
-            14, 0.35 * opacityMultiplier,
-            17, 0.55 * opacityMultiplier,
-            20, 0.75 * opacityMultiplier
-          ]
-        }, {}, ['!=', ['get', 'isFocus'], true], activeSourceId + '-layer');
-
-        ensureSourceAndLayer('grid-cells-focus', 'fill', cellsData, {
-          'fill-color': isSatellite || isDark ? '#94a3b8' : '#475569',
-          'fill-opacity': 0.4 * opacityMultiplier
-        }, {}, ['==', ['get', 'isFocus'], true], activeSourceId + '-layer');
         
         setIsGridRegenerating(false);
       };
 
-      let bounds = map.current.getBounds().toArray();
-      if (mapPitch > 30) {
-        const sw = bounds[0];
-        const ne = bounds[1];
-        const lngPad = (ne[0] - sw[0]) * 0.5; 
-        const latPad = (ne[1] - sw[1]) * 1.5; 
-        bounds = [[sw[0] - lngPad, sw[1] - latPad * 0.2], [ne[0] + lngPad, ne[1] + latPad]];
-      }
+      const bounds = map.current.getBounds().toArray();
 
       gridWorker.current.postMessage({
         lat, lon: lng, zoom, isLargeGrid,
@@ -987,11 +956,12 @@ export default function App() {
     const sourceId = 'nautical-regions';
     const labelLayerId = 'nautical-regions-labels';
 
+    ['nautical-regions-layer', 'nautical-regions-layer-land-mask', 'nautical-regions-layer-outline', labelLayerId].forEach(l => {
+      if (map.current?.getLayer(l)) map.current.removeLayer(l);
+    });
+    if (map.current?.getSource(sourceId)) map.current.removeSource(sourceId);
+
     if (!isNauticalMode && !isSeaTypeMode) {
-      ['nautical-regions-layer', 'nautical-regions-layer-land-mask', 'nautical-regions-layer-outline', labelLayerId].forEach(l => {
-        if (map.current?.getLayer(l)) map.current.removeLayer(l);
-      });
-      if (map.current?.getSource(sourceId)) map.current.removeSource(sourceId);
     } else {
       // Find a layer to insert before
       const layers = map.current.getStyle().layers;
@@ -1054,16 +1024,11 @@ export default function App() {
         })
       ];
 
-      ensureSourceAndLayer(sourceId, 'fill', { type: 'FeatureCollection', features }, {
-        'fill-color': ['get', 'color'],
-        'fill-opacity': isSeaTypeMode ? 0.3 : 0.1,
-        'fill-outline-color': ['get', 'color']
-      }, {}, ['==', ['get', 'isSea'], true], beforeId);
-
-      ensureSourceAndLayer(sourceId + '-land-mask', 'fill', { type: 'FeatureCollection', features }, {
-        'fill-color': mapStyle === 'satellite' ? 'transparent' : '#f8f9fa',
-        'fill-opacity': mapStyle === 'satellite' ? 0 : 1
-      }, {}, ['==', ['get', 'isLand'], true], beforeId);
+      ensureSourceAndLayer(sourceId, 'line', { type: 'FeatureCollection', features }, {
+        'line-color': ['coalesce', ['get', 'color'], '#9ca3af'],
+        'line-width': 1.5,
+        'line-opacity': 0.7
+      }, {}, undefined, beforeId);
 
       ensureSourceAndLayer(sourceId + '-outline', 'line', { type: 'FeatureCollection', features }, {
         'line-color': ['get', 'color'],
@@ -1534,7 +1499,6 @@ export default function App() {
                 // Periodically retry with high precision for the LOCKED spot if address is still vague
                 // This satisfies "Attempt to get accurate address in the meantime"
                 if (!clickedAddress || clickedAddress.includes("Unnamed") || clickedAddress.includes("Unknown") || clickedAddress.includes("Loading")) {
-                  const { lat, lon } = decodeAGID(clickedAgid.id);
                   // Use a slightly offset lat/lng from the current actual GPS if we want the "current" address,
                   // but "locked ID" suggests we want the address of the grid cell's center or the user's specific spot at lock time.
                   // Let's use the current user position to get the best address of the current exact spot,
@@ -2098,10 +2062,14 @@ export default function App() {
 
   useEffect(() => {
     if (clickedAgid) {
-      const { lat, lon } = decodeAGID(clickedAgid.id);
+      const decoded = decodeAGID(clickedAgid.id);
+      if (!decoded) return;
+      const { lat, lon } = decoded;
       
       const timer = setTimeout(() => {
-        const { lat, lon } = decodeAGID(clickedAgid.id);
+        const decodedAgain = decodeAGID(clickedAgid.id);
+        if (!decodedAgain) return;
+        const { lat, lon } = decodedAgain;
         reverseGeocode(lat, lon, clickedAgid.prefix, clickedAgid.isSea, true);
         setClickedAddressTab(prev => prev !== defaultAddrTab ? defaultAddrTab : prev);
       }, 500);
@@ -2529,8 +2497,9 @@ export default function App() {
       style: mapStyle === 'satellite' ? SATELLITE_STYLE : mapStyle,
       center: [lng, lat],
       zoom: zoom,
-      pitch: mapPitch,
-      bearing: mapBearing,
+      pitch: 0,
+      bearing: 0,
+      maxPitch: 0,
       attributionControl: true,
       projection: { type: projection },
       maxParallelImageRequests: 16, 
@@ -2658,14 +2627,14 @@ export default function App() {
       
       const newLat = center.lat;
       const newZ = Number(newZoom.toFixed(2));
-      const newB = Math.round(newBearing);
-      const newP = Math.round(newPitch);
       
       setLng(prev => Math.abs(prev - newLng) > COORD_EPSILON ? newLng : prev);
       setLat(prev => Math.abs(prev - newLat) > COORD_EPSILON ? newLat : prev);
       setZoom(prev => Math.abs(prev - newZ) > 0.01 ? newZ : prev);
-      setMapBearing(prev => Math.abs(prev - newB) > 0.1 ? newB : prev);
-      setMapPitch(prev => Math.abs(prev - newP) > 0.1 ? newP : prev);
+      if (newBearing !== 0) map.current?.setBearing(0);
+      if (newPitch !== 0) map.current?.setPitch(0);
+      setMapBearing(0);
+      setMapPitch(0);
 
       const result = encodeAGID(newLat, newLng);
       if (!isManualSelection) {
@@ -3751,6 +3720,32 @@ export default function App() {
       if (map.current?.getSource(id)) map.current.removeSource(id);
     };
 
+    const ensureOutlineLayer = (id: string, geojson: any, color: string, width: number, opacity: number) => {
+      const existingLayer: any = map.current?.getLayer(id);
+      if (existingLayer && existingLayer.type !== 'line') {
+        map.current?.removeLayer(id);
+      }
+
+      if (map.current?.getSource(id)) {
+        (map.current.getSource(id) as maplibregl.GeoJSONSource).setData(geojson);
+      } else {
+        map.current?.addSource(id, { type: 'geojson', data: geojson });
+      }
+
+      if (!map.current?.getLayer(id)) {
+        map.current?.addLayer({
+          id,
+          type: 'line',
+          source: id,
+          paint: {
+            'line-color': color,
+            'line-width': width,
+            'line-opacity': opacity
+          }
+        });
+      }
+    };
+
     if (!showFloodRiskLayer) clearLayer(floodSourceId);
     if (!showLandslideRiskLayer) clearLayer(landslideSourceId);
 
@@ -3851,40 +3846,12 @@ export default function App() {
 
         if (showFloodRiskLayer) {
           const geojson: any = { type: 'FeatureCollection', features: waterFeatures };
-          if (map.current.getSource(floodSourceId)) {
-            (map.current.getSource(floodSourceId) as maplibregl.GeoJSONSource).setData(geojson);
-          } else {
-            map.current.addSource(floodSourceId, { type: 'geojson', data: geojson });
-            map.current.addLayer({
-              id: floodSourceId,
-              type: 'fill',
-              source: floodSourceId,
-              paint: {
-                'fill-color': '#3b82f6',
-                'fill-opacity': 0.4,
-                'fill-outline-color': '#1d4ed8'
-              }
-            });
-          }
+          ensureOutlineLayer(floodSourceId, geojson, '#3b82f6', 1.5, 0.75);
         }
 
         if (showLandslideRiskLayer) {
           const geojson: any = { type: 'FeatureCollection', features: forestFeatures };
-          if (map.current.getSource(landslideSourceId)) {
-            (map.current.getSource(landslideSourceId) as maplibregl.GeoJSONSource).setData(geojson);
-          } else {
-            map.current.addSource(landslideSourceId, { type: 'geojson', data: geojson });
-            map.current.addLayer({
-              id: landslideSourceId,
-              type: 'fill',
-              source: landslideSourceId,
-              paint: {
-                'fill-color': '#f59e0b',
-                'fill-opacity': 0.3,
-                'fill-outline-color': '#d97706'
-              }
-            });
-          }
+          ensureOutlineLayer(landslideSourceId, geojson, '#f59e0b', 1.5, 0.75);
         }
       } catch (err: any) {
         if (err.name === 'AbortError') return; // Silence aborts

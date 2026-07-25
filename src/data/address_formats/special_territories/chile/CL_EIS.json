@@ -1,0 +1,37 @@
+{
+  "countryCode": "CL",
+  "name": "Easter Island",
+  "native": {
+    "name": "Rapa Nui / Isla de Pascua",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{subdistrict}}\n{{postcode}} {{city}}\n{{state}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Avenida Atamu Tekena", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número/Depto", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "subdistrict", "label": "Comuna", "placeholder": "Rapa Nui", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "2770000", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "Isla de Pascua", "required": true, "type": "text" },
+      { "key": "state", "label": "Región", "placeholder": "Región de Valparaíso", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{subdistrict}}\n{{postcode}} {{city}}\n{{state}}\nCHILE",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Co./Org.", "placeholder": "", "required": false, "type": "text" },
+      { "key": "street", "label": "Street (Latin)", "placeholder": "Atamu Tekena Ave", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "No./Unit", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "subdistrict", "label": "District", "placeholder": "Rapa Nui", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "2770000", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Easter Island", "required": true, "type": "text" },
+      { "key": "state", "label": "Region", "placeholder": "Valparaíso Region", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNNNN",
+    "regex": "^2770000$",
+    "source": "CorreosChile"
+  }
+}

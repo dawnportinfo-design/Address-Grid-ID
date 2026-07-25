@@ -46,6 +46,8 @@ import { ExportService, ExportData } from '../services/ExportService';
 import { saveAs } from 'file-saver';
 import maplibregl from 'maplibre-gl';
 import { LAND_REGIONS, SEA_REGIONS, COUNTRY_REGIONS } from '../lib/regions';
+import { getEuropeLanguageFamily, getEuropeLanguageFamilyFlag, getEuropeLanguageFamilyLabel } from '../lib/europeLanguageGroups';
+import { getAsiaLanguageFamily, getAsiaLanguageFamilyFlag, getAsiaLanguageFamilyLabel } from '../lib/asiaLanguageGroups';
 
 interface SettingsPanelProps {
   show: boolean;
@@ -180,47 +182,53 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const groupedLanguages = React.useMemo(() => {
     const groups: Record<string, typeof LANGUAGES> = {};
     const indianLangs = ['hi', 'bn', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'pa', 'ur'];
-    const saLangs = ['af', 'zu', 'xh'];
-    const deLangs = ['de', 'de-AT', 'de-CH', 'nds', 'hsb', 'dsb'];
-    const esRegionalLangs = ['ca', 'gl', 'eu'];
-    const itRegionalLangs = ['sc', 'fur', 'co'];
-    const euRegionalLangs = ['cy', 'gd', 'lb', 'rm', 'br', 'oc', 'wa', 'fy', 'ga', 'is', 'vls', 'li'];
+    const africanLangs = ['af', 'zu', 'xh', 'sw', 'am', 'crs', 'mfe'];
+    const eastAsia = ['ja', 'ko', 'zh-Hans', 'zh-Hant', 'yue', 'zh-Hant-TW', 'zh-Hant-HK', 'zh-Hant-MO'];
+    const southeastAsia = ['vi', 'th', 'id', 'ms', 'tl', 'km', 'lo', 'my', 'en-SG', 'en-PH', 'en-MY'];
+    const southAsia = ['hi', 'bn', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'pa', 'ur', 'ne', 'si', 'dz', 'dv', 'en-IN', 'en-PK', 'en-BD', 'en-LK', 'en-NP', 'en-MV'];
+    const centralAsia = ['kk', 'uz', 'ky', 'tg', 'tk'];
+    const westAsia = ['ar', 'ar-SA', 'ar-EG', 'ar-AE', 'ar-KW', 'ar-QA', 'ar-OM', 'ar-BH', 'ar-JO', 'ar-LB', 'ar-SY', 'ar-IQ', 'ar-YE', 'ar-MA', 'ar-DZ', 'ar-TN', 'ar-LY', 'ar-SD', 'ar-PS', 'ar-MR', 'ar-SO', 'ar-DJ', 'ar-KM', 'fa', 'he', 'ps', 'ku', 'az', 'tr'];
     const hispanosphereEs = ['es', 'es-MX', 'es-AR', 'es-CO', 'es-PE', 'es-VE', 'es-CL', 'es-EC', 'es-BO', 'es-PY', 'es-UY', 'es-PA', 'es-CR', 'es-NI', 'es-HN', 'es-SV', 'es-GT', 'es-DO', 'es-PR', 'es-CU', 'es-GQ'];
     const lusospherePt = ['pt', 'pt-PT', 'pt-BR', 'pt-AO', 'pt-MZ', 'pt-CV', 'pt-GW', 'pt-ST'];
-    const arabicGlobal = [
-      'ar', 'ar-SA', 'ar-EG', 'ar-AE', 'ar-KW', 'ar-QA', 'ar-OM', 'ar-BH', 'ar-JO', 'ar-LB', 'ar-SY', 'ar-IQ', 'ar-YE', 
-      'ar-MA', 'ar-DZ', 'ar-TN', 'ar-LY', 'ar-SD', 'ar-PS', 'ar-MR', 'ar-SO', 'ar-DJ', 'ar-KM'
-    ];
-    const menaOther = ['fa', 'he', 'ps', 'ku', 'az'];
 
     LANGUAGES.forEach(lang => {
       let groupKey;
       if (indianLangs.includes(lang.code)) {
         groupKey = 'in-regional';
-      } else if (saLangs.includes(lang.code)) {
-        groupKey = 'za-regional';
-      } else if (deLangs.includes(lang.code)) {
-        groupKey = 'de-regional';
-      } else if (euRegionalLangs.includes(lang.code)) {
-        groupKey = 'eu-regional';
-      } else if (esRegionalLangs.includes(lang.code)) {
-        groupKey = 'es-regional';
-      } else if (itRegionalLangs.includes(lang.code)) {
-        groupKey = 'it-regional';
-      } else if (hispanosphereEs.includes(lang.code)) {
+      } else if (africanLangs.includes(lang.code)) {
+        groupKey = 'af-regional';
+      } else if (eastAsia.includes(lang.code) || getAsiaLanguageFamily(lang.code) === 'east') {
+        groupKey = 'asia-east';
+      } else if (southeastAsia.includes(lang.code) || getAsiaLanguageFamily(lang.code) === 'southeast') {
+        groupKey = 'asia-southeast';
+      } else if (southAsia.includes(lang.code) || getAsiaLanguageFamily(lang.code) === 'south') {
+        groupKey = 'asia-south';
+      } else if (centralAsia.includes(lang.code) || getAsiaLanguageFamily(lang.code) === 'central') {
+        groupKey = 'asia-central';
+      } else if (westAsia.includes(lang.code) || getAsiaLanguageFamily(lang.code) === 'west') {
+        groupKey = 'asia-west';
+      } else {
+        const euroFamily = getEuropeLanguageFamily(lang.code);
+        if (euroFamily) {
+          groupKey = `eu-${euroFamily}`;
+        } else if (lang.code === 'ca' || lang.code === 'gl') {
+          groupKey = 'eu-romance';
+        } else if (lang.code === 'eu') {
+          groupKey = 'eu-other';
+        } else if (lang.code === 'ka' || lang.code === 'hy' || lang.code === 'sq' || lang.code === 'tr' || lang.code === 'mt' || lang.code === 'hu' || lang.code === 'ro') {
+          groupKey = 'eu-other';
+        } else {
+          groupKey = lang.code.split('-')[0];
+        }
+      }
+      if ((!groupKey || groupKey === 'eu-other') && hispanosphereEs.includes(lang.code)) {
         groupKey = 'hispanosphere';
-      } else if (lusospherePt.includes(lang.code)) {
+      } else if ((!groupKey || groupKey === 'eu-other') && lusospherePt.includes(lang.code)) {
         groupKey = 'lusosphere';
-      } else if (arabicGlobal.includes(lang.code)) {
-        groupKey = 'arabic-global';
-      } else if (menaOther.includes(lang.code)) {
-        groupKey = 'mena-other';
       } else if (lang.code.startsWith('zh-Hans')) {
         groupKey = 'zh-Hans';
       } else if (lang.code.startsWith('zh-Hant')) {
         groupKey = 'zh-Hant';
-      } else {
-        groupKey = lang.code.split('-')[0];
       }
 
       if (!groups[groupKey]) groups[groupKey] = [];
@@ -237,21 +245,17 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       if (base === 'in-regional') {
         name = t('tab_indian_langs' as any) || 'Indian Languages';
         flag = '🇮🇳';
-      } else if (base === 'za-regional') {
-        name = t('tab_sa_langs' as any) || 'South African Languages';
-        flag = '🇿🇦';
-      } else if (base === 'de-regional') {
-        name = t('tab_de_langs' as any) || 'Germanic Languages';
-        flag = '🇩🇪';
-      } else if (base === 'eu-regional') {
-        name = t('tab_regional_langs' as any) || 'Regional Languages';
-        flag = '🇪🇺';
-      } else if (base === 'es-regional') {
-        name = t('tab_es_regional' as any) || 'Spain Regions';
-        flag = '🇪🇸';
-      } else if (base === 'it-regional') {
-        name = t('tab_it_regional' as any) || 'Italy Regions';
-        flag = '🇮🇹';
+      } else if (base === 'af-regional') {
+        name = t('tab_sa_langs' as any) || 'African Languages';
+        flag = '🌍';
+      } else if (base.startsWith('asia-')) {
+        const family = base.slice(5) as any;
+        name = getAsiaLanguageFamilyLabel(family, appLanguage);
+        flag = getAsiaLanguageFamilyFlag(family);
+      } else if (base.startsWith('eu-')) {
+        const family = base.slice(3) as any;
+        name = getEuropeLanguageFamilyLabel(family, appLanguage);
+        flag = getEuropeLanguageFamilyFlag(family);
       } else if (base === 'hispanosphere') {
         name = t('tab_latam_es' as any) || 'Español (Global)';
         flag = '🌎';

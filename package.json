@@ -9,13 +9,13 @@
     "dev": "tsx server.ts",
     "build": "vite build",
     "build:rust-wasm": "rustup target add wasm32-unknown-unknown && cargo build --manifest-path native/agid-core/Cargo.toml --target wasm32-unknown-unknown --release && mkdir -p public/wasm && cp native/agid-core/target/wasm32-unknown-unknown/release/agid_core.wasm public/wasm/agid_core.wasm",
-    "start": "node dist/server.cjs",
+    "start": "tsx server.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@google/genai": "^2.3.0",
+    "@sindresorhus/transliterate": "^2.3.1",
     "@tailwindcss/vite": "^4.1.14",
     "@turf/turf": "^7.3.4",
     "@types/adm-zip": "^0.5.8",
@@ -48,6 +48,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.5.0",
+    "transliteration": "^2.6.1",
     "vite": "^6.2.0",
     "vite-plugin-pwa": "^1.2.0"
   },

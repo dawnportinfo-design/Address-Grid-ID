@@ -1,0 +1,41 @@
+{
+  "countryCode": "UY",
+  "name": "Uruguay",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{neighborhood}}\n{{city}}\n{{state}}\n{{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Nombre", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Av. 18 de Julio", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "1234", "required": true, "type": "text" },
+      { "key": "neighborhood", "label": "Barrio", "placeholder": "Centro", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "Montevideo", "required": true, "type": "text" },
+      { "key": "state", "label": "Departamento", "placeholder": "Montevideo", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "11000", "required": true, "type": "text" },
+      { "key": "country", "label": "País", "placeholder": "Uruguay", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{neighborhood}}\n{{city}}\n{{state}}\n{{postcode}}\nURUGUAY",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "18 de Julio Ave", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "1234", "required": true, "type": "text" },
+      { "key": "neighborhood", "label": "Neighborhood", "placeholder": "Centro", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Montevideo", "required": true, "type": "text" },
+      { "key": "state", "label": "Department", "placeholder": "Montevideo", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "11000", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=uy",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

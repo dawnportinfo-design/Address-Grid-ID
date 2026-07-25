@@ -1,0 +1,36 @@
+{
+  "countryCode": "AS",
+  "name": "American Samoa",
+  "native": {
+    "name": "English",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{aptSuite}}\n{{village}}\n{{city}}\nAS\n{{postcode}}\nAmerican Samoa",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Name", "placeholder": "John Doe", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Pago Pago Rd", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "House No.", "placeholder": "10", "required": true, "type": "text" },
+      { "key": "aptSuite", "label": "Apt / Suite", "placeholder": "Suite 1", "required": false, "type": "text" },
+      { "key": "village", "label": "Village", "placeholder": "Fagatogo", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Pago Pago", "required": true, "type": "text" },
+      { "key": "postcode", "label": "ZIP Code", "placeholder": "96799", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{aptSuite}}\n{{village}}\n{{city}}\nAS\n{{postcode}}\nAmerican Samoa",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Name", "placeholder": "John Doe", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Pago Pago Rd", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "House No.", "placeholder": "10", "required": true, "type": "text" },
+      { "key": "aptSuite", "label": "Apt / Suite", "placeholder": "Suite 1", "required": false, "type": "text" },
+      { "key": "village", "label": "Village", "placeholder": "Fagatogo", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Pago Pago", "required": true, "type": "text" },
+      { "key": "postcode", "label": "ZIP Code", "placeholder": "96799", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "96799",
+    "regex": "^96799$"
+  }
+}

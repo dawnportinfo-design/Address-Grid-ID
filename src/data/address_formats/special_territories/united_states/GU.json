@@ -1,0 +1,38 @@
+{
+  "countryCode": "GU",
+  "name": "Guam",
+  "native": {
+    "name": "Guåhan",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{aptSuite}}\n{{suburb}}\n{{city}}\nGuam\n{{postcode}}\nUnited States",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "recipient", "label": "Name", "placeholder": "Juan", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Marine Corps Dr", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "House No.", "placeholder": "10", "required": true, "type": "text" },
+      { "key": "aptSuite", "label": "Apt / Suite", "placeholder": "Apt 2", "required": false, "type": "text" },
+      { "key": "suburb", "label": "Suburb / Village", "placeholder": "Tamuning", "required": false, "type": "text" },
+      { "key": "city", "label": "Village / Municipality", "placeholder": "Hagåtña", "required": true, "type": "text" },
+      { "key": "postcode", "label": "ZIP Code", "placeholder": "96910", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{aptSuite}}\n{{suburb}}\n{{city}}\nGUAM\n{{postcode}}\nUnited States",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Name", "placeholder": "Juan", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Marine Corps Dr", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "House No.", "placeholder": "10", "required": true, "type": "text" },
+      { "key": "aptSuite", "label": "Apt / Suite", "placeholder": "Apt 2", "required": false, "type": "text" },
+      { "key": "suburb", "label": "Suburb / Village", "placeholder": "Tamuning", "required": false, "type": "text" },
+      { "key": "city", "label": "Village / Municipality", "placeholder": "Hagåtña", "required": true, "type": "text" },
+      { "key": "postcode", "label": "ZIP Code", "placeholder": "96910", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN or NNNNN-NNNN",
+    "regex": "^9691[0-9](-\\d{4})?$",
+    "api": null,
+    "source": "USPS"
+  }
+}

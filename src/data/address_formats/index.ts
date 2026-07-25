@@ -36,7 +36,20 @@ export interface AddressFormat {
 }
 
 // Vite handles dynamic imports with variables using glob patterns
-const formatModules = (import.meta as any).glob('./*.json');
+const formatModules = (import.meta as any).glob('./**/*.json');
+const addressFormatCache = new Map<string, Promise<AddressFormat | null>>();
+
+function findAddressFormatPath(code: string): string | null {
+  const exactSuffix = `/${code}.json`;
+  const baseCode = code.split(/[-_]/)[0];
+  const baseSuffix = `/${baseCode}.json`;
+
+  const exactMatch = Object.keys(formatModules).find((path) => path.endsWith(exactSuffix));
+  if (exactMatch) return exactMatch;
+
+  const baseMatch = Object.keys(formatModules).find((path) => path.endsWith(baseSuffix));
+  return baseMatch || null;
+}
 
 /**
  * Dynamically loads the address format for a given country code.
@@ -44,25 +57,29 @@ const formatModules = (import.meta as any).glob('./*.json');
  */
 export async function getAddressFormat(countryCode: string): Promise<AddressFormat | null> {
   let code = countryCode.toUpperCase();
-  let path = `./${code}.json`;
-  
-  if (!(path in formatModules)) {
-    // Try base code fallback for sub-regions (e.g. DE-BY -> DE, ES_BAL -> ES)
-    const baseCode = code.split(/[-_]/)[0];
-    const basePath = `./${baseCode}.json`;
-    if (basePath in formatModules) {
-      path = basePath;
-    } else {
-      console.warn(`Address format for ${code} not found.`);
-      return null;
-    }
-  }
+  let path = findAddressFormatPath(code);
 
-  try {
-    const module = await formatModules[path]() as any;
-    return module.default as AddressFormat;
-  } catch (error) {
-    console.warn(`Address format for ${code} failed to load:`, error);
+  if (!path) {
+    console.warn(`Address format for ${code} not found.`);
     return null;
   }
+
+  const cached = addressFormatCache.get(path);
+  if (cached) {
+    return cached;
+  }
+
+  const loader = (async () => {
+    try {
+      const module = await formatModules[path]() as any;
+      return module.default as AddressFormat;
+    } catch (error) {
+      console.warn(`Address format for ${code} failed to load:`, error);
+      addressFormatCache.delete(path);
+      return null;
+    }
+  })();
+
+  addressFormatCache.set(path, loader);
+  return loader;
 }

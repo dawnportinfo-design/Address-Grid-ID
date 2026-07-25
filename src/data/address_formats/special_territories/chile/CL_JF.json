@@ -1,0 +1,37 @@
+{
+  "countryCode": "CL",
+  "name": "Juan Fernández Islands",
+  "native": {
+    "name": "Juan Fernández",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{subdistrict}}\n{{postcode}} {{city}}\n{{state}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Camino Principal", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número/Depto", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "subdistrict", "label": "Comuna", "placeholder": "Juan Fernández", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "Juan Fernández", "required": true, "type": "text" },
+      { "key": "state", "label": "Región", "placeholder": "Región de Valparaíso", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{street}} {{houseNumber}}\n{{subdistrict}}\n{{postcode}} {{city}}\n{{state}}\nCHILE",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Co./Org.", "placeholder": "", "required": false, "type": "text" },
+      { "key": "street", "label": "Street (Latin)", "placeholder": "Main Road", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "No./Unit", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "subdistrict", "label": "District", "placeholder": "Juan Fernández", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Juan Fernández Islands", "required": true, "type": "text" },
+      { "key": "state", "label": "Region", "placeholder": "Valparaíso Region", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": null,
+    "regex": null,
+    "source": "CorreosChile"
+  }
+}

@@ -46,6 +46,8 @@ import { JapaneseGeoContext } from '../services/JapaneseGeoService';
 import { translateAddressOpenSource, BIG_TO_SMALL_COUNTRIES, formatAddress, COUNTRY_LANGUAGES, LANGUAGES, normalizeAddressText } from '../lib/addressUtils';
 import { AddressRenderer, createCanonicalAddress } from '../lib/addressRendering';
 import { toSimplified, toTraditional, detectChineseScript } from '../lib/chineseAddressUtils';
+import { getEuropeLanguageFamily, getEuropeLanguageFamilyFlag, getEuropeLanguageFamilyLabel } from '../lib/europeLanguageGroups';
+import { getAsiaLanguageFamily, getAsiaLanguageFamilyFlag, getAsiaLanguageFamilyLabel } from '../lib/asiaLanguageGroups';
 import { COUNTRIES } from '../constants/countries';
 import { getAddressFormat, AddressFormat } from '../data/address_formats';
 import { PostcodeInput } from './PostcodeInput';
@@ -142,8 +144,8 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     registerAsAoid: 'AOIDとしてプライベート登録する',
     phoneRequired: '電話番号は必須です',
     nameRequired: '氏名は必須です',
-    tab_indian_langs: 'インド諸語',
-    tab_sa_langs: '南アフリカ諸語',
+    tab_indian_langs: '南アジア言語',
+    tab_sa_langs: 'アフリカ諸語',
     tab_de_langs: 'ゲルマン諸語',
     tab_regional_langs: '地域言語',
     tab_es_regional: 'スペイン諸州',
@@ -155,8 +157,8 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     tab_anglosphere: '英語圏 (グローバル)',
     tab_greater_china: '大中華圏',
     tab_francophonie: 'フランス語圏',
-    tab_zh_hans: '簡体字中国語',
-    tab_zh_hant: '繁体字中国語'
+    tab_zh_hans: '簡体中文',
+    tab_zh_hant: '繁體中文'
   },
   de: {
     quickLookup: 'Schnellsuche',
@@ -208,8 +210,8 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     registerAsAoid: 'Privat als AOID registrieren',
     phoneRequired: 'Telefonnummer ist erforderlich',
     nameRequired: 'Name ist erforderlich',
-    tab_indian_langs: 'Indische Sprachen',
-    tab_sa_langs: 'Südafrikanische Sprachen',
+    tab_indian_langs: 'Südasiatische Sprachen',
+    tab_sa_langs: 'Afrikanische Sprachen',
     tab_de_langs: 'Germanische Sprachen',
     tab_regional_langs: 'Regionalsprachen',
     tab_es_regional: 'Regionen Spanien',
@@ -285,8 +287,8 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     registerAsAoid: 'Register as Private AOID',
     phoneRequired: 'Phone is required for AOID',
     nameRequired: 'Name is required for AOID',
-    tab_indian_langs: 'Indian Languages',
-    tab_sa_langs: 'South African Languages',
+    tab_indian_langs: 'South Asian Languages',
+    tab_sa_langs: 'African Languages',
     tab_de_langs: 'Germanic Languages',
     tab_regional_langs: 'Regional Languages',
     tab_es_regional: 'Spain Regions',
@@ -363,7 +365,7 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     phoneRequired: 'AOID 需要電話號碼',
     nameRequired: 'AOID 需要姓名',
     tab_indian_langs: '印度語言',
-    tab_sa_langs: '南非語言',
+    tab_sa_langs: '非洲語言',
     tab_de_langs: '日耳曼語言',
     tab_regional_langs: '地區語言',
     tab_es_regional: '西班牙地區',
@@ -440,7 +442,7 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     phoneRequired: 'AOID 需要电话号码',
     nameRequired: 'AOID 需要姓名',
     tab_indian_langs: '印度语言',
-    tab_sa_langs: '南非语言',
+    tab_sa_langs: '非洲语言',
     tab_de_langs: '日耳曼语言',
     tab_regional_langs: '地区语言',
     tab_es_regional: '西班牙地区',
@@ -517,7 +519,7 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     phoneRequired: 'El teléfono es obligatorio para AOID',
     nameRequired: 'El nombre es obligatorio para AOID',
     tab_indian_langs: 'Lenguas Indias',
-    tab_sa_langs: 'Lenguas Sudafricanas',
+    tab_sa_langs: 'Lenguas africanas',
     tab_de_langs: 'Lenguas Germánicas',
     tab_regional_langs: 'Lenguas Regionales',
     tab_es_regional: 'Regiones de España',
@@ -594,7 +596,7 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     phoneRequired: 'Telefone é obrigatório para AOID',
     nameRequired: 'Nome é obrigatório para AOID',
     tab_indian_langs: 'Línguas Indianas',
-    tab_sa_langs: 'Línguas Sul-Africanas',
+    tab_sa_langs: 'Línguas Africanas',
     tab_de_langs: 'Línguas Germânicas',
     tab_regional_langs: 'Línguas Regionais',
     tab_es_regional: 'Regiões da Espanha',
@@ -671,7 +673,7 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     phoneRequired: 'Téléphone requis pour AOID',
     nameRequired: 'Nom requis pour AOID',
     tab_indian_langs: 'Langues Indiennes',
-    tab_sa_langs: 'Langues Sud-Africaines',
+    tab_sa_langs: 'Langues africaines',
     tab_de_langs: 'Langues Germaniques',
     tab_regional_langs: 'Langues Régionales',
     tab_es_regional: 'Régions d\'Espagne',
@@ -748,7 +750,7 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     phoneRequired: 'الهاتف مطلوب لـ AOID',
     nameRequired: 'الاسم مطلوب لـ AOID',
     tab_indian_langs: 'اللغات الهندية',
-    tab_sa_langs: 'لغات جنوب أفريقيا',
+    tab_sa_langs: 'لغات أفريقيا',
     tab_de_langs: 'اللغات الجرمانية',
     tab_regional_langs: 'اللغات الإقليمية',
     tab_es_regional: 'مناطق إسبانيا',
@@ -799,11 +801,11 @@ const LANGUAGE_NAMES: Record<string, string> = {
   'en-LC': 'English (LC)',
   'en-VC': 'English (VC)',
   'ja': '日本語',
-  'zh-Hans': '简体中文 (中国)',
+  'zh-Hans': '简体中文',
   'zh-Hant': '繁體中文',
-  'zh-Hant-TW': '繁體中文 (台灣)',
-  'zh-Hant-HK': '繁體中文 (香港)',
-  'zh-Hant-MO': '繁體中文 (澳門)',
+  'zh-Hant-TW': '繁體中文（台灣）',
+  'zh-Hant-HK': '繁體中文（香港）',
+  'zh-Hant-MO': '繁體中文（澳門）',
   'ko': '한국어',
   'fr': 'Français',
   'de': 'Deutsch',
@@ -840,23 +842,23 @@ const LANGUAGE_NAMES: Record<string, string> = {
   'vi': 'Tiếng Việt',
   'th': 'ไทย',
   'ar': 'العربية',
-  'hi': 'हिन्दी (Hindi)',
-  'bn': 'বাংলা (Bengali)',
-  'ta': 'தமிழ் (Tamil)',
-  'te': 'తెలుగు (Telugu)',
-  'mr': 'मराठी (Marathi)',
-  'gu': 'ગુજરાતી (Gujarati)',
-  'kn': 'ಕನ್ನಡ (Kannada)',
-  'ml': 'മലയാളം (Malayalam)',
-  'pa': 'ਪੰਜਾਬੀ (Punjabi)',
-  'ur': 'اردو (Urdu)',
+  'hi': 'हिन्दी',
+  'bn': 'বাংলা',
+  'ta': 'தமிழ்',
+  'te': 'తెలుగు',
+  'mr': 'मराठी',
+  'gu': 'ગુજરાતી',
+  'kn': 'ಕನ್ನಡ',
+  'ml': 'മലയാളം',
+  'pa': 'ਪੰਜਾਬੀ',
+  'ur': 'اردو',
   'fa': 'فارسی',
   'he': 'עברית',
   'sw': 'Kiswahili',
   'am': 'አማርኛ',
   'kk': 'Қазақ тілі',
-  'uz': 'Oʻzbek',
-  'mn': 'Монгол',
+  'uz': 'Oʻzbek tili',
+  'mn': 'Монгол хэл',
   'is': 'Íslenska',
   'cs': 'Čeština',
   'sk': 'Slovenčina',
@@ -881,11 +883,11 @@ const LANGUAGE_NAMES: Record<string, string> = {
   'fj': 'Vosa Vakaviti',
   'crs': 'Seselwa',
   'mfe': 'Morisyen',
+  'af-regional': 'African Languages',
   'in-regional': 'Indian Languages',
-  'za-regional': 'South African Languages',
   'ms': 'Bahasa Melayu',
   'id': 'Bahasa Indonesia',
-  'tl': 'Tagalog',
+  'tl': 'Filipino',
   'romaji': 'Romaji'
 };
 
@@ -1492,6 +1494,7 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
   const [consensus, setConsensus] = useState<{ confidence: number, entropy: number } | null>(null);
   const [elevationData, setElevationData] = useState<{ elevation: number, source: string } | null>(null);
   const [agidData, setAgidData] = useState<any>(null);
+  const isSouthAfrica = formData.country === 'ZA';
 
   useEffect(() => {
     if (initialAgid) {
@@ -1507,6 +1510,18 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
     };
     loadFormat();
   }, [formData.country]);
+
+  useEffect(() => {
+    if (!isSouthAfrica) return;
+
+    if (selectedBaseLang === 'af-regional') {
+      setSelectedBaseLang(null);
+    }
+
+    if (!['local', 'en', 'romaji', 'international'].includes(activeTab) && !activeTab.startsWith('en')) {
+      setActiveTab('en');
+    }
+  }, [activeTab, isSouthAfrica, selectedBaseLang]);
 
   const t = (key: string) => {
     return UI_STRINGS[appLanguage]?.[key] || UI_STRINGS['en'][key] || key;
@@ -1707,12 +1722,40 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
   const groupedLanguages = useMemo(() => {
     const groups: Record<string, typeof LANGUAGES> = {};
     const INDIAN_LANGS = ['hi', 'bn', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'pa', 'ur'];
+    const AFRICAN_LANGS = ['af', 'zu', 'xh', 'sw', 'am', 'crs', 'mfe'];
+    const EAST_ASIA = ['ja', 'ko', 'zh-Hans', 'zh-Hant', 'yue', 'zh-Hant-TW', 'zh-Hant-HK', 'zh-Hant-MO'];
+    const SOUTHEAST_ASIA = ['vi', 'th', 'id', 'ms', 'tl', 'km', 'lo', 'my', 'en-SG', 'en-PH', 'en-MY'];
+    const SOUTH_ASIA = ['hi', 'bn', 'ta', 'te', 'mr', 'gu', 'kn', 'ml', 'pa', 'ur', 'ne', 'si', 'dz', 'dv', 'en-IN', 'en-PK', 'en-BD', 'en-LK', 'en-NP', 'en-MV'];
+    const CENTRAL_ASIA = ['kk', 'uz', 'ky', 'tg', 'tk'];
+    const WEST_ASIA = ['ar', 'ar-SA', 'ar-EG', 'ar-AE', 'ar-KW', 'ar-QA', 'ar-OM', 'ar-BH', 'ar-JO', 'ar-LB', 'ar-SY', 'ar-IQ', 'ar-YE', 'ar-MA', 'ar-DZ', 'ar-TN', 'ar-LY', 'ar-SD', 'ar-PS', 'ar-MR', 'ar-SO', 'ar-DJ', 'ar-KM', 'fa', 'he', 'ps', 'ku', 'az', 'tr'];
+    const HISPANOSPHERE = ['es', 'es-MX', 'es-AR', 'es-CO', 'es-PE', 'es-VE', 'es-CL', 'es-EC', 'es-BO', 'es-PY', 'es-UY', 'es-PA', 'es-CR', 'es-NI', 'es-HN', 'es-SV', 'es-GT', 'es-DO', 'es-PR', 'es-CU', 'es-GQ'];
+    const LUSOSPHERE = ['pt', 'pt-PT', 'pt-BR', 'pt-AO', 'pt-MZ', 'pt-CV', 'pt-GW', 'pt-ST'];
     
     LANGUAGES.forEach(lang => {
       let base = lang.code.split('-')[0];
       if (lang.code.startsWith('zh-Hans')) base = 'zh-Hans';
       if (lang.code.startsWith('zh-Hant') || lang.code === 'yue') base = 'zh-Hant';
       if (INDIAN_LANGS.includes(lang.code) || INDIAN_LANGS.includes(base)) base = 'in-regional';
+      if (AFRICAN_LANGS.includes(lang.code) || AFRICAN_LANGS.includes(base)) base = 'af-regional';
+
+      const asiaFamily = getAsiaLanguageFamily(lang.code);
+      if (asiaFamily) {
+        base = `asia-${asiaFamily}`;
+      }
+
+      const euroFamily = getEuropeLanguageFamily(lang.code);
+      if (euroFamily) {
+        base = `eu-${euroFamily}`;
+      } else if ((lang.code === 'ca' || lang.code === 'gl') && !base.startsWith('eu-')) {
+        base = 'eu-romance';
+      } else if (lang.code === 'eu' && !base.startsWith('eu-')) {
+        base = 'eu-other';
+      } else if ((lang.code === 'ka' || lang.code === 'hy' || lang.code === 'sq' || lang.code === 'tr' || lang.code === 'mt' || lang.code === 'hu' || lang.code === 'ro') && !base.startsWith('eu-')) {
+        base = 'eu-other';
+      }
+
+      if ((!base.startsWith('eu-') && !base.startsWith('asia-')) && HISPANOSPHERE.includes(lang.code)) base = 'hispanosphere';
+      if ((!base.startsWith('eu-') && !base.startsWith('asia-')) && LUSOSPHERE.includes(lang.code)) base = 'lusosphere';
       
       if (!groups[base]) groups[base] = [];
       groups[base].push(lang);
@@ -1721,11 +1764,24 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
   }, []);
 
   const baseLanguages = useMemo(() => {
-    return Object.keys(groupedLanguages).map(base => {
+    return Object.keys(groupedLanguages)
+      .filter(base => !(isSouthAfrica && base === 'af-regional'))
+      .map(base => {
       const group = groupedLanguages[base];
       
       let name, flag;
-      if (base === 'in-regional') {
+      if (base === 'af-regional') {
+        name = t('tab_sa_langs');
+        flag = '🌍';
+      } else if (base.startsWith('asia-')) {
+        const family = base.slice(5) as any;
+        name = getAsiaLanguageFamilyLabel(family, appLanguage);
+        flag = getAsiaLanguageFamilyFlag(family);
+      } else if (base.startsWith('eu-')) {
+        const family = base.slice(3) as any;
+        name = getEuropeLanguageFamilyLabel(family, appLanguage);
+        flag = getEuropeLanguageFamilyFlag(family);
+      } else if (base === 'in-regional') {
         name = t('tab_indian_langs');
         flag = '🇮🇳';
       } else if (base === 'zh-Hans') {
@@ -1755,15 +1811,15 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
         flag = main.flag;
       }
       
-      return {
-        base,
-        name,
-        flag,
-        count: group.length,
-        variants: group
-      };
-    }).sort((a, b) => a.name.localeCompare(b.name));
-  }, [groupedLanguages, appLanguage]);
+        return {
+          base,
+          name,
+          flag,
+          count: group.length,
+          variants: group
+        };
+      }).sort((a, b) => a.name.localeCompare(b.name));
+  }, [groupedLanguages, appLanguage, isSouthAfrica]);
 
   return (
     <AnimatePresence>

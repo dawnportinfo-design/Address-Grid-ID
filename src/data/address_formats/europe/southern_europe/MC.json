@@ -1,0 +1,48 @@
+{
+  "countryCode": "MC",
+  "name": "Monaco",
+  "native": {
+    "name": "Monaco",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{postcode}} {{city}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Société/Organisation", "placeholder": "", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "Numéro", "placeholder": "1", "required": true, "type": "text" },
+      { "key": "street", "label": "Rue/Avenue", "placeholder": "Avenue Princesse Grace", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Code Postal", "placeholder": "98000", "required": true, "type": "text" },
+      { "key": "city", "label": "Quartier", "placeholder": "Monaco", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{postcode}} {{city}}\nMONACO",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company/Organization", "placeholder": "" },
+      { "key": "houseNumber", "label": "House/Building No.", "placeholder": "1" },
+      { "key": "street", "label": "Street Address", "placeholder": "Avenue Princesse Grace" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "98000" },
+      { "key": "city", "label": "District", "placeholder": "Monaco" }
+    ]
+  },
+  "international": {
+    "fr": {
+      "name": "Français (International)",
+      "addressFormat": "{{organization}}\n{{houseNumber}} {{street}}\n{{postcode}} {{city}}\nMONACO",
+      "ordering": "small-to-big",
+      "fields": [
+        { "key": "organization", "label": "Société/Organisation", "placeholder": "" },
+        { "key": "houseNumber", "label": "Numéro", "placeholder": "1" },
+        { "key": "street", "label": "Rue/Avenue", "placeholder": "Avenue Princesse Grace" },
+        { "key": "postcode", "label": "Code Postal", "placeholder": "98000" },
+        { "key": "city", "label": "Quartier", "placeholder": "Monaco" }
+      ]
+    }
+  },
+  "postalCode": {
+    "format": "980NN",
+    "regex": "^980\\d{2}$",
+    "api": "https://www.laposte.fr/outils/trouver-un-code-postal",
+    "source": "La Poste (Monaco)"
+  }
+}

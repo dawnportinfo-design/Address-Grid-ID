@@ -1,0 +1,36 @@
+{
+  "countryCode": "AM",
+  "name": "Armenia",
+  "native": {
+    "name": "Հայաստան",
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "postcode", "label": "Փոստային ինդեքս", "placeholder": "0001", "required": true, "type": "text" },
+      { "key": "state", "label": "Մարզ", "placeholder": "Երևան", "required": true, "type": "text" },
+      { "key": "city", "label": "Քաղաք", "placeholder": "Երևան", "required": true, "type": "text" },
+      { "key": "street", "label": "Փողոց", "placeholder": "Աբովյան փողոց", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "Շենք/Տուն", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Անուն", "placeholder": "Արամ", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{postcode}}\n{{state}}\n{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "state", "label": "Province/Region", "placeholder": "Yerevan", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Yerevan", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Abovyan St", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "House No.", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Aram", "required": false, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "0001", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": null,
+    "source": "Armenia Post"
+  }
+}

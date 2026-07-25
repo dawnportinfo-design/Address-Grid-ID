@@ -1,0 +1,59 @@
+{
+  "countryCode": "SV",
+  "name": "El Salvador",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{barrio}}\n{{city}}\n{{state}}\n{{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Nombre", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Avenida España", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "barrio", "label": "Barrio", "placeholder": "Centro", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "San Salvador", "required": true, "type": "text" },
+      { "key": "state", "label": "Departamento", "placeholder": "San Salvador", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "0111", "required": true, "type": "text" },
+      { "key": "country", "label": "País", "placeholder": "El Salvador", "required": false, "type": "text" }
+    ]
+  },
+  "domestic": {
+    "en": {
+      "name": "English",
+      "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{barrio}}\n{{city}}\n{{state}}\n{{postcode}}\n{{country}}",
+      "ordering": "small-to-big",
+      "fields": [
+        { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+        { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+        { "key": "street", "label": "Street", "placeholder": "Espana Avenue", "required": true, "type": "text" },
+        { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+        { "key": "barrio", "label": "Neighborhood", "placeholder": "Centro", "required": true, "type": "text" },
+        { "key": "city", "label": "City", "placeholder": "San Salvador", "required": true, "type": "text" },
+        { "key": "state", "label": "Department", "placeholder": "San Salvador", "required": true, "type": "text" },
+        { "key": "postcode", "label": "Postal Code", "placeholder": "0111", "required": true, "type": "text" },
+        { "key": "country", "label": "Country", "placeholder": "El Salvador", "required": false, "type": "text" }
+      ]
+    }
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{barrio}}\n{{city}}\n{{state}}\n{{postcode}}\nEL SALVADOR",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Espana Avenue", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "barrio", "label": "Neighborhood", "placeholder": "Centro", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "San Salvador", "required": true, "type": "text" },
+      { "key": "state", "label": "Department", "placeholder": "San Salvador", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "0111", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=sv",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

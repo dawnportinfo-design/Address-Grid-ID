@@ -1,0 +1,33 @@
+{
+  "countryCode": "AI",
+  "name": "Anguilla",
+  "native": {
+    "name": "Anguilla",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{district}}\n{{postcode}}\nAnguilla",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Street address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "The Valley", "required": true, "type": "text" },
+      { "key": "district", "label": "District", "placeholder": "South Hill", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "AI-2640", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{street}}\n{{locality}}\n{{district}}\n{{postcode}}\nANGUILLA",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Street address", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "The Valley", "required": true, "type": "text" },
+      { "key": "district", "label": "District", "placeholder": "South Hill", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "AI-2640", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "AI-NNNN",
+    "regex": "^AI-\\d{4}$",
+    "api": null,
+    "source": "Anguilla Postal Service"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "countryCode": "EC",
+  "name": "Ecuador",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{neighborhood}}\n{{city}}\n{{state}}\n{{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Nombre", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Av. Amazonas", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "neighborhood", "label": "Barrio", "placeholder": "La Mariscal", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "Quito", "required": true, "type": "text" },
+      { "key": "state", "label": "Provincia", "placeholder": "Pichincha", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "170515", "required": true, "type": "text" },
+      { "key": "country", "label": "País", "placeholder": "Ecuador", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{neighborhood}}\n{{city}}\n{{state}}\n{{postcode}}\nECUADOR",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Amazonas Ave", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "neighborhood", "label": "Neighborhood", "placeholder": "La Mariscal", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Quito", "required": true, "type": "text" },
+      { "key": "state", "label": "Province", "placeholder": "Pichincha", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "170515", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNNN",
+    "regex": "^\\d{6}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=ec",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

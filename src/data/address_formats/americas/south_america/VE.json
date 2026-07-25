@@ -1,0 +1,41 @@
+{
+  "countryCode": "VE",
+  "name": "Venezuela",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{neighborhood}}\n{{city}}\n{{state}}\n{{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Nombre", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Av. Libertador", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "neighborhood", "label": "Barrio", "placeholder": "Chacao", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "Caracas", "required": true, "type": "text" },
+      { "key": "state", "label": "Estado", "placeholder": "Distrito Capital", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "1010", "required": true, "type": "text" },
+      { "key": "country", "label": "País", "placeholder": "Venezuela", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{neighborhood}}\n{{city}}\n{{state}}\n{{postcode}}\nVENEZUELA",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Libertador Ave", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "neighborhood", "label": "Neighborhood", "placeholder": "Chacao", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Caracas", "required": true, "type": "text" },
+      { "key": "state", "label": "State", "placeholder": "Distrito Capital", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "1010", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNN",
+    "regex": "^\\d{4}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=ve",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

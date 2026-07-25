@@ -1,0 +1,59 @@
+{
+  "countryCode": "NI",
+  "name": "Nicaragua",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{barrio}}\n{{city}}\n{{state}}\n{{postcode}}\n{{country}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Empresa", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Nombre", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Avenida Central", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "barrio", "label": "Barrio", "placeholder": "Centro", "required": true, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "Managua", "required": true, "type": "text" },
+      { "key": "state", "label": "Departamento", "placeholder": "Managua", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "11001", "required": true, "type": "text" },
+      { "key": "country", "label": "País", "placeholder": "Nicaragua", "required": false, "type": "text" }
+    ]
+  },
+  "domestic": {
+    "en": {
+      "name": "English",
+      "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{barrio}}\n{{city}}\n{{state}}\n{{postcode}}\n{{country}}",
+      "ordering": "small-to-big",
+      "fields": [
+        { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+        { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+        { "key": "street", "label": "Street", "placeholder": "Central Avenue", "required": true, "type": "text" },
+        { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+        { "key": "barrio", "label": "Neighborhood", "placeholder": "Centro", "required": true, "type": "text" },
+        { "key": "city", "label": "City", "placeholder": "Managua", "required": true, "type": "text" },
+        { "key": "state", "label": "Department", "placeholder": "Managua", "required": true, "type": "text" },
+        { "key": "postcode", "label": "Postal Code", "placeholder": "11001", "required": true, "type": "text" },
+        { "key": "country", "label": "Country", "placeholder": "Nicaragua", "required": false, "type": "text" }
+      ]
+    }
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{organization}}\n{{name}}\n{{street}} {{houseNumber}}\n{{barrio}}\n{{city}}\n{{state}}\n{{postcode}}\nNICARAGUA",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "organization", "label": "Company", "placeholder": "", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Juan Perez", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Central Avenue", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Number", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "barrio", "label": "Neighborhood", "placeholder": "Centro", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Managua", "required": true, "type": "text" },
+      { "key": "state", "label": "Department", "placeholder": "Managua", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postal Code", "placeholder": "11001", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN",
+    "regex": "^\\d{5}$",
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=ni",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

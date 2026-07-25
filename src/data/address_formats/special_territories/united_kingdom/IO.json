@@ -1,0 +1,31 @@
+{
+  "countryCode": "IO",
+  "name": "British Indian Ocean Territory",
+  "native": {
+    "name": "British Indian Ocean Territory",
+    "addressFormat": "{{recipient}}\n{{unit}}\n{{locality}}\n{{postcode}}\nBritish Indian Ocean Territory",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "unit", "label": "Unit", "placeholder": "Diego Garcia", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "Diego Garcia", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "BBND 1ZZ", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{recipient}}\n{{unit}}\n{{locality}}\n{{postcode}}\nBRITISH INDIAN OCEAN TERRITORY",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Recipient", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "unit", "label": "Unit", "placeholder": "Diego Garcia", "required": true, "type": "text" },
+      { "key": "locality", "label": "Locality", "placeholder": "Diego Garcia", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Postcode", "placeholder": "BBND 1ZZ", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "BBND 1ZZ",
+    "regex": "^BBND\\s?1ZZ$",
+    "api": null,
+    "source": "BFPO"
+  }
+}

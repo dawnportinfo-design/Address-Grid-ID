@@ -1,0 +1,35 @@
+{
+  "countryCode": "KP",
+  "name": "North Korea",
+  "native": {
+    "name": "조선민주주의인민공화국",
+    "addressFormat": "{{state}}\n{{city}}\n{{district}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "state", "label": "도", "placeholder": "평양시", "required": true, "type": "text" },
+      { "key": "city", "label": "시/군", "placeholder": "중구역", "required": true, "type": "text" },
+      { "key": "district", "label": "구역", "placeholder": "창전동", "required": false, "type": "text" },
+      { "key": "street", "label": "동", "placeholder": "승리거리", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "번지", "placeholder": "1", "required": false, "type": "text" },
+      { "key": "name", "label": "이름", "placeholder": "홍길동", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "addressFormat": "{{state}}\n{{city}}\n{{district}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "state", "label": "Province", "placeholder": "Pyongyang", "required": true, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "Jung-guyok", "required": true, "type": "text" },
+      { "key": "district", "label": "District", "placeholder": "Changjon-dong", "required": false, "type": "text" },
+      { "key": "street", "label": "Neighborhood", "placeholder": "Sungri St", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "Lot", "placeholder": "1", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Kim Il-sung", "required": false, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNN-NNN",
+    "regex": "^\\d{3}-\\d{3}$",
+    "api": null,
+    "source": "Korea Post (DPRK)"
+  }
+}

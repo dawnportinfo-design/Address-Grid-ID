@@ -1,0 +1,38 @@
+{
+  "countryCode": "PR",
+  "name": "Puerto Rico",
+  "native": {
+    "name": "Español",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{aptSuite}}\n{{suburb}}\n{{city}}\n{{state}}\n{{postcode}}\nPuerto Rico",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Nombre", "placeholder": "Nombre completo", "required": true, "type": "text" },
+      { "key": "street", "label": "Calle", "placeholder": "Calle Principal", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "Número", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "aptSuite", "label": "Departamento / Suite", "placeholder": "Apt 4B", "required": false, "type": "text" },
+      { "key": "suburb", "label": "Barrio / Colonia", "placeholder": "Santurce", "required": false, "type": "text" },
+      { "key": "city", "label": "Ciudad", "placeholder": "San Juan", "required": true, "type": "text" },
+      { "key": "state", "label": "Municipio", "placeholder": "San Juan", "required": true, "type": "text" },
+      { "key": "postcode", "label": "Código Postal", "placeholder": "00901", "required": true, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "English",
+    "addressFormat": "{{recipient}}\n{{street}} {{houseNumber}}\n{{aptSuite}}\n{{suburb}}\n{{city}}\n{{state}}\n{{postcode}}\nPuerto Rico",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "recipient", "label": "Name", "placeholder": "Full Name", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Main Street", "required": true, "type": "text" },
+      { "key": "houseNumber", "label": "House No.", "placeholder": "123", "required": true, "type": "text" },
+      { "key": "aptSuite", "label": "Apt / Suite", "placeholder": "Apt 4B", "required": false, "type": "text" },
+      { "key": "suburb", "label": "Suburb / Neighborhood", "placeholder": "Santurce", "required": false, "type": "text" },
+      { "key": "city", "label": "City", "placeholder": "San Juan", "required": true, "type": "text" },
+      { "key": "state", "label": "Municipality", "placeholder": "San Juan", "required": true, "type": "text" },
+      { "key": "postcode", "label": "ZIP Code", "placeholder": "00901", "required": true, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "NNNNN or NNNNN-NNNN",
+    "regex": "^00[6-9]\\d{2}(-\\d{4})?$"
+  }
+}

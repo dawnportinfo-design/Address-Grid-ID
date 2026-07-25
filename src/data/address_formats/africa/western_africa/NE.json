@@ -1,0 +1,32 @@
+{
+  "countryCode": "NE",
+  "name": "Niger",
+  "native": {
+    "name": "Niger",
+    "addressFormat": "{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}",
+    "ordering": "big-to-small",
+    "fields": [
+      { "key": "city", "label": "Ville", "placeholder": "Niamey", "required": true, "type": "text" },
+      { "key": "street", "label": "Rue", "placeholder": "Avenue de l'Indépendance", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "Numéro", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Nom", "placeholder": "Ali", "required": false, "type": "text" }
+    ]
+  },
+  "english": {
+    "name": "International English",
+    "addressFormat": "{{city}}\n{{street}}\n{{houseNumber}}\n{{name}}\nNIGER",
+    "ordering": "small-to-big",
+    "fields": [
+      { "key": "city", "label": "City", "placeholder": "Niamey", "required": true, "type": "text" },
+      { "key": "street", "label": "Street", "placeholder": "Independence Ave", "required": false, "type": "text" },
+      { "key": "houseNumber", "label": "No.", "placeholder": "10", "required": false, "type": "text" },
+      { "key": "name", "label": "Name", "placeholder": "Ali", "required": false, "type": "text" }
+    ]
+  },
+  "postalCode": {
+    "format": "None",
+    "regex": null,
+    "api": "https://nominatim.openstreetmap.org/ui/search.html?countrycodes=ne",
+    "source": "OpenStreetMap Nominatim"
+  }
+}

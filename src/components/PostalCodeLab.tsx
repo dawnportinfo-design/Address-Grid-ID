@@ -404,13 +404,13 @@ export const PostalCodeLab: React.FC<PostalCodeLabProps> = ({
                     onClick={() => handleCountrySelect(country)}
                     className={cn(
                       "w-full flex items-center justify-between p-4 border-b border-slate-50 transition-all text-left",
-                      selectedCountry?.code === country.code ? "bg-blue-600 text-white shadow-lg" : "hover:bg-slate-50"
+                      selectedCountry?.code === country.code ? "bg-blue-600 text-white shadow-lg" : "bg-white hover:bg-slate-50"
                     )}
                   >
                     <div className="flex items-center gap-3">
                       <div className={cn(
                         "w-10 h-6 rounded overflow-hidden flex items-center justify-center font-black text-[10px] shrink-0 border border-slate-200",
-                        selectedCountry?.code === country.code ? "bg-white/20 border-white/40 text-white" : "bg-slate-100 text-slate-400"
+                        selectedCountry?.code === country.code ? "bg-white/20 border-white/40 text-white" : "bg-slate-100 border-slate-200 text-slate-500"
                       )}>
                         <img 
                           src={`https://flagcdn.com/w80/${country.code.toLowerCase()}.png`}
@@ -420,10 +420,10 @@ export const PostalCodeLab: React.FC<PostalCodeLabProps> = ({
                         />
                       </div>
                       <div>
-                        <p className={cn("text-xs font-black", selectedCountry?.code === country.code ? "text-white" : "text-slate-700")}>
+                        <p className={cn("text-xs font-black", selectedCountry?.code === country.code ? "text-white" : "text-slate-800")}>
                           {country.name}
                         </p>
-                        <p className={cn("text-[9px] font-bold uppercase tracking-widest", selectedCountry?.code === country.code ? "text-white/60" : "text-slate-400")}>
+                        <p className={cn("text-[9px] font-bold uppercase tracking-widest", selectedCountry?.code === country.code ? "text-white/60" : "text-slate-500")}>
                           {country.region}
                         </p>
                       </div>
