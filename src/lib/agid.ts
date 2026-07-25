@@ -6,6 +6,7 @@
 import { SEA_REGIONS, LAND_REGIONS, COUNTRY_REGIONS } from './regions';
 import { COUNTRIES } from '../constants/countries';
 import { getAgidWasmCore } from './agidWasm';
+import { decodeR16Payload, encodeR16Cell, getR16GridFeatures } from './agidR16';
 export { SEA_REGIONS, LAND_REGIONS, COUNTRY_REGIONS };
 
 const BASE32_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
@@ -406,37 +407,29 @@ interface AGIDOptions {
 }
 
 /**
- * Core AGID Encoding
- * Redesigned for Cubed Sphere (23-bit precision per face axis).
- * This ensures near-uniform cell size (~4.78m) globally.
+ * Core AGID Encoding.
+ * AGID-R16 uses 16 rotated coordinate domains, 23 longitude bits,
+ * 22 latitude bits, Morton45 position coding, and a 4-bit domain id.
  */
 export function encodeAGID(lat: number, lon: number): AGIDResult {
   const region = getRegionInfo(lat, lon);
   const prefix = generatePrefix(region.prefix, region.isSea, region.name);
-
-  // 1. Quantization: Cubed Sphere mapping with Equal-Area correction
-  const { face, qx, qy } = getQuantized(lat, lon);
-
-  // 2. Hilbert & Base32
-  // 10 characters Base32 = 50 bits.
-  // 3 bits for face + 42 bits for Hilbert (L=21) = 45 bits.
-  const hilbert = encodeHilbert(K, qx, qy);
-  const packedValue = packAGID(face, hilbert);
-  const hash = encodeBase32(packedValue, 10);
+  const cell = encodeR16Cell(lat, lon);
+  const hash = encodeBase32(cell.payload, 10);
 
   return {
     id: prefix + hash,
     prefix,
     hash,
     isSea: region.isSea,
-    gridSize: 4.4, // ~4.4m average resolution (2^21 divisions per face)
+    gridSize: 4.77,
     regionName: region.name,
     regionPolygon: region.polygon,
-    face,
+    face: cell.domain,
     lat,
     lon,
-    bounds: getCellBounds(face, qx, qy),
-    polygon: getCellPolygon(face, qx, qy)
+    bounds: cell.bounds,
+    polygon: cell.polygon
   };
 }
 
@@ -499,12 +492,9 @@ export function decodeAGID(id: string): { lat: number, lon: number, isSea: boole
 
   try {
     const packedValue = decodeBase32(hash);
-    const { face, h } = unpackAGID(packedValue);
-    const { x: quantX, y: quantY } = decodeHilbert(K, h);
-
-    const { lat, lon } = getFromQuantized(face, quantX, quantY);
-
-    return { lat, lon, isSea: false, prefix, face };
+    const cell = decodeR16Payload(packedValue);
+    if (!cell) return null;
+    return { lat: cell.center.lat, lon: cell.center.lon, isSea: false, prefix, face: cell.domain };
   } catch (e) {
     return null;
   }
@@ -913,44 +903,16 @@ const gridCache = new Map<string, { gridLines: any[][], gridCells: any[] }>();
 /**
  * Generates grid features for map visualization based on the new AGID spec.
  */
-export function getGridFeatures(lat: number, lon: number, range: number) {
+export function getGridFeatures(lat: number, lon: number, range: number, step = 64) {
   const centerResult = encodeAGID(lat, lon);
-  const { face, qx: quantX, qy: quantY } = getQuantized(lat, lon);
   
   // Cache key
-  const cacheKey = `${centerResult.id}_${range}`;
+  const cacheKey = `${centerResult.id}_${range}_${step}`;
   if (gridCache.has(cacheKey)) {
     return gridCache.get(cacheKey)!;
   }
 
-  const gridLines: any[][] = [];
-  const gridCells: any[] = [];
-  const seenIds = new Set<string>();
-
-  for (let dy = -range; dy <= range; dy++) {
-    for (let dx = -range; dx <= range; dx++) {
-      const qx = quantX + dx;
-      const qy = quantY + dy;
-      
-      const polyCoords = getCellPolygon(face, qx, qy);
-      const cellId = `${face},${qx},${qy}`;
-      if (seenIds.has(cellId)) continue;
-      seenIds.add(cellId);
-
-      gridLines.push([polyCoords[0], polyCoords[1]]);
-      gridLines.push([polyCoords[1], polyCoords[2]]);
-      gridLines.push([polyCoords[2], polyCoords[3]]);
-      gridLines.push([polyCoords[3], polyCoords[0]]);
-
-      gridCells.push({
-        type: 'Feature',
-        geometry: { type: 'Polygon', coordinates: [polyCoords] },
-        properties: { id: cellId, isSea: centerResult.isSea }
-      });
-    }
-  }
-
-  const result = { gridLines, gridCells };
+  const result = getR16GridFeatures(lat, lon, range, step);
   gridCache.set(cacheKey, result);
   return result;
 }

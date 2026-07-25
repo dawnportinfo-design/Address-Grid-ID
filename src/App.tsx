@@ -168,6 +168,8 @@ import { SavedLocations } from './components/SavedLocations';
 import { ExportService, ExportData } from './services/ExportService';
 import { saveAs } from 'file-saver';
 
+const CAMERA_2D = { pitch: 0, bearing: 0 };
+
 export default function App() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
@@ -225,12 +227,7 @@ export default function App() {
   const [lat, setLat] = useState(initialLat);
   const [zoom, setZoom] = useState(initialZoom);
   const [mapBearing, setMapBearing] = useState(0);
-  const [mapPitch, setMapPitch] = useState(() => {
-    try {
-      const saved = localStorage.getItem('agid_map_pitch');
-      return saved !== null ? parseInt(saved, 10) : 0;
-    } catch { return 0; }
-  });
+  const [mapPitch, setMapPitch] = useState(0);
   const [gridOpacityLevel, setGridOpacityLevel] = useState(() => {
     try {
       const saved = localStorage.getItem('agid_grid_opacity_level');
@@ -508,15 +505,28 @@ export default function App() {
       return (localStorage.getItem('agid_distance_unit') as 'automatic' | 'kilometers' | 'miles' | 'nautical') || 'automatic';
     } catch { return 'automatic'; }
   });
-  const [is3DEnabled, setIs3DEnabled] = useState(() => {
-    try {
-      const saved = localStorage.getItem('agid_3d_enabled');
-      return saved !== null ? JSON.parse(saved) : false;
-    } catch { return false; }
-  });
+  const [is3DEnabled, setIs3DEnabled] = useState(false);
   
   useEffect(() => { localStorage.setItem('agid_map_pitch', mapPitch.toString()); }, [mapPitch]);
   useEffect(() => { localStorage.setItem('agid_grid_opacity_level', gridOpacityLevel.toString()); }, [gridOpacityLevel]);
+
+  useEffect(() => {
+    localStorage.setItem('agid_3d_enabled', 'false');
+    localStorage.setItem('agid_projection', 'mercator');
+    if (is3DEnabled) setIs3DEnabled(false);
+    if (mapPitch !== 0) setMapPitch(0);
+    if (mapBearing !== 0) setMapBearing(0);
+    if (map.current) {
+      map.current.easeTo({ ...CAMERA_2D, duration: 0 });
+      try {
+        map.current.setProjection({ type: 'mercator' } as any);
+        map.current.setTerrain(null);
+      } catch {
+        // Some styles do not expose terrain/projection setters at all times.
+      }
+      if (map.current.getLayer('3d-buildings')) map.current.removeLayer('3d-buildings');
+    }
+  }, [is3DEnabled, mapPitch, mapBearing]);
 
   // Theme Effect
   useEffect(() => {
@@ -717,13 +727,21 @@ export default function App() {
       return localStorage.getItem('agid_map_style') || 'https://tiles.openfreemap.org/styles/liberty';
     } catch { return 'https://tiles.openfreemap.org/styles/liberty'; }
   });
-  const [projection, setProjection] = useState<'mercator' | 'globe'>(() => {
-    try {
-      return (localStorage.getItem('agid_projection') as 'mercator' | 'globe') || 'mercator';
-    } catch { return 'mercator'; }
-  });
+  const [projection, setProjection] = useState<'mercator' | 'globe'>('mercator');
   const [showStyleMenu, setShowStyleMenu] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+
+  useEffect(() => {
+    if (projection !== 'mercator') setProjection('mercator');
+    localStorage.setItem('agid_projection', 'mercator');
+    if (map.current) {
+      try {
+        map.current.setProjection({ type: 'mercator' } as any);
+      } catch {
+        // Projection is reapplied when the style finishes loading.
+      }
+    }
+  }, [projection]);
 
   // Custom UI for alerts and confirms
   const [alertConfig, setAlertConfig] = useState<{ show: boolean, title: string, message: string } | null>(null);
@@ -761,8 +779,11 @@ export default function App() {
           lastPropsRef.current[layerId] = { paint, layout };
         }
         
-        // Ensure manual selection/hover layers always stay on top
-        if ((id.includes('selected') || id.includes('selection')) && map.current.getLayer(layerId)) {
+        // Keep ordinary grid layers below the red focus cell, and keep focus
+        // layers above everything so side/edge cells never visually stack.
+        if (beforeId && map.current.getLayer(layerId) && map.current.getLayer(beforeId)) {
+          map.current.moveLayer(layerId, beforeId);
+        } else if ((id.includes('active-cell') || id.includes('selected') || id.includes('selection')) && map.current.getLayer(layerId)) {
           map.current.moveLayer(layerId);
         }
       }
@@ -774,33 +795,34 @@ export default function App() {
   const updateGrid = React.useCallback((activeResult?: AGIDResult, selectedResult?: AGIDResult, gridSize: number = 4, refreshGrid: boolean = true) => {
     if (!map.current || !map.current.isStyleLoaded()) return;
 
-    // If we are zoomed in enough, always use 4m grid for detail, even in sea
-    let effectiveGridSize = gridSize;
-    if (zoom >= 15) {
-      effectiveGridSize = 4;
-    }
-
     const sourceId = 'agid-grid';
     const activeSourceId = 'active-cell';
     const selectedSourceId = 'selected-cell';
 
-    const shouldShow = isGridVisible && gridOpacityLevel > 0;
+    const shouldShow = isGridVisible;
     const shouldShowHighlight = true;
-
-    // Use cell bounds for active/selected cell
-    const activeBounds = activeResult?.bounds;
-    const selectedBounds = selectedResult?.bounds;
 
     const isSatellite = mapStyle === 'satellite';
     const isDark = mapStyle.includes('dark');
-    const isSeaGrid = activeResult?.isSea && zoom < 15;
+    const isSeaGrid = selectedResult?.isSea && zoom < 15;
+    const getVisibleGridCell = (result?: AGIDResult) => {
+      if (!result?.polygon) return null;
+      return {
+        key: result.id,
+        polygon: result.polygon
+      };
+    };
+    const selectedCell = getVisibleGridCell(selectedResult);
+    const visibleRedCell = selectedCell;
+    const selectedPolygon = selectedCell?.polygon || null;
 
-    // 1) Update Active Cell
-    const activeData: any = (shouldShowHighlight && activeResult?.polygon) ? {
+    // 1) Update the single visible red selected grid cell.
+    // Hover/preview cells stay outline-only in the black surrounding grid.
+    const activeData: any = (shouldShowHighlight && visibleRedCell) ? {
       type: 'Feature',
       geometry: {
         type: 'Polygon',
-        coordinates: [activeResult.polygon]
+        coordinates: [visibleRedCell.polygon]
       },
       properties: {}
     } : { type: 'FeatureCollection', features: [] };
@@ -812,15 +834,9 @@ export default function App() {
       'fill-outline-color': isSeaGrid ? '#cbd5e1' : '#dc2626'
     });
 
-    // 2) Update Selected Cell
-    const selectedData: any = (shouldShowHighlight && selectedResult?.polygon) ? {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [selectedResult.polygon]
-      },
-      properties: {}
-    } : { type: 'FeatureCollection', features: [] };
+    // 2) Keep the selected fill layer empty. The active-cell layer above is the
+    // single source of red fill; selected-cell-outline only adds the border.
+    const selectedData: any = { type: 'FeatureCollection', features: [] };
 
     // Selection Fill
     ensureSourceAndLayer(selectedSourceId, 'fill', selectedData, {
@@ -829,11 +845,11 @@ export default function App() {
     });
 
     // Selection Outline
-    const selectedOutlineData: any = (shouldShowHighlight && selectedResult?.polygon) ? {
+    const selectedOutlineData: any = (shouldShowHighlight && selectedPolygon) ? {
       type: 'Feature',
       geometry: {
         type: 'Polygon',
-        coordinates: [selectedResult.polygon]
+        coordinates: [selectedPolygon]
       },
       properties: {}
     } : { type: 'FeatureCollection', features: [] };
@@ -842,7 +858,7 @@ export default function App() {
       type: 'Feature',
       geometry: {
         type: 'LineString',
-        coordinates: selectedResult?.polygon || []
+        coordinates: selectedPolygon || []
       },
       properties: {}
     }, {
@@ -890,7 +906,15 @@ export default function App() {
     });
 
     if (!shouldShow) {
-      ensureSourceAndLayer(sourceId, 'line', { type: 'FeatureCollection', features: [] }, {});
+      ensureSourceAndLayer(sourceId, 'line', { type: 'FeatureCollection', features: [] }, {}, {}, undefined, activeSourceId + '-layer');
+      ensureSourceAndLayer('grid-cells', 'fill', { type: 'FeatureCollection', features: [] }, {});
+      ensureSourceAndLayer('grid-cells-focus', 'fill', { type: 'FeatureCollection', features: [] }, {});
+      return;
+    }
+
+    const shouldShowSurroundingGrid = true;
+    if (!shouldShowSurroundingGrid) {
+      ensureSourceAndLayer(sourceId, 'line', { type: 'FeatureCollection', features: [] }, {}, {}, undefined, activeSourceId + '-layer');
       ensureSourceAndLayer('grid-cells', 'fill', { type: 'FeatureCollection', features: [] }, {});
       ensureSourceAndLayer('grid-cells-focus', 'fill', { type: 'FeatureCollection', features: [] }, {});
       return;
@@ -898,87 +922,59 @@ export default function App() {
 
     if (!refreshGrid) return;
 
-    const opacityMultiplier = gridOpacityLevel / 3; 
-    const gridColor = isSatellite || isDark ? '#94a3b8' : '#475569';
+    const opacityMultiplier = Math.max(0.7, gridOpacityLevel / 3);
+    const gridColor = isSatellite || isDark ? '#0f172a' : '#111827';
     
     const dynamicGridOpacity = [
       'interpolate', ['linear'], ['zoom'],
-      1, 0.3 * opacityMultiplier, 
-      8, 0.4 * opacityMultiplier,
-      14, 0.5 * opacityMultiplier,
-      18, 0.7 * opacityMultiplier,
-      20, 0.8 * opacityMultiplier
+      1, 0.18 * opacityMultiplier,
+      8, 0.24 * opacityMultiplier,
+      14, 0.42 * opacityMultiplier,
+      17, 0.66 * opacityMultiplier,
+      18.5, 0.74 * opacityMultiplier,
+      20, 0.82 * opacityMultiplier
     ];
 
     const dynamicGridWidth = [
       'interpolate', ['linear'], ['zoom'],
       1, 0.2,
-      10, 0.4,
-      15, 0.6,
-      18, 0.8,
-      20, 1.2
+      10, 0.35,
+      15, 0.65,
+      18, 1.05,
+      20, 1.3
     ];
 
-    if (gridWorker.current) {
-      setIsGridRegenerating(true);
-      const isLargeGrid = effectiveGridSize >= 1000;
-      
-      gridWorker.current.onmessage = (e) => {
-        const { gridLines, gridCells } = e.data;
-        if (!gridLines || gridLines.length === 0) {
-          setIsGridRegenerating(false);
-          return;
-        }
+    setIsGridRegenerating(true);
 
-        ensureSourceAndLayer(sourceId, 'line', {
-          type: 'FeatureCollection',
-          features: [{
-            type: 'Feature',
-            geometry: { type: 'MultiLineString', coordinates: gridLines },
-            properties: {}
-          }]
-        }, {
-          'line-color': gridColor,
-          'line-width': dynamicGridWidth,
-          'line-opacity': dynamicGridOpacity
-        });
+    const gridStep = 1;
+    const gridRange = zoom >= 19 ? 64 : zoom >= 17 ? 96 : zoom >= 16 ? 72 : 48;
+    const { gridLines } = getGridFeatures(activeResult?.lat ?? lat, activeResult?.lon ?? lng, gridRange, gridStep);
+    const gridData = gridLines.length > 0 ? {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        geometry: { type: 'MultiLineString', coordinates: gridLines },
+        properties: {}
+      }]
+    } : { type: 'FeatureCollection', features: [] };
 
-        const cellsData = { type: 'FeatureCollection', features: gridCells };
+    ensureSourceAndLayer(sourceId, 'line', gridData, {
+      'line-color': gridColor,
+      'line-width': dynamicGridWidth,
+      'line-opacity': dynamicGridOpacity
+    }, {}, undefined, activeSourceId + '-layer');
 
-        ensureSourceAndLayer('grid-cells', 'fill', cellsData, {
-          'fill-color': isSatellite || isDark ? '#94a3b8' : '#475569', 
-          'fill-opacity': [
-            'interpolate', ['linear'], ['zoom'],
-            1, 0.15 * opacityMultiplier,
-            10, 0.25 * opacityMultiplier,
-            14, 0.35 * opacityMultiplier,
-            17, 0.55 * opacityMultiplier,
-            20, 0.75 * opacityMultiplier
-          ]
-        }, {}, ['!=', ['get', 'isFocus'], true], activeSourceId + '-layer');
+    ensureSourceAndLayer('grid-cells', 'fill', { type: 'FeatureCollection', features: [] }, {
+      'fill-color': isSatellite || isDark ? '#94a3b8' : '#475569',
+      'fill-opacity': 0
+    }, {}, ['!=', ['get', 'isFocus'], true], activeSourceId + '-layer');
 
-        ensureSourceAndLayer('grid-cells-focus', 'fill', cellsData, {
-          'fill-color': isSatellite || isDark ? '#94a3b8' : '#475569',
-          'fill-opacity': 0.4 * opacityMultiplier
-        }, {}, ['==', ['get', 'isFocus'], true], activeSourceId + '-layer');
-        
-        setIsGridRegenerating(false);
-      };
+    ensureSourceAndLayer('grid-cells-focus', 'fill', { type: 'FeatureCollection', features: [] }, {
+      'fill-color': isSatellite || isDark ? '#94a3b8' : '#475569',
+      'fill-opacity': 0
+    }, {}, ['==', ['get', 'isFocus'], true], activeSourceId + '-layer');
 
-      let bounds = map.current.getBounds().toArray();
-      if (mapPitch > 30) {
-        const sw = bounds[0];
-        const ne = bounds[1];
-        const lngPad = (ne[0] - sw[0]) * 0.5; 
-        const latPad = (ne[1] - sw[1]) * 1.5; 
-        bounds = [[sw[0] - lngPad, sw[1] - latPad * 0.2], [ne[0] + lngPad, ne[1] + latPad]];
-      }
-
-      gridWorker.current.postMessage({
-        lat, lon: lng, zoom, isLargeGrid,
-        bounds: bounds
-      });
-    }
+    setIsGridRegenerating(false);
   }, [lat, lng, zoom, mapPitch, mapStyle, isGridVisible, gridOpacityLevel, ensureSourceAndLayer]);
 
   const updateMapScene = React.useCallback(() => {
@@ -1151,7 +1147,7 @@ export default function App() {
         map.current.flyTo({
           center: [decoded.lon, decoded.lat],
           zoom: getDeviceZoom(),
-          pitch: mapPitch,
+          ...CAMERA_2D,
           essential: true
         });
       }
@@ -1398,7 +1394,7 @@ export default function App() {
               map.current?.flyTo({
                 center: [longitude, latitude],
                 zoom: getDeviceZoom(),
-                pitch: mapPitch,
+                ...CAMERA_2D,
                 essential: true,
                 duration: 2500
               });
@@ -1495,8 +1491,7 @@ export default function App() {
               map.current.flyTo({
                 center: [longitude, latitude],
                 zoom: 18,
-                pitch: 60,
-                bearing: navigationTarget ? calculateBearing(latitude, longitude, navigationTarget.lat, navigationTarget.lng) : 0,
+                ...CAMERA_2D,
                 essential: true
               });
             }
@@ -1534,7 +1529,6 @@ export default function App() {
                 // Periodically retry with high precision for the LOCKED spot if address is still vague
                 // This satisfies "Attempt to get accurate address in the meantime"
                 if (!clickedAddress || clickedAddress.includes("Unnamed") || clickedAddress.includes("Unknown") || clickedAddress.includes("Loading")) {
-                  const { lat, lon } = decodeAGID(clickedAgid.id);
                   // Use a slightly offset lat/lng from the current actual GPS if we want the "current" address,
                   // but "locked ID" suggests we want the address of the grid cell's center or the user's specific spot at lock time.
                   // Let's use the current user position to get the best address of the current exact spot,
@@ -1833,7 +1827,7 @@ export default function App() {
     map.current.flyTo({
       center: [saved.lon, saved.lat],
       zoom: getDeviceZoom(),
-      pitch: mapPitch,
+      ...CAMERA_2D,
       essential: true,
       duration: 2000
     });
@@ -1868,7 +1862,12 @@ export default function App() {
     copyToClipboard(url, 'share');
   };
 
+  const latestClickedGeocodeKeyRef = useRef<string | null>(null);
+  const makeGeocodeKey = React.useCallback((l: number, n: number) => `${l.toFixed(6)},${n.toFixed(6)}`, []);
+  const isLatestClickedGeocode = React.useCallback((key: string) => latestClickedGeocodeKeyRef.current === key, []);
+
   const fetchAddressForLang = React.useCallback(async (l: number, n: number, langCode: string, isClicked: boolean, countryCode: string = '', isHighPrecision: boolean = false) => {
+    const requestKey = makeGeocodeKey(l, n);
     try {
       // Respect Nominatim rate limit (1 request per second) if not high-precision
       // and only if it's not a common default language to speed up UI
@@ -1876,15 +1875,18 @@ export default function App() {
       if (!isHighPrecision && !isDefaultLang) {
         await new Promise(resolve => setTimeout(resolve, 1100));
       }
+      if (isClicked && !isLatestClickedGeocode(requestKey)) return;
       
       const actualLangCode = langCode.startsWith('en_') ? 'en' : langCode;
       const data = await regionalReverseGeocode(l, n, actualLangCode, countryCode);
+      if (isClicked && !isLatestClickedGeocode(requestKey)) return;
       if (data && data.address) {
         const formatted = await formatAddress(data.address, actualLangCode, { 
           shipping: isShippingMode,
           isHighPrecision,
           forceDomestic: langCode === 'en_domestic'
         });
+        if (isClicked && !isLatestClickedGeocode(requestKey)) return;
 
         // Special handling for dual formats (Domestic vs International)
         const countryLangs = COUNTRY_LANGUAGES[data.address.country_code?.toLowerCase()] || [];
@@ -1899,6 +1901,7 @@ export default function App() {
           });
           
           if (isClicked && domesticVersion !== formatted) {
+            if (!isLatestClickedGeocode(requestKey)) return;
             setClickedAddressMap(prev => ({ ...prev, [`${langCode}_domestic`]: domesticVersion }));
           }
         }
@@ -1917,7 +1920,7 @@ export default function App() {
     } catch (e) {
       console.error(`Error fetching address for ${langCode}:`, e);
     }
-  }, [formatAddress, isShippingMode, addressLanguage]);
+  }, [formatAddress, isShippingMode, addressLanguage, makeGeocodeKey, isLatestClickedGeocode]);
 
   const lastGeocodeRequestRef = useRef<string | null>(null);
 
@@ -1925,9 +1928,19 @@ export default function App() {
     if (!l || !n) return;
 
     // Prevent redundant calls for the same location within 400ms grid-level debounce
-    const currentKey = `${l.toFixed(6)},${n.toFixed(6)}`;
+    const currentKey = makeGeocodeKey(l, n);
     if (lastGeocodeRequestRef.current === currentKey) return;
     lastGeocodeRequestRef.current = currentKey;
+
+    if (isClicked) {
+      latestClickedGeocodeKeyRef.current = currentKey;
+      setClickedAddress("Loading address...");
+      setClickedAddressTranslated("");
+      setClickedAddressDetails(null);
+      setClickedAddressMap({});
+      setNearbyPlaces([]);
+      setNearestRoad(null);
+    }
 
     // Helper to wait
     const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -1970,11 +1983,23 @@ export default function App() {
       if (langs.length === 0) langs = ['en'];
 
       const primaryLang = langs[0];
+      if (isClicked) {
+        setClickedActiveLangs(prev => {
+          if (JSON.stringify(prev) === JSON.stringify(langs)) return prev;
+          return langs;
+        });
+        let targetTab: any = langs[0];
+        if (langs.includes(defaultAddrTab)) {
+          targetTab = defaultAddrTab;
+        }
+        setClickedAddressTab(prev => prev !== targetTab ? targetTab : prev);
+      }
       
       let data: any = null;
       try {
         const countryCode = isSeaLoc ? '' : prefix;
         data = await regionalReverseGeocode(l, n, primaryLang, countryCode);
+        if (isClicked && !isLatestClickedGeocode(currentKey)) return;
       } catch (e) {
         console.error("Reverse geocoding fetch error:", e);
       }
@@ -1983,6 +2008,7 @@ export default function App() {
 
       if (data && data.address) {
         const formatted = await formatAddress(data.address, primaryLang, { shipping: isShippingMode });
+        if (isClicked && !isLatestClickedGeocode(currentKey)) return;
         const initialMap = { [primaryLang]: formatted };
         
         // Fetch nearby OSM places and update local DB
@@ -2055,13 +2081,6 @@ export default function App() {
             if (JSON.stringify(prev) === JSON.stringify(initialMap)) return prev;
             return initialMap;
           });
-          
-          let targetTab: any = langs[0];
-          if (langs.includes(defaultAddrTab)) {
-            targetTab = defaultAddrTab;
-          }
-          setClickedAddressTab(prev => prev !== targetTab ? targetTab : prev);
-          
           // Pre-fetch ALL active languages concurrently for near-instant switching
           langs.forEach(langCode => {
             if (langCode !== primaryLang) {
@@ -2094,14 +2113,17 @@ export default function App() {
     } catch (e) {
       console.error("Reverse geocoding logic error:", e);
     }
-  }, [formatAddress, defaultAddrTab, fetchAddressForLang, appLanguage]);
+  }, [formatAddress, defaultAddrTab, fetchAddressForLang, appLanguage, makeGeocodeKey, isLatestClickedGeocode]);
 
   useEffect(() => {
     if (clickedAgid) {
-      const { lat, lon } = decodeAGID(clickedAgid.id);
+      const decoded = decodeAGID(clickedAgid.id);
+      if (!decoded) return;
       
       const timer = setTimeout(() => {
-        const { lat, lon } = decodeAGID(clickedAgid.id);
+        const decodedAgain = decodeAGID(clickedAgid.id);
+        if (!decodedAgain) return;
+        const { lat, lon } = decodedAgain;
         reverseGeocode(lat, lon, clickedAgid.prefix, clickedAgid.isSea, true);
         setClickedAddressTab(prev => prev !== defaultAddrTab ? defaultAddrTab : prev);
       }, 500);
@@ -2149,7 +2171,7 @@ export default function App() {
         map.current?.flyTo({
           center: [longitude, latitude],
           zoom: getDeviceZoom(),
-          pitch: mapPitch,
+          ...CAMERA_2D,
           essential: true,
           duration: 2000
         });
@@ -2184,7 +2206,7 @@ export default function App() {
     map.current.flyTo({
       center: [centerLon, centerLat],
       zoom: getDeviceZoom(),
-      pitch: mapPitch,
+      ...CAMERA_2D,
       essential: true,
       duration: 1500
     });
@@ -2239,7 +2261,7 @@ export default function App() {
     map.current.flyTo({
       center: [newLng, newLat],
       zoom: result.type === 'saved_qr' ? 19.5 : getDeviceZoom(),
-      pitch: result.type === 'saved_qr' ? 0 : mapPitch,
+      ...CAMERA_2D,
       essential: true,
       duration: 1500
     });
@@ -2529,13 +2551,15 @@ export default function App() {
       style: mapStyle === 'satellite' ? SATELLITE_STYLE : mapStyle,
       center: [lng, lat],
       zoom: zoom,
-      pitch: mapPitch,
-      bearing: mapBearing,
+      ...CAMERA_2D,
       attributionControl: true,
-      projection: { type: projection },
+      projection: { type: 'mercator' },
       maxParallelImageRequests: 16, 
       transformRequest: (url) => ({ url })
     } as any);
+    (window as any).__agidMap = map.current;
+    map.current.dragRotate.disable();
+    map.current.touchZoomRotate.disableRotation();
 
     // Add ResizeObserver to handle map resizing properly
     const resizeObserver = new ResizeObserver(() => {
@@ -2571,6 +2595,11 @@ export default function App() {
       // Set cursor to crosshair for grid mode
       try {
         map.current.getCanvas().style.cursor = 'crosshair';
+        if (isGridVisible) {
+          map.current.easeTo({ pitch: 0, bearing: 0, duration: 0 });
+          setMapPitch(0);
+          setMapBearing(0);
+        }
       } catch (e) {
         console.warn("Could not set map cursor dynamically", e);
       }
@@ -2593,6 +2622,23 @@ export default function App() {
           if (layer.type === 'symbol' && layer.layout && (layer.layout as any)['text-field']) {
             map.current?.setLayoutProperty(layer.id, 'visibility', 'none');
           }
+
+          const layerKey = `${layer.id} ${(layer as any)['source-layer'] || ''}`.toLowerCase();
+          const isGridLikeBaseLayer = layerKey.includes('building') ||
+            layerKey.includes('indoor') ||
+            layerKey.includes('room') ||
+            layerKey.includes('floor') ||
+            layerKey.includes('rail') ||
+            layerKey.includes('transit') ||
+            layerKey.includes('platform');
+          if (isGridLikeBaseLayer) {
+            if (layer.type === 'line') {
+              map.current?.setLayoutProperty(layer.id, 'visibility', 'none');
+            }
+            if (layer.type === 'fill' && (layer.paint as any)?.['fill-outline-color'] !== undefined) {
+              map.current?.setPaintProperty(layer.id, 'fill-outline-color', 'rgba(0, 0, 0, 0)');
+            }
+          }
         });
       }
 
@@ -2600,6 +2646,7 @@ export default function App() {
       const center = map.current.getCenter();
       const result = encodeAGID(center.lat, center.lng);
       setClickedAgid(result);
+      updateGrid(result, result, 4, true);
       reverseGeocode(center.lat, center.lng, result.prefix, result.isSea, true);
     };
 
@@ -2647,8 +2694,8 @@ export default function App() {
 
       const center = map.current.getCenter();
       const newZoom = map.current.getZoom();
-      const newBearing = map.current.getBearing();
-      const newPitch = map.current.getPitch();
+      const newBearing = 0;
+      const newPitch = 0;
 
       const COORD_EPSILON = 0.000001; 
       let newLng = center.lng;
@@ -2658,20 +2705,17 @@ export default function App() {
       
       const newLat = center.lat;
       const newZ = Number(newZoom.toFixed(2));
-      const newB = Math.round(newBearing);
-      const newP = Math.round(newPitch);
-      
       setLng(prev => Math.abs(prev - newLng) > COORD_EPSILON ? newLng : prev);
       setLat(prev => Math.abs(prev - newLat) > COORD_EPSILON ? newLat : prev);
       setZoom(prev => Math.abs(prev - newZ) > 0.01 ? newZ : prev);
-      setMapBearing(prev => Math.abs(prev - newB) > 0.1 ? newB : prev);
-      setMapPitch(prev => Math.abs(prev - newP) > 0.1 ? newP : prev);
+      setMapBearing(0);
+      setMapPitch(0);
 
       const result = encodeAGID(newLat, newLng);
       if (!isManualSelection) {
         setClickedAgid(prev => (prev?.id === result.id ? prev : result));
       }
-      updateGrid(result, isManualSelection ? clickedAgid || undefined : undefined, 4, false);
+      updateGrid(result, isManualSelection ? clickedAgid || undefined : result, 4, false);
     });
 
     map.current.on('dragstart', () => {
@@ -2714,8 +2758,8 @@ export default function App() {
         const name = poiFeature.properties.name;
         const result = encodeAGID(clickLat, clickLng);
         setClickedAgid(result);
-        setClickedAddress(name); // Use the feature name
-        setClickedAddressTab('en');
+        setClickedAddress("住所を取得中...");
+        reverseGeocode(clickLat, clickLng, result.prefix, result.isSea, true);
         // Pre-fill destination just in case they want directions
         setDestination({ lat: clickLat, lng: clickLng, name });
         setDestinationQuery(name);
@@ -2927,7 +2971,6 @@ export default function App() {
   useEffect(() => {
     if (isMountainMode) {
       if (!prevMapStyle) setPrevMapStyle(mapStyle);
-      setIs3DEnabled(true);
       setMapStyle('satellite');
     } else if (!isDisasterMode && prevMapStyle) {
       setMapStyle(prevMapStyle);
@@ -3960,15 +4003,13 @@ export default function App() {
     const updateTerrain = () => {
       if (!map.current) return;
       
-      if (!is3DEnabled) {
-        if (map.current.getLayer('3d-buildings')) map.current.removeLayer('3d-buildings');
-        try {
-          map.current.setTerrain(null);
-        } catch (e) {
-          console.warn("Failed to reset terrain:", e);
-        }
-        return;
+      if (map.current.getLayer('3d-buildings')) map.current.removeLayer('3d-buildings');
+      try {
+        map.current.setTerrain(null);
+      } catch (e) {
+        console.warn("Failed to reset terrain:", e);
       }
+      return;
 
       // Add Terrain if not already present
       try {
@@ -4568,11 +4609,7 @@ export default function App() {
           const result = encodeAGID(lat, lng);
           setClickedAgid(result);
           setClickedAddress("Loading address...");
-          
-          // Fetch address
-          const cc = result.prefix.toLowerCase();
-          const primaryLang = COUNTRY_LANGUAGES[cc]?.[0] || 'en';
-          fetchAddressForLang(lat, lng, primaryLang, true, result.isSea ? '' : result.prefix);
+          reverseGeocode(lat, lng, result.prefix, result.isSea, true);
           
           // Auto-zoom
           map.current.flyTo({
