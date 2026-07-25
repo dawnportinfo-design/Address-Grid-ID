@@ -16,5 +16,17 @@
     "licenseOrTerms": "source-specific",
     "redistribution": "review-required",
     "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+  },
+  {
+    "subject": "Posta Uganda postal-address service source metadata",
+    "licenseOrTerms": "Official Uganda Post Limited webpage; reuse rights for postal-address or postal-code data are not recorded",
+    "redistribution": "metadata-only",
+    "notes": "This release records source metadata only. It does not apply, query, bundle, derive, or retain postal-address, box, postcode, locality, recipient, branch, or delivery-point records. The service page does not provide a reusable national regex or mapping reuse right."
+  },
+  {
+    "subject": "Uganda national postal-code format and delivery-point mapping",
+    "licenseOrTerms": "Not yet verified",
+    "redistribution": "not-bundled",
+    "notes": "No fixed national regex, postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, operational-coverage assertion, or derived equivalent is included until authority, version, redistribution, coverage, and correction evidence are recorded."
   }
 ]

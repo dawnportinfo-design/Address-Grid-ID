@@ -17,7 +17,7 @@ test('registers official and open postal sources for the priority rollout countr
 });
 
 test('prefers country-specific official sources before the UPU global fallback', () => {
-  const countrySpecificCountries = ['AO', 'DZ', 'EG', 'GH', 'KE', 'MA', 'TN', 'TZ', 'RW', 'ZM', 'MG', 'MU', 'BW', 'AT', 'CH', 'LI', 'NL'];
+  const countrySpecificCountries = ['AO', 'DZ', 'EG', 'GH', 'KE', 'MA', 'TN', 'TZ', 'UG', 'RW', 'ZM', 'MG', 'MU', 'BW', 'AT', 'CH', 'LI', 'NL'];
 
   for (const countryCode of countrySpecificCountries) {
     const sources = getOfficialPostalSourcesForCountry(countryCode);
@@ -32,6 +32,23 @@ test('prefers country-specific official sources before the UPU global fallback',
   }
 
   assert.equal(getOfficialPostalSourcesForCountry('DE')[0]?.id, 'upu-universal-postcode-database');
+});
+
+test('keeps Uganda postal-address metadata on the official Posta Uganda URL', () => {
+  const ugandaSource = getOfficialPostalSourcesForCountry('UG').find(source => source.id === 'posta-uganda-postal-address');
+
+  assert.equal(ugandaSource?.authority, 'postal-operator');
+  assert.equal(ugandaSource?.availability, 'web-search');
+  assert.equal(ugandaSource?.url, 'https://ugapost.co.ug/our-services/physical-address/');
+  assert.equal(ugandaSource?.depth, 'locality');
+});
+
+test('keeps Tanzania postcode metadata on the current TCRA service URL', () => {
+  const tanzaniaSource = getOfficialPostalSourcesForCountry('TZ').find(source => source.id === 'tcra-tanzania-postcode');
+
+  assert.equal(tanzaniaSource?.authority, 'government');
+  assert.equal(tanzaniaSource?.availability, 'public-api');
+  assert.equal(tanzaniaSource?.url, 'https://address.tcra.go.tz/services/postcode');
 });
 
 test('keeps the UPU source as an explicit official global fallback', () => {

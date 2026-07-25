@@ -2,7 +2,7 @@
 
 Version: agid-postal-country-pack-v0.1
 Country: Eritrea (ER)
-Generated at: 2026-06-20T00:00:00.000Z
+Generated at: 2026-07-23T06:12:06.057Z
 Official status: draft
 
 This is an AGID Postal Country Pack for AGID Postal Forge. It contains
@@ -21,6 +21,7 @@ data trust, privacy, and transition gates are satisfied.
 - `manifest.json`: pack identity, required layers, counts, and safety flags.
 - `agid-postal-country-pack.json`: complete generated country pack.
 - `source-catalog.json`: source slots and license/reuse cautions.
+- `postal-source-readiness.json`: country-specific postal-mapping release gates, when applicable.
 - `locality-index.json`: stable non-personal locality IDs and aliases.
 - `planning-cell-index.json`: synthetic AGID planning cells for postal-zone design.
 - `route-evidence-index.json`: route, ferry, port, and corridor evidence slots.

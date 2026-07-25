@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "AL official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "albania-akep-universal-postal-service-authorization-2025",
+    "sourceName": "Albania AKEP universal postal service authorization",
+    "sourceUrl": "https://akep.al/wp-content/uploads/2026/02/Vendim-17.pdf",
+    "provider": "Electronic and Postal Communications Authority of Albania (AKEP)",
+    "licenseOrTerms": "Official Decision 17 grants Posta Shqiptare J.S.C. a five-year individual authorization for universal postal service starting 2025-07-07. It is authority metadata only and does not provide a postcode-mapping license, format definition, or delivery-coverage grant. No carrier operational data is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal regulator and universal-service operator reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The regulator records the current national universal-service authorization.",
+      "Operator authority is separate from postcode format, mapping rights, coverage, and correction evidence.",
+      "No carrier operational data is retained."
+    ]
+  },
+  {
+    "sourceId": "albania-asig-geoportal-terms",
+    "sourceName": "Albania National Geoportal terms of use",
+    "sourceUrl": "https://geoportal.asig.gov.al/en/info/terms",
+    "provider": "State Authority for Geospatial Information of Albania (ASIG)",
+    "licenseOrTerms": "Official terms allow Geoportal resources only for non-profit and non-commercial use and state that tariffs apply to download and transformation services. The terms do not establish redistribution rights for an AGID postcode or administrative artifact; no geospatial record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "geospatial reuse-terms and publication-safety reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Public viewing or access does not establish commercial redistribution rights.",
+      "No Geoportal data, services, metadata values, or geometry are retained.",
+      "The terms remain a release gate for any future administrative extract."
+    ]
+  },
+  {
+    "sourceId": "albania-asig-administrative-boundary-metadata",
+    "sourceName": "Albania ASIG administrative-territorial boundary metadata",
+    "sourceUrl": "https://geoportal.asig.gov.al/en/node/956",
+    "provider": "State Authority for Geospatial Information of Albania (ASIG)",
+    "licenseOrTerms": "Official publication records updated administrative-territorial boundary information aligned with DCM 360 dated 2019-05-29. Geometry is excluded and the Geoportal terms do not provide the required general redistribution grant; no boundary, address, parcel, or location record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-boundary authority and safety-boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Boundary authority is recorded separately from a releasable key-only extract.",
+      "No geometry, boundary feature, cadastral record, or address-system data is retained.",
+      "Administrative boundaries do not establish postal-code coverage or address-to-postcode mapping."
+    ]
+  },
+  {
+    "sourceId": "albania-instat-administrative-divisions-classification",
+    "sourceName": "Albania INSTAT administrative-divisions classification",
+    "sourceUrl": "https://www.instat.gov.al/en/documentation/classifications/version/?verId=3488",
+    "provider": "Institute of Statistics, Republic of Albania (INSTAT)",
+    "licenseOrTerms": "Official administrative classification page describes counties and municipalities and presents a download surface. Resource-specific reuse terms, version cadence, and a postal crosswalk are not verified; no classification value, locality, postcode, or geographic record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-classification and unresolved-terms reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The classification is a useful official authority reference, not a verified reuse grant.",
+      "No administrative value is retained.",
+      "The source does not establish a postcode format, postal mapping, coverage, or correction process."
+    ]
+  },
+  {
+    "sourceId": "al-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Albania current postcode format, safe mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:albania-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "provider": "AKEP, Posta Shqiptare, or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with explicit format authority, reuse terms, coverage, version, and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The recorded authorization and administrative sources are not substitutes for a safe offline postcode mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+    ]
+  }
+]

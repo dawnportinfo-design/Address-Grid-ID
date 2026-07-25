@@ -348,23 +348,56 @@ type WeakPostalPresetSeed = {
   pattern?: string;
   samples?: string[];
   note?: string;
+  openSourceIds?: string[];
 };
 
 const WEAK_POSTAL_PRESET_SEEDS: WeakPostalPresetSeed[] = ([
   { code: 'AF', name: 'Afghanistan', region: 'Asia', lat: 33.9391, lng: 67.71, population: 42_000_000, areaKm2: 652_230, municipalityCount: 400, terrain: 'mountain', pattern: '^\\d{4}$', samples: ['1001'], note: 'Postal codes exist, but public API and rural address coverage are weak; keep manual confirmation first.' },
   { code: 'BD', name: 'Bangladesh', region: 'Asia', lat: 23.685, lng: 90.3563, population: 173_000_000, areaKm2: 147_570, municipalityCount: 500, terrain: 'mixed', pattern: '^\\d{4}$', samples: ['1000'], note: 'Postal codes exist; use format checks and administrative candidates before carrier review.' },
+  { code: 'GT', name: 'Guatemala', region: 'Americas', lat: 15.7835, lng: -90.2308, population: 18_000_000, areaKm2: 108_889, municipalityCount: 340, terrain: 'mountain', pattern: '^\\d{5}$', note: 'Five-digit postal-code formatting is supported, but country-specific redistributable postal-code mapping remains unverified. Keep manual confirmation and use only AGID synthetic fixtures; the INE populated-place dataset is catalogued as metadata only.', openSourceIds: ['gt-ine-censo-2018-lugares-poblados', 'openstreetmap', 'geoboundaries', 'natural-earth'] },
   { code: 'IN', name: 'India', region: 'Asia', lat: 20.5937, lng: 78.9629, population: 1_430_000_000, areaKm2: 3_287_263, municipalityCount: 6_000, terrain: 'mixed', pattern: '^\\d{6}$', samples: ['110001'], note: 'PIN codes are broad; use postal candidates plus locality, landmark, and route evidence.' },
-  { code: 'KH', name: 'Cambodia', region: 'Asia', lat: 12.5657, lng: 104.991, population: 17_000_000, areaKm2: 181_035, municipalityCount: 200, terrain: 'mixed', pattern: '^\\d{5}$', samples: ['12000'], note: 'Postal metadata is uneven; candidate display should not override local manual input.' },
-  { code: 'LA', name: 'Laos', region: 'Asia', lat: 19.8563, lng: 102.4955, population: 7_600_000, areaKm2: 236_800, municipalityCount: 150, terrain: 'mountain', pattern: '^\\d{5}$', samples: ['01000'], note: 'Postal coverage is sparse outside cities; combine postal hints with AGID and administrative hierarchy.' },
-  { code: 'MM', name: 'Myanmar', region: 'Asia', lat: 21.9162, lng: 95.956, population: 55_000_000, areaKm2: 676_578, municipalityCount: 350, terrain: 'mixed', pattern: '^\\d{5}$', samples: ['11181'], note: 'Postal data and administration can be unstable; keep conflict-sensitive manual review.' },
-  { code: 'NP', name: 'Nepal', region: 'Asia', lat: 28.3949, lng: 84.124, population: 31_000_000, areaKm2: 147_516, municipalityCount: 753, terrain: 'mountain', pattern: '^\\d{5}$', samples: ['44600'], note: 'Mountain routing needs locality and route evidence in addition to postal format.' },
+  { code: 'KH', name: 'Cambodia', region: 'Asia', lat: 12.5657, lng: 104.991, population: 17_000_000, areaKm2: 181_035, municipalityCount: 200, terrain: 'mixed', note: 'A previously assumed fixed postal-code pattern is not authority-verified and conflicts with public Cambodia Post format signals. Do not format-validate or autofill until an authority-published national format, mapping scope, reuse rights, and update policy are recorded.' },
+  { code: 'LA', name: 'Laos', region: 'Asia', lat: 19.8563, lng: 102.4955, population: 7_600_000, areaKm2: 236_800, municipalityCount: 150, terrain: 'mountain', note: 'Lao postal law defines post codes by delivery geography and the official postal service exposes a postcode page, but a reusable national regex, mapping, rights, and update policy are not authority-verified here. Do not format-validate or autofill until those gates are recorded.' },
+  { code: 'MM', name: 'Myanmar', region: 'Asia', lat: 21.9162, lng: 95.956, population: 55_000_000, areaKm2: 676_578, municipalityCount: 350, terrain: 'mixed', note: 'The official postal operator exposes a postcode-search screen, but a reusable national regex, mapping, rights, coverage, and update policy are not authority-verified here. Do not format-validate, query, or autofill until those gates are recorded; keep conflict-sensitive manual review.' },
+  { code: 'NP', name: 'Nepal', region: 'Asia', lat: 28.3949, lng: 84.124, population: 31_000_000, areaKm2: 147_516, municipalityCount: 753, terrain: 'mountain', note: 'Nepal Postal Service publishes national, regional, and change-notice postal-code material, but a reusable national regex, machine-readable mapping, reuse rights, and update policy are not authority-verified here. Do not format-validate, query, or autofill until those gates are recorded; mountain routing still needs locality and route evidence.' },
   { code: 'NG', name: 'Nigeria', region: 'Africa', lat: 9.082, lng: 8.6753, population: 224_000_000, areaKm2: 923_768, municipalityCount: 774, terrain: 'mixed', pattern: '^\\d{6}$', samples: ['100001'], note: 'Postal codes exist, but free machine-readable API coverage is uneven; candidate-first workflow required.' },
-  { code: 'PK', name: 'Pakistan', region: 'Asia', lat: 30.3753, lng: 69.3451, population: 240_000_000, areaKm2: 881_913, municipalityCount: 600, terrain: 'mixed', pattern: '^\\d{5}$', samples: ['44000'], note: 'Postal codes exist; use format validation, city/province candidates, and manual confirmation.' },
+  { code: 'PK', name: 'Pakistan', region: 'Asia', lat: 30.3753, lng: 69.3451, population: 240_000_000, areaKm2: 881_913, municipalityCount: 600, terrain: 'mixed', note: 'Pakistan Post exposes a post-code directory, but a reusable national regex, machine-readable mapping, reuse rights, and update policy are not authority-verified here. Do not format-validate, query, or autofill until those gates are recorded; city and province candidates still require manual confirmation.' },
   { code: 'PH', name: 'Philippines', region: 'Asia', lat: 12.8797, lng: 121.774, population: 118_000_000, areaKm2: 300_000, municipalityCount: 1_600, terrain: 'archipelago', pattern: '^\\d{4}$', samples: ['1000'], note: 'Postal codes exist but island/barangay addressing needs candidate selection and local delivery evidence.' },
-  { code: 'UG', name: 'Uganda', region: 'Africa', lat: 1.3733, lng: 32.2903, population: 49_000_000, areaKm2: 241_038, municipalityCount: 170, terrain: 'mixed', pattern: '^\\d{5}$', samples: ['10101'], note: 'Postal-code use is limited in many delivery flows; keep AGID as supplemental locality evidence.' },
+  { code: 'UG', name: 'Uganda', region: 'Africa', lat: 1.3733, lng: 32.2903, population: 49_000_000, areaKm2: 241_038, municipalityCount: 170, terrain: 'mixed', note: 'Posta Uganda exposes postal-address services, but no authority-published national postal-code regex is verified here. Do not format-validate, query, or autofill until format, mapping, rights, and update evidence are recorded; keep AGID as supplemental locality evidence.' },
   { code: 'VN', name: 'Vietnam', region: 'Asia', lat: 14.0583, lng: 108.2772, population: 100_000_000, areaKm2: 331_212, municipalityCount: 700, terrain: 'mixed', pattern: '^\\d{5,6}$', samples: ['100000'], note: 'Postal formats changed over time; validate format but prioritize province/district/ward candidates.' },
   { code: 'ZM', name: 'Zambia', region: 'Africa', lat: -13.1339, lng: 27.8493, population: 20_000_000, areaKm2: 752_612, municipalityCount: 116, terrain: 'mixed', pattern: '^\\d{5}$', samples: ['10101'], note: 'Postal metadata exists but may not be enough for last-mile delivery; use AGID supplemental areas.' },
 ] satisfies WeakPostalPresetSeed[]).filter(seed => !NO_POSTAL_COUNTRY_CODES.has(seed.code));
+
+const COUNTRY_REPOSITORY_BOOTSTRAP_NOTE = 'Country-repository bootstrap uses synthetic planning metadata only. Postal format, mapping, authority, license, coverage, and update policy are unverified here; no postal lookup, address autofill, or delivery claim is enabled.';
+
+const COUNTRY_REPOSITORY_BOOTSTRAP_PRESET_SEEDS: WeakPostalPresetSeed[] = [
+  { code: 'HN', name: 'Honduras', region: 'Americas', lat: 14.8, lng: -86.2, population: 10_800_000, areaKm2: 112_492, municipalityCount: 298, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'NI', name: 'Nicaragua', region: 'Americas', lat: 12.9, lng: -85.2, population: 7_000_000, areaKm2: 130_373, municipalityCount: 153, terrain: 'mixed', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'SV', name: 'El Salvador', region: 'Americas', lat: 13.8, lng: -88.9, population: 6_400_000, areaKm2: 21_041, municipalityCount: 262, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'PA', name: 'Panama', region: 'Americas', lat: 8.54, lng: -80.78, population: 4_500_000, areaKm2: 75_417, municipalityCount: 81, terrain: 'mixed', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'LS', name: 'Lesotho', region: 'Africa', lat: -29.61, lng: 28.23, population: 2_300_000, areaKm2: 30_355, municipalityCount: 10, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'SZ', name: 'Eswatini', region: 'Africa', lat: -26.52, lng: 31.47, population: 1_200_000, areaKm2: 17_364, municipalityCount: 4, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'GW', name: 'Guinea-Bissau', region: 'Africa', lat: 11.8, lng: -15.18, population: 2_100_000, areaKm2: 36_125, municipalityCount: 12, terrain: 'mixed', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'PE', name: 'Peru', region: 'Americas', lat: -9.19, lng: -75.02, population: 34_000_000, areaKm2: 1_285_216, municipalityCount: 196, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'PY', name: 'Paraguay', region: 'Americas', lat: -23.44, lng: -58.44, population: 7_500_000, areaKm2: 406_752, municipalityCount: 263, terrain: 'mixed', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'UY', name: 'Uruguay', region: 'Americas', lat: -32.52, lng: -55.77, population: 3_400_000, areaKm2: 176_215, municipalityCount: 19, terrain: 'mixed', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'VE', name: 'Venezuela', region: 'Americas', lat: 6.42, lng: -66.59, population: 28_500_000, areaKm2: 916_445, municipalityCount: 335, terrain: 'mixed', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'MN', name: 'Mongolia', region: 'Asia', lat: 46.86, lng: 103.85, population: 3_500_000, areaKm2: 1_564_116, municipalityCount: 330, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'KG', name: 'Kyrgyzstan', region: 'Asia', lat: 41.2, lng: 74.77, population: 7_200_000, areaKm2: 199_951, municipalityCount: 40, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'TJ', name: 'Tajikistan', region: 'Asia', lat: 38.86, lng: 71.28, population: 10_500_000, areaKm2: 143_100, municipalityCount: 68, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'TM', name: 'Turkmenistan', region: 'Asia', lat: 38.97, lng: 59.56, population: 7_100_000, areaKm2: 488_100, municipalityCount: 50, terrain: 'desert', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'JO', name: 'Jordan', region: 'Asia', lat: 30.59, lng: 36.24, population: 11_500_000, areaKm2: 89_342, municipalityCount: 12, terrain: 'desert', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'MD', name: 'Moldova', region: 'Europe', lat: 47.41, lng: 28.37, population: 2_500_000, areaKm2: 33_846, municipalityCount: 32, terrain: 'mixed', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'MK', name: 'North Macedonia', region: 'Europe', lat: 41.61, lng: 21.75, population: 1_800_000, areaKm2: 25_713, municipalityCount: 80, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'RO', name: 'Romania', region: 'Europe', lat: 45.94, lng: 24.97, population: 19_000_000, areaKm2: 238_397, municipalityCount: 318, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'BG', name: 'Bulgaria', region: 'Europe', lat: 42.73, lng: 25.49, population: 6_400_000, areaKm2: 110_994, municipalityCount: 265, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'AL', name: 'Albania', region: 'Europe', lat: 41.15, lng: 20.17, population: 2_800_000, areaKm2: 28_748, municipalityCount: 61, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'BA', name: 'Bosnia and Herzegovina', region: 'Europe', lat: 44.2, lng: 17.68, population: 3_200_000, areaKm2: 51_209, municipalityCount: 143, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'ME', name: 'Montenegro', region: 'Europe', lat: 42.71, lng: 19.37, population: 630_000, areaKm2: 13_812, municipalityCount: 25, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'RS', name: 'Serbia', region: 'Europe', lat: 44.02, lng: 21.01, population: 6_600_000, areaKm2: 77_474, municipalityCount: 145, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'GE', name: 'Georgia', region: 'Asia', lat: 42.31, lng: 43.36, population: 3_700_000, areaKm2: 69_700, municipalityCount: 64, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+  { code: 'AZ', name: 'Azerbaijan', region: 'Asia', lat: 40.14, lng: 47.58, population: 10_400_000, areaKm2: 86_600, municipalityCount: 70, terrain: 'mountain', note: COUNTRY_REPOSITORY_BOOTSTRAP_NOTE },
+];
 
 const PREPARATION_WEAK_POSTAL_PRESET_SEEDS: WeakPostalPresetSeed[] =
   POSTAL_FORGE_WEAK_POSTAL_PREPARATION_COUNTRIES.map(target => ({
@@ -405,7 +438,7 @@ function buildWeakPostalPreset(seed: WeakPostalPresetSeed): PostalZoneDesignerCo
           api: null,
           format: seed.pattern ? 'National postal-code format, candidate-first' : 'Candidate-first postal metadata',
         },
-        openSourceIds: ['openstreetmap', 'geoboundaries', 'natural-earth'],
+        openSourceIds: seed.openSourceIds || ['openstreetmap', 'geoboundaries', 'natural-earth'],
       },
       existingPostalPattern: seed.pattern,
       existingPostalSamples: seed.samples,
@@ -445,6 +478,7 @@ const CLASS_B_PRESETS: PostalZoneDesignerCountryPreset[] = [
   },
   ...WEAK_POSTAL_PRESET_SEEDS.map(buildWeakPostalPreset),
   ...PREPARATION_WEAK_POSTAL_PRESET_SEEDS.map(buildWeakPostalPreset),
+  ...COUNTRY_REPOSITORY_BOOTSTRAP_PRESET_SEEDS.map(buildWeakPostalPreset),
 ];
 
 const PREPARATION_NO_POSTAL_COUNTRY_PRESETS: PostalZoneDesignerCountryPreset[] =

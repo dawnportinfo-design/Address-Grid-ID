@@ -1,0 +1,782 @@
+[
+  {
+    "localityId": "GW-M1",
+    "stableId": "gw-municipality-gw-m1",
+    "name": "Central Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "MV",
+    "aliases": [
+      {
+        "label": "Central Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T1",
+    "stableId": "gw-town-gw-m1-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "GW-M1",
+    "codePart": "VF",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T1-C0",
+    "stableId": "gw-block-gw-m1-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "GW-M1-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T1-C1",
+    "stableId": "gw-block-gw-m1-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "GW-M1-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T1-C2",
+    "stableId": "gw-block-gw-m1-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "GW-M1-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T1-C3",
+    "stableId": "gw-block-gw-m1-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "GW-M1-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T2",
+    "stableId": "gw-town-gw-m1-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "GW-M1",
+    "codePart": "XB",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T2-C0",
+    "stableId": "gw-block-gw-m1-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "GW-M1-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T2-C1",
+    "stableId": "gw-block-gw-m1-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "GW-M1-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T2-C2",
+    "stableId": "gw-block-gw-m1-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "GW-M1-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T2-C3",
+    "stableId": "gw-block-gw-m1-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "GW-M1-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T3",
+    "stableId": "gw-town-gw-m1-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "GW-M1",
+    "codePart": "W7",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T3-C0",
+    "stableId": "gw-block-gw-m1-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "GW-M1-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T3-C1",
+    "stableId": "gw-block-gw-m1-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "GW-M1-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T3-C2",
+    "stableId": "gw-block-gw-m1-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "GW-M1-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M1-T3-C3",
+    "stableId": "gw-block-gw-m1-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "GW-M1-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2",
+    "stableId": "gw-municipality-gw-m2",
+    "name": "North Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "8N",
+    "aliases": [
+      {
+        "label": "North Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T1",
+    "stableId": "gw-town-gw-m2-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "GW-M2",
+    "codePart": "B4",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T1-C0",
+    "stableId": "gw-block-gw-m2-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "GW-M2-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T1-C1",
+    "stableId": "gw-block-gw-m2-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "GW-M2-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T1-C2",
+    "stableId": "gw-block-gw-m2-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "GW-M2-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T1-C3",
+    "stableId": "gw-block-gw-m2-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "GW-M2-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T2",
+    "stableId": "gw-town-gw-m2-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "GW-M2",
+    "codePart": "7C",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T2-C0",
+    "stableId": "gw-block-gw-m2-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "GW-M2-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T2-C1",
+    "stableId": "gw-block-gw-m2-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "GW-M2-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T2-C2",
+    "stableId": "gw-block-gw-m2-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "GW-M2-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T2-C3",
+    "stableId": "gw-block-gw-m2-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "GW-M2-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T3",
+    "stableId": "gw-town-gw-m2-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "GW-M2",
+    "codePart": "4Z",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T3-C0",
+    "stableId": "gw-block-gw-m2-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "GW-M2-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T3-C1",
+    "stableId": "gw-block-gw-m2-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "GW-M2-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T3-C2",
+    "stableId": "gw-block-gw-m2-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "GW-M2-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M2-T3-C3",
+    "stableId": "gw-block-gw-m2-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "GW-M2-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3",
+    "stableId": "gw-municipality-gw-m3",
+    "name": "South Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "8T",
+    "aliases": [
+      {
+        "label": "South Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "South Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T1",
+    "stableId": "gw-town-gw-m3-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "GW-M3",
+    "codePart": "XG",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "South Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T1-C0",
+    "stableId": "gw-block-gw-m3-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "GW-M3-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T1-C1",
+    "stableId": "gw-block-gw-m3-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "GW-M3-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T1-C2",
+    "stableId": "gw-block-gw-m3-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "GW-M3-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T1-C3",
+    "stableId": "gw-block-gw-m3-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "GW-M3-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T2",
+    "stableId": "gw-town-gw-m3-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "GW-M3",
+    "codePart": "H3",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "South Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T2-C0",
+    "stableId": "gw-block-gw-m3-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "GW-M3-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T2-C1",
+    "stableId": "gw-block-gw-m3-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "GW-M3-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T2-C2",
+    "stableId": "gw-block-gw-m3-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "GW-M3-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T2-C3",
+    "stableId": "gw-block-gw-m3-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "GW-M3-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T3",
+    "stableId": "gw-town-gw-m3-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "GW-M3",
+    "codePart": "GN",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "South Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T3-C0",
+    "stableId": "gw-block-gw-m3-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "GW-M3-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T3-C1",
+    "stableId": "gw-block-gw-m3-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "GW-M3-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T3-C2",
+    "stableId": "gw-block-gw-m3-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "GW-M3-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "GW-M3-T3-C3",
+    "stableId": "gw-block-gw-m3-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "GW-M3-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  }
+]

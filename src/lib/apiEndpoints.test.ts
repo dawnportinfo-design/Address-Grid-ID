@@ -8,6 +8,8 @@ test('builds country admin endpoints with normalized country codes', () => {
   assert.equal(apiEndpoints.countryBoundary('br'), '/api/v1/country-boundary?cc=BR');
   assert.equal(apiEndpoints.addressVerify(), '/api/v1/address/verify');
   assert.equal(apiEndpoints.addressVerifyCapabilities(), '/api/v1/address/verify/capabilities');
+  assert.equal(apiEndpoints.postalCodeCapabilities(), '/api/v1/postal-codes/capabilities');
+  assert.equal(apiEndpoints.postalCodeValidate(), '/api/v1/postal-codes/validate');
   assert.equal(apiEndpoints.addressStandardLibraryResolve(), '/api/v1/address/standard-library/resolve');
   assert.equal(apiEndpoints.addressExternalValidatorsCapabilities(), '/api/v1/address/external-validators/capabilities');
   assert.equal(apiEndpoints.addressExternalValidatorImport(), '/api/v1/address/external-validators/import');

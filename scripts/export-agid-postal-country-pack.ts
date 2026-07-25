@@ -41,6 +41,7 @@ data trust, privacy, and transition gates are satisfied.
 - \`manifest.json\`: pack identity, required layers, counts, and safety flags.
 - \`agid-postal-country-pack.json\`: complete generated country pack.
 - \`source-catalog.json\`: source slots and license/reuse cautions.
+- \`postal-source-readiness.json\`: country-specific postal-mapping release gates, when applicable.
 - \`locality-index.json\`: stable non-personal locality IDs and aliases.
 - \`planning-cell-index.json\`: synthetic AGID planning cells for postal-zone design.
 - \`route-evidence-index.json\`: route, ferry, port, and corridor evidence slots.
@@ -93,6 +94,9 @@ This directory contains draft AGID Postal Country Packs for target countries
 across mature postal systems, weak postal systems, no-postal countries, and
 supplemental AGID postal-zone design. These packs are safe OSS planning
 artifacts, not official postal authority datasets.
+
+The metadata-only construction order is published separately in
+\`build-queue.json\`. It never authorizes real postcode lookup or delivery claims.
 
 ## Countries
 
@@ -155,6 +159,9 @@ async function writeCountryPack(pack: AgidPostalCountryPack) {
   await writeJson(outDir, 'manifest.json', pack.manifest);
   await writeJson(outDir, 'agid-postal-country-pack.json', pack);
   await writeJson(outDir, 'source-catalog.json', pack.sourceCatalog);
+  if (pack.postalSourceReadiness) {
+    await writeJson(outDir, 'postal-source-readiness.json', pack.postalSourceReadiness);
+  }
   await writeJson(outDir, 'locality-index.json', pack.localityIndex);
   await writeJson(outDir, 'planning-cell-index.json', pack.planningCellIndex);
   await writeJson(outDir, 'route-evidence-index.json', pack.routeEvidenceIndex);
@@ -217,14 +224,21 @@ async function main() {
       generatedAt,
       officialMunicipalityDataset: await loadOfficialMunicipalityDataset(requestedCountryCode),
     })];
+  const indexPacks = exportAll
+    ? packs
+    : await Promise.all(listAgidPostalCountryPackTargetCountries().map(async country => (
+      buildAgidPostalCountryPack({
+        countryCode: country.countryCode,
+        generatedAt,
+        officialMunicipalityDataset: await loadOfficialMunicipalityDataset(country.countryCode),
+      })
+    )));
 
   const outDirs = [];
   for (const pack of packs) {
     outDirs.push(await writeCountryPack(pack));
   }
-  if (exportAll) {
-    await writeCountryPackIndex(packs);
-  }
+  await writeCountryPackIndex(indexPacks);
 
   console.log(`AGID Postal Country Pack export complete`);
   console.log(`countries=${packs.length}`);

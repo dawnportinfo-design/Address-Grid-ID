@@ -1,0 +1,115 @@
+{
+  "schemaId": "agid-tanzania-postal-source-readiness-v0.1",
+  "countryCode": "TZ",
+  "countryName": "Tanzania",
+  "evaluatedAt": "2026-07-23T06:12:06.057Z",
+  "postalFormat": {
+    "pattern": "^\\d{5}$",
+    "authorityVerified": true,
+    "verifiedFormatOnly": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "tcra-tanzania-postcode",
+      "scope": "national-postcode-policy-and-service",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": null,
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "tcra-tanzania-postcode-list-publication",
+      "scope": "postcode-list-publication-notice",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": null,
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "The TCRA national five-digit numeric postcode format is recorded as format-only authority evidence",
+      "status": "passed",
+      "evidence": [
+        "tcra-tanzania-postcode",
+        "postalFormat.pattern=^\\d{5}$",
+        "authorityVerified=true",
+        "verifiedFormatOnly=true"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postcode-list-publication-recorded",
+      "label": "The TCRA postcode-list publication notice is cataloged as metadata only",
+      "status": "passed",
+      "evidence": [
+        "tcra-tanzania-postcode-list-publication",
+        "postalMappingEvidence=false",
+        "redistributionStatus=metadata-only"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-code-mapping-evidence",
+      "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "A national format is not a mapping."
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "redistribution-rights",
+      "label": "Redistribution rights for any postcode mapping, list, or derived output are verified",
+      "status": "blocked",
+      "evidence": [
+        "redistributionStatus=metadata-only for every source"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-update-cadence",
+      "label": "The usable postcode mapping has a version, retrieval date, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "version=null for every source",
+        "updateCadence=unknown for every source"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "A versioned postcode-to-locality or delivery-point mapping with geographic coverage and documented corrections.",
+    "Field-level reuse, attribution, and redistribution terms for any mapping, list, map, search result, or derived output.",
+    "Publication date, retrieval date, update cadence, coverage limits, and correction path for the mapping and publication list."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack records only the national five-digit format, not a postcode-to-locality match.",
+    "This pack does not assert operational coverage or delivery-point coverage."
+  ]
+}

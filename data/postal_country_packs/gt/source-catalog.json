@@ -1,0 +1,100 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "GT official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "gt-ine-censo-2018-lugares-poblados",
+    "sourceName": "Guatemala INE Censo 2018 - Lugares Poblados",
+    "sourceUrl": "https://datos.ine.gob.gt/es/dataset/censo-2018-lugares-poblados",
+    "provider": "Instituto Nacional de Estadistica (INE), Guatemala",
+    "licenseOrTerms": "Creative Commons Attribution, as declared by the INE dataset page; raw records are not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "country-specific populated-place source candidate; metadata only, not a postal-code mapping or address dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The INE dataset page declares Creative Commons Attribution and describes populated-place data.",
+      "This source does not establish a national postal-code mapping or delivery-point coverage.",
+      "This pack contains only source metadata and no locality, household, dwelling, or address records from the dataset."
+    ]
+  },
+  {
+    "sourceId": "upu-universal-postcode-database",
+    "sourceName": "UPU Universal POST*CODE Database",
+    "sourceUrl": "https://www.upu.int/en/postal-solutions/programmes-services/addressing-solutions",
+    "provider": "Universal Postal Union (UPU)",
+    "licenseOrTerms": "UPU Universal POST*CODE Database license documents; catalog update 2026.1 is listed by UPU. Contract, non-disclosure agreement, data-use declaration, and rates apply; no access or data is acquired.",
+    "redistributionStatus": "license-review-required",
+    "role": "international licensed postcode reference candidate; metadata only, not Guatemala postal-authority evidence",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "UPU describes this as a global postcode database and publishes license material and update metadata.",
+      "This pack does not obtain, query, store, transform, or redistribute UPU postcode records.",
+      "A UPU candidate does not establish Guatemala authority, mapping coverage, or delivery-point evidence."
+    ]
+  },
+  {
+    "sourceId": "gt-postal-code-mapping-required",
+    "sourceName": "Guatemala postal-code and delivery-point authority source",
+    "sourceUrl": "source-metadata-only:guatemala-postal-code-mapping-required",
+    "provider": "Guatemala postal authority or authority-designated official source",
+    "licenseOrTerms": "Not yet verified; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for any real postal-code mapping, address-to-postcode lookup, or delivery-point claim",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The five-digit format alone does not prove a postcode-to-locality or delivery-point mapping.",
+      "Do not add real postcode records, address matching, or carrier deliverability assertions until authority, license, version, and redistribution evidence are recorded."
+    ]
+  }
+]

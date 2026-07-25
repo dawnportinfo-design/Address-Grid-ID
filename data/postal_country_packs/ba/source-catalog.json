@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "BA official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "bosnia-public-postal-operators-universal-service-coordination",
+    "sourceName": "Bosnia and Herzegovina public postal operators universal-service coordination",
+    "sourceUrl": "https://www.posta.ba/bh-posta-na-sastanku-javnih-postanskih-operatera-u-mostaru/",
+    "provider": "JP BH Pošta d.o.o. Sarajevo",
+    "licenseOrTerms": "Official public-operator publication records BH Pošta, HP Mostar, and Pošte Srpske working jointly on universal postal service. It is coordination metadata only and does not provide a postcode-mapping license, format definition, countrywide coverage artifact, or delivery-coverage grant. No carrier operational data is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "public postal-operator coordination reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The source supports the multi-operator release boundary.",
+      "Operator coordination does not establish a current reusable postcode artifact.",
+      "No carrier operational data is retained."
+    ]
+  },
+  {
+    "sourceId": "bh-posta-postal-network-search",
+    "sourceName": "BH Pošta postal-network search",
+    "sourceUrl": "https://www.posta.ba/en/postal-network/",
+    "provider": "JP BH Pošta d.o.o. Sarajevo",
+    "licenseOrTerms": "Official postal-network search accepts postcode and address terms and returns postal-unit, address, contact, and work-time fields. No bulk postcode-mapping reuse grant or publication version is recorded; the interface is not queried and no result, postcode, address, office, contact, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-network search authority and safety-boundary reference; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "A searchable site is not a safe offline dataset or a redistribution license.",
+      "Its address-bearing result schema is outside the public pack boundary.",
+      "No query result is retained."
+    ]
+  },
+  {
+    "sourceId": "poste-srpske-addressing-and-routing-tool",
+    "sourceName": "Pošte Srpske addressing and routing tool",
+    "sourceUrl": "https://www.postesrpske.com/eng/adresuj-posiljku/",
+    "provider": "Preduzeće za Poštanski saobraćaj Republike Srpske a.d. Banja Luka",
+    "licenseOrTerms": "Official addressing surface states that street or place searches return destination post office, postcode, and address form. No bulk postcode-mapping reuse grant or publication version is recorded; the interface is not queried and no result, postcode, locality, address, office, contact, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official operator postcode-addressing search and safety-boundary reference; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The search surface cannot supply a public mapping artifact.",
+      "Street- and locality-query results remain outside the safety boundary.",
+      "No query result is retained."
+    ]
+  },
+  {
+    "sourceId": "fbih-fgu-geoportal-boundary-metadata",
+    "sourceName": "FBiH Federal Geodetic Administration GeoPortal boundary metadata",
+    "sourceUrl": "https://www.fgu.com.ba/en/572.html",
+    "provider": "Federal Administration for Geodetic and Real Property Affairs of the Federation of Bosnia and Herzegovina",
+    "licenseOrTerms": "Official FBiH GeoPortal describes entity, canton, and municipality boundary coverage and carries an all-rights-reserved copyright notice. It is limited to FBiH and does not provide a whole-country redistribution grant; no boundary, cadastral, address, or geometry record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "entity administrative-boundary authority and safety-boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Entity scope is not whole-country administrative coverage.",
+      "Boundary geometry and cadastral data are excluded.",
+      "Administrative boundary availability does not establish postcode coverage or address-to-postcode mapping."
+    ]
+  },
+  {
+    "sourceId": "ba-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Bosnia and Herzegovina current postcode format, cross-operator mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:bosnia-herzegovina-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "provider": "Agency for Postal Traffic of Bosnia and Herzegovina and the authority-designated public postal operators",
+    "licenseOrTerms": "Not yet acquired and verified as a current cross-operator safe postcode-only artifact with explicit format authority, reuse terms, coverage, version, and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Recorded operator pages are not substitutes for a national safe offline mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+    ]
+  }
+]

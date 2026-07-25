@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "MK official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "north-macedonia-postal-agency-universal-service-provider",
+    "sourceName": "Postal Agency of North Macedonia universal-service provider reference",
+    "sourceUrl": "https://ap.mk/mk/node/491",
+    "provider": "Postal Agency of the Republic of North Macedonia",
+    "licenseOrTerms": "Official regulatory reference that records JSC Post of North Macedonia as the universal-service provider. It is recorded as authority metadata only and does not provide a postcode-mapping license, format, or redistribution grant. No postal, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal regulator and universal-service operator reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The regulator records the universal-service provider and nationwide service obligation.",
+      "Operator authority is separate from postcode format, mapping rights, coverage, and correction evidence.",
+      "No carrier operational data is retained."
+    ]
+  },
+  {
+    "sourceId": "north-macedonia-post-office-location-search",
+    "sourceName": "North Macedonia Post office-location search",
+    "sourceUrl": "https://www.posta.com.mk/locations_en/",
+    "provider": "JSC Post of North Macedonia",
+    "licenseOrTerms": "Official office-location search surface. Its result schema includes excluded address, contact, and work-time fields, and no bulk postcode-mapping reuse grant is recorded. The interface is not queried and no result, postcode, locality, address, telephone, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal office-search authority reference and safety-boundary evidence; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "A searchable site is not a safe offline dataset or a redistribution license.",
+      "Excluded office and location fields prevent acquisition until a separate safe postcode-only artifact exists.",
+      "No query result is retained."
+    ]
+  },
+  {
+    "sourceId": "north-macedonia-makstat-territorial-units",
+    "sourceName": "MakStat territorial-units statistical table",
+    "sourceUrl": "https://makstat.stat.gov.mk/PXWeb/pxweb/en/MakStat/MakStat__ProstorniEdinici/125_PrEdn_reg_09_BrOpstiniNM_ml.px",
+    "provider": "State Statistical Office of the Republic of North Macedonia",
+    "licenseOrTerms": "MakStat states that data are available free of charge and require source attribution; the table is an aggregate territorial-units summary. No postcode mapping, address, locality, boundary, or geographic-key record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "attributed territorial-statistics reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The source supplies clear reuse and attribution context for aggregate territorial statistics.",
+      "The recorded table does not supply postcode mappings or administrative geographic keys for routing.",
+      "No raw statistical table data is retained in this pack."
+    ]
+  },
+  {
+    "sourceId": "north-macedonia-cadastre-admin-boundary-and-address-catalog",
+    "sourceName": "North Macedonia cadastre administrative-boundary and address catalog",
+    "sourceUrl": "https://www.katastar.gov.mk/%D0%BF%D0%BE%D0%B4%D0%B0%D1%82%D0%BE%D1%86%D0%B8-%D0%BE%D0%B4-%D0%B3%D0%BA%D0%B8%D1%81/%D0%BF%D0%BE%D0%B4%D0%B0%D1%82%D0%BE%D1%86%D0%B8-%D0%B7%D0%B0-%D0%B0%D0%B4%D0%BC%D0%B8%D0%BD%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%B8%D0%B2%D0%BD%D0%B8-%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B8/",
+    "provider": "Agency for Real Estate Cadastre of the Republic of North Macedonia",
+    "licenseOrTerms": "Official catalog describes administrative-boundary products alongside street and house-number products. Resource-specific reuse terms and a safe postcode-only or administrative-key schema are not verified; no boundary, street, house, parcel, geometry, or location record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-geography catalog and safety-boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The mixed catalog cannot be treated as an approved administrative-key extraction source.",
+      "No geometry or cadastral, street, house-number, or address data is retained.",
+      "Administrative publication does not establish postal-code coverage, mapping rights, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "mk-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "sourceName": "North Macedonia current postcode format, safe mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:north-macedonia-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "provider": "Postal Agency of the Republic of North Macedonia or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with explicit reuse terms, coverage, version, and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The office-search surface and aggregate statistics are not substitutes for a safe offline postcode mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+    ]
+  }
+]

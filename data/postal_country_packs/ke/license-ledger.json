@@ -16,5 +16,17 @@
     "licenseOrTerms": "source-specific",
     "redistribution": "review-required",
     "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+  },
+  {
+    "subject": "Posta Kenya post-office locator source metadata",
+    "licenseOrTerms": "Official locator page; page terms are linked but no data reuse or redistribution grant is recorded",
+    "redistribution": "metadata-only",
+    "notes": "This release records source metadata only. It does not query, bundle, or derive locator, postcode, address, post-office, recipient, or delivery-point records. Verify reuse rights, version, coverage, and correction policy before any derived publication."
+  },
+  {
+    "subject": "Kenya real postcode and delivery-point mapping",
+    "licenseOrTerms": "Not yet verified",
+    "redistribution": "not-bundled",
+    "notes": "No real postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, or derived equivalent is included until versioned mapping, redistribution, and freshness evidence are recorded."
   }
 ]

@@ -18,6 +18,10 @@ import {
   type PostalSourceTrustTier,
 } from './officialPostalSourceCatalog';
 import {
+  assessOfficialPostalEvidenceGate,
+  type OfficialPostalEvidenceGateResult,
+} from './officialPostalEvidenceGate';
+import {
   buildAddressDataLoadPlan,
   type AddressDataLoadPlan,
   type AddressDataLoadPlanOptions,
@@ -32,8 +36,14 @@ import {
   type AddressStandardLibraryResolution,
   type AddressStandardLibraryResolutionInput,
 } from './addressStandardLibraryResolver';
+import {
+  buildDeliveryEvidenceSourcePlan,
+  type DeliveryEvidenceSourcePlan,
+} from './deliveryEvidenceSourcePlan';
+import { normalizeAddressPartEphemerally } from './addressEphemeralNormalization';
+import { GENERATED_ADDRESS_VERIFICATION_TARGET_POLICIES } from './generatedAddressVerificationCountryPolicies';
 
-export const ADDRESS_VERIFICATION_ENGINE_VERSION = 'address-verification-engine-v1';
+export const ADDRESS_VERIFICATION_ENGINE_VERSION = 'address-verification-engine-v2';
 
 export type AddressVerificationScope = 'postal' | 'address';
 
@@ -114,6 +124,11 @@ export type PostalEvidenceCandidate = {
   source: string;
   sourceId?: string;
   url?: string;
+  sourceScopeId?: string;
+  sourceVersion?: string;
+  sourceRetrievedAt?: string;
+  sourceTermsUrl?: string;
+  sourceCorrectionUrl?: string;
   countryCode?: string;
   postalCode?: string;
   postcode?: string;
@@ -127,6 +142,24 @@ export type PostalEvidenceCandidate = {
   confidence?: number;
 };
 
+export type DeliveryEvidenceMatchLevel = 'house' | 'building' | 'delivery-point';
+
+export type DeliveryEvidenceCandidate = {
+  source: string;
+  sourceId?: string;
+  sourceUrl: string;
+  countryCode?: string;
+  authority: 'authoritative' | 'official' | 'official-derived';
+  matchConfirmed: boolean;
+  matchLevel: DeliveryEvidenceMatchLevel;
+  coverage: 'national' | 'regional' | 'local';
+  version: string;
+  retrievedAt: string;
+  validUntil: string;
+  licenseOrTermsUrl: string;
+  correctionUrl: string;
+};
+
 export type AddressVerificationEngineInput = {
   countryCode?: string;
   targetCountries?: string[];
@@ -137,6 +170,8 @@ export type AddressVerificationEngineInput = {
   format?: AddressVerificationFormatLike | null;
   countryPolicies?: Record<string, AddressVerificationTargetCountryPolicy>;
   postalEvidence?: PostalEvidenceCandidate[];
+  deliveryEvidence?: DeliveryEvidenceCandidate[];
+  evaluationTime?: string;
   referenceRecords?: OpenAddressesRecord[];
   sources?: string[];
   allowFallbackCountryFromAddress?: boolean;
@@ -168,6 +203,7 @@ export type AddressVerificationAuditStep = {
     | 'postal-format'
     | 'postal-evidence'
     | 'address-reference'
+    | 'delivery-evidence'
     | 'address-rules'
     | 'final-decision';
   status: 'ok' | 'warning' | 'failed' | 'skipped';
@@ -179,11 +215,13 @@ export type AddressVerificationEvidenceSummary = {
   postalStrength: PostalEvidenceStrength;
   postalSourceTrust: PostalSourceTrustTier;
   postalSourceCatalogMatches: string[];
+  officialPostalEvidenceGate: OfficialPostalEvidenceGateResult;
   lookupSatisfied: boolean;
   addressReference: AddressReferenceEvidence;
   strongPostalEvidence?: PostalEvidenceCandidate;
   weakPostalEvidence?: PostalEvidenceCandidate;
   referenceMatch?: AddressReferenceMatch;
+  deliveryEvidence?: DeliveryEvidenceCandidate;
 };
 
 export type AddressVerificationEvidenceGrade =
@@ -221,6 +259,14 @@ export type AddressVerificationQualitySummary = {
   comparableFor: string[];
   limitations: string[];
   upgradeActions: string[];
+  deliveryEvidence: {
+    supplied: number;
+    matched: boolean;
+    depth: DeliveryEvidenceMatchLevel | null;
+    sourceCatalogId: string | null;
+    commercialGradeEligible: boolean;
+    blockers: string[];
+  };
 };
 
 export type AddressVerificationEngineResult = {
@@ -253,6 +299,7 @@ export type AddressVerificationEngineResult = {
   quality: AddressVerificationQualitySummary;
   canonicalAddress: CanonicalAddressParts;
   dataLoading: AddressDataLoadPlan;
+  deliveryEvidenceSourcePlan: DeliveryEvidenceSourcePlan;
   standardLibrary: AddressStandardLibraryResolution;
   systemConnection: AddressSystemConnectionPlan;
   validation: AddressValidationResult;
@@ -295,7 +342,7 @@ const WEAK_POSTAL_EVIDENCE_PATTERNS = [
 
 const VALIDATION_POSTAL_USAGES = ['required', 'recommended', 'used', 'partial', 'optional'] as const;
 
-export const DEFAULT_ADDRESS_VERIFICATION_TARGET_POLICIES: Record<string, AddressVerificationTargetCountryPolicy> = {
+const CURATED_ADDRESS_VERIFICATION_TARGET_POLICIES: Record<string, AddressVerificationTargetCountryPolicy> = {
   JP: {
     countryCode: 'JP',
     enabled: true,
@@ -530,6 +577,11 @@ export const DEFAULT_ADDRESS_VERIFICATION_TARGET_POLICIES: Record<string, Addres
   },
 };
 
+export const DEFAULT_ADDRESS_VERIFICATION_TARGET_POLICIES: Record<string, AddressVerificationTargetCountryPolicy> = {
+  ...GENERATED_ADDRESS_VERIFICATION_TARGET_POLICIES,
+  ...CURATED_ADDRESS_VERIFICATION_TARGET_POLICIES,
+};
+
 export const DEFAULT_ADDRESS_VERIFICATION_TARGET_COUNTRIES = Object.keys(
   DEFAULT_ADDRESS_VERIFICATION_TARGET_POLICIES,
 ).sort();
@@ -554,7 +606,7 @@ function sourceMatches(values: Array<string | null | undefined>, patterns: RegEx
 }
 
 function normalizeTextKey(value: unknown) {
-  return clean(value).toLowerCase().replace(/[^\p{Letter}\p{Number}]+/gu, '');
+  return normalizeAddressPartEphemerally(value).comparisonKey.replace(/\s+/g, '');
 }
 
 function hasNonAscii(value: string) {
@@ -849,6 +901,7 @@ function postalEvidenceStrength(
   evidence: PostalEvidenceCandidate | null,
   format: AddressVerificationFormatLike | null | undefined,
   policy: AddressVerificationTargetCountryPolicy | null,
+  officialEvidenceGate: OfficialPostalEvidenceGateResult,
 ): PostalEvidenceStrength {
   if (!evidence) return 'none';
   const source = clean(evidence.source);
@@ -862,7 +915,9 @@ function postalEvidenceStrength(
       ...source.split(/[,\s/]+/g),
     ]),
   });
-  if (catalog.strength === 'strong') return 'strong';
+  if (catalog.strength === 'strong') {
+    return officialEvidenceGate.status === 'rejected' ? 'weak' : 'strong';
+  }
   if (sourceMatches([source], WEAK_POSTAL_EVIDENCE_PATTERNS)) return 'weak';
   if (sourceMatches([source], STRONG_POSTAL_EVIDENCE_PATTERNS)) return 'strong';
 
@@ -880,7 +935,7 @@ function postalEvidenceStrength(
       sourceMatches([candidate], STRONG_POSTAL_EVIDENCE_PATTERNS)
     );
   });
-  if (appearsInConfiguredReliableSource) return 'strong';
+  if (appearsInConfiguredReliableSource) return officialEvidenceGate.status === 'rejected' ? 'weak' : 'strong';
 
   const confidence = Number(evidence.confidence);
   if (
@@ -888,7 +943,7 @@ function postalEvidenceStrength(
     confidence >= 0.92 &&
     sourceMatches([source], [/official/i, /government/i, /national/i])
   ) {
-    return 'strong';
+    return officialEvidenceGate.status === 'rejected' ? 'weak' : 'strong';
   }
 
   return 'weak';
@@ -932,17 +987,6 @@ function strongerDepth(
   return DEPTH_ORDER[right] > DEPTH_ORDER[left] ? right : left;
 }
 
-function depthFromPostalCatalogDepth(depth: string | undefined): AddressVerificationDepth {
-  if (depth === 'delivery-point') return 'delivery-point';
-  if (depth === 'building') return 'building';
-  if (depth === 'address') return 'house';
-  if (depth === 'street') return 'street';
-  if (depth === 'locality') return 'locality';
-  if (depth === 'postcode') return 'postal-code';
-  if (depth === 'geo-only') return 'geo-only';
-  return 'postal-code';
-}
-
 function evidenceGradeFromTrust(tier: PostalSourceTrustTier, referenceMatch: AddressReferenceMatch | null): AddressVerificationEvidenceGrade {
   if (tier === 'authoritative') return 'authoritative';
   if (tier === 'official') return 'official';
@@ -953,11 +997,87 @@ function evidenceGradeFromTrust(tier: PostalSourceTrustTier, referenceMatch: Add
   return 'format-only';
 }
 
+const DELIVERY_EVIDENCE_MAX_AGE_MS = 90 * 24 * 60 * 60 * 1000;
+
+type DeliveryEvidenceAssessment = {
+  supplied: number;
+  matched: DeliveryEvidenceCandidate | null;
+  sourceCatalogId: string | null;
+  commercialGradeEligible: boolean;
+  blockers: string[];
+};
+
+function isHttpUrl(value: unknown) {
+  return /^https?:\/\/\S+$/i.test(clean(value));
+}
+
+function timestamp(value: unknown) {
+  const parsed = Date.parse(clean(value));
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
+function assessDeliveryEvidence(options: {
+  evidence: DeliveryEvidenceCandidate[] | undefined;
+  countryCode: string;
+  evaluationTime?: string;
+}): DeliveryEvidenceAssessment {
+  const supplied = options.evidence || [];
+  const matched = supplied.find(candidate => (
+    candidate.matchConfirmed &&
+    (!options.countryCode || normalizeCountryCode(candidate.countryCode || options.countryCode) === options.countryCode)
+  )) || null;
+  if (!matched) {
+    return {
+      supplied: supplied.length,
+      matched: null,
+      sourceCatalogId: null,
+      commercialGradeEligible: false,
+      blockers: [supplied.length ? 'no-confirmed-country-matched-delivery-evidence' : 'no-delivery-evidence-supplied'],
+    };
+  }
+
+  const evaluatedAt = timestamp(options.evaluationTime) ?? Date.now();
+  const retrievedAt = timestamp(matched.retrievedAt);
+  const validUntil = timestamp(matched.validUntil);
+  const sourceClassification = classifyPostalSourceTrust({
+    countryCode: options.countryCode,
+    source: matched.source,
+    url: matched.sourceUrl,
+    sourceIds: [matched.sourceId || ''],
+  });
+  const deliveryPointProfile = sourceClassification.matches.find(profile => (
+    profile.trustTier === 'authoritative' && profile.depth === 'delivery-point'
+  ));
+  const blockers = unique([
+    clean(matched.source) ? null : 'missing-source',
+    matched.authority === 'authoritative' ? null : 'source-is-not-authoritative',
+    deliveryPointProfile ? null : 'no-authoritative-delivery-point-source-catalog-match',
+    matched.coverage === 'national' || matched.coverage === 'regional' ? null : 'coverage-is-too-local',
+    clean(matched.version) ? null : 'missing-source-version',
+    isHttpUrl(matched.sourceUrl) ? null : 'missing-or-invalid-source-url',
+    isHttpUrl(matched.licenseOrTermsUrl) ? null : 'missing-or-invalid-license-or-terms-url',
+    isHttpUrl(matched.correctionUrl) ? null : 'missing-or-invalid-correction-url',
+    retrievedAt === null ? 'missing-or-invalid-retrieved-at' : null,
+    retrievedAt !== null && retrievedAt > evaluatedAt ? 'retrieved-at-is-in-the-future' : null,
+    retrievedAt !== null && evaluatedAt - retrievedAt > DELIVERY_EVIDENCE_MAX_AGE_MS ? 'delivery-evidence-is-stale' : null,
+    validUntil === null ? 'missing-or-invalid-valid-until' : null,
+    validUntil !== null && validUntil < evaluatedAt ? 'delivery-evidence-is-expired' : null,
+  ]);
+
+  return {
+    supplied: supplied.length,
+    matched,
+    sourceCatalogId: deliveryPointProfile?.id || null,
+    commercialGradeEligible: !blockers.length,
+    blockers,
+  };
+}
+
 function buildQualitySummary(options: {
+  scope: AddressVerificationScope;
   status: AddressVerificationStatus;
   policy: AddressVerificationTargetCountryPolicy | null;
   postalSourceTrust: PostalSourceTrustTier;
-  postalSourceMatches: ReturnType<typeof classifyPostalSourceTrust>['matches'];
   postalStrength: PostalEvidenceStrength;
   referenceMatch: AddressReferenceMatch | null;
   formatValid: boolean | null;
@@ -965,11 +1085,11 @@ function buildQualitySummary(options: {
   lookupSatisfied: boolean;
   mode: PostalVerificationMode;
   validation: AddressValidationResult;
+  deliveryEvidence: DeliveryEvidenceAssessment;
 }): AddressVerificationQualitySummary {
   let depth: AddressVerificationDepth = options.mode === 'geo-only' ? 'geo-only' : 'format';
-  for (const match of options.postalSourceMatches) {
-    depth = strongerDepth(depth, depthFromPostalCatalogDepth(match.depth));
-  }
+  // A source capability is not proof that this request matched at that depth.
+  // Depth may advance only from fields present in the matched evidence or reference.
   if (options.referenceMatch) {
     const record = options.referenceMatch.record;
     if (record.houseNumber) depth = strongerDepth(depth, 'house');
@@ -980,12 +1100,19 @@ function buildQualitySummary(options: {
     depth = strongerDepth(depth, 'postal-code');
   }
 
-  const evidenceGrade = options.postalStrength === 'none' && !options.referenceMatch
-    ? options.formatValid === true ? 'format-only' : 'none'
-    : evidenceGradeFromTrust(options.postalSourceTrust, options.referenceMatch);
+  if (options.deliveryEvidence.commercialGradeEligible && options.deliveryEvidence.matched) {
+    depth = strongerDepth(depth, options.deliveryEvidence.matched.matchLevel);
+  }
+
+  const evidenceGrade = options.deliveryEvidence.commercialGradeEligible
+    ? 'authoritative'
+    : options.postalStrength === 'none' && !options.referenceMatch
+      ? options.formatValid === true ? 'format-only' : 'none'
+      : evidenceGradeFromTrust(options.postalSourceTrust, options.referenceMatch);
   const paidApiParityClaimed = (
+    options.scope === 'address' &&
     options.status === 'verified' &&
-    evidenceGrade === 'authoritative' &&
+    options.deliveryEvidence.commercialGradeEligible &&
     DEPTH_ORDER[depth] >= DEPTH_ORDER.house
   );
   const readiness: AddressVerificationReadiness =
@@ -1009,6 +1136,9 @@ function buildQualitySummary(options: {
     options.postalStrength === 'weak'
       ? 'Community postal evidence is useful for candidate generation but not enough for paid-grade deliverability.'
       : null,
+    options.deliveryEvidence.commercialGradeEligible
+      ? null
+      : `Delivery evidence is not eligible for commercial-grade verification: ${options.deliveryEvidence.blockers.join(', ')}.`,
     options.validation.missingRequiredFields.length
       ? `Missing required field(s): ${options.validation.missingRequiredFields.join(', ')}.`
       : null,
@@ -1021,6 +1151,7 @@ function buildQualitySummary(options: {
     options.policy?.countryCode ? null : 'load-country-address-format-or-policy',
     options.lookupRequired && !options.lookupSatisfied ? 'add-credential-free-official-postal-source-or-open-address-reference' : null,
     DEPTH_ORDER[depth] < DEPTH_ORDER.house ? 'add-street-house-building-reference-data' : null,
+    options.deliveryEvidence.commercialGradeEligible ? null : 'attach-fresh-authoritative-delivery-evidence-with-rights-and-correction-path',
     options.postalStrength === 'weak' ? 'cross-check-community-postal-data-against-official-or-open-address-reference' : null,
     options.validation.missingRequiredFields.length ? 'collect-required-address-fields' : null,
   ]);
@@ -1032,12 +1163,20 @@ function buildQualitySummary(options: {
     readiness,
     paidApiParityClaimed,
     comparableFor: paidApiParityClaimed
-      ? ['country formatting', 'postal evidence', 'house/building-level evidence for this supplied source set']
+      ? ['country formatting', 'postal evidence', 'fresh authoritative house/building/delivery-point evidence for this supplied source set']
       : readiness === 'strong-open-verification'
         ? ['country formatting', 'open-source verification', 'postal/geographic candidate confidence']
         : ['country formatting', 'candidate generation', 'manual review workflow'],
     limitations,
     upgradeActions,
+    deliveryEvidence: {
+      supplied: options.deliveryEvidence.supplied,
+      matched: Boolean(options.deliveryEvidence.matched),
+      depth: options.deliveryEvidence.matched?.matchLevel || null,
+      sourceCatalogId: options.deliveryEvidence.sourceCatalogId,
+      commercialGradeEligible: options.deliveryEvidence.commercialGradeEligible,
+      blockers: options.deliveryEvidence.blockers,
+    },
   };
 }
 
@@ -1121,8 +1260,12 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
   const scope = input.scope === 'postal' ? 'postal' : 'address';
   const targetCountries = unique((input.targetCountries || []).map(normalizeCountryCode));
   const resolvedCountry = inferCountryCode(input);
-  const policy = countryPolicyFor(resolvedCountry, input.countryPolicies) || policyFromFormat(input.format, resolvedCountry);
+  const customPolicy = input.countryPolicies?.[resolvedCountry];
+  const policy = withPreferredPostalSources(customPolicy)
+    || policyFromFormat(input.format, resolvedCountry)
+    || countryPolicyFor(resolvedCountry);
   const targetAllowed = !targetCountries.length || targetCountries.includes(resolvedCountry);
+  const deliveryEvidenceSourcePlan = buildDeliveryEvidenceSourcePlan(resolvedCountry);
   const supported = Boolean(input.format || policy?.enabled);
   const canonicalAddress = buildCanonicalAddress(input, resolvedCountry);
   const format = input.format || policyFormat(policy);
@@ -1132,6 +1275,11 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
   const required = postalRequired(format, policy);
   const mode = policy?.postalMode || (required ? 'manual' : 'geo-only');
   const matchedEvidence = findMatchedPostalEvidence(input.postalEvidence, canonicalAddress, resolvedCountry);
+  const officialPostalEvidenceGate = assessOfficialPostalEvidenceGate({
+    countryCode: resolvedCountry,
+    candidate: matchedEvidence,
+    evaluatedAt: input.evaluationTime,
+  });
   const postalSourceClassification = classifyPostalSourceTrust({
     countryCode: matchedEvidence?.countryCode || resolvedCountry,
     source: matchedEvidence?.source,
@@ -1141,10 +1289,11 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
       ...(matchedEvidence?.source ? matchedEvidence.source.split(/[,\s/]+/g) : []),
     ]),
   });
-  const postalStrength = postalEvidenceStrength(matchedEvidence, format, policy);
+  const postalStrength = postalEvidenceStrength(matchedEvidence, format, policy, officialPostalEvidenceGate);
   const strongPostalEvidenceMatched = postalStrength === 'strong';
   const weakPostalEvidenceMatched = postalStrength === 'weak';
-  const lookupRequired = mode === 'format-and-lookup' && required;
+  const lookupRequired = (mode === 'format-and-lookup' && required)
+    || (officialPostalEvidenceGate.status !== 'not-required' && required);
   const dataLoading = buildAddressDataLoadPlan({
     ...input.dataLoad,
     countryCode: resolvedCountry,
@@ -1189,7 +1338,16 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
       ? 'matched'
       : 'not-matched'
     : 'not-provided';
-  const lookupSatisfied = !lookupRequired || strongPostalEvidenceMatched || Boolean(referenceMatch);
+  const deliveryEvidence = assessDeliveryEvidence({
+    evidence: input.deliveryEvidence,
+    countryCode: resolvedCountry,
+    evaluationTime: input.evaluationTime,
+  });
+  const officialScopeEvidenceRejected = officialPostalEvidenceGate.status === 'rejected' && Boolean(matchedEvidence);
+  const lookupSatisfied = (!lookupRequired && !officialScopeEvidenceRejected)
+    || strongPostalEvidenceMatched
+    || Boolean(referenceMatch)
+    || deliveryEvidence.commercialGradeEligible;
   const referenceMatches = matchedEvidence
     ? [{
         source: matchedEvidence.source,
@@ -1202,6 +1360,12 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
     referenceMatches.push({
       source: referenceMatch.source,
       confidence: referenceMatch.confidence,
+    });
+  }
+  if (deliveryEvidence.commercialGradeEligible && deliveryEvidence.matched) {
+    referenceMatches.push({
+      source: deliveryEvidence.matched.source,
+      confidence: 0.98,
     });
   }
   const validation = validateAddressWithOpenSourceRules(
@@ -1230,13 +1394,14 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
   const evidenceConfidence = Math.max(
     strongPostalEvidenceMatched ? matchedEvidence?.confidence ?? 0.88 : 0,
     referenceMatch?.confidence ?? 0,
+    deliveryEvidence.commercialGradeEligible ? 0.98 : 0,
   );
   const score = scoreForStatus(status, validation.score, evidenceConfidence);
   const quality = buildQualitySummary({
+    scope,
     status,
     policy,
     postalSourceTrust: postalSourceClassification.tier,
-    postalSourceMatches: postalSourceClassification.matches,
     postalStrength,
     referenceMatch,
     formatValid,
@@ -1244,6 +1409,7 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
     lookupSatisfied,
     mode,
     validation,
+    deliveryEvidence,
   });
   const warnings = unique([
     ...validation.warnings,
@@ -1253,9 +1419,15 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
     supported ? null : `No address verification policy or format is available for ${resolvedCountry || '(unknown country)'}.`,
     required && !postcode ? 'Postal code is required for this target country.' : null,
     formatValid === false ? 'Postal code does not match the selected target country pattern.' : null,
+    officialPostalEvidenceGate.status === 'rejected'
+      ? `Postal evidence did not pass the official source scope gate: ${officialPostalEvidenceGate.blockers.join(', ')}.`
+      : null,
     lookupRequired && weakPostalEvidenceMatched ? 'Postal-code candidate came from a weak source; strong postal or address-reference evidence is required for verified status.' : null,
     lookupRequired && !lookupSatisfied && !weakPostalEvidenceMatched ? 'Postal-code format is valid, but source lookup evidence is still required for strong verification.' : null,
     referenceRecordsProvided && !referenceMatch ? 'Address reference records were supplied, but none matched strongly enough.' : null,
+    deliveryEvidence.supplied && !deliveryEvidence.commercialGradeEligible
+      ? `Delivery evidence cannot support commercial-grade verification: ${deliveryEvidence.blockers.join(', ')}.`
+      : null,
   ]);
   const nextActions = nextActionsFor({
     status,
@@ -1272,6 +1444,7 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
   const mergedNextActions = unique([
     ...nextActions,
     ...standardLibrary.nextActions,
+    ...quality.upgradeActions,
   ]);
   const sources = unique([
     ...validation.checkedWith,
@@ -1279,6 +1452,7 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
     standardLibrary.modelVersion,
     matchedEvidence?.source,
     referenceMatch?.source,
+    deliveryEvidence.matched?.source,
     policy?.countryCode ? `country-policy:${policy.countryCode}` : null,
   ]);
   const audit: AddressVerificationAuditStep[] = [
@@ -1316,7 +1490,7 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
     },
     {
       step: 'postal-evidence',
-      status: !lookupRequired ? 'skipped' : strongPostalEvidenceMatched ? 'ok' : 'warning',
+        status: !lookupRequired ? 'skipped' : strongPostalEvidenceMatched ? 'ok' : 'warning',
       message: !lookupRequired
         ? 'Postal lookup evidence is not required by this policy.'
         : strongPostalEvidenceMatched
@@ -1335,6 +1509,20 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
           ? `Address reference matched from ${referenceMatch.source}.`
           : 'Address reference records were supplied, but none matched the canonical address.',
       source: referenceMatch?.source,
+    },
+    {
+      step: 'delivery-evidence',
+      status: !deliveryEvidence.supplied
+        ? 'skipped'
+        : deliveryEvidence.commercialGradeEligible
+          ? 'ok'
+          : 'warning',
+      message: !deliveryEvidence.supplied
+        ? 'No delivery-point evidence was supplied.'
+        : deliveryEvidence.commercialGradeEligible
+          ? `Fresh authoritative ${deliveryEvidence.matched?.matchLevel} evidence matched from ${deliveryEvidence.matched?.source}.`
+          : `Delivery evidence is incomplete for commercial-grade verification: ${deliveryEvidence.blockers.join(', ')}.`,
+      source: deliveryEvidence.matched?.source,
     },
     {
       step: 'address-rules',
@@ -1388,15 +1576,18 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
       postalStrength,
     lookupSatisfied,
     addressReference,
-    postalSourceTrust: postalSourceClassification.tier,
-    postalSourceCatalogMatches: postalSourceClassification.matches.map(match => match.id),
+      postalSourceTrust: postalSourceClassification.tier,
+      postalSourceCatalogMatches: postalSourceClassification.matches.map(match => match.id),
+      officialPostalEvidenceGate,
     strongPostalEvidence: strongPostalEvidenceMatched ? matchedEvidence || undefined : undefined,
     weakPostalEvidence: weakPostalEvidenceMatched ? matchedEvidence || undefined : undefined,
-      referenceMatch: referenceMatch || undefined,
+    referenceMatch: referenceMatch || undefined,
+    deliveryEvidence: deliveryEvidence.matched || undefined,
     },
     quality,
     canonicalAddress,
     dataLoading,
+    deliveryEvidenceSourcePlan,
     standardLibrary,
     systemConnection,
     validation,

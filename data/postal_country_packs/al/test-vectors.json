@@ -1,0 +1,44 @@
+[
+  {
+    "id": "al-test-vector-1",
+    "input": {
+      "countryCode": "AL",
+      "municipalityId": "AL-M1",
+      "townId": "AL-M1-T1",
+      "chomeId": "AL-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "AL-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "al-test-vector-2",
+    "input": {
+      "countryCode": "AL",
+      "municipalityId": "AL-M2",
+      "townId": "AL-M2-T2",
+      "chomeId": "AL-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "AL-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "al-test-vector-3",
+    "input": {
+      "countryCode": "AL",
+      "municipalityId": "AL-M3",
+      "townId": "AL-M3-T3",
+      "chomeId": "AL-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "AL-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

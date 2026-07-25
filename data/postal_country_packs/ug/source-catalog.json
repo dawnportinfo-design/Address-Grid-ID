@@ -52,5 +52,20 @@
       "Open map records are not bundled by default.",
       "Any derived database must keep source-specific attribution and redistribution obligations."
     ]
+  },
+  {
+    "sourceId": "posta-uganda-postal-address",
+    "sourceName": "Posta Uganda postal-address service",
+    "sourceUrl": "https://ugapost.co.ug/our-services/physical-address/",
+    "provider": "Uganda Post Limited (Posta Uganda)",
+    "licenseOrTerms": "Official postal-operator service webpage; no postal-mapping data license or redistribution grant is recorded, and no postal-address, box, location, or service records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-address service provenance; metadata only, not a national postal-code regex, reusable mapping, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official Posta Uganda page describes postal addresses as boxes associated with post-office stations.",
+      "This pack records page metadata only and does not apply, query, store, transform, or redistribute postal-address, box, location, recipient, or delivery-point records.",
+      "The service page does not establish a national postcode syntax, a versioned mapping, redistribution rights, or current operational coverage."
+    ]
   }
 ]

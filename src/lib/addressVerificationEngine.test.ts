@@ -5,6 +5,7 @@ import {
   DEFAULT_ADDRESS_VERIFICATION_TARGET_COUNTRIES,
   getAddressVerificationTargetPolicy,
   isCountryEnabledForAddressVerification,
+  type AddressVerificationTargetCountryPolicy,
   verifyAddressCandidate,
 } from './addressVerificationEngine';
 
@@ -263,7 +264,71 @@ test('caller supplied country formats enable safe global postal verification wit
   assert.equal(result.quality.paidApiParityClaimed, false);
 });
 
-test('authoritative delivery point evidence can be labeled paid-grade for the supplied evidence set', () => {
+test('a scope-bound Eurostat GISCO candidate can provide official postcode-level evidence for Portugal', () => {
+  const portugalFormat = {
+    countryCode: 'PT',
+    name: 'Portugal',
+    native: {
+      addressFormat: '{{postcode}} {{city}}',
+      fields: [{ key: 'postcode', required: true }],
+    },
+    postalCode: {
+      regex: '^\\d{4}-\\d{3}$',
+      source: 'Eurostat GISCO postal-code points',
+    },
+    addressRules: {
+      postalCode: { required: true, usage: 'required' as const },
+    },
+  };
+  const result = verifyAddressCandidate({
+    targetCountries: ['PT'],
+    countryCode: 'PT',
+    postalCode: '9999-999',
+    scope: 'postal',
+    format: portugalFormat,
+    evaluationTime: '2026-07-24T00:00:00.000Z',
+    postalEvidence: [{
+      source: 'Eurostat GISCO postal-code points',
+      sourceId: 'eurostat-gisco-postal-code-points-2024',
+      url: 'https://ec.europa.eu/eurostat/web/gisco/geodata/administrative-units/postal-codes',
+      sourceScopeId: 'pt-mainland-azores-madeira-format-scope',
+      sourceVersion: '2024',
+      sourceRetrievedAt: '2026-07-24T00:00:00.000Z',
+      sourceTermsUrl: 'https://ec.europa.eu/eurostat/web/gisco/geodata/administrative-units/postal-codes',
+      sourceCorrectionUrl: 'https://ec.europa.eu/eurostat/help/support',
+      countryCode: 'PT',
+      postalCode: '9999-999',
+    }],
+  });
+
+  assert.equal(result.status, 'verified');
+  assert.equal(result.quality.depth, 'postal-code');
+  assert.equal(result.quality.paidApiParityClaimed, false);
+  assert.equal(result.evidence.officialPostalEvidenceGate.status, 'accepted');
+  assert.ok(result.evidence.postalSourceCatalogMatches.includes('eurostat-gisco-postal-code-points-2024'));
+});
+
+test('a Portugal candidate cannot claim official strength without the recorded source scope metadata', () => {
+  const result = verifyAddressCandidate({
+    targetCountries: ['PT'],
+    countryCode: 'PT',
+    postalCode: '9999-999',
+    scope: 'postal',
+    evaluationTime: '2026-07-24T00:00:00.000Z',
+    postalEvidence: [{
+      source: 'Eurostat GISCO postal-code points',
+      sourceId: 'eurostat-gisco-postal-code-points-2024',
+      countryCode: 'PT',
+      postalCode: '9999-999',
+    }],
+  });
+
+  assert.equal(result.status, 'partial');
+  assert.equal(result.evidence.officialPostalEvidenceGate.status, 'rejected');
+  assert.equal(result.evidence.postalStrength, 'weak');
+});
+
+test('an authoritative postal source does not imply delivery-point validation without matched address evidence', () => {
   const result = verifyAddressCandidate({
     targetCountries: ['US'],
     countryCode: 'US',
@@ -289,8 +354,119 @@ test('authoritative delivery point evidence can be labeled paid-grade for the su
   });
 
   assert.equal(result.status, 'verified');
-  assert.equal(result.quality.depth, 'delivery-point');
+  assert.equal(result.quality.depth, 'postal-code');
   assert.equal(result.quality.evidenceGrade, 'authoritative');
-  assert.equal(result.quality.readiness, 'paid-grade-for-supplied-evidence');
+  assert.equal(result.quality.readiness, 'strong-open-verification');
+  assert.equal(result.quality.paidApiParityClaimed, false);
+  assert.ok(result.quality.upgradeActions.includes('add-street-house-building-reference-data'));
+});
+
+const deliveryEvidenceTestPolicy: Record<string, AddressVerificationTargetCountryPolicy> = {
+  US: {
+    countryCode: 'US',
+    enabled: true,
+    label: 'Synthetic delivery-evidence test jurisdiction',
+    postalMode: 'format-only' as const,
+    postcodeRegex: '^US\\d{3}$',
+    requiredFields: ['country_code', 'postcode'],
+    lookupSources: [],
+    notes: ['Synthetic policy used to test metadata gates without address records.'],
+  },
+};
+
+test('incomplete delivery-evidence metadata cannot claim commercial-grade verification', () => {
+  const result = verifyAddressCandidate({
+    targetCountries: ['US'],
+    countryCode: 'US',
+    postalCode: 'US001',
+    scope: 'address',
+    countryPolicies: deliveryEvidenceTestPolicy,
+    evaluationTime: '2026-07-23T00:00:00.000Z',
+    deliveryEvidence: [{
+      source: 'USPS APIs Addresses 3.0 and ZIP lookup APIs',
+      sourceId: 'usps-web-tools',
+      sourceUrl: 'https://developers.usps.com/addressesv3',
+      countryCode: 'US',
+      authority: 'authoritative',
+      matchConfirmed: true,
+      matchLevel: 'delivery-point',
+      coverage: 'national',
+      version: '2026-07',
+      retrievedAt: '2026-07-01T00:00:00.000Z',
+      validUntil: '2026-08-01T00:00:00.000Z',
+      licenseOrTermsUrl: '',
+      correctionUrl: 'https://www.usps.com/help/contact-us.htm',
+    }],
+  });
+
+  assert.equal(result.status, 'verified');
+  assert.equal(result.quality.deliveryEvidence.matched, true);
+  assert.equal(result.quality.deliveryEvidence.commercialGradeEligible, false);
+  assert.ok(result.quality.deliveryEvidence.blockers.includes('missing-or-invalid-license-or-terms-url'));
+  assert.equal(result.quality.paidApiParityClaimed, false);
+  assert.ok(result.nextActions.includes('attach-fresh-authoritative-delivery-evidence-with-rights-and-correction-path'));
+});
+
+test('self-declared delivery evidence cannot bypass the authoritative source catalog', () => {
+  const result = verifyAddressCandidate({
+    targetCountries: ['US'],
+    countryCode: 'US',
+    postalCode: 'US001',
+    scope: 'address',
+    countryPolicies: deliveryEvidenceTestPolicy,
+    evaluationTime: '2026-07-23T00:00:00.000Z',
+    deliveryEvidence: [{
+      source: 'Uncataloged delivery source',
+      sourceUrl: 'https://example.test/source',
+      countryCode: 'US',
+      authority: 'authoritative',
+      matchConfirmed: true,
+      matchLevel: 'delivery-point',
+      coverage: 'national',
+      version: '2026-07',
+      retrievedAt: '2026-07-01T00:00:00.000Z',
+      validUntil: '2026-08-01T00:00:00.000Z',
+      licenseOrTermsUrl: 'https://example.test/terms',
+      correctionUrl: 'https://example.test/corrections',
+    }],
+  });
+
+  assert.equal(result.quality.deliveryEvidence.commercialGradeEligible, false);
+  assert.equal(result.quality.deliveryEvidence.sourceCatalogId, null);
+  assert.ok(result.quality.deliveryEvidence.blockers.includes('no-authoritative-delivery-point-source-catalog-match'));
+});
+
+test('fresh authoritative delivery evidence can support paid-grade parity for the supplied evidence only', () => {
+  const result = verifyAddressCandidate({
+    targetCountries: ['US'],
+    countryCode: 'US',
+    postalCode: 'US001',
+    scope: 'address',
+    countryPolicies: deliveryEvidenceTestPolicy,
+    evaluationTime: '2026-07-23T00:00:00.000Z',
+    deliveryEvidence: [{
+      source: 'USPS APIs Addresses 3.0 and ZIP lookup APIs',
+      sourceId: 'usps-web-tools',
+      sourceUrl: 'https://developers.usps.com/addressesv3',
+      countryCode: 'US',
+      authority: 'authoritative',
+      matchConfirmed: true,
+      matchLevel: 'delivery-point',
+      coverage: 'national',
+      version: '2026-07',
+      retrievedAt: '2026-07-01T00:00:00.000Z',
+      validUntil: '2026-08-01T00:00:00.000Z',
+      licenseOrTermsUrl: 'https://developers.usps.com/terms-and-conditions',
+      correctionUrl: 'https://www.usps.com/help/contact-us.htm',
+    }],
+  });
+
+  assert.equal(result.status, 'verified');
+  assert.equal(result.quality.depth, 'delivery-point');
+  assert.equal(result.quality.deliveryEvidence.sourceCatalogId, 'usps-web-tools');
+  assert.equal(result.quality.deliveryEvidence.commercialGradeEligible, true);
   assert.equal(result.quality.paidApiParityClaimed, true);
+  assert.equal(result.quality.readiness, 'paid-grade-for-supplied-evidence');
+  assert.deepEqual(result.deliveryEvidenceSourcePlan.sources.map(source => source.id), ['usps-web-tools']);
+  assert.ok(result.audit.some(step => step.step === 'delivery-evidence' && step.status === 'ok'));
 });

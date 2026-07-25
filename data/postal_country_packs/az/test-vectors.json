@@ -1,0 +1,44 @@
+[
+  {
+    "id": "az-test-vector-1",
+    "input": {
+      "countryCode": "AZ",
+      "municipalityId": "AZ-M1",
+      "townId": "AZ-M1-T1",
+      "chomeId": "AZ-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "AZ-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "az-test-vector-2",
+    "input": {
+      "countryCode": "AZ",
+      "municipalityId": "AZ-M2",
+      "townId": "AZ-M2-T2",
+      "chomeId": "AZ-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "AZ-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "az-test-vector-3",
+    "input": {
+      "countryCode": "AZ",
+      "municipalityId": "AZ-M3",
+      "townId": "AZ-M3-T3",
+      "chomeId": "AZ-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "AZ-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

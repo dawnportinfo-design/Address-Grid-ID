@@ -1,0 +1,147 @@
+{
+  "schemaId": "agid-eswatini-postal-source-readiness-v0.1",
+  "countryCode": "SZ",
+  "countryName": "Eswatini",
+  "evaluatedAt": "2026-07-23T07:52:09.489Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "formatAuthorityEvidence": false
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "eswatini-postcode-table",
+      "scope": "official-postcode-table",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": null,
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "eswatini-post-designated-operator",
+      "scope": "designated-postal-operator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": null,
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "eswatini-government-postal-policy",
+      "scope": "government-postal-policy-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": null,
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "sz-postcode-mapping-required",
+      "scope": "postcode-mapping-rights-and-update-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "official-postcode-table-recorded",
+      "label": "EswatiniPost official postcode table is cataloged as metadata only",
+      "status": "passed",
+      "evidence": [
+        "eswatini-postcode-table",
+        "postalMappingEvidence=false",
+        "redistributionStatus=metadata-only"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-operator-and-policy-sources-recorded",
+      "label": "Designated postal operator and government postal-policy references are cataloged as metadata only",
+      "status": "passed",
+      "evidence": [
+        "eswatini-post-designated-operator",
+        "eswatini-government-postal-policy",
+        "postalMappingEvidence=false for both sources"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "A stable authority-published national postcode format is evidenced for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "sz-postcode-mapping-required authorityStatus=unresolved",
+        "nationalPattern=null"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-evidence",
+      "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "redistribution-rights",
+      "label": "Redistribution rights for any derived postal mapping are verified",
+      "status": "blocked",
+      "evidence": [
+        "sz-postcode-mapping-required redistributionStatus=not-bundled"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-update-cadence",
+      "label": "The postal mapping has a version, retrieval date, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "sz-postcode-mapping-required version=null",
+        "sz-postcode-mapping-required retrievedAt=null",
+        "sz-postcode-mapping-required updateCadence=unknown"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "A stable authority-published postcode format specification that permits offline reuse.",
+    "A versioned postcode-to-locality or delivery-point mapping with geographic coverage and correction policy.",
+    "Field-level reuse, attribution, and redistribution terms for any mapping or derived output.",
+    "Publication date, retrieval date, update cadence, and correction path for the mapping."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not assert a national postcode format.",
+    "This pack does not assert an address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

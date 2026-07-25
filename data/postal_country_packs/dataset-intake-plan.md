@@ -9,10 +9,10 @@ for safe country-pack production.
 
 ## Summary
 
-- Total countries: 85
+- Total countries: 86
 - P0 countries: 17
-- Generated pack countries: 78
-- Valid pack countries: 78
+- Generated pack countries: 79
+- Valid pack countries: 79
 - Source-catalog-only countries: 7
 - Countries needing normalized official municipality datasets: 65
 

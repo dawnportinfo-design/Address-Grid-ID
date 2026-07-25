@@ -4,7 +4,7 @@
     "version": "agid-postal-country-pack-v0.1",
     "strategyVersion": "agid-postal-country-pack-strategy-v0.1",
     "engineVersion": "agid-postal-code-engine-v0.1-rc",
-    "generatedAt": "2026-06-20T00:00:00.000Z",
+    "generatedAt": "2026-07-23T06:12:06.057Z",
     "countryCode": "KE",
     "countryName": "Kenya",
     "repositoryName": "agid-postal-pack-ke",
@@ -32,7 +32,7 @@
     "containsRawThirdPartyData": false,
     "officialStatus": "draft",
     "counts": {
-      "sources": 3,
+      "sources": 4,
       "localities": 48,
       "boundaries": 12,
       "landforms": 1,
@@ -174,8 +174,114 @@
         "Open map records are not bundled by default.",
         "Any derived database must keep source-specific attribution and redistribution obligations."
       ]
+    },
+    {
+      "sourceId": "posta-kenya",
+      "sourceName": "Postal Corporation of Kenya post offices",
+      "sourceUrl": "https://posta.co.ke/post-offices/",
+      "provider": "Postal Corporation of Kenya (Posta Kenya)",
+      "licenseOrTerms": "Official locator page; no postal-mapping data license or redistribution grant is recorded, and no locator records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official postal-operator locator candidate; metadata only, not a national postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The official page presents a post-office locator and links to terms and privacy material.",
+        "This pack does not query, store, transform, or redistribute locator records.",
+        "The locator page alone does not establish a versioned postcode-to-locality mapping, redistribution rights, or delivery-point coverage."
+      ]
     }
   ],
+  "postalSourceReadiness": {
+    "schemaId": "agid-kenya-postal-source-readiness-v0.1",
+    "countryCode": "KE",
+    "countryName": "Kenya",
+    "evaluatedAt": "2026-07-23T06:12:06.057Z",
+    "postalFormat": {
+      "pattern": "^\\d{5}$",
+      "verifiedFormatOnly": true
+    },
+    "publicationStatus": "draft",
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "realPostalLookupEnabled": false,
+    "deliveryClaimEnabled": false,
+    "sources": [
+      {
+        "sourceId": "posta-kenya",
+        "scope": "postal-operator-post-office-locator",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      }
+    ],
+    "gates": [
+      {
+        "id": "no-personal-or-raw-third-party-data",
+        "label": "The published pack remains metadata and synthetic fixtures only",
+        "status": "passed",
+        "evidence": [
+          "containsPersonalData=false",
+          "containsRawThirdPartyData=false",
+          "rawRecordsBundled=false for every source"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-operator-locator-recorded",
+        "label": "The Kenya postal operator locator is cataloged as metadata only",
+        "status": "passed",
+        "evidence": [
+          "posta-kenya",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-code-mapping-evidence",
+        "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+        "status": "blocked",
+        "evidence": [
+          "The five-digit format is not a mapping.",
+          "posta-kenya postalMappingEvidence=false"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "redistribution-rights",
+        "label": "Redistribution rights for any derived postal mapping are verified",
+        "status": "blocked",
+        "evidence": [
+          "posta-kenya redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "version-freshness-and-update-cadence",
+        "label": "The postal mapping has a version, retrieval date, and update cadence",
+        "status": "blocked",
+        "evidence": [
+          "posta-kenya version=null",
+          "posta-kenya updateCadence=unknown"
+        ],
+        "blocksRealPostalLookup": true
+      }
+    ],
+    "nextRequiredEvidence": [
+      "A versioned Kenya postcode-to-locality or delivery-point mapping with geographic coverage.",
+      "Field-level reuse, attribution, and redistribution terms for any mapping or derived output.",
+      "Publication date, retrieval date, update cadence, and correction path for the mapping."
+    ],
+    "nonClaims": [
+      "This pack does not provide a real postcode lookup.",
+      "This pack does not assert an address-to-postcode match.",
+      "This pack does not assert delivery-point or carrier deliverability coverage."
+    ]
+  },
   "licenseLedger": [
     {
       "subject": "AGID-created country pack metadata",
@@ -194,6 +300,18 @@
       "licenseOrTerms": "source-specific",
       "redistribution": "review-required",
       "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+    },
+    {
+      "subject": "Posta Kenya post-office locator source metadata",
+      "licenseOrTerms": "Official locator page; page terms are linked but no data reuse or redistribution grant is recorded",
+      "redistribution": "metadata-only",
+      "notes": "This release records source metadata only. It does not query, bundle, or derive locator, postcode, address, post-office, recipient, or delivery-point records. Verify reuse rights, version, coverage, and correction policy before any derived publication."
+    },
+    {
+      "subject": "Kenya real postcode and delivery-point mapping",
+      "licenseOrTerms": "Not yet verified",
+      "redistribution": "not-bundled",
+      "notes": "No real postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, or derived equivalent is included until versioned mapping, redistribution, and freshness evidence are recorded."
     }
   ],
   "officialMunicipalitySummary": {

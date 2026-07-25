@@ -1,0 +1,181 @@
+{
+  "schemaId": "agid-georgia-postal-source-readiness-v0.1",
+  "countryCode": "GE",
+  "countryName": "Georgia",
+  "evaluatedAt": "2026-07-23T09:36:42.085Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "formatAuthorityEvidence": false,
+    "unverifiedFormatInferenceRejected": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "georgia-post-addressing-rule",
+      "scope": "postal-addressing-rule-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "Georgia Post addressing rule retrieved 2026-07-23; current postcode format definition not verified",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "source-contains-excluded-fields",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "georgia-post-postcode-lookup-boundary",
+      "scope": "postal-code-lookup-boundary-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "Georgia Post postal-code lookup surface retrieved 2026-07-23",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "source-contains-excluded-fields",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "georgia-napr-public-registry-and-nsdi",
+      "scope": "administrative-and-geospatial-authority-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "NAPR public registry and national spatial-data infrastructure reference retrieved 2026-07-23; resource-level reuse terms not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "terms-not-verified",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "ge-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "scope": "current-postcode-format-mapping-rights-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-authority-surfaces-recorded",
+      "label": "The postal addressing rule and postcode lookup surface are recorded without extracting or querying address-level data",
+      "status": "passed",
+      "evidence": [
+        "georgia-post-addressing-rule",
+        "georgia-post-postcode-lookup-boundary",
+        "source-contains-excluded-fields",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "administrative-authority-recorded",
+      "label": "The public registry and spatial-data authority are recorded without acquiring administrative or geographic entries",
+      "status": "passed",
+      "evidence": [
+        "georgia-napr-public-registry-and-nsdi",
+        "rawRecordsBundled=false",
+        "resource-level terms not recorded"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires a safe schema, rights, current version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "address, office, contact, cadastral, coordinate, and geometry fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "A current official format definition authorizes a national postcode pattern claim",
+      "status": "blocked",
+      "evidence": [
+        "addressing rule is recorded without using address examples as a format definition",
+        "unverifiedFormatInferenceRejected=true",
+        "nationalPattern=null"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-mapping-reuse-rights",
+      "label": "A current official postcode mapping has explicit reuse terms suitable for a safe offline artifact",
+      "status": "blocked",
+      "evidence": [
+        "postcode lookup surface is not a bulk reuse grant",
+        "no current mapping artifact acquired",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "administrative-geodata-rights-and-safe-schema",
+      "label": "Administrative geographic keys have explicit resource-level reuse terms and a safe non-geometry schema",
+      "status": "blocked",
+      "evidence": [
+        "NAPR is recorded as authority only",
+        "resource-level terms not recorded",
+        "no key-only extract acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been schema-checked and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no postcode rows acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and authority correction path",
+      "status": "blocked",
+      "evidence": [
+        "mapping-version-not-recorded",
+        "no mapping update cadence recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a current authority-published postcode format and postcode-only or safe administrative-key mapping artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, version, attribution wording, and coverage.",
+    "Before ingestion, accept only safe postcode and administrative-zone identifiers, reject address, street, number, postal-unit, office, contact, precise-point, geometry, parcel, property, and cadastral fields, and verify that the publication is current.",
+    "Record the authority correction path, update cadence, and coverage validation before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not infer a Georgian national postcode pattern from the recorded addressing rule or lookup surface.",
+    "This pack does not query, download, store, or redistribute postcode mappings, administrative entries, addresses, offices, contacts, properties, parcels, boundaries, or location records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

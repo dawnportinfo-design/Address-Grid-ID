@@ -1,0 +1,173 @@
+{
+  "schemaId": "agid-paraguay-postal-source-readiness-v0.1",
+  "countryCode": "PY",
+  "countryName": "Paraguay",
+  "evaluatedAt": "2026-07-23T08:05:39.655Z",
+  "postalFormat": {
+    "nationalPattern": "^[0-9]{6}$",
+    "formatAuthorityEvidence": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "dinacopa-postcode-format-guidance",
+      "scope": "official-postcode-format-guidance",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "schemaEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "published 2023-08",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawSnapshotSha256": null,
+      "rawSnapshotBytes": null,
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "dinacopa-postcode-open-data-catalog",
+      "scope": "official-open-data-postcode-catalog",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "schemaEvidence": false,
+      "redistributionStatus": "licensed-metadata-only",
+      "version": "metadata modified 2023-08-11; resources modified 2023-04-03",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawSnapshotSha256": null,
+      "rawSnapshotBytes": null,
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "dinacopa-postcode-data-dictionary",
+      "scope": "official-postcode-schema-dictionary",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "schemaEvidence": true,
+      "redistributionStatus": "licensed-metadata-only",
+      "version": "resource modified 2023-04-03",
+      "retrievedAt": "2026-07-23T08:06:46.2757296Z",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "external-dictionary-acquired",
+      "rawSnapshotSha256": "AC8D2303AEC3309D02BAC672D8DC789EA868B7D58159C11F0951362F6DEA588D",
+      "rawSnapshotBytes": 12261,
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "ine-paraguay-admin-cartography",
+      "scope": "official-administrative-cartography",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "schemaEvidence": false,
+      "redistributionStatus": "licensed-metadata-only",
+      "version": "digital cartography 2012",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawSnapshotSha256": null,
+      "rawSnapshotBytes": null,
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "py-current-postcode-mapping-coverage-and-correction-required",
+      "scope": "current-postcode-mapping-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "schemaEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawSnapshotSha256": null,
+      "rawSnapshotBytes": null,
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "DINACOPA documents a six-digit postcode format for offline validation only",
+      "status": "passed",
+      "evidence": [
+        "dinacopa-postcode-format-guidance",
+        "nationalPattern=^[0-9]{6}$",
+        "formatAuthorityEvidence=true"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "open-data-reuse-terms-recorded",
+      "label": "DINACOPA postcode data catalog and INE cartography record the Paraguayan Government Public Information Use License",
+      "status": "passed",
+      "evidence": [
+        "dinacopa-postcode-open-data-catalog",
+        "ine-paraguay-admin-cartography",
+        "license=Licencia de Uso de la Información Pública del Gobierno Paraguayo",
+        "attribution-and-update-date-required"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-schema-inspection-isolated",
+      "label": "The official data dictionary is externally snapshotted and schema-checked without importing raw source records",
+      "status": "passed",
+      "evidence": [
+        "dinacopa-postcode-data-dictionary",
+        "sha256=AC8D2303AEC3309D02BAC672D8DC789EA868B7D58159C11F0951362F6DEA588D",
+        "bytes=12261",
+        "rawRecordsBundled=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current postcode mapping has been separately acquired, row-validated, and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "dictionary schema inspection is not mapping-row validation",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, retrieval record, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "catalog resources modified 2023-04-03",
+        "py-current-postcode-mapping-coverage-and-correction-required version=null",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Acquire the licensed DINACOPA mapping table through the catalog resource, retain the raw snapshot outside public packs, and record its hash, resource URL, and retrieval time.",
+    "Validate mapping rows and national coverage using only safe administrative and postal-zone identifiers; reject addresses, recipients, buildings, streets, precise points, and query logs.",
+    "Record the current publication version, update cadence, attribution wording, and a DINACOPA correction path before any lookup release."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not assert a postcode-to-household, building, street, point, or address match.",
+    "This pack does not assert that the 2023 catalog resource is current or nationally complete.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

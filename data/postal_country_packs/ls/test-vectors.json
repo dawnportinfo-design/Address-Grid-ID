@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ls-test-vector-1",
+    "input": {
+      "countryCode": "LS",
+      "municipalityId": "LS-M1",
+      "townId": "LS-M1-T1",
+      "chomeId": "LS-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "LS-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "ls-test-vector-2",
+    "input": {
+      "countryCode": "LS",
+      "municipalityId": "LS-M2",
+      "townId": "LS-M2-T2",
+      "chomeId": "LS-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "LS-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "ls-test-vector-3",
+    "input": {
+      "countryCode": "LS",
+      "municipalityId": "LS-M3",
+      "townId": "LS-M3-T3",
+      "chomeId": "LS-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "LS-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

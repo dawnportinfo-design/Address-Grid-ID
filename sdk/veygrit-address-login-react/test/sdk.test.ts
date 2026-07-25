@@ -133,7 +133,7 @@ test('GuestCheckoutButton can be rendered as a wallet-address checkout control',
             carrierCredentialsSharedWithMerchant: false,
             oneTimeUse: true,
           },
-        }),
+        } as const),
         onGuestCheckoutBlocked: result => {
           assert.equal(result.status, 'blocked');
         },

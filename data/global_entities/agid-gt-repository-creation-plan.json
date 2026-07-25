@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-07-23T06:41:21.134Z",
+  "version": "agid-country-repository-creation-plan-v1",
+  "owner": "dawnportinfo-design",
+  "policy": {
+    "ownerRequirement": "Create repositories only while authenticated as the target owner or an organization admin. Do not let GitHub CLI fall back to the current personal account.",
+    "noRawAddress": "Do not store raw personal addresses, recipient records, private coordinates, witness data, or private keys in public repositories.",
+    "heavyData": "Keep building polygons, coordinates, search indexes, tiles, OSM/Overture extracts, and generated caches in external content-addressed packs.",
+    "childDataReadiness": "A child repository marked for GitHub creation is not data-ready by default; it must still add manifest, sources, quality gates, tests, and no-raw checks before publication.",
+    "stagedCreation": "This country plan marks only the parent repository for creation; children remain logical until maintainers and datasets are ready."
+  },
+  "source": {
+    "continent": "americas",
+    "continentRepository": "agid-americas-index",
+    "region": "central_america",
+    "regionRepository": "agid-americas-central-america-index",
+    "splitStrategy": "single-country-or-territory-pack"
+  },
+  "summary": {
+    "countryCode": "GT",
+    "countryName": "Guatemala",
+    "parentRepository": "agid-country-gt",
+    "childRepositories": 0,
+    "githubCreateNow": 1,
+    "dataReadyRepositories": 1,
+    "logicalOnlyRepositories": 0,
+    "childRepositoriesAwaitingData": 0,
+    "totalRepositories": 1
+  },
+  "repositories": [
+    {
+      "repository": "agid-country-gt",
+      "kind": "country-parent",
+      "continent": "americas",
+      "region": "central_america",
+      "countryCode": "GT",
+      "countryName": "Guatemala",
+      "parentRepository": "agid-americas-central-america-index",
+      "stage": "country-parent",
+      "githubCreateNow": true,
+      "evidenceState": "parent-bootstrap-ready",
+      "dataReady": true,
+      "creationRationale": "Parent repositories can be bootstrapped with manifest, rules, sources, quality gates, and synthetic fixtures before any real address dataset is published.",
+      "description": "AGID country or territory pack for Guatemala (GT); stores safe rules, sources, quality gates, and synthetic fixtures only."
+    }
+  ]
+}

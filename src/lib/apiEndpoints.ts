@@ -83,6 +83,14 @@ export const apiEndpoints = {
     return apiV1Path('/address/verify/capabilities');
   },
 
+  postalCodeCapabilities() {
+    return apiV1Path('/postal-codes/capabilities');
+  },
+
+  postalCodeValidate() {
+    return apiV1Path('/postal-codes/validate');
+  },
+
   addressStandardLibraryCapabilities(params: AddressStandardLibraryCapabilitiesParams = {}) {
     return withParams(apiV1Path('/address/standard-library/capabilities'), {
       cc: params.countryCode ? cleanCountryCode(params.countryCode) : undefined,

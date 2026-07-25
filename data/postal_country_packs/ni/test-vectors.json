@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ni-test-vector-1",
+    "input": {
+      "countryCode": "NI",
+      "municipalityId": "NI-M1",
+      "townId": "NI-M1-T1",
+      "chomeId": "NI-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "NI-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "ni-test-vector-2",
+    "input": {
+      "countryCode": "NI",
+      "municipalityId": "NI-M2",
+      "townId": "NI-M2-T2",
+      "chomeId": "NI-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "NI-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "ni-test-vector-3",
+    "input": {
+      "countryCode": "NI",
+      "municipalityId": "NI-M3",
+      "townId": "NI-M3-T3",
+      "chomeId": "NI-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "NI-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

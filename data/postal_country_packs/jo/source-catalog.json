@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "JO official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "jordan-open-government-data-license-v1",
+    "sourceName": "Jordan Open Government Data License issue v1.0",
+    "sourceUrl": "https://portal.jordan.gov.jo/OGD-License_en.pdf",
+    "provider": "Government of Jordan",
+    "licenseOrTerms": "The official license permits use, copying, publication, distribution, and derivative works for data published on the government open-data platform, subject to its terms. It does not override the AGID safety boundary for address, location, or property fields. No raw dataset or protected field is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "government open-data reuse-license reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The license is recorded before any candidate data acquisition.",
+      "License evidence is distinct from field-level safety, coverage, and correction evidence.",
+      "This pack contains no raw government data."
+    ]
+  },
+  {
+    "sourceId": "jordan-post-offices-open-data-catalog-2025",
+    "sourceName": "Jordan Post Offices open-data catalog entry",
+    "sourceUrl": "https://opendata.gov.jo/en/dataset/jordan-post-offices-1661-2023",
+    "provider": "Jordan Post Company via Open Government Data Portal",
+    "licenseOrTerms": "Catalog metadata records the Jordanian open-data license and a 2025-07-16 update. The listed resources combine postal codes with office address, work-hours, and property fields. The resources are intentionally not downloaded or ingested because AGID does not collect or store raw address, location, or property fields.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "licensed postal-office dataset catalog and safety-boundary reference; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The catalog establishes a reusable license but not a safe postcode-only representation.",
+      "No office record, address, coordinate, property status, opening-hour, or postcode row is retained.",
+      "A general dataset license does not establish a safe schema, nationwide coverage, correction path, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "upu-jordan-designated-operator",
+    "sourceName": "UPU Jordan designated postal operator entry",
+    "sourceUrl": "https://www.upu.int/UPU/media/upu/PostalEntitiesFiles/statusOfPostalEntities/20240315dPRMAnListOfEntities_En.pdf",
+    "provider": "Universal Postal Union (UPU)",
+    "licenseOrTerms": "UPU status list dated 2024-03-15 records Jordan Post as the designated operator. It does not state a bulk postcode-mapping reuse grant, and no operator, postcode, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "international designated-operator authority reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The UPU entry supplies operator authority metadata only.",
+      "This pack does not access any postal lookup result.",
+      "Operator designation alone does not establish postcode format, mapping rights, current coverage, or delivery-point capability."
+    ]
+  },
+  {
+    "sourceId": "jo-current-postcode-format-coverage-and-correction-required",
+    "sourceName": "Jordan current postcode format, safe mapping, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:jordan-current-postcode-format-coverage-and-correction-required",
+    "provider": "Jordan Post or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with coverage and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The existing open-data catalog is not acquired because its source schema contains excluded fields.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until a safe official artifact and all release evidence are recorded."
+    ]
+  }
+]

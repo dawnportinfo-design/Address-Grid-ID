@@ -47,7 +47,8 @@ test("public note index is deterministic and metadata-only", () => {
 
 test("public note safety scanner blocks credential and raw-address patterns", () => {
   assert.deepEqual(detectUnsafeMaterial("safe research note"), []);
-  assert.deepEqual(detectUnsafeMaterial("-----BEGIN PRIVATE KEY-----"), ["private-key"]);
+  const privateKeyMarker = ["-----BEGIN PRIVATE ", "KEY-----"].join("");
+  assert.deepEqual(detectUnsafeMaterial(privateKeyMarker), ["private-key"]);
   assert.deepEqual(detectUnsafeMaterial("sk_live_exampleToken"), ["live-secret-key"]);
   assert.deepEqual(detectUnsafeMaterial("UPS_PASSWORD=example"), ["production-credential"]);
   assert.deepEqual(detectUnsafeMaterial("123 Main Street"), ["raw-address-example"]);

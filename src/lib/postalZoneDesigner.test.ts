@@ -203,6 +203,7 @@ test('Postal Zone Designer country and template catalogs include ready planning 
   assert.ok(countries.some(country => country.classHint === 'B'));
   assert.ok(countries.some(country => country.classHint === 'C'));
   assert.ok(countries.some(country => country.code === 'NG' && country.classHint === 'B'));
+  assert.ok(countries.some(country => country.code === 'GT' && country.classHint === 'B'));
   assert.ok(countries.some(country => country.code === 'FJ' && country.classHint === 'C'));
   assert.ok(templates.some(template => template.id === 'agid-native'));
   assert.ok(templates.some(template => template.id === 'ghana-like'));
@@ -225,7 +226,7 @@ test('Postal Forge coverage catalog covers all no-postal target countries and we
     assert.match(entry?.coverageClass || '', /^no-postal-code-/);
   }
 
-  for (const weakPostalCountry of ['AF', 'BD', 'IN', 'NG', 'PK', 'PH', 'VN', ...preparationWeakPostalCodes]) {
+  for (const weakPostalCountry of ['AF', 'BD', 'GT', 'IN', 'NG', 'PK', 'PH', 'VN', ...preparationWeakPostalCodes]) {
     const entry = byCode.get(weakPostalCountry);
     assert.ok(entry, `missing weak-postal coverage for ${weakPostalCountry}`);
     assert.equal(entry?.coverageClass, 'postal-code-available-weak-api');
@@ -244,6 +245,64 @@ test('Postal Forge exposes weak postal countries as supplemental AGID planning w
   assert.equal(workspace.exportSafe.forgeMode, 'supplemental-agid-postal');
   assert.equal(workspace.exportSafe.privateLocationTextIncluded, false);
   assert.equal(workspace.exportSafe.personalDataIncluded, false);
+});
+
+test('Guatemala keeps its five-digit postal format separate from AGID draft codes', () => {
+  const workspace = buildPostalZoneDesignerWorkspace({ countryCode: 'GT' });
+
+  assert.equal(workspace.country.code, 'GT');
+  assert.equal(workspace.designPlan.classification.class, 'B');
+  assert.equal(workspace.country.profileOverrides?.existingPostalPattern, '^\\d{5}$');
+  assert.equal(workspace.country.profileOverrides?.existingPostalSamples, undefined);
+  assert.equal(workspace.coverage.coverageClass, 'postal-code-available-weak-api');
+  assert.equal(workspace.coverage.forgeMode, 'supplemental-agid-postal');
+  assert.equal(workspace.exportSafe.personalDataIncluded, false);
+  assert.ok(workspace.governanceChecklist.some(item => item.includes('Do not present')));
+});
+
+test('Cambodia keeps an unverified postal format out of format validation', () => {
+  const workspace = buildPostalZoneDesignerWorkspace({ countryCode: 'KH' });
+
+  assert.equal(workspace.country.code, 'KH');
+  assert.equal(workspace.country.profileOverrides?.existingPostalPattern, undefined);
+  assert.equal(workspace.profile.addressFormat.postalCode.regex, null);
+  assert.ok(workspace.country.sourceNote.includes('not authority-verified'));
+});
+
+test('Laos keeps an unverified postal format out of format validation', () => {
+  const workspace = buildPostalZoneDesignerWorkspace({ countryCode: 'LA' });
+
+  assert.equal(workspace.country.code, 'LA');
+  assert.equal(workspace.country.profileOverrides?.existingPostalPattern, undefined);
+  assert.equal(workspace.profile.addressFormat.postalCode.regex, null);
+  assert.ok(workspace.country.sourceNote.includes('not authority-verified'));
+});
+
+test('Myanmar keeps an unverified postal format out of format validation', () => {
+  const workspace = buildPostalZoneDesignerWorkspace({ countryCode: 'MM' });
+
+  assert.equal(workspace.country.code, 'MM');
+  assert.equal(workspace.country.profileOverrides?.existingPostalPattern, undefined);
+  assert.equal(workspace.profile.addressFormat.postalCode.regex, null);
+  assert.ok(workspace.country.sourceNote.includes('not authority-verified'));
+});
+
+test('Nepal keeps an unverified postal format out of format validation', () => {
+  const workspace = buildPostalZoneDesignerWorkspace({ countryCode: 'NP' });
+
+  assert.equal(workspace.country.code, 'NP');
+  assert.equal(workspace.country.profileOverrides?.existingPostalPattern, undefined);
+  assert.equal(workspace.profile.addressFormat.postalCode.regex, null);
+  assert.ok(workspace.country.sourceNote.includes('not authority-verified'));
+});
+
+test('Pakistan keeps an unverified postal format out of format validation', () => {
+  const workspace = buildPostalZoneDesignerWorkspace({ countryCode: 'PK' });
+
+  assert.equal(workspace.country.code, 'PK');
+  assert.equal(workspace.country.profileOverrides?.existingPostalPattern, undefined);
+  assert.equal(workspace.profile.addressFormat.postalCode.regex, null);
+  assert.ok(workspace.country.sourceNote.includes('not authority-verified'));
 });
 
 test('privacy and data trust gates keep high-risk or weak data designs from public publication', () => {

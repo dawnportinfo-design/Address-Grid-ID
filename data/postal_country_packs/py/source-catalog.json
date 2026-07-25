@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "PY official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "dinacopa-postcode-format-guidance",
+    "sourceName": "DINACOPA Paraguay postcode format guidance",
+    "sourceUrl": "https://correoparaguayo.gov.py/sitio/el-codigo-postal-es-importante-para-ubicar-las-direcciones-5/",
+    "provider": "Dirección Nacional de Correos del Paraguay (DINACOPA)",
+    "licenseOrTerms": "Official postcode guidance page; it documents the six-digit format but does not by itself grant bulk mapping distribution or delivery-coverage claims, and no postcode, locality, address, or location record is bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "authority-published six-digit postcode-format reference; metadata only, not an offline mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "DINACOPA describes six digits partitioned into department, district, and barrio/locality components.",
+      "This pack stores the format rule only and does not copy illustrative codes, locality records, address material, or location-aware query results.",
+      "Format guidance does not establish current mapping coverage or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "dinacopa-postcode-open-data-catalog",
+    "sourceName": "DINACOPA Nuevo Codigo Postal del Paraguay open-data catalog",
+    "sourceUrl": "https://www.datos.gov.py/search?query=+Postal",
+    "provider": "Dirección Nacional de Correos del Paraguay (DINACOPA) via Datos.gov.py",
+    "licenseOrTerms": "The official catalog lists CSV, XLSX, and postal-zone resources under the Paraguayan Government Public Information Use License; catalog metadata was modified 2023-08-11 and resource metadata 2023-04-03. No raw mapping, geometry, location, address, or recipient record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "licensed postcode-table and postal-zone catalog evidence; metadata only until a current raw mapping is separately acquired and row-reviewed",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Catalog metadata records data-table and postal-zone resource formats with an explicit government public-information license.",
+      "The public pack does not include the catalog resources or derived mapping rows.",
+      "Catalog metadata alone does not establish current coverage, correction workflow, or delivery-point capability."
+    ]
+  },
+  {
+    "sourceId": "dinacopa-postcode-data-dictionary",
+    "sourceName": "DINACOPA postal-zone data dictionary",
+    "sourceUrl": "https://www.datos.gov.py/sites/default/files/Diccionario%20de%20Datos%20-%20ZONA%20POSTAL%20PARAGUAY.xlsx",
+    "provider": "Dirección Nacional de Correos del Paraguay (DINACOPA) via Datos.gov.py",
+    "licenseOrTerms": "Licensed under the Paraguayan Government Public Information Use License. A 12,261-byte schema dictionary snapshot was acquired outside public packs on 2026-07-23 and identified only administrative and postal-zone schema fields; no raw records, mapping rows, geometry, address, recipient, or precise-location data is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "externally retained source-schema evidence for controlled mapping ingestion; not a public mapping dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The external snapshot SHA-256 is recorded in the readiness artifact for reproducibility.",
+      "Schema inspection permits administrative and postal-zone identifiers but rejects address, street, building, coordinate, and geometry fields before any mapping ingestion.",
+      "A dictionary validates shape, not mapping-row accuracy, current coverage, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "ine-paraguay-admin-cartography",
+    "sourceName": "INE Paraguay digital administrative cartography",
+    "sourceUrl": "https://www.ine.gov.py/microdatos/cartografia-digital-2012.php",
+    "provider": "Instituto Nacional de Estadística (INE), Paraguay",
+    "licenseOrTerms": "Official cartography page under the Paraguayan Government Public Information Use License; no boundary, locality, road, block, address, or coordinate record is bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-boundary and locality-cartography reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "INE describes downloadable administrative-cartography layers and labels their political-administrative boundaries as referential.",
+      "This pack does not download, store, transform, or redistribute cartographic layers, boundaries, roads, blocks, or precise location data.",
+      "Administrative cartography does not establish postcode mapping coverage or carrier deliverability."
+    ]
+  },
+  {
+    "sourceId": "py-current-postcode-mapping-coverage-and-correction-required",
+    "sourceName": "Paraguay current postcode mapping, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:paraguay-current-postcode-mapping-coverage-and-correction-required",
+    "provider": "Dirección Nacional de Correos del Paraguay (DINACOPA) or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current mapping; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The catalog license and isolated schema dictionary support a controlled future ingestion, but no mapping rows or current coverage were validated.",
+      "Do not add real postcode records, address matching, delivery coverage, or carrier claims until a current mapping, coverage evidence, and correction path are recorded."
+    ]
+  }
+]

@@ -1,0 +1,193 @@
+{
+  "schemaId": "agid-romania-postal-source-readiness-v0.1",
+  "countryCode": "RO",
+  "countryName": "Romania",
+  "evaluatedAt": "2026-07-23T09:01:40.510Z",
+  "postalFormat": {
+    "nationalPattern": "^[0-9]{6}$",
+    "formatAuthorityEvidence": true,
+    "sourceFreshness": "historical-format-evidence-only"
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "ancom-cnpr-universal-service-2025-2029",
+      "scope": "postal-regulator-and-operator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "ANCOM Decision 810/2024 designation through 2029-12-31",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "data-gov-ro-romania-postal-codes-ogl-2016",
+      "scope": "historical-postcode-format-and-license-catalog",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "last updated 2016-09-06; OGL-ROU-1.0",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "historical-street-level-source",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "posta-romana-current-zip-code-search",
+      "scope": "official-postal-code-search-surface",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "retrieved 2026-07-23; publication version not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "search-results-not-acquired",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "ancpi-administrative-boundaries-open-information-license",
+      "scope": "current-administrative-boundaries-license-catalog",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "administrative-boundaries application updated 2026-05-05",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "geometry-excluded",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "ro-current-postcode-mapping-coverage-and-correction-required",
+      "scope": "current-postcode-mapping-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-regulator-and-operator-recorded",
+      "label": "ANCOM and the current national universal-service provider are recorded as authority metadata only",
+      "status": "passed",
+      "evidence": [
+        "ancom-cnpr-universal-service-2025-2029",
+        "designation through 2029-12-31",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "national-postcode-format-authority-recorded",
+      "label": "A government-open-data catalog records the numeric six-digit national format",
+      "status": "passed",
+      "evidence": [
+        "data-gov-ro-romania-postal-codes-ogl-2016",
+        "nationalPattern=^[0-9]{6}$",
+        "format evidence is historical only"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires a safe schema, rights, current version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "street, number, office, contact, parcel, coordinate, and geometry fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "current-postcode-mapping-freshness",
+      "label": "The licensed postcode mapping is current enough for operational use",
+      "status": "blocked",
+      "evidence": [
+        "OGL catalog last updated 2016-09-06",
+        "historical-format-evidence-only",
+        "mappingCurrent=false"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "safe-current-postcode-mapping-schema",
+      "label": "A current postcode mapping has a postcode-only or safe administrative-key schema independent of streets and numbers",
+      "status": "blocked",
+      "evidence": [
+        "historical catalog is detailed to street level",
+        "current search returns street and number fields",
+        "no safe current mapping extract acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "administrative-geodata-safe-extract",
+      "label": "Administrative keys have an approved non-geometry extract under explicit current reuse terms",
+      "status": "blocked",
+      "evidence": [
+        "ANCPI application records an open-information license for administrative boundaries",
+        "boundary geometry is excluded from this pack",
+        "no key-only administrative extract acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been schema-checked and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no postcode rows or search results acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "current search publication version not recorded",
+        "no current mapping version recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a current Posta Romana or authority-designated postcode-only artifact with explicit reuse terms and no street, number, office, contact, or location fields; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, and attribution wording.",
+    "Before ingestion, accept only safe postcode and administrative-zone identifiers, reject street, number, address, postal-unit, contact, precise-point, geometry, parcel, property, and query-result fields, and verify that the published version is current.",
+    "Record mapping coverage, update cadence, and an authority correction path before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not query, store, or redistribute Posta Romana search results.",
+    "This pack does not treat the 2016 OGL postal-code catalog as a current postcode mapping.",
+    "This pack does not download, store, or redistribute postcode, street, number, address, office, contact, property, parcel, boundary, or location records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

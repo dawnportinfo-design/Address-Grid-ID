@@ -1,0 +1,91 @@
+{
+  "schemaId": "agid-kenya-postal-source-readiness-v0.1",
+  "countryCode": "KE",
+  "countryName": "Kenya",
+  "evaluatedAt": "2026-07-23T06:12:06.057Z",
+  "postalFormat": {
+    "pattern": "^\\d{5}$",
+    "verifiedFormatOnly": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "posta-kenya",
+      "scope": "postal-operator-post-office-locator",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": null,
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-operator-locator-recorded",
+      "label": "The Kenya postal operator locator is cataloged as metadata only",
+      "status": "passed",
+      "evidence": [
+        "posta-kenya",
+        "postalMappingEvidence=false",
+        "redistributionStatus=metadata-only"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-code-mapping-evidence",
+      "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+      "status": "blocked",
+      "evidence": [
+        "The five-digit format is not a mapping.",
+        "posta-kenya postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "redistribution-rights",
+      "label": "Redistribution rights for any derived postal mapping are verified",
+      "status": "blocked",
+      "evidence": [
+        "posta-kenya redistributionStatus=metadata-only"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-update-cadence",
+      "label": "The postal mapping has a version, retrieval date, and update cadence",
+      "status": "blocked",
+      "evidence": [
+        "posta-kenya version=null",
+        "posta-kenya updateCadence=unknown"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "A versioned Kenya postcode-to-locality or delivery-point mapping with geographic coverage.",
+    "Field-level reuse, attribution, and redistribution terms for any mapping or derived output.",
+    "Publication date, retrieval date, update cadence, and correction path for the mapping."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not assert an address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

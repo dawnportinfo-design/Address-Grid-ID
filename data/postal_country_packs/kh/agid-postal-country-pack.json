@@ -4,7 +4,7 @@
     "version": "agid-postal-country-pack-v0.1",
     "strategyVersion": "agid-postal-country-pack-strategy-v0.1",
     "engineVersion": "agid-postal-code-engine-v0.1-rc",
-    "generatedAt": "2026-06-20T00:00:00.000Z",
+    "generatedAt": "2026-07-23T06:12:06.057Z",
     "countryCode": "KH",
     "countryName": "Cambodia",
     "repositoryName": "agid-postal-pack-kh",
@@ -32,7 +32,7 @@
     "containsRawThirdPartyData": false,
     "officialStatus": "draft",
     "counts": {
-      "sources": 3,
+      "sources": 5,
       "localities": 48,
       "boundaries": 12,
       "landforms": 1,
@@ -53,7 +53,7 @@
     "repositoryMode": "country-pack-recommended",
     "repositoryName": "agid-postal-pack-kh",
     "packageName": "@agid/agid-postal-pack-kh",
-    "packWeight": "standard-pack",
+    "packWeight": "thin-pack",
     "recommendedUse": "supplemental-agid-postal-draft",
     "requiredLayers": [
       "manifest",
@@ -118,7 +118,7 @@
       "lat": 12.5657,
       "lng": 104.991
     },
-    "sourceNote": "Postal metadata is uneven; candidate display should not override local manual input."
+    "sourceNote": "A previously assumed fixed postal-code pattern is not authority-verified and conflicts with public Cambodia Post format signals. Do not format-validate or autofill until an authority-published national format, mapping scope, reuse rights, and update policy are recorded."
   },
   "sourceCatalog": [
     {
@@ -174,8 +174,162 @@
         "Open map records are not bundled by default.",
         "Any derived database must keep source-specific attribution and redistribution obligations."
       ]
+    },
+    {
+      "sourceId": "cambodia-post-location",
+      "sourceName": "Cambodia Post location page",
+      "sourceUrl": "https://cambodiapost.com.kh/location",
+      "provider": "Cambodia Post",
+      "licenseOrTerms": "Official location page with linked terms and privacy policy; no postal-mapping data license or redistribution grant is recorded, and no location records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official postal-operator location page; metadata only, not a national postcode format, mapping, or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The official page presents Cambodia Post location categories and linked terms and privacy material.",
+        "This pack does not query, store, transform, or redistribute location records or displayed addresses.",
+        "Public format signals on this page do not establish an authority-published national postal-code regex."
+      ]
+    },
+    {
+      "sourceId": "mptc-cambodia-post-autonomous-unit",
+      "sourceName": "MPTC autonomous-unit listing for Cambodia Post",
+      "sourceUrl": "https://mptc.gov.kh/en/",
+      "provider": "Ministry of Post and Telecommunications, Cambodia",
+      "licenseOrTerms": "Official ministry webpage; no postal-mapping data license or redistribution grant is recorded, and no raw records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "government-to-postal-operator relationship evidence; metadata only, not postal-code mapping evidence",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The ministry webpage lists Cambodia Post among its autonomous units.",
+        "This pack records only source metadata and does not infer a postal-code format, mapping coverage, or deliverability from that relationship."
+      ]
     }
   ],
+  "postalSourceReadiness": {
+    "schemaId": "agid-cambodia-postal-source-readiness-v0.1",
+    "countryCode": "KH",
+    "countryName": "Cambodia",
+    "evaluatedAt": "2026-07-23T06:12:06.057Z",
+    "postalFormat": {
+      "nationalPattern": null,
+      "authorityVerified": false,
+      "fixedLegacyPatternRejected": true
+    },
+    "publicationStatus": "draft",
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "realPostalLookupEnabled": false,
+    "deliveryClaimEnabled": false,
+    "sources": [
+      {
+        "sourceId": "cambodia-post-location",
+        "scope": "postal-operator-location-page",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "mptc-cambodia-post-autonomous-unit",
+        "scope": "government-operator-relationship",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      }
+    ],
+    "gates": [
+      {
+        "id": "no-personal-or-raw-third-party-data",
+        "label": "The published pack remains metadata and synthetic fixtures only",
+        "status": "passed",
+        "evidence": [
+          "containsPersonalData=false",
+          "containsRawThirdPartyData=false",
+          "rawRecordsBundled=false for every source"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-operator-recorded",
+        "label": "Cambodia Post is cataloged from its official location page as metadata only",
+        "status": "passed",
+        "evidence": [
+          "cambodia-post-location",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "government-operator-relationship-recorded",
+        "label": "The ministry page records Cambodia Post as an autonomous unit",
+        "status": "passed",
+        "evidence": [
+          "mptc-cambodia-post-autonomous-unit",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-format-authority-evidence",
+        "label": "An authority-published national postal-code format is evidenced",
+        "status": "blocked",
+        "evidence": [
+          "nationalPattern=null",
+          "authorityVerified=false",
+          "fixedLegacyPatternRejected=true"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "postal-code-mapping-evidence",
+        "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+        "status": "blocked",
+        "evidence": [
+          "postalMappingEvidence=false for every source"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "redistribution-rights",
+        "label": "Redistribution rights for any derived postal mapping are verified",
+        "status": "blocked",
+        "evidence": [
+          "redistributionStatus=metadata-only for every source"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "version-freshness-and-update-cadence",
+        "label": "The postal mapping has a version, retrieval date, and update cadence",
+        "status": "blocked",
+        "evidence": [
+          "version=null for every source",
+          "updateCadence=unknown for every source"
+        ],
+        "blocksRealPostalLookup": true
+      }
+    ],
+    "nextRequiredEvidence": [
+      "An authority-published national postal-code format and format-change policy.",
+      "A versioned postcode-to-locality or delivery-point mapping with geographic coverage.",
+      "Field-level reuse, attribution, and redistribution terms for any mapping or derived output.",
+      "Publication date, retrieval date, update cadence, and correction path for the mapping."
+    ],
+    "nonClaims": [
+      "This pack does not provide a real postcode lookup.",
+      "This pack does not assert a national Cambodia postal-code regex.",
+      "This pack does not assert an address-to-postcode match or delivery-point coverage."
+    ]
+  },
   "licenseLedger": [
     {
       "subject": "AGID-created country pack metadata",
@@ -194,6 +348,18 @@
       "licenseOrTerms": "source-specific",
       "redistribution": "review-required",
       "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+    },
+    {
+      "subject": "Cambodia Post location and MPTC relationship source metadata",
+      "licenseOrTerms": "Official operator and ministry webpages; terms and reuse rights for postal mapping are not recorded",
+      "redistribution": "metadata-only",
+      "notes": "This release records source metadata only. It does not query, bundle, or derive location, postcode, address, post-office, recipient, or delivery-point records. The webpages do not establish a national postal-code format or mapping reuse right."
+    },
+    {
+      "subject": "Cambodia national postal-code format and delivery-point mapping",
+      "licenseOrTerms": "Not yet verified",
+      "redistribution": "not-bundled",
+      "notes": "No fixed national regex, postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, or derived equivalent is included until authority, version, redistribution, and correction evidence are recorded."
     }
   ],
   "officialMunicipalitySummary": {

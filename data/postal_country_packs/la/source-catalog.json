@@ -52,5 +52,34 @@
       "Open map records are not bundled by default.",
       "Any derived database must keep source-specific attribution and redistribution obligations."
     ]
+  },
+  {
+    "sourceId": "laos-postal-service-postcode-page",
+    "sourceName": "Laos Postal Service postcode page",
+    "sourceUrl": "https://www.laopost.com.la/about/postcode",
+    "provider": "Laos Postal Service",
+    "licenseOrTerms": "Official postcode webpage; no postal-mapping data license or redistribution grant is recorded, and no postcode or location records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-operator postcode page; metadata only, not a national postcode regex, mapping, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official postal-service site exposes a postcode page and postal-service navigation.",
+      "This pack does not query, store, transform, or redistribute the page content, postcode records, branch records, or displayed addresses.",
+      "The page alone does not establish a reusable national format, a versioned mapping, or redistribution rights."
+    ]
+  },
+  {
+    "sourceId": "lao-postal-law-post-code-definition",
+    "sourceName": "Lao Law on Postal Services, Article 11 post-code definition",
+    "sourceUrl": "https://www.laotradeportal.gov.la/en-gb/site/display/1164",
+    "provider": "Lao Trade Portal publication of Law No. 45/NA",
+    "licenseOrTerms": "Published legal text; no postal mapping or derived-data redistribution grant is recorded",
+    "redistributionStatus": "source-metadata-only",
+    "role": "legal postal-code governance evidence; metadata only, not a published postcode-to-locality mapping",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Article 11 defines post codes as delivery geography indicators and assigns the Ministry of Post and Telecommunications a role in defining them with relevant authorities.",
+      "This pack records the legal source metadata only and does not infer a fixed national regex, mapping coverage, or delivery-point evidence."
+    ]
   }
 ]

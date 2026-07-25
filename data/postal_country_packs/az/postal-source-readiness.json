@@ -1,0 +1,193 @@
+{
+  "schemaId": "agid-azerbaijan-postal-source-readiness-v0.1",
+  "countryCode": "AZ",
+  "countryName": "Azerbaijan",
+  "evaluatedAt": "2026-07-23T09:40:43.135Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "formatAuthorityEvidence": false,
+    "unverifiedFormatInferenceRejected": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "azerbaijan-azerpost-index-search-boundary",
+      "scope": "postal-index-search-boundary-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "Azerpost index-search FAQ retrieved 2026-07-23",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "source-contains-excluded-fields",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "azerbaijan-azerpost-addressing-rule",
+      "scope": "postal-addressing-rule-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "Azerpost mail-receiving and addressing procedure retrieved 2026-07-23",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "source-contains-excluded-fields",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "azerbaijan-idda-open-data-portal",
+      "scope": "open-data-governance-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "IDDA Open Data Portal retrieved 2026-07-23; selected resource and terms not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "terms-not-verified",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "azerbaijan-electronic-land-cadastre-system",
+      "scope": "administrative-and-cadastral-authority-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "Electronic Land Cadastre Information System reference retrieved 2026-07-23; resource-level reuse terms not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "source-contains-excluded-fields",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "az-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "scope": "current-postcode-format-mapping-rights-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-authority-surfaces-recorded",
+      "label": "The operator index search and addressing rule are recorded without extracting or querying address-level data",
+      "status": "passed",
+      "evidence": [
+        "azerbaijan-azerpost-index-search-boundary",
+        "azerbaijan-azerpost-addressing-rule",
+        "source-contains-excluded-fields",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "open-data-and-administrative-authorities-recorded",
+      "label": "The open-data portal and cadastral authority are recorded without acquiring datasets or geographic entries",
+      "status": "passed",
+      "evidence": [
+        "azerbaijan-idda-open-data-portal",
+        "azerbaijan-electronic-land-cadastre-system",
+        "rawRecordsBundled=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires a safe schema, rights, current version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "address, office, contact, cadastral, coordinate, and geometry fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "A current official format definition authorizes a national postcode pattern claim",
+      "status": "blocked",
+      "evidence": [
+        "operator materials are recorded without using examples as a format definition",
+        "unverifiedFormatInferenceRejected=true",
+        "nationalPattern=null"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-mapping-reuse-rights",
+      "label": "A current official postcode mapping has explicit reuse terms suitable for a safe offline artifact",
+      "status": "blocked",
+      "evidence": [
+        "index search is not a bulk reuse grant",
+        "no current mapping artifact acquired",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "administrative-geodata-rights-and-safe-schema",
+      "label": "Administrative geographic keys have explicit resource-level reuse terms and a safe non-geometry schema",
+      "status": "blocked",
+      "evidence": [
+        "open-data portal catalog is not a selected dataset license",
+        "cadastre includes excluded boundary and cadastral data",
+        "no key-only extract acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been schema-checked and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no postcode rows acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and authority correction path",
+      "status": "blocked",
+      "evidence": [
+        "mapping-version-not-recorded",
+        "no mapping update cadence recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a current authority-published postcode format and postcode-only or safe administrative-key mapping artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, version, attribution wording, and coverage.",
+    "Before ingestion, accept only safe postcode and administrative-zone identifiers, reject address, street, number, postal-unit, office, contact, precise-point, geometry, parcel, property, and cadastral fields, and verify that the publication is current.",
+    "Record the authority correction path, update cadence, and coverage validation before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not infer an Azerbaijan national postcode pattern from the recorded operator materials.",
+    "This pack does not query, download, store, or redistribute postcode mappings, administrative entries, addresses, offices, contacts, properties, parcels, boundaries, or location records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

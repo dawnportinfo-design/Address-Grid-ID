@@ -1,4 +1,6 @@
-export const ADDRESS_VERIFICATION_BENCHMARK_VERSION = 'address-verification-benchmark-v1';
+export const ADDRESS_VERIFICATION_BENCHMARK_VERSION = 'address-verification-benchmark-v2';
+export const ADDRESS_VALIDATION_AGGREGATE_EVALUATION_PROTOCOL_VERSION = 'address-validation-aggregate-evaluation-v1';
+export const ADDRESS_VALIDATION_AGGREGATE_METRIC_DEFINITION_VERSION = 'address-validation-aggregate-metrics-v1';
 
 export const ADDRESS_VERIFICATION_BENCHMARK_DIMENSIONS = [
   'globalPostalCoverage',
@@ -26,6 +28,8 @@ export type AddressVerificationBenchmarkProfile = {
     claimedCountries?: number;
     addressFormatCountries?: number;
     explicitPolicyCountries?: number;
+    authoritativePostalCountries?: number;
+    deliveryPointCountries?: number;
     notes: string[];
   };
   scores: Record<AddressVerificationBenchmarkDimension, number>;
@@ -55,6 +59,75 @@ export type AddressVerificationBenchmarkGap = {
 export type AgidAddressVerificationBenchmarkInput = {
   addressFormatCountryCount: number;
   explicitPolicyCountryCount: number;
+  authoritativePostalCountryCount?: number;
+  deliveryPointCountryCount?: number;
+};
+
+export const COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS = {
+  minimumAggregateSamples: 10_000,
+  minimumExactMatchRate: 0.995,
+  maximumFalseAcceptRate: 0.001,
+  maximumP95LatencyMs: 500,
+  minimumAvailabilityPct: 99.9,
+  minimumNormalizationExactMatchRate: 0.995,
+  minimumTypoCorrectionPrecision: 0.99,
+  maximumTypoCorrectionFalseChangeRate: 0.001,
+  minimumInputScriptClassCount: 2,
+  minimumAvailabilityObservationWindowSeconds: 86_400,
+  maximumAggregateEvaluationAgeDays: 30,
+} as const;
+
+export type AddressValidationCommercialParityInput = {
+  countryCode: string;
+  officialEvidence: {
+    format: boolean;
+    postal: boolean;
+    deliveryPoint: boolean;
+    rights: boolean;
+    version: boolean;
+    freshness: boolean;
+    correctionPath: boolean;
+  };
+  privacyBoundary: 'no-raw-address-storage' | 'ephemeral-customer-controlled' | 'unknown-or-persistent';
+  evaluatedAt?: string;
+  aggregateEvaluation?: {
+    measuredAt: string;
+    sampleCount: number;
+    exactMatchRate: number;
+    falseAcceptRate: number;
+    p95LatencyMs: number;
+    availabilityPct: number;
+    normalizationExactMatchRate?: number;
+    typoCorrectionPrecision?: number;
+    typoCorrectionFalseChangeRate?: number;
+    measurementContract?: AddressValidationAggregateMeasurementContract;
+  };
+};
+
+export type AddressValidationAggregateMeasurementContract = {
+  protocolVersion: string;
+  metricDefinitionVersion: string;
+  corpusKind: 'synthetic' | 'aggregate-only';
+  scope: 'country-specific-holdout';
+  rawDataHandling: 'no-raw-addresses-or-responses-recorded';
+  testVectorDigest: string;
+  inputScriptClassCount?: number;
+  availabilityObservationWindowSeconds?: number;
+};
+
+export type AddressValidationCommercialParityGate = {
+  id: string;
+  passed: boolean;
+  action: string;
+};
+
+export type AddressValidationCommercialParityReadiness = {
+  countryCode: string;
+  status: 'blocked' | 'measurement-required' | 'commercial-comparison-eligible';
+  gates: AddressValidationCommercialParityGate[];
+  blockers: string[];
+  nextActions: string[];
+  nonClaim: string;
 };
 
 export const ADDRESS_VERIFICATION_DIMENSION_WEIGHTS: Record<AddressVerificationBenchmarkDimension, number> = {
@@ -146,12 +219,197 @@ export function findAgidAddressVerificationGaps(
   }).sort((left, right) => right.delta - left.delta);
 }
 
+function normalizedCountryCode(value: string) {
+  const code = value.normalize('NFKC').trim().toUpperCase().replace(/[^A-Z]/g, '');
+  return code === 'UK' ? 'GB' : code;
+}
+
+function validMetric(value: number, minimum: number, direction: 'at-least' | 'at-most') {
+  if (!Number.isFinite(value)) return false;
+  return direction === 'at-least' ? value >= minimum : value <= minimum;
+}
+
+function validRate(value: number, minimum: number, direction: 'at-least' | 'at-most') {
+  return value >= 0 && value <= 1 && validMetric(value, minimum, direction);
+}
+
+function validPercentage(value: number, minimum: number) {
+  return value >= 0 && value <= 100 && validMetric(value, minimum, 'at-least');
+}
+
+function validSampleCount(value: number, minimum: number) {
+  return Number.isInteger(value) && value >= 0 && validMetric(value, minimum, 'at-least');
+}
+
+function validLatency(value: number, maximum: number) {
+  return value >= 0 && validMetric(value, maximum, 'at-most');
+}
+
+function validScriptClassCount(value: number | undefined) {
+  return Number.isInteger(value) && value >= COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.minimumInputScriptClassCount;
+}
+
+function validAvailabilityObservationWindow(value: number | undefined) {
+  return Number.isInteger(value) &&
+    value >= COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.minimumAvailabilityObservationWindowSeconds;
+}
+
+function timestamp(value: string | undefined) {
+  if (!value || !/T.+(?:Z|[+-]\d{2}:\d{2})$/i.test(value)) return null;
+  const parsed = Date.parse(value || '');
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
+function isSha256Digest(value: string | undefined) {
+  return /^[a-f0-9]{64}$/i.test(value || '');
+}
+
+function hasValidAggregateMeasurementContract(
+  contract: AddressValidationAggregateMeasurementContract | undefined,
+) {
+  return contract?.protocolVersion === ADDRESS_VALIDATION_AGGREGATE_EVALUATION_PROTOCOL_VERSION &&
+    contract.metricDefinitionVersion === ADDRESS_VALIDATION_AGGREGATE_METRIC_DEFINITION_VERSION &&
+    (contract.corpusKind === 'synthetic' || contract.corpusKind === 'aggregate-only') &&
+    contract.scope === 'country-specific-holdout' &&
+    contract.rawDataHandling === 'no-raw-addresses-or-responses-recorded';
+}
+
+export function assessAddressValidationCommercialParity(
+  input: AddressValidationCommercialParityInput,
+): AddressValidationCommercialParityReadiness {
+  const evidence = input.officialEvidence;
+  const aggregate = input.aggregateEvaluation;
+  const evaluatedAt = timestamp(input.evaluatedAt);
+  const measuredAt = timestamp(aggregate?.measuredAt);
+  const semanticTypoCorrectionCorpusEligible = aggregate?.measurementContract?.corpusKind === 'aggregate-only';
+  const aggregateEvaluationFresh = evaluatedAt !== null &&
+    measuredAt !== null &&
+    measuredAt <= evaluatedAt &&
+    evaluatedAt - measuredAt <= COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.maximumAggregateEvaluationAgeDays * 24 * 60 * 60 * 1000;
+  const gates: AddressValidationCommercialParityGate[] = [
+    { id: 'official-format', passed: evidence.format, action: 'record-current-official-format-evidence' },
+    { id: 'official-postal', passed: evidence.postal, action: 'record-current-authoritative-postal-evidence' },
+    { id: 'official-delivery-point', passed: evidence.deliveryPoint, action: 'connect-an-authoritative-delivery-point-source' },
+    { id: 'rights', passed: evidence.rights, action: 'record-use-and-redistribution-terms' },
+    { id: 'version', passed: evidence.version, action: 'record-source-version-and-update-cadence' },
+    { id: 'freshness', passed: evidence.freshness, action: 'enforce-a-country-specific-freshness-window' },
+    { id: 'correction-path', passed: evidence.correctionPath, action: 'record-and-test-the-source-correction-path' },
+    {
+      id: 'privacy-boundary',
+      passed: input.privacyBoundary !== 'unknown-or-persistent',
+      action: 'use-no-storage-or-customer-controlled-ephemeral-address-handling',
+    },
+    {
+      id: 'aggregate-sample-size',
+      passed: aggregate ? validSampleCount(aggregate.sampleCount, COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.minimumAggregateSamples) : false,
+      action: `collect-at-least-${COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.minimumAggregateSamples}-synthetic-or-consented-aggregate-evaluations`,
+    },
+    {
+      id: 'aggregate-evaluation-freshness',
+      passed: aggregateEvaluationFresh,
+      action: `refresh-aggregate-evaluation-within-${COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.maximumAggregateEvaluationAgeDays}-days`,
+    },
+    {
+      id: 'aggregate-measurement-contract',
+      passed: hasValidAggregateMeasurementContract(aggregate?.measurementContract),
+      action: 'record-the-versioned-aggregate-only-measurement-contract-and-no-raw-data-attestation',
+    },
+    {
+      id: 'aggregate-test-vector-digest',
+      passed: isSha256Digest(aggregate?.measurementContract?.testVectorDigest),
+      action: 'record-a-sha256-digest-for-the-non-personal-test-vector-set',
+    },
+    {
+      id: 'aggregate-exact-match-rate',
+      passed: aggregate ? validRate(aggregate.exactMatchRate, COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.minimumExactMatchRate, 'at-least') : false,
+      action: 'meet-the-exact-match-rate-threshold-in-a-country-specific-holdout-evaluation',
+    },
+    {
+      id: 'aggregate-false-accept-rate',
+      passed: aggregate ? validRate(aggregate.falseAcceptRate, COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.maximumFalseAcceptRate, 'at-most') : false,
+      action: 'reduce-false-accept-rate-below-the-release-threshold',
+    },
+    {
+      id: 'aggregate-p95-latency',
+      passed: aggregate ? validLatency(aggregate.p95LatencyMs, COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.maximumP95LatencyMs) : false,
+      action: 'meet-the-p95-latency-release-threshold',
+    },
+    {
+      id: 'aggregate-availability',
+      passed: aggregate ? validPercentage(aggregate.availabilityPct, COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.minimumAvailabilityPct) : false,
+      action: 'meet-the-availability-release-threshold',
+    },
+    {
+      id: 'aggregate-availability-observation-window',
+      passed: validAvailabilityObservationWindow(aggregate?.measurementContract?.availabilityObservationWindowSeconds),
+      action: `record-an-availability-observation-window-of-at-least-${COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.minimumAvailabilityObservationWindowSeconds}-seconds`,
+    },
+    {
+      id: 'aggregate-normalization-exact-match-rate',
+      passed: aggregate ? validRate(
+        aggregate.normalizationExactMatchRate ?? Number.NaN,
+        COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.minimumNormalizationExactMatchRate,
+        'at-least',
+      ) : false,
+      action: 'meet-the-country-specific-multilingual-normalization-threshold-in-a-synthetic-holdout-evaluation',
+    },
+    {
+      id: 'aggregate-multilingual-script-diversity',
+      passed: validScriptClassCount(aggregate?.measurementContract?.inputScriptClassCount),
+      action: `record-at-least-${COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.minimumInputScriptClassCount}-input-script-classes-in-the-aggregate-only-normalization-holdout`,
+    },
+    {
+      id: 'aggregate-typo-correction-precision',
+      passed: Boolean(semanticTypoCorrectionCorpusEligible && aggregate && validRate(
+        aggregate.typoCorrectionPrecision ?? Number.NaN,
+        COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.minimumTypoCorrectionPrecision,
+        'at-least',
+      )),
+      action: 'meet-the-country-specific-typo-correction-precision-threshold-in-an-aggregate-only-holdout-evaluation',
+    },
+    {
+      id: 'aggregate-typo-correction-false-change-rate',
+      passed: Boolean(semanticTypoCorrectionCorpusEligible && aggregate && validRate(
+        aggregate.typoCorrectionFalseChangeRate ?? Number.NaN,
+        COMMERCIAL_ADDRESS_VALIDATION_MINIMUMS.maximumTypoCorrectionFalseChangeRate,
+        'at-most',
+      )),
+      action: 'reduce-country-specific-typo-correction-false-change-rate-below-the-aggregate-only-release-threshold',
+    },
+  ];
+  const blockers = gates.filter(gate => !gate.passed).map(gate => gate.id);
+  const evidenceBlocked = blockers.some(blocker => blocker.startsWith('official-') || [
+    'rights',
+    'version',
+    'freshness',
+    'correction-path',
+    'privacy-boundary',
+  ].includes(blocker));
+
+  return {
+    countryCode: normalizedCountryCode(input.countryCode),
+    status: evidenceBlocked
+      ? 'blocked'
+      : blockers.length
+        ? 'measurement-required'
+        : 'commercial-comparison-eligible',
+    gates,
+    blockers,
+    nextActions: gates.filter(gate => !gate.passed).map(gate => gate.action),
+    nonClaim: 'Commercial-comparison eligibility is an internal release gate, not a claim of equivalence, superiority, carrier deliverability, or nationwide coverage.',
+  };
+}
+
 export function buildAgidAddressVerificationBenchmarkProfile({
   addressFormatCountryCount,
   explicitPolicyCountryCount,
+  authoritativePostalCountryCount = 0,
+  deliveryPointCountryCount = 0,
 }: AgidAddressVerificationBenchmarkInput): AddressVerificationBenchmarkProfile {
   const formatCoverageScore = Math.min(2.4, (addressFormatCountryCount / 281) * 2.4);
   const explicitPolicyScore = Math.min(1.8, (explicitPolicyCountryCount / 55) * 1.8);
+  const authoritativePostalDepthScore = Math.min(1.5, Math.max(0, authoritativePostalCountryCount) / 40);
+  const deliveryPointDepthScore = Math.min(1.2, Math.max(0, deliveryPointCountryCount) / 30);
 
   return {
     id: 'agid-current',
@@ -160,6 +418,8 @@ export function buildAgidAddressVerificationBenchmarkProfile({
     metrics: {
       addressFormatCountries: addressFormatCountryCount,
       explicitPolicyCountries: explicitPolicyCountryCount,
+      authoritativePostalCountries: authoritativePostalCountryCount,
+      deliveryPointCountries: deliveryPointCountryCount,
       notes: [
         'Scores assume the current open-source rules, address-format corpus, postal evidence matching, and optional OpenAddresses-style reference records.',
         'The score is an internal planning heuristic, not a user-facing quality label.',
@@ -167,8 +427,8 @@ export function buildAgidAddressVerificationBenchmarkProfile({
     },
     scores: {
       globalPostalCoverage: roundScore(clampScore(2 + formatCoverageScore + explicitPolicyScore)),
-      deliveryPointDepth: roundScore(clampScore(2.2 + explicitPolicyCountryCount / 28)),
-      authoritativePostalDepth: roundScore(clampScore(3 + explicitPolicyCountryCount / 14)),
+      deliveryPointDepth: roundScore(clampScore(2.2 + deliveryPointDepthScore)),
+      authoritativePostalDepth: roundScore(clampScore(3 + authoritativePostalDepthScore)),
       correctionAndStandardization: 5.8,
       fuzzyMatching: 5.7,
       geocodingDepth: 5.5,

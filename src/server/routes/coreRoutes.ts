@@ -81,6 +81,7 @@ import { registerManagedZkProofServerRoutes } from './managedZkProofServerRoutes
 import { registerMachineAgidAoidRoutes } from './machineAgidAoidRoutes';
 import { registerOracleOperaRoutes } from './oracleOperaRoutes';
 import { registerPosTerminalRoutes } from './posTerminalRoutes';
+import { registerPostalCodeApiRoutes } from './postalCodeApiRoutes';
 import { registerPrivateDeploymentRoutes } from './privateDeploymentRoutes';
 import { registerRevocationFreshnessRoutes } from './revocationFreshnessRoutes';
 import { registerWarehouseLockerSimulatorRoutes } from './warehouseLockerSimulatorRoutes';
@@ -1015,6 +1016,7 @@ export function registerCoreApiRoutes(
     registryStore: hostedAgidRegistryStore,
     ledgerStore: addressResolutionLedgerStore,
   });
+  registerPostalCodeApiRoutes(app);
   registerCrossBorderAuxiliaryRoutes(app);
   registerTaxOpenSourceRoutes(app);
   registerExternalDeliveryApiRoutes(app, { connectorFetch: connectorFetchNoCache });

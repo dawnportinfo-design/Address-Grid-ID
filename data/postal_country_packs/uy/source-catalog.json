@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "UY official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "correo-uruguayo-postcode-search-status",
+    "sourceName": "Correo Uruguayo postcode search service status",
+    "sourceUrl": "https://www.correo.com.uy/codigospostales",
+    "provider": "Administración Nacional de Correos (Correo Uruguayo)",
+    "licenseOrTerms": "Official service page records a 2026-05-04 update and links to the open-data catalog. It does not grant reuse of search results, and no query, postcode, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postcode service-status and currentness reference; metadata only, not an offline mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The page records its own update date and identifies the official open-data catalog.",
+      "This pack does not query, store, transform, or redistribute service results.",
+      "Service status does not establish a reusable mapping, national coverage, correction workflow, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "correo-uruguayo-postcode-open-data-catalog",
+    "sourceName": "Correo Uruguayo Código Postal open-data catalog",
+    "sourceUrl": "https://catalogodatos.gub.uy/dataset/correo-codigo-postal",
+    "provider": "Correo Uruguayo, Unidad de Geomática via Catálogo de Datos Abiertos",
+    "licenseOrTerms": "Catalog metadata records the Licencia de Datos Abiertos - Uruguay, version 1.0, and a one-off publication last updated 2023-08-16. The license permits reuse with provider, license, and dataset attribution. No KML, SHP, postcode-zone, geometry, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "licensed postcode-zone catalog evidence; metadata only because the listed 2023 resources predate the 2026 operational service update",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The catalog documents a five-digit national postcode format and KML/SHP resources updated in August 2023.",
+      "The listed resource is intentionally not downloaded or ingested because the official operational page is newer and the catalog declares a one-off publication cadence.",
+      "A public license does not cure an unresolved currentness, coverage, or correction-path gap."
+    ]
+  },
+  {
+    "sourceId": "ursec-postal-services-reference",
+    "sourceName": "URSEC postal services reference",
+    "sourceUrl": "https://www.gub.uy/unidad-reguladora-servicios-comunicaciones/servicios-postales-servicios-a-la-ciudadania",
+    "provider": "Unidad Reguladora de Servicios de Comunicaciones (URSEC)",
+    "licenseOrTerms": "Official regulatory reference; no postcode mapping or bulk redistribution terms are recorded here, and no postal-operator, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-regulatory and correction-channel reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "URSEC links to Correo Uruguayo postcode listings by locality and has a service for reporting errors or suggesting improvements.",
+      "This pack records no regulator listings, postal-office locations, operator records, or location data.",
+      "The reference does not establish a current reusable mapping or delivery-point coverage."
+    ]
+  },
+  {
+    "sourceId": "uy-current-postcode-mapping-coverage-and-correction-required",
+    "sourceName": "Uruguay current postcode mapping, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:uruguay-current-postcode-mapping-coverage-and-correction-required",
+    "provider": "Correo Uruguayo or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current mapping; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official catalog terms support attributable future reuse, but its listed resources are older than the operational service status.",
+      "Do not add postcode rows, zones, geometry, address matching, delivery coverage, or carrier claims until current mapping, coverage, version, and correction evidence are recorded."
+    ]
+  }
+]

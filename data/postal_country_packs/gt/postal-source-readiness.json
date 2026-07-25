@@ -1,0 +1,165 @@
+{
+  "schemaId": "agid-guatemala-postal-source-readiness-v0.1",
+  "countryCode": "GT",
+  "countryName": "Guatemala",
+  "evaluatedAt": "2026-07-23T06:12:06.057Z",
+  "postalFormat": {
+    "pattern": "^\\d{5}$",
+    "verifiedFormatOnly": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "gt-ine-censo-2018-lugares-poblados",
+      "scope": "populated-place-metadata",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "Censo 2018",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false,
+      "documentation": {
+        "sourceUrl": "https://datos.ine.gob.gt/es/dataset/censo-2018-lugares-poblados",
+        "termsUrl": "https://datos.ine.gob.gt/es/dataset/censo-2018-lugares-poblados",
+        "correctionUrl": "https://www.ine.gob.gt/contactenos/",
+        "correctionPathStatus": "general-contact-only",
+        "reuseStatus": "metadata-only-verified",
+        "verifiedAt": "2026-07-24T00:00:00.000Z"
+      }
+    },
+    {
+      "sourceId": "gt-postal-code-mapping-required",
+      "scope": "postal-code-mapping-and-delivery-points",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "upu-universal-postcode-database",
+      "scope": "international-licensed-postcode-reference",
+      "authorityStatus": "international-licensed-candidate",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "license-review-required",
+      "version": "2026.1 catalog metadata",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "country-specific-populated-place-source-recorded",
+      "label": "A Guatemala populated-place source is cataloged as metadata only",
+      "status": "passed",
+      "evidence": [
+        "gt-ine-censo-2018-lugares-poblados",
+        "postalMappingEvidence=false",
+        "redistributionStatus=metadata-only"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "populated-place-metadata-reuse-terms-recorded",
+      "label": "INE populated-place metadata reuse terms are recorded without importing source records",
+      "status": "passed",
+      "evidence": [
+        "gt-ine-censo-2018-lugares-poblados documentation.reuseStatus=metadata-only-verified",
+        "The INE dataset page declares Creative Commons Attribution.",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "populated-place-metadata-general-contact-recorded",
+      "label": "The INE general contact route is recorded without treating it as a dataset-specific correction path",
+      "status": "passed",
+      "evidence": [
+        "https://www.ine.gob.gt/contactenos/",
+        "correctionPathStatus=general-contact-only",
+        "does-not-satisfy-postal-mapping-correction-path"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "licensed-international-postcode-candidate-recorded",
+      "label": "A licensed international postcode reference is recorded as metadata only",
+      "status": "passed",
+      "evidence": [
+        "upu-universal-postcode-database",
+        "redistributionStatus=license-review-required",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-authority-and-jurisdiction-evidence",
+      "label": "A country-specific postal authority and publication scope are recorded",
+      "status": "blocked",
+      "evidence": [
+        "gt-postal-code-mapping-required authorityStatus=unresolved"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-evidence",
+      "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+      "status": "blocked",
+      "evidence": [
+        "The five-digit format is not a mapping.",
+        "postalMappingEvidence=false for every source"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "redistribution-rights",
+      "label": "Redistribution rights for any derived postal mapping are verified",
+      "status": "blocked",
+      "evidence": [
+        "gt-postal-code-mapping-required redistributionStatus=not-bundled"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-update-cadence",
+      "label": "The postal mapping has a version, retrieval date, and update cadence",
+      "status": "blocked",
+      "evidence": [
+        "gt-postal-code-mapping-required version=null",
+        "gt-postal-code-mapping-required updateCadence=unknown"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Country-specific postal authority or authority-designated publisher.",
+    "Versioned postal-code mapping scope and geographic coverage.",
+    "Field-level reuse, attribution, and redistribution terms.",
+    "Publication date, retrieval date, update cadence, and correction path.",
+    "A separate UPU contract and data-use review if the licensed international candidate is considered; it does not replace Guatemala authority evidence."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not assert an address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

@@ -1,0 +1,205 @@
+{
+  "schemaId": "agid-bosnia-herzegovina-postal-source-readiness-v0.1",
+  "countryCode": "BA",
+  "countryName": "Bosnia and Herzegovina",
+  "evaluatedAt": "2026-07-23T09:18:40.967Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "formatAuthorityEvidence": false,
+    "unverifiedFormatInferenceRejected": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "bosnia-public-postal-operators-universal-service-coordination",
+      "scope": "public-postal-operator-coordination-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "public operator coordination reference; publication date 2024",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "bh-posta-postal-network-search",
+      "scope": "official-postal-network-search-surface",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "retrieved 2026-07-23; publication version not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "search-results-not-acquired",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "poste-srpske-addressing-and-routing-tool",
+      "scope": "official-postcode-addressing-search-surface",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "retrieved 2026-07-23; publication version not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "search-results-not-acquired",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "fbih-fgu-geoportal-boundary-metadata",
+      "scope": "entity-administrative-boundary-metadata-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "FBiH GeoPortal; copyright notice 2026",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "geometry-excluded",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "ba-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "scope": "current-postcode-format-mapping-rights-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "public-postal-operator-coordination-recorded",
+      "label": "The three-public-operator universal-service coordination context is recorded as metadata only",
+      "status": "passed",
+      "evidence": [
+        "bosnia-public-postal-operators-universal-service-coordination",
+        "BH Pošta, HP Mostar, and Pošte Srpske are named in the official coordination reference",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "search-surface-safety-boundaries-recorded",
+      "label": "Official postal search surfaces are recorded without queries or retained results",
+      "status": "passed",
+      "evidence": [
+        "bh-posta-postal-network-search",
+        "poste-srpske-addressing-and-routing-tool",
+        "search-results-not-acquired",
+        "rawRecordsBundled=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires a safe schema, rights, current version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "address, office, contact, cadastral, coordinate, and geometry fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "A current official format definition authorizes a national postcode pattern claim",
+      "status": "blocked",
+      "evidence": [
+        "operator search surfaces are not a format specification",
+        "unverifiedFormatInferenceRejected=true",
+        "nationalPattern=null"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-mapping-reuse-rights",
+      "label": "A current operator-authorized postcode mapping has explicit reuse terms suitable for a safe offline artifact",
+      "status": "blocked",
+      "evidence": [
+        "no current cross-operator mapping artifact acquired",
+        "search surfaces provide no verified bulk redistribution grant",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "countrywide-multi-operator-coverage-and-correction",
+      "label": "Coverage and correction authority is evidenced across all public postal operator areas",
+      "status": "blocked",
+      "evidence": [
+        "three-public-operator coordination is recorded",
+        "no cross-operator coverage artifact acquired",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "administrative-geodata-rights-and-safe-schema",
+      "label": "Administrative geographic keys have explicit whole-country reuse terms and a safe non-geometry schema",
+      "status": "blocked",
+      "evidence": [
+        "FGU GeoPortal is limited to FBiH materials",
+        "copyright notice recorded",
+        "no whole-country key-only extract acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been schema-checked and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no postcode rows or routing results acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and authority correction path",
+      "status": "blocked",
+      "evidence": [
+        "mapping-version-not-recorded",
+        "no cross-operator update cadence recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a current authority-approved, cross-operator postcode format and postcode-only or safe administrative-key mapping artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, version, attribution wording, coverage, and operator scope.",
+    "Before ingestion, accept only safe postcode and administrative-zone identifiers, reject address, street, number, postal-unit, office, contact, precise-point, geometry, parcel, property, and cadastral fields, and verify that the publication is current.",
+    "Record coverage and an authority correction path across BH Pošta, HP Mostar, and Pošte Srpske service areas before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not infer a Bosnia and Herzegovina national postcode pattern from operator search surfaces.",
+    "This pack does not query, store, or redistribute operator routing results, postcode mappings, addresses, offices, contacts, or delivery information.",
+    "This pack does not download, store, or redistribute FBiH boundary or cadastral geometry, administrative values, or location records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

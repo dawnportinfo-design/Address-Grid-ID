@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "GW official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "upu-guinea-bissau-addressing-unit",
+    "sourceName": "UPU Guinea-Bissau Addressing Unit",
+    "sourceUrl": "https://www.upu.int/UPU/media/upu/PostalEntitiesFiles/addressingUnit/GNBEn.pdf",
+    "provider": "Universal Postal Union / Direccao General dos Correios, Guinea-Bissau",
+    "licenseOrTerms": "UPU addressing reference; no postcode-mapping license or redistribution grant is recorded here, and no locality, postal, or address record is bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "authority-published four-digit postcode-format reference; metadata only, not an offline mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The UPU document states that four digits precede the locality name.",
+      "This pack records only the format rule and does not copy example addresses, locality mappings, or postal records.",
+      "The publication date is 03/2005, so it does not establish current mapping coverage or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "itu-upu-guinea-bissau-post-office-list",
+    "sourceName": "ITU/UPU Guinea-Bissau postal-office reference",
+    "sourceUrl": "https://www.itu.int/dms_pub/itu-t/oth/02/05/T02050000050001PDFE.pdf",
+    "provider": "International Telecommunication Union / Universal Postal Union",
+    "licenseOrTerms": "International postal reference document; no reusable postcode-mapping terms are recorded here, and no office, postal, contact, or address records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-operator and post-office reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The document identifies Direccao Geral dos Correios as the postal entity and lists an international postal-office reference.",
+      "This pack does not copy, store, transform, or redistribute office, locality, telephone, postal, contact, or address records.",
+      "Office references do not establish a versioned reusable postcode mapping, rights, or delivery-point coverage."
+    ]
+  },
+  {
+    "sourceId": "guinea-bissau-official-admin-division-reference",
+    "sourceName": "Guinea-Bissau official administrative-division reference",
+    "sourceUrl": "https://www.stat-guinebissau.com/Menu_principal/Pubica%C3%A7%C3%B5es/saude/Trabalho_Infantil.pdf",
+    "provider": "Guinea-Bissau national statistics publication",
+    "licenseOrTerms": "Official statistical publication; no data reuse or redistribution terms are recorded here, and no administrative or geographic records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "regions and autonomous-sector reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The publication describes the country administrative division into regions, autonomous sector, and sectors.",
+      "This pack does not store or transform administrative codes, geographic records, locality records, or addresses.",
+      "Administrative structure does not establish postal-code coverage, mapping rights, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "gw-postcode-mapping-required",
+    "sourceName": "Guinea-Bissau postcode mapping, rights, and update authority source",
+    "sourceUrl": "source-metadata-only:guinea-bissau-postcode-mapping-required",
+    "provider": "Guinea-Bissau postal authority or authority-designated official publisher",
+    "licenseOrTerms": "Not yet verified; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The recorded format reference does not establish a current reusable postcode-to-locality mapping.",
+      "Do not add real postcode records, address matching, or carrier deliverability assertions until authority, license, version, coverage, and correction evidence are recorded."
+    ]
+  }
+]

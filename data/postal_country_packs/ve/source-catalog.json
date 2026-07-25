@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "VE official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "upu-venezuela-addressing-unit-2019",
+    "sourceName": "UPU Venezuela addressing unit reference",
+    "sourceUrl": "https://www.upu.int/UPU/media/upu/PostalEntitiesFiles/addressingUnit/venEn.pdf",
+    "provider": "Universal Postal Union (UPU), addressing information supplied by IPOSTEL",
+    "licenseOrTerms": "UPU reference document dated 2019-05; it records a four-digit postcode syntax but does not state a bulk mapping reuse grant. The document is not downloaded, copied, or redistributed, and no example, address, postcode, locality, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "operator-supplied four-digit postcode-format reference; metadata only, not a current offline mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The reference records four digits to the right of a locality name and cites IPOSTEL.",
+      "Only the format pattern is represented; no individual postcode or sample address is retained.",
+      "The 2019 reference does not establish current mapping rights, version, coverage, correction workflow, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "upu-venezuela-designated-operator",
+    "sourceName": "UPU Venezuela designated postal operator entry",
+    "sourceUrl": "https://www.upu.int/en/Postal-Solutions/Programmes-Services/Addressing-Solutions?cid=325&csid=20",
+    "provider": "Universal Postal Union (UPU)",
+    "licenseOrTerms": "Official international postal-operator directory; no postcode-mapping license or redistribution grant is recorded here, and no operator, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "designated-operator authority reference for IPOSTEL; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "UPU records IPOSTEL as Venezuela’s designated postal operator.",
+      "This pack does not query, store, transform, or redistribute postal lookup results or tracking data.",
+      "Operator designation alone does not establish mapping rights, current coverage, or delivery-point capability."
+    ]
+  },
+  {
+    "sourceId": "salb-venezuela-authority-and-availability",
+    "sourceName": "UN SALB Venezuela authority and data-availability entry",
+    "sourceUrl": "https://salb.un.org/en/data/ven",
+    "provider": "United Nations Second Administrative Level Boundaries (SALB)",
+    "licenseOrTerms": "Official UN availability page identifies the national geospatial authority but reports no Venezuela geospatial datasets available. No boundary, administrative-key, geometry, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-geodata authority and availability reference; metadata only, not a postal mapping or boundary dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "SALB reports no downloadable Venezuela geospatial dataset, so no administrative geography is acquired.",
+      "This pack retains only source metadata and does not use unlicensed substitutes.",
+      "Administrative authority metadata does not establish postcode mapping coverage or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "ve-current-postcode-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Venezuela current postcode mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:venezuela-current-postcode-mapping-rights-coverage-and-correction-required",
+    "provider": "IPOSTEL or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current reusable mapping; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The UPU records format and operator authority, but not a current reusable mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until current rights, version, coverage, and correction evidence are recorded."
+    ]
+  }
+]

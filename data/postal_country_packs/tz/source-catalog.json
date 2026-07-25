@@ -52,5 +52,35 @@
       "Open map records are not bundled by default.",
       "Any derived database must keep source-specific attribution and redistribution obligations."
     ]
+  },
+  {
+    "sourceId": "tcra-tanzania-postcode",
+    "sourceName": "Tanzania Communications Regulatory Authority postcode service",
+    "sourceUrl": "https://address.tcra.go.tz/services/postcode",
+    "provider": "Tanzania Communications Regulatory Authority (TCRA)",
+    "licenseOrTerms": "Official regulator service page; no postcode-mapping data license or redistribution grant is recorded, and no search, map, or postcode records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official national postcode policy and format evidence; metadata only, not a reusable postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official TCRA service describes its statutory postcode role and a five-digit numeric national format.",
+      "This pack does not submit queries or download, read, store, transform, or redistribute postcode lists, maps, locality records, or displayed addresses.",
+      "Format evidence alone does not establish a versioned mapping, redistribution rights, operational coverage, or delivery-point validity."
+    ]
+  },
+  {
+    "sourceId": "tcra-tanzania-postcode-list-publication",
+    "sourceName": "TCRA publication of postcode list notice",
+    "sourceUrl": "https://tcra.go.tz/services/publication-of-postcode-list",
+    "provider": "Tanzania Communications Regulatory Authority (TCRA)",
+    "licenseOrTerms": "Official regulator publication notice; no postcode-list or derived-data redistribution grant is recorded, and no list records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postcode-list publication provenance; metadata only, not a reusable list or change-feed dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The TCRA notice records publication of a Tanzania postcode list under a government gazette notice.",
+      "This pack records notice metadata only and does not download, read, store, transform, or redistribute the list, locality records, or displayed addresses.",
+      "A publication notice does not supply current list versioning, field-level reuse rights, correction cadence, or operational-coverage evidence."
+    ]
   }
 ]

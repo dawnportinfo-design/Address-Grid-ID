@@ -1,0 +1,157 @@
+{
+  "schemaId": "agid-venezuela-postal-source-readiness-v0.1",
+  "countryCode": "VE",
+  "countryName": "Venezuela",
+  "evaluatedAt": "2026-07-23T08:18:09.808Z",
+  "postalFormat": {
+    "nationalPattern": "^[0-9]{4}$",
+    "formatAuthorityEvidence": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "upu-venezuela-addressing-unit-2019",
+      "scope": "upu-postcode-format-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "UPU addressing unit reference dated 2019-05",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "upu-venezuela-designated-operator",
+      "scope": "upu-designated-postal-operator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "retrieved 2026-07-23; publication version not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "salb-venezuela-authority-and-availability",
+      "scope": "administrative-geodata-authority-and-availability",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "retrieved 2026-07-23; no geospatial dataset available",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-available",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "ve-current-postcode-mapping-rights-coverage-and-correction-required",
+      "scope": "current-postcode-mapping-rights-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "The IPOSTEL-submitted UPU addressing reference records a four-digit postcode syntax for offline validation only",
+      "status": "passed",
+      "evidence": [
+        "upu-venezuela-addressing-unit-2019",
+        "nationalPattern=^[0-9]{4}$",
+        "formatAuthorityEvidence=true",
+        "reference dated 2019-05"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "designated-operator-recorded",
+      "label": "UPU records IPOSTEL as Venezuela’s designated postal operator",
+      "status": "passed",
+      "evidence": [
+        "upu-venezuela-designated-operator",
+        "operator=IPOSTEL",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and cannot be ingested without rights, version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-mapping-reuse-rights",
+      "label": "A current official postcode mapping has explicit, verified reuse terms",
+      "status": "blocked",
+      "evidence": [
+        "UPU format reference carries no bulk mapping reuse grant",
+        "no official mapping license or terms recorded",
+        "ve-current-postcode-mapping-rights-coverage-and-correction-required unresolved"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been acquired, schema-checked, and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no mapping rows, postal zones, or address-query results acquired",
+        "SALB Venezuela page reports no geospatial datasets available"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "format reference dated 2019-05",
+        "no current mapping version recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a current IPOSTEL or authority-designated mapping artifact with an explicit reuse license or terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, and attribution wording.",
+    "Before ingestion, reject recipient, residential, building, street, precise-point, and query-result fields; validate only safe postcode and administrative-zone identifiers.",
+    "Record mapping coverage, current version, update cadence, and an authority correction path before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not assert that the four-digit format reference from 2019 is a current mapping or a complete current delivery specification.",
+    "This pack does not download, store, or redistribute IPOSTEL, UPU, SALB, address-query, or postal-mapping records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

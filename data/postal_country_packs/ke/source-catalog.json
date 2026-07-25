@@ -52,5 +52,20 @@
       "Open map records are not bundled by default.",
       "Any derived database must keep source-specific attribution and redistribution obligations."
     ]
+  },
+  {
+    "sourceId": "posta-kenya",
+    "sourceName": "Postal Corporation of Kenya post offices",
+    "sourceUrl": "https://posta.co.ke/post-offices/",
+    "provider": "Postal Corporation of Kenya (Posta Kenya)",
+    "licenseOrTerms": "Official locator page; no postal-mapping data license or redistribution grant is recorded, and no locator records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-operator locator candidate; metadata only, not a national postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official page presents a post-office locator and links to terms and privacy material.",
+      "This pack does not query, store, transform, or redistribute locator records.",
+      "The locator page alone does not establish a versioned postcode-to-locality mapping, redistribution rights, or delivery-point coverage."
+    ]
   }
 ]

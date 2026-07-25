@@ -1,0 +1,145 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "RS official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "serbia-ratel-universal-postal-service",
+    "sourceName": "Serbia RATEL universal postal service reference",
+    "sourceUrl": "https://www.ratel.rs/sr/univerzalna-postanska-usluga",
+    "provider": "Regulatory Agency for Electronic Communications and Postal Services (RATEL)",
+    "licenseOrTerms": "Official regulator reference records universal postal service as a nationwide public-interest service. It is authority metadata only and does not provide a postcode-mapping license, postcode format definition, or delivery-coverage grant. No postal, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal regulator and universal-service context; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The regulator establishes nationwide service context, not a reusable postcode mapping.",
+      "No carrier operational data is retained.",
+      "The source does not establish an address-to-postcode or delivery-point claim."
+    ]
+  },
+  {
+    "sourceId": "serbia-posta-proper-addressing-and-pak-locator",
+    "sourceName": "Posta Srbije proper addressing and PAK locator reference",
+    "sourceUrl": "https://www.posta.rs/eng/stanovnistvo/usluga.aspx?usluga=postal-services%2Fproper-addressing",
+    "provider": "Public Enterprise Posta Srbije",
+    "licenseOrTerms": "Official operator addressing page identifies postal number and Postal Address Code (PAK) in the addressing workflow. The related locator accepts address-level input and can return address-level results, so it is neither queried nor acquired. No PAK, postcode, address, recipient, office, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal addressing and address-level PAK locator boundary reference; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The pack records the service boundary without sending any locator query.",
+      "Address-level PAK results are excluded from acquisition.",
+      "The page does not independently authorize a national postcode format or mapping claim."
+    ]
+  },
+  {
+    "sourceId": "serbia-open-data-portal-reuse-license",
+    "sourceName": "Serbia Open Data Portal reuse license",
+    "sourceUrl": "https://data.gov.rs/sr/terms/",
+    "provider": "Office for Information Technologies and eGovernment of Serbia",
+    "licenseOrTerms": "Official portal terms describe non-exclusive, no-fee reuse with source, retrieval date, access URL, and modification attribution requirements for datasets published under the portal license unless otherwise stipulated. This governance page is not proof that any particular postal or administrative resource is safely reusable.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "open-data reuse governance reference; metadata only, not a selected postcode or administrative dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The framework is recorded separately from dataset-level terms.",
+      "No data.gov.rs dataset is acquired in this pack.",
+      "A future artifact must still establish its own safe schema, current version, coverage, and correction path."
+    ]
+  },
+  {
+    "sourceId": "serbia-rgz-administrative-units-register",
+    "sourceName": "Serbia RGZ Administrative Units Register",
+    "sourceUrl": "https://www.rgz.gov.rs/administrative-units-register",
+    "provider": "Republic Geodetic Authority (RGZ)",
+    "licenseOrTerms": "Official register page describes alphanumeric and geospatial administrative-unit data, including codes and polygons, but does not provide resource-level reuse terms for a safe key-only artifact. No administrative entry, code, boundary, geometry, or postcode record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative authority and unresolved resource-level rights reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The register includes fields outside the permitted schema, notably geospatial data.",
+      "No administrative key is retained.",
+      "Administrative authority does not establish postcode mapping or delivery coverage."
+    ]
+  },
+  {
+    "sourceId": "serbia-rgz-address-register-exclusion",
+    "sourceName": "Serbia RGZ Address Register exclusion reference",
+    "sourceUrl": "https://www.rgz.gov.rs/address-regisrer",
+    "provider": "Republic Geodetic Authority (RGZ)",
+    "licenseOrTerms": "Official page describes an Address Register containing street, house-number, address-code, cadastral, and related attributes. Those records are prohibited for this program even where a public portal offers access; no record is queried, downloaded, stored, or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "source-exclusion boundary for address, property, and precise-location data; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The Address Register is expressly excluded because it contains address and property attributes.",
+      "No source query is sent.",
+      "Public availability does not satisfy the program safety boundary."
+    ]
+  },
+  {
+    "sourceId": "rs-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Serbia current postcode format, safe mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:serbia-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "provider": "RATEL, Posta Srbije, RGZ, or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with explicit format authority, reuse terms, coverage, version, and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The PAK locator is not a substitute for a reusable postcode mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+    ]
+  }
+]

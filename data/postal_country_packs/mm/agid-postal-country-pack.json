@@ -4,7 +4,7 @@
     "version": "agid-postal-country-pack-v0.1",
     "strategyVersion": "agid-postal-country-pack-strategy-v0.1",
     "engineVersion": "agid-postal-code-engine-v0.1-rc",
-    "generatedAt": "2026-06-20T00:00:00.000Z",
+    "generatedAt": "2026-07-23T06:12:06.057Z",
     "countryCode": "MM",
     "countryName": "Myanmar",
     "repositoryName": "agid-postal-pack-mm",
@@ -32,7 +32,7 @@
     "containsRawThirdPartyData": false,
     "officialStatus": "draft",
     "counts": {
-      "sources": 3,
+      "sources": 5,
       "localities": 48,
       "boundaries": 12,
       "landforms": 1,
@@ -118,7 +118,7 @@
       "lat": 21.9162,
       "lng": 95.956
     },
-    "sourceNote": "Postal data and administration can be unstable; keep conflict-sensitive manual review."
+    "sourceNote": "The official postal operator exposes a postcode-search screen, but a reusable national regex, mapping, rights, coverage, and update policy are not authority-verified here. Do not format-validate, query, or autofill until those gates are recorded; keep conflict-sensitive manual review."
   },
   "sourceCatalog": [
     {
@@ -174,8 +174,162 @@
         "Open map records are not bundled by default.",
         "Any derived database must keep source-specific attribution and redistribution obligations."
       ]
+    },
+    {
+      "sourceId": "myanmar-post-postcode-search",
+      "sourceName": "Myanmar Post postcode-search screen",
+      "sourceUrl": "https://myanmarpost.com.mm/search-post",
+      "provider": "Myanmar Post",
+      "licenseOrTerms": "Official postcode-search webpage; no postal-mapping data license or redistribution grant is recorded, and no search results or records are queried or bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official postal-operator postcode-search surface; metadata only, not a national postcode regex, mapping, or operational-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The official page exposes a postcode-search screen; this pack never submits a query or stores a result.",
+        "This pack does not query, store, transform, or redistribute postcode, address, locality, branch, recipient, or delivery-point records.",
+        "The screen alone does not establish a reusable national format, a versioned mapping, redistribution rights, or current operational coverage."
+      ]
+    },
+    {
+      "sourceId": "motc-myanmar-post-government-site-list",
+      "sourceName": "Ministry of Transport and Communications government-site listing for Myanmar Post",
+      "sourceUrl": "https://www.motc.gov.mm/government-website-list",
+      "provider": "Ministry of Transport and Communications, Myanmar",
+      "licenseOrTerms": "Official government website list; no postal mapping or derived-data redistribution grant is recorded",
+      "redistributionStatus": "source-metadata-only",
+      "role": "government-to-postal-operator website relationship evidence; metadata only, not postcode mapping evidence",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The ministry page lists Myanmar Post and links to myanmarpost.com.mm.",
+        "This pack records only source metadata and does not infer national format, mapping coverage, operational availability, or deliverability from the listing."
+      ]
     }
   ],
+  "postalSourceReadiness": {
+    "schemaId": "agid-myanmar-postal-source-readiness-v0.1",
+    "countryCode": "MM",
+    "countryName": "Myanmar",
+    "evaluatedAt": "2026-07-23T06:12:06.057Z",
+    "postalFormat": {
+      "nationalPattern": null,
+      "authorityVerified": false,
+      "fixedLegacyPatternRejected": true
+    },
+    "publicationStatus": "draft",
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "realPostalLookupEnabled": false,
+    "deliveryClaimEnabled": false,
+    "sources": [
+      {
+        "sourceId": "myanmar-post-postcode-search",
+        "scope": "postal-operator-postcode-search",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "motc-myanmar-post-government-site-list",
+        "scope": "government-operator-website-listing",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      }
+    ],
+    "gates": [
+      {
+        "id": "no-personal-or-raw-third-party-data",
+        "label": "The published pack remains metadata and synthetic fixtures only",
+        "status": "passed",
+        "evidence": [
+          "containsPersonalData=false",
+          "containsRawThirdPartyData=false",
+          "rawRecordsBundled=false for every source"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-operator-search-recorded",
+        "label": "The official Myanmar Post postcode-search screen is cataloged as metadata only",
+        "status": "passed",
+        "evidence": [
+          "myanmar-post-postcode-search",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "government-operator-relationship-recorded",
+        "label": "The ministry government-site list records Myanmar Post as an official organization",
+        "status": "passed",
+        "evidence": [
+          "motc-myanmar-post-government-site-list",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-format-authority-evidence",
+        "label": "An authority-published national postal-code format is evidenced",
+        "status": "blocked",
+        "evidence": [
+          "nationalPattern=null",
+          "authorityVerified=false",
+          "fixedLegacyPatternRejected=true"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "postal-code-mapping-evidence",
+        "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+        "status": "blocked",
+        "evidence": [
+          "postalMappingEvidence=false for every source"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "redistribution-rights",
+        "label": "Redistribution rights for any derived postal mapping are verified",
+        "status": "blocked",
+        "evidence": [
+          "redistributionStatus=metadata-only for every source"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "version-freshness-and-update-cadence",
+        "label": "The postal mapping has a version, retrieval date, and update cadence",
+        "status": "blocked",
+        "evidence": [
+          "version=null for every source",
+          "updateCadence=unknown for every source"
+        ],
+        "blocksRealPostalLookup": true
+      }
+    ],
+    "nextRequiredEvidence": [
+      "An authority-published national postal-code format and format-change policy.",
+      "A versioned postcode-to-locality or delivery-point mapping with geographic coverage.",
+      "Field-level reuse, attribution, and redistribution terms for any mapping or derived output.",
+      "Publication date, retrieval date, update cadence, conflict-sensitive coverage limits, and correction path for the mapping."
+    ],
+    "nonClaims": [
+      "This pack does not provide a real postcode lookup.",
+      "This pack does not assert a national Myanmar postal-code regex.",
+      "This pack does not assert an address-to-postcode match, operational coverage, or delivery-point coverage."
+    ]
+  },
   "licenseLedger": [
     {
       "subject": "AGID-created country pack metadata",
@@ -194,6 +348,18 @@
       "licenseOrTerms": "source-specific",
       "redistribution": "review-required",
       "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+    },
+    {
+      "subject": "Myanmar Post postcode-search and ministry website-list source metadata",
+      "licenseOrTerms": "Official postal-operator and government webpages; reuse rights for postal mapping are not recorded",
+      "redistribution": "metadata-only",
+      "notes": "This release records source metadata only. It does not submit search queries or bundle, derive, or retain postcode, address, locality, recipient, branch, or delivery-point records. The sources do not provide a reusable national regex or mapping reuse right."
+    },
+    {
+      "subject": "Myanmar national postal-code format and delivery-point mapping",
+      "licenseOrTerms": "Not yet verified",
+      "redistribution": "not-bundled",
+      "notes": "No fixed national regex, postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, operational-coverage assertion, or derived equivalent is included until authority, version, redistribution, coverage, and correction evidence are recorded."
     }
   ],
   "officialMunicipalitySummary": {

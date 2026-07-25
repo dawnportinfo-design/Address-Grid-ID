@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "GE official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "georgia-post-addressing-rule",
+    "sourceName": "Georgia Post addressing rule",
+    "sourceUrl": "https://www.gpost.ge/Content/ContentFiles/addressingRule24125.pdf",
+    "provider": "Georgian Post Ltd",
+    "licenseOrTerms": "Official operator addressing rule is recorded as metadata only. It includes address examples and is not used to acquire or retain personal, address, or postcode data; it also does not independently authorize a current national postcode-format or mapping claim.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal addressing-rule boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Address examples are excluded from all artifacts.",
+      "No postcode row or address data is retained.",
+      "The pack deliberately does not infer a format from examples."
+    ]
+  },
+  {
+    "sourceId": "georgia-post-postcode-lookup-boundary",
+    "sourceName": "Georgia Post postal-code lookup surface",
+    "sourceUrl": "https://www.gpost.ge/?site-lang=en&site-path=help%2Fzipcodes",
+    "provider": "Georgian Post Ltd",
+    "licenseOrTerms": "Official operator site provides a postal-code search surface. It is not queried, does not provide a bulk-reuse grant, and no postcode, address, office, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-code lookup boundary reference; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "No lookup request is sent.",
+      "Interactive availability is not a redistribution grant.",
+      "No operational postal data is retained."
+    ]
+  },
+  {
+    "sourceId": "georgia-napr-public-registry-and-nsdi",
+    "sourceName": "Georgia NAPR public registry and national spatial-data infrastructure reference",
+    "sourceUrl": "https://www.napr.gov.ge/en",
+    "provider": "National Agency of Public Registry (NAPR)",
+    "licenseOrTerms": "Official NAPR page identifies address, municipality, public-registry, and national spatial-data infrastructure services. Resource-level reuse terms for a safe key-only artifact are not recorded; no administrative entry, address, boundary, geometry, or postcode record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative and geospatial authority reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Authority is recorded separately from a reusable artifact.",
+      "No resource-level terms are inferred.",
+      "No geographic or address data is retained."
+    ]
+  },
+  {
+    "sourceId": "ge-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Georgia current postcode format, safe mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:georgia-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "provider": "Georgian Post, NAPR, or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with explicit format authority, reuse terms, coverage, version, and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The lookup surface is not a substitute for a safe offline mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+    ]
+  }
+]

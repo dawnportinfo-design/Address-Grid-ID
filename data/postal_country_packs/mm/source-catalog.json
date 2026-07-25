@@ -52,5 +52,34 @@
       "Open map records are not bundled by default.",
       "Any derived database must keep source-specific attribution and redistribution obligations."
     ]
+  },
+  {
+    "sourceId": "myanmar-post-postcode-search",
+    "sourceName": "Myanmar Post postcode-search screen",
+    "sourceUrl": "https://myanmarpost.com.mm/search-post",
+    "provider": "Myanmar Post",
+    "licenseOrTerms": "Official postcode-search webpage; no postal-mapping data license or redistribution grant is recorded, and no search results or records are queried or bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-operator postcode-search surface; metadata only, not a national postcode regex, mapping, or operational-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official page exposes a postcode-search screen; this pack never submits a query or stores a result.",
+      "This pack does not query, store, transform, or redistribute postcode, address, locality, branch, recipient, or delivery-point records.",
+      "The screen alone does not establish a reusable national format, a versioned mapping, redistribution rights, or current operational coverage."
+    ]
+  },
+  {
+    "sourceId": "motc-myanmar-post-government-site-list",
+    "sourceName": "Ministry of Transport and Communications government-site listing for Myanmar Post",
+    "sourceUrl": "https://www.motc.gov.mm/government-website-list",
+    "provider": "Ministry of Transport and Communications, Myanmar",
+    "licenseOrTerms": "Official government website list; no postal mapping or derived-data redistribution grant is recorded",
+    "redistributionStatus": "source-metadata-only",
+    "role": "government-to-postal-operator website relationship evidence; metadata only, not postcode mapping evidence",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The ministry page lists Myanmar Post and links to myanmarpost.com.mm.",
+      "This pack records only source metadata and does not infer national format, mapping coverage, operational availability, or deliverability from the listing."
+    ]
   }
 ]

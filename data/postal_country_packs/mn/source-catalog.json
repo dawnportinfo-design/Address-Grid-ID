@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "MN official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "mongol-post-zip-code-faq",
+    "sourceName": "Mongol Post ZIP code FAQ",
+    "sourceUrl": "https://www.mongolpost.mn/mn/faq",
+    "provider": "Mongol Post JSC",
+    "licenseOrTerms": "Official FAQ records a five-digit numeric ZIP-code format and points to a separate registry. It does not state bulk mapping, query-result, derived-data, or redistribution permission. No registry query, postcode, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postcode-format and registry-guidance reference; metadata only, not an offline mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The FAQ establishes only the national five-digit format.",
+      "The linked registry is not queried, and no result is stored or transformed.",
+      "Format guidance alone does not establish mapping rights, coverage, version, correction workflow, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "upu-mongolia-addressing-unit-2019",
+    "sourceName": "UPU Mongolia addressing unit reference",
+    "sourceUrl": "https://www.upu.int/UPU/media/upu/PostalEntitiesFiles/addressingUnit/mngEn.pdf",
+    "provider": "Universal Postal Union (UPU)",
+    "licenseOrTerms": "UPU reference dated 2019-01 records a five-digit postcode syntax but does not state a bulk mapping reuse grant. The document is not downloaded, copied, or redistributed, and no example, postcode, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "international postcode-format reference; metadata only, not a current offline mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Only the format pattern is represented.",
+      "No individual postcode or example address is retained.",
+      "The 2019 reference does not establish current mapping rights, version, coverage, correction workflow, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "mongol-post-designated-operator",
+    "sourceName": "Mongol Post designated-operator reference",
+    "sourceUrl": "https://mongolpost.mn/en/about",
+    "provider": "Mongol Post JSC",
+    "licenseOrTerms": "Official operator profile describes the national postal role and universal-service obligation. No postcode-mapping license or redistribution grant is recorded here, and no postal, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-operator authority reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The profile supplies institutional context for the postal operator.",
+      "This pack does not query, store, transform, or redistribute postal lookup results or delivery records.",
+      "Operator status alone does not establish mapping rights, current coverage, or delivery-point capability."
+    ]
+  },
+  {
+    "sourceId": "nsdi-mongolia-geospatial-distribution-rules",
+    "sourceName": "Mongolia NSDI geospatial distribution rules",
+    "sourceUrl": "https://nsdi.gov.mn/service-page/21",
+    "provider": "General Authority for Land Administration, Geodesy and Cartography, Mongolia",
+    "licenseOrTerms": "Official NSDI service page describes geospatial data as copyright-protected works customarily used under license agreements. No reusable boundary or administrative-key license is verified, and no boundary, key, geometry, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-geodata distribution-rules reference; metadata only, not a postal mapping or boundary dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "No administrative geography is acquired without source-specific permission.",
+      "This pack retains only metadata and does not use an unlicensed substitute.",
+      "Administrative-geodata availability does not establish postal mapping coverage or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "mn-current-postcode-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Mongolia current postcode mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:mongolia-current-postcode-mapping-rights-coverage-and-correction-required",
+    "provider": "Mongol Post or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current reusable mapping; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Official format guidance and operator references do not establish a reusable current mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until current rights, version, coverage, and correction evidence are recorded."
+    ]
+  }
+]

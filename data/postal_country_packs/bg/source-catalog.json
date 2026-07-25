@@ -1,0 +1,129 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "BG official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "bulgaria-crc-postal-code-formation-system",
+    "sourceName": "Bulgaria CRC postal-code formation system reference",
+    "sourceUrl": "https://www.crc.bg/bg/rubriki/128/podzakonovi-aktove-po-zakona-za-poshtenskite-uslugi",
+    "provider": "Communications Regulation Commission of Bulgaria (CRC)",
+    "licenseOrTerms": "Official regulatory page records a postal-code formation-system reference. It is authority metadata only and does not independently establish a current national format, postcode mapping, or redistribution grant. No postal, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-code system regulatory reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The regulator reference establishes that a national postal-code formation system exists.",
+      "The pack deliberately does not infer a pattern from that reference.",
+      "No index entry or operational postal data is retained."
+    ]
+  },
+  {
+    "sourceId": "bulgaria-crc-national-postcode-index-catalog",
+    "sourceName": "Bulgaria CRC national postcode-index catalog reference",
+    "sourceUrl": "https://www.crc.bg/bg/rubriki/226/regulirane-na-poshtenskite-uslugi",
+    "provider": "Communications Regulation Commission of Bulgaria (CRC)",
+    "licenseOrTerms": "Official regulatory catalog lists the national postal-code index, but resource-specific reuse terms, current publication version, coverage, and correction path are not verified. The index is not downloaded or queried, and no postcode, address, locality, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "national postcode-index catalog and unresolved-reuse reference; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Catalog presence is not treated as a reuse grant.",
+      "No national-index entry is retained.",
+      "The source cannot establish a current offline mapping or coverage claim without further evidence."
+    ]
+  },
+  {
+    "sourceId": "bulgaria-crc-universal-service-operator-2026",
+    "sourceName": "Bulgaria CRC universal postal service license reference",
+    "sourceUrl": "https://www.crc.bg/index.php/bg/novini/1744/zaplashtane-na-godishna-taksa-kontrol-po-zakona-za-poshtenskite-uslugi",
+    "provider": "Communications Regulation Commission of Bulgaria (CRC)",
+    "licenseOrTerms": "Official 2026 CRC reference identifies Bulgarian Posts EAD under an individual license for the universal postal service. It is authority metadata only and does not provide a postcode-mapping license, format definition, or delivery-coverage grant. No carrier operational data is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal regulator and universal-service operator reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Operator licensing is separate from mapping rights, current coverage, correction process, and address-to-postcode evidence.",
+      "No carrier operational data is retained."
+    ]
+  },
+  {
+    "sourceId": "bulgaria-cadastre-public-sector-reuse-framework",
+    "sourceName": "Bulgaria cadastre public-sector information reuse service",
+    "sourceUrl": "https://www.cadastre.bg/service/2-predostavyane-na-dostp-do-obschestvena-informaciya",
+    "provider": "Agency for Geodesy, Cartography and Cadastre of Bulgaria",
+    "licenseOrTerms": "Official access-and-reuse service is a governance reference, not a verified resource-specific license for a safe administrative-key extract. Cadastre materials can include excluded address, property, parcel, coordinate, and geometry fields; no record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-geography reuse-governance and safety-boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "A general reuse framework does not authorize a particular data artifact.",
+      "No cadastral, boundary, property, address, or location data is retained.",
+      "Administrative publication does not establish postcode coverage or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "bg-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Bulgaria current postcode format, safe mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:bulgaria-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "provider": "Communications Regulation Commission, Bulgarian Posts, or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with explicit format authority, reuse terms, coverage, version, and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The recorded regulatory references are not substitutes for a safe offline postcode mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+    ]
+  }
+]

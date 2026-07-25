@@ -1,0 +1,194 @@
+{
+  "schemaId": "agid-moldova-postal-source-readiness-v0.1",
+  "countryCode": "MD",
+  "countryName": "Moldova",
+  "evaluatedAt": "2026-07-23T08:46:10.328Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "formatAuthorityEvidence": false,
+    "unverifiedFormatInferenceRejected": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "posta-moldovei-office-map",
+      "scope": "official-postal-office-search-surface",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "retrieved 2026-07-23; publication version not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "moldova-state-property-agency-posta-moldovei",
+      "scope": "government-postal-operator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "government company profile reports 2025 data",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "moldova-administrative-classifier-catalog",
+      "scope": "administrative-key-catalog-and-terms",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "catalog marks license not specified",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "license-unspecified",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "moldova-spatial-data-reuse-framework",
+      "scope": "spatial-data-reuse-governance-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "open-data and public-sector reuse methodology approved 2025",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "md-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "scope": "current-postcode-format-mapping-rights-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-operator-and-search-surface-recorded",
+      "label": "Posta Moldovei’s national-operator status and office-search surface are recorded as metadata only",
+      "status": "passed",
+      "evidence": [
+        "moldova-state-property-agency-posta-moldovei",
+        "posta-moldovei-office-map",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "public-sector-reuse-framework-recorded",
+      "label": "Moldova’s open-data and public-sector reuse governance framework is recorded for future source-specific review",
+      "status": "passed",
+      "evidence": [
+        "moldova-spatial-data-reuse-framework",
+        "source-specific license remains required",
+        "no raw spatial data acquired"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires safe schema, rights, version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "unsafe address, location, and property fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "An authority-published national postcode format is recorded independently of an address-bearing office search",
+      "status": "blocked",
+      "evidence": [
+        "nationalPattern=null",
+        "formatAuthorityEvidence=false",
+        "unverifiedFormatInferenceRejected=true",
+        "Posta Moldovei search is not queried"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-mapping-reuse-rights",
+      "label": "A current official postcode mapping has explicit, verified reuse terms",
+      "status": "blocked",
+      "evidence": [
+        "official map copyright notice is not a bulk mapping license",
+        "no official mapping license or terms recorded",
+        "md-current-postcode-format-mapping-rights-coverage-and-correction-required unresolved"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "administrative-geodata-reuse-rights",
+      "label": "Administrative keys or boundaries have explicit reusable terms independent of address datasets",
+      "status": "blocked",
+      "evidence": [
+        "moldova-administrative-classifier-catalog license is unspecified",
+        "reuse framework does not establish this catalog resource terms",
+        "no administrative records acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been acquired, schema-checked, and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no search results, postcode rows, or geographic records acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "official map publication version not recorded",
+        "no current mapping version recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a current Posta Moldovei or authority-designated postcode-only artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, and attribution wording.",
+    "Before ingestion, accept only safe postcode and administrative-zone identifiers and reject address, street, building, recipient, precise-point, geometry, property, and query-result fields.",
+    "Record mapping coverage, current version, update cadence, and an authority correction path before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not query, store, or redistribute Posta Moldovei office-search results.",
+    "This pack does not assert a national Moldova postal-code regex.",
+    "This pack does not download, store, or redistribute Posta Moldovei, government, postal-mapping, boundary, address, property, or location records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

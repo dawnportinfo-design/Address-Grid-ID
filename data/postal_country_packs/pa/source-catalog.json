@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "PA official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "panama-national-postcode-system",
+    "sourceName": "Sistema de Codigos Postales de Panama",
+    "sourceUrl": "https://www.codigospostalespanama.gob.pa/",
+    "provider": "Correos Panama / Correos y Telegrafos Nacionales de Panama",
+    "licenseOrTerms": "Official postcode-system interface; no bulk-download, API, derived-data, or redistribution permission is recorded here, and no query result, geographic key, postal record, or address is bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "national postcode-system reference; metadata only, not an AGID lookup, offline postcode mapping, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official system supports search by province, district, and corregimiento and describes a full-code presentation.",
+      "This pack does not query, store, transform, infer, or redistribute results, geographic keys, postal records, addresses, buildings, or points.",
+      "Interface availability does not establish offline reuse rights, a stable format specification, mapping version, correction path, or delivery-point coverage."
+    ]
+  },
+  {
+    "sourceId": "correos-panama-postal-services",
+    "sourceName": "Correos Panama postal services",
+    "sourceUrl": "https://www.correospanama.gob.pa/servicios-postales/",
+    "provider": "Correos y Telegrafos Nacionales de Panama",
+    "licenseOrTerms": "Official postal-service page; no postcode-mapping license or redistribution grant is recorded here, and no postal, tracking, contact, or address records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-operator service reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The page identifies national postal services operated by Correos Panama.",
+      "This pack does not query, store, transform, or redistribute postal, tracking, contact, or address records.",
+      "Service availability does not establish a reusable postcode mapping, rights, or delivery-point coverage."
+    ]
+  },
+  {
+    "sourceId": "panama-miambiente-admin-boundaries",
+    "sourceName": "MiAmbiente Panama political-administrative boundary geoportal",
+    "sourceUrl": "https://geoportal.miambiente.gob.pa/server/rest/services/Nodo_Caracteristica_General/MapServer/13",
+    "provider": "Ministerio de Ambiente (MiAmbiente), Panama",
+    "licenseOrTerms": "Official geoportal layer description; no data reuse or redistribution terms are recorded here, and no geometry, attribute, or address records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official province, comarca, district, and corregimiento boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The layer groups province/comarca, district, and corregimiento administrative levels and lists geospatial service formats.",
+      "This pack does not query, store, transform, or redistribute geoportal records, geometries, layers, or address data.",
+      "Administrative boundaries do not establish postal-code coverage, format, mapping rights, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "pa-postcode-mapping-required",
+    "sourceName": "Panama postcode format, mapping, rights, and update authority source",
+    "sourceUrl": "source-metadata-only:panama-postcode-mapping-required",
+    "provider": "Panama postal authority or authority-designated official publisher",
+    "licenseOrTerms": "Not yet verified; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The recorded official interfaces and references do not establish an offline reusable postcode format or mapping.",
+      "Do not add real postcode records, address matching, geographic-key inference, or carrier deliverability assertions until authority, license, version, coverage, and correction evidence are recorded."
+    ]
+  }
+]

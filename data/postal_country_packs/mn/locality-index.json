@@ -1,0 +1,782 @@
+[
+  {
+    "localityId": "MN-M1",
+    "stableId": "mn-municipality-mn-m1",
+    "name": "Central Valley Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "T2",
+    "aliases": [
+      {
+        "label": "Central Valley Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Valley Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T1",
+    "stableId": "mn-town-mn-m1-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "MN-M1",
+    "codePart": "HW",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Valley Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T1-C0",
+    "stableId": "mn-block-mn-m1-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "MN-M1-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T1-C1",
+    "stableId": "mn-block-mn-m1-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "MN-M1-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T1-C2",
+    "stableId": "mn-block-mn-m1-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "MN-M1-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T1-C3",
+    "stableId": "mn-block-mn-m1-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "MN-M1-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T2",
+    "stableId": "mn-town-mn-m1-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "MN-M1",
+    "codePart": "7V",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Valley Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T2-C0",
+    "stableId": "mn-block-mn-m1-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "MN-M1-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T2-C1",
+    "stableId": "mn-block-mn-m1-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "MN-M1-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T2-C2",
+    "stableId": "mn-block-mn-m1-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "MN-M1-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T2-C3",
+    "stableId": "mn-block-mn-m1-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "MN-M1-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T3",
+    "stableId": "mn-town-mn-m1-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "MN-M1",
+    "codePart": "RQ",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Valley Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T3-C0",
+    "stableId": "mn-block-mn-m1-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "MN-M1-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T3-C1",
+    "stableId": "mn-block-mn-m1-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "MN-M1-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T3-C2",
+    "stableId": "mn-block-mn-m1-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "MN-M1-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M1-T3-C3",
+    "stableId": "mn-block-mn-m1-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "MN-M1-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2",
+    "stableId": "mn-municipality-mn-m2",
+    "name": "Upper Valley Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "XK",
+    "aliases": [
+      {
+        "label": "Upper Valley Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Upper Valley Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T1",
+    "stableId": "mn-town-mn-m2-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "MN-M2",
+    "codePart": "4H",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Upper Valley Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T1-C0",
+    "stableId": "mn-block-mn-m2-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "MN-M2-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T1-C1",
+    "stableId": "mn-block-mn-m2-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "MN-M2-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T1-C2",
+    "stableId": "mn-block-mn-m2-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "MN-M2-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T1-C3",
+    "stableId": "mn-block-mn-m2-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "MN-M2-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T2",
+    "stableId": "mn-town-mn-m2-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "MN-M2",
+    "codePart": "6P",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Upper Valley Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T2-C0",
+    "stableId": "mn-block-mn-m2-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "MN-M2-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T2-C1",
+    "stableId": "mn-block-mn-m2-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "MN-M2-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T2-C2",
+    "stableId": "mn-block-mn-m2-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "MN-M2-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T2-C3",
+    "stableId": "mn-block-mn-m2-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "MN-M2-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T3",
+    "stableId": "mn-town-mn-m2-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "MN-M2",
+    "codePart": "D8",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Upper Valley Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T3-C0",
+    "stableId": "mn-block-mn-m2-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "MN-M2-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T3-C1",
+    "stableId": "mn-block-mn-m2-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "MN-M2-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T3-C2",
+    "stableId": "mn-block-mn-m2-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "MN-M2-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M2-T3-C3",
+    "stableId": "mn-block-mn-m2-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "MN-M2-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3",
+    "stableId": "mn-municipality-mn-m3",
+    "name": "Ridge Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "ZE",
+    "aliases": [
+      {
+        "label": "Ridge Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Ridge Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T1",
+    "stableId": "mn-town-mn-m3-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "MN-M3",
+    "codePart": "C6",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Ridge Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T1-C0",
+    "stableId": "mn-block-mn-m3-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "MN-M3-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T1-C1",
+    "stableId": "mn-block-mn-m3-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "MN-M3-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T1-C2",
+    "stableId": "mn-block-mn-m3-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "MN-M3-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T1-C3",
+    "stableId": "mn-block-mn-m3-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "MN-M3-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T2",
+    "stableId": "mn-town-mn-m3-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "MN-M3",
+    "codePart": "4Q",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Ridge Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T2-C0",
+    "stableId": "mn-block-mn-m3-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "MN-M3-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T2-C1",
+    "stableId": "mn-block-mn-m3-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "MN-M3-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T2-C2",
+    "stableId": "mn-block-mn-m3-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "MN-M3-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T2-C3",
+    "stableId": "mn-block-mn-m3-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "MN-M3-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T3",
+    "stableId": "mn-town-mn-m3-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "MN-M3",
+    "codePart": "9N",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Ridge Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T3-C0",
+    "stableId": "mn-block-mn-m3-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "MN-M3-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T3-C1",
+    "stableId": "mn-block-mn-m3-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "MN-M3-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T3-C2",
+    "stableId": "mn-block-mn-m3-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "MN-M3-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "MN-M3-T3-C3",
+    "stableId": "mn-block-mn-m3-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "MN-M3-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  }
+]

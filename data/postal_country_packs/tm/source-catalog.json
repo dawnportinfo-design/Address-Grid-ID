@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "TM official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "turkmenistan-postal-communication-law-2021",
+    "sourceName": "Turkmenistan Law on Postal Communication",
+    "sourceUrl": "https://turkmenistan.gov.tm/ru/post/58755/zakon-turkmenistana-o-pochtovoj-svyazi",
+    "provider": "Government of Turkmenistan",
+    "licenseOrTerms": "Official law records the postal-code concept, national-operator functions, and postal secrecy for postal-address and user data. It does not provide a machine-readable national format or a bulk postcode-mapping reuse grant. No legal text, postcode, address, recipient, user, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-law and privacy-boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The legal definition does not establish a safe fixed postal-code regex.",
+      "Postal address and user data are treated as out of scope.",
+      "Legal authority alone does not establish mapping rights, coverage, version, correction workflow, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "turkmenistan-government-turkmenpochta-operator-reference",
+    "sourceName": "Government Turkmenpochta postal operator reference",
+    "sourceUrl": "https://turkmenistan.gov.tm/index.php/en/post/57704/little-about-history-and-services-postal-service-turkmenistan",
+    "provider": "Government of Turkmenistan",
+    "licenseOrTerms": "Official government reference identifies Turkmenpochta as the state postal operator. No postcode-mapping license or bulk redistribution grant is recorded here, and no postal, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "government postal-operator authority reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The reference supplies institutional context for the postal operator.",
+      "This pack does not query, store, transform, or redistribute operational service results.",
+      "Operator status alone does not establish format, mapping rights, current coverage, or delivery-point capability."
+    ]
+  },
+  {
+    "sourceId": "turkmenpost-official-service-surface",
+    "sourceName": "Turkmenpost official service surface",
+    "sourceUrl": "https://post.tm/services/sending",
+    "provider": "Turkmenpost",
+    "licenseOrTerms": "Official service page records postal services but states no postcode format, bulk mapping, API, derived-data, or redistribution permission. No tracking, office-search, postcode, locality, address, recipient, or location result is queried or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-service surface reference; metadata only, not an AGID lookup, offline mapping, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The service surface is recorded without submitting any query.",
+      "No format is inferred from tracking, service, or unrelated interface data.",
+      "Service availability does not establish reusable mapping rights, coverage, version, correction workflow, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "turkmenistan-2024-administrative-division-resolution",
+    "sourceName": "Turkmenistan 2024 administrative-territorial division resolution",
+    "sourceUrl": "https://turkmenistan.gov.tm/en/post/98762/resolution-mejlis-turkmenistan-administrative-territorial-division-turkmenistan",
+    "provider": "Mejlis of Turkmenistan",
+    "licenseOrTerms": "Official resolution records administrative-division changes. It does not state open-data, boundary, or administrative-key reuse terms, and no resolution text, key, boundary, geometry, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-division authority reference; metadata only, not a reusable administrative or postcode mapping dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The resolution confirms that administrative structure may change.",
+      "No administrative geography is acquired without explicit terms.",
+      "Administrative authority metadata does not establish postal mapping coverage or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "tm-current-postcode-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Turkmenistan current postcode format, mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:turkmenistan-current-postcode-mapping-rights-coverage-and-correction-required",
+    "provider": "Turkmenpost or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current reusable format and mapping; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Recorded official references do not independently establish a reusable national format or mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until current rights, version, coverage, and correction evidence are recorded."
+    ]
+  }
+]

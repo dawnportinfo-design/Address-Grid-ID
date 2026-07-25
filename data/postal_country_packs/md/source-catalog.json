@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "MD official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "posta-moldovei-office-map",
+    "sourceName": "Posta Moldovei office map",
+    "sourceUrl": "https://posta.md/ro/map",
+    "provider": "I.S. Posta Moldovei",
+    "licenseOrTerms": "Official office-search surface with no recorded bulk postcode-mapping reuse grant. It is not queried, and no result, postcode, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal office-search authority reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The interface permits a search by address or postal code, but AGID does not submit a query.",
+      "Its availability does not establish a reusable national postcode format, offline mapping, coverage, version, correction path, or delivery capability.",
+      "No search result or postal record is retained."
+    ]
+  },
+  {
+    "sourceId": "moldova-state-property-agency-posta-moldovei",
+    "sourceName": "Moldova State Property Agency Posta Moldovei profile",
+    "sourceUrl": "https://app.gov.md/companies/posta-moldovei/",
+    "provider": "Agenția Proprietății Publice, Republic of Moldova",
+    "licenseOrTerms": "Official government company profile reporting 2025 data. It is recorded as postal-operator authority metadata only; no postcode, address, recipient, or operational record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "government postal-operator reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The profile supplies a government reference for the national operator.",
+      "It does not state a postcode-mapping license, national postal-code format, current coverage, or correction workflow.",
+      "No government company data is reproduced."
+    ]
+  },
+  {
+    "sourceId": "moldova-administrative-classifier-catalog",
+    "sourceName": "Moldova administrative classifier catalog",
+    "sourceUrl": "https://dataset.gov.md/ru/dataset/?_organization_limit=0&_tags_limit=0&groups=2233-clasificatoare-si-nomenclatoare&license_id=notspecified&tags=raioane",
+    "provider": "Moldova Open Data Portal",
+    "licenseOrTerms": "Official catalog listing with license not specified. No classifier, administrative key, boundary, geometry, locality, or postal record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-key catalog and terms reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The catalog is recorded specifically to retain the unresolved resource-level license gate.",
+      "A public catalog presence does not provide reuse permission for the referenced resource.",
+      "No administrative geographic data is retained."
+    ]
+  },
+  {
+    "sourceId": "moldova-spatial-data-reuse-framework",
+    "sourceName": "Moldova legislative and normative acts for public-sector reuse",
+    "sourceUrl": "https://inds.gov.md/en/legislative-and-normative-acts/",
+    "provider": "Government of the Republic of Moldova",
+    "licenseOrTerms": "Official governance reference to 2025 open-data and public-sector information reuse methodology. It is not a source-specific license or postcode-mapping grant, and no spatial, postal, address, property, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "public-sector reuse-governance reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Governance is recorded separately from resource-specific reuse terms.",
+      "The framework does not cure the classifier catalog license-unspecified status.",
+      "No raw data is acquired from this reference."
+    ]
+  },
+  {
+    "sourceId": "md-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Moldova current postcode format, safe mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:moldova-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "provider": "Posta Moldovei or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with explicit reuse terms, coverage, version, and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The office-search surface is not used as a substitute for a safe offline artifact.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+    ]
+  }
+]

@@ -4,7 +4,7 @@
     "version": "agid-postal-country-pack-v0.1",
     "strategyVersion": "agid-postal-country-pack-strategy-v0.1",
     "engineVersion": "agid-postal-code-engine-v0.1-rc",
-    "generatedAt": "2026-06-20T00:00:00.000Z",
+    "generatedAt": "2026-07-23T06:12:06.057Z",
     "countryCode": "NP",
     "countryName": "Nepal",
     "repositoryName": "agid-postal-pack-np",
@@ -32,7 +32,7 @@
     "containsRawThirdPartyData": false,
     "officialStatus": "draft",
     "counts": {
-      "sources": 3,
+      "sources": 6,
       "localities": 48,
       "boundaries": 12,
       "landforms": 1,
@@ -118,7 +118,7 @@
       "lat": 28.3949,
       "lng": 84.124
     },
-    "sourceNote": "Mountain routing needs locality and route evidence in addition to postal format."
+    "sourceNote": "Nepal Postal Service publishes national, regional, and change-notice postal-code material, but a reusable national regex, machine-readable mapping, reuse rights, and update policy are not authority-verified here. Do not format-validate, query, or autofill until those gates are recorded; mountain routing still needs locality and route evidence."
   },
   "sourceCatalog": [
     {
@@ -174,8 +174,190 @@
         "Open map records are not bundled by default.",
         "Any derived database must keep source-specific attribution and redistribution obligations."
       ]
+    },
+    {
+      "sourceId": "nepal-post-national-postal-codes",
+      "sourceName": "Nepal Postal Service national postal-codes publication",
+      "sourceUrl": "https://nepalpost.gov.np/content/1716/1716-postal-codes-of-nepal/",
+      "provider": "Department of Postal Service, Government of Nepal",
+      "licenseOrTerms": "Official national postal-code publication page; no mapping data license or redistribution grant is recorded, and neither its PDF nor postal-code records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official national postal-code publication surface; metadata only, not a reusable national regex, mapping, or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The Department of Postal Service hosts a national postal-codes publication page.",
+        "This pack does not download, read, store, transform, or redistribute the linked PDF, postal-code records, locality records, or displayed addresses.",
+        "The publication page alone does not establish a machine-readable national format, a versioned mapping, or redistribution rights."
+      ]
+    },
+    {
+      "sourceId": "pokhara-postal-directorate-postal-code-2025",
+      "sourceName": "Postal Directorate Pokhara postal-code 2025 publication",
+      "sourceUrl": "https://pokhara.nepalpost.gov.np/content/12/postal-code--2025/",
+      "provider": "Postal Directorate Pokhara, Department of Postal Service, Government of Nepal",
+      "licenseOrTerms": "Official regional postal-code publication page; no mapping data license or redistribution grant is recorded, and neither its PDF nor postal-code records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official regional publication and recency signal; metadata only, not a national mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The official postal directorate page publishes a postal-code item labeled 2025.",
+        "This pack records page metadata only and does not download, read, store, transform, or redistribute its linked document or postal records.",
+        "A regional publication does not establish national format scope, mapping completeness, or reuse rights."
+      ]
+    },
+    {
+      "sourceId": "parbat-district-post-new-postal-code-notice",
+      "sourceName": "District Post Office Parbat new postal-code notice",
+      "sourceUrl": "https://parbat.nepalpost.gov.np/content/13299/information-of-a-new-postal-cord-/",
+      "provider": "District Post Office Parbat, Department of Postal Service, Government of Nepal",
+      "licenseOrTerms": "Official district postal-code notice page; no mapping data license or redistribution grant is recorded, and neither its PDF nor postal-code records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official postal-code change-notice surface; metadata only, not a national mapping or change-feed dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The official district post office page presents a notice titled as new postal-code information.",
+        "This pack records page metadata only and does not download, read, store, transform, or redistribute the linked notice, postal records, or displayed addresses.",
+        "A change notice without an authoritative machine-readable delta, version, scope, rights, and correction policy cannot support lookup or autofill."
+      ]
     }
   ],
+  "postalSourceReadiness": {
+    "schemaId": "agid-nepal-postal-source-readiness-v0.1",
+    "countryCode": "NP",
+    "countryName": "Nepal",
+    "evaluatedAt": "2026-07-23T06:12:06.057Z",
+    "postalFormat": {
+      "nationalPattern": null,
+      "authorityVerified": false,
+      "fixedLegacyPatternRejected": true
+    },
+    "publicationStatus": "draft",
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "realPostalLookupEnabled": false,
+    "deliveryClaimEnabled": false,
+    "sources": [
+      {
+        "sourceId": "nepal-post-national-postal-codes",
+        "scope": "national-postal-code-publication",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "pokhara-postal-directorate-postal-code-2025",
+        "scope": "regional-postal-code-publication",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "parbat-district-post-new-postal-code-notice",
+        "scope": "postal-code-change-notice",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      }
+    ],
+    "gates": [
+      {
+        "id": "no-personal-or-raw-third-party-data",
+        "label": "The published pack remains metadata and synthetic fixtures only",
+        "status": "passed",
+        "evidence": [
+          "containsPersonalData=false",
+          "containsRawThirdPartyData=false",
+          "rawRecordsBundled=false for every source"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "national-postal-code-publication-recorded",
+        "label": "The Department of Postal Service national postal-codes publication is cataloged as metadata only",
+        "status": "passed",
+        "evidence": [
+          "nepal-post-national-postal-codes",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-code-update-and-change-surfaces-recorded",
+        "label": "Official regional and change-notice postal-code publication surfaces are cataloged as metadata only",
+        "status": "passed",
+        "evidence": [
+          "pokhara-postal-directorate-postal-code-2025",
+          "parbat-district-post-new-postal-code-notice",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-format-authority-evidence",
+        "label": "An authority-published national postal-code format specification is evidenced",
+        "status": "blocked",
+        "evidence": [
+          "nationalPattern=null",
+          "authorityVerified=false",
+          "fixedLegacyPatternRejected=true"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "postal-code-mapping-evidence",
+        "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+        "status": "blocked",
+        "evidence": [
+          "postalMappingEvidence=false for every source"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "redistribution-rights",
+        "label": "Redistribution rights for any postal-code mapping or linked publication are verified",
+        "status": "blocked",
+        "evidence": [
+          "redistributionStatus=metadata-only for every source"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "version-freshness-and-update-cadence",
+        "label": "The usable postal mapping has a version, retrieval date, update cadence, and correction path",
+        "status": "blocked",
+        "evidence": [
+          "version=null for every source",
+          "updateCadence=unknown for every source"
+        ],
+        "blocksRealPostalLookup": true
+      }
+    ],
+    "nextRequiredEvidence": [
+      "An authority-published national postal-code format specification, scope statement, and format-change policy.",
+      "A versioned postcode-to-locality or delivery-point mapping with geographic coverage and documented corrections.",
+      "Field-level reuse, attribution, and redistribution terms for any mapping, linked publication, or derived output.",
+      "Publication date, retrieval date, update cadence, conflict-sensitive coverage limits, and correction path for the mapping and change notices."
+    ],
+    "nonClaims": [
+      "This pack does not provide a real postcode lookup.",
+      "This pack does not assert a national Nepal postal-code regex.",
+      "This pack does not assert an address-to-postcode match, operational coverage, or delivery-point coverage."
+    ]
+  },
   "licenseLedger": [
     {
       "subject": "AGID-created country pack metadata",
@@ -194,6 +376,18 @@
       "licenseOrTerms": "source-specific",
       "redistribution": "review-required",
       "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+    },
+    {
+      "subject": "Nepal Postal Service national, regional, and change-notice source metadata",
+      "licenseOrTerms": "Official Department of Postal Service webpages; reuse rights for postal mapping and linked documents are not recorded",
+      "redistribution": "metadata-only",
+      "notes": "This release records source metadata only. It does not download, query, bundle, derive, or retain postal-code, address, locality, recipient, branch, or delivery-point records. The webpages do not provide a reusable national regex or mapping reuse right."
+    },
+    {
+      "subject": "Nepal national postal-code format and delivery-point mapping",
+      "licenseOrTerms": "Not yet verified",
+      "redistribution": "not-bundled",
+      "notes": "No fixed national regex, postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, operational-coverage assertion, or derived equivalent is included until authority, version, redistribution, coverage, and correction evidence are recorded."
     }
   ],
   "officialMunicipalitySummary": {

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "tj-test-vector-1",
+    "input": {
+      "countryCode": "TJ",
+      "municipalityId": "TJ-M1",
+      "townId": "TJ-M1-T1",
+      "chomeId": "TJ-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "TJ-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "tj-test-vector-2",
+    "input": {
+      "countryCode": "TJ",
+      "municipalityId": "TJ-M2",
+      "townId": "TJ-M2-T2",
+      "chomeId": "TJ-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "TJ-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "tj-test-vector-3",
+    "input": {
+      "countryCode": "TJ",
+      "municipalityId": "TJ-M3",
+      "townId": "TJ-M3-T3",
+      "chomeId": "TJ-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "TJ-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

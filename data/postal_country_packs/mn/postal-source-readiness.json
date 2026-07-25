@@ -1,0 +1,182 @@
+{
+  "schemaId": "agid-mongolia-postal-source-readiness-v0.1",
+  "countryCode": "MN",
+  "countryName": "Mongolia",
+  "evaluatedAt": "2026-07-23T08:23:39.938Z",
+  "postalFormat": {
+    "nationalPattern": "^[0-9]{5}$",
+    "formatAuthorityEvidence": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "mongol-post-zip-code-faq",
+      "scope": "official-postcode-format-and-registry-guidance",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "retrieved 2026-07-23; publication version not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "upu-mongolia-addressing-unit-2019",
+      "scope": "upu-postcode-format-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "UPU addressing unit reference dated 2019-01",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "mongol-post-designated-operator",
+      "scope": "designated-postal-operator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "retrieved 2026-07-23; publication version not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "nsdi-mongolia-geospatial-distribution-rules",
+      "scope": "administrative-geodata-distribution-rules",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "retrieved 2026-07-23; source-specific license agreement required",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "license-required",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "mn-current-postcode-mapping-rights-coverage-and-correction-required",
+      "scope": "current-postcode-mapping-rights-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "Mongol Post and the UPU record a five-digit postcode syntax for offline validation only",
+      "status": "passed",
+      "evidence": [
+        "mongol-post-zip-code-faq",
+        "upu-mongolia-addressing-unit-2019",
+        "nationalPattern=^[0-9]{5}$",
+        "formatAuthorityEvidence=true"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "designated-operator-recorded",
+      "label": "Mongol Post records its designated-national-operator role and universal-service obligation",
+      "status": "passed",
+      "evidence": [
+        "mongol-post-designated-operator",
+        "operator=Mongol Post JSC",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires schema, rights, version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "unsafe location and personal fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-mapping-reuse-rights",
+      "label": "A current official postcode mapping has explicit, verified reuse terms",
+      "status": "blocked",
+      "evidence": [
+        "Mongol Post FAQ links to a registry but states no bulk mapping license",
+        "UPU format reference carries no bulk mapping reuse grant",
+        "mn-current-postcode-mapping-rights-coverage-and-correction-required unresolved"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "administrative-geodata-reuse-rights",
+      "label": "Administrative keys or boundaries have explicit reusable terms independent of address datasets",
+      "status": "blocked",
+      "evidence": [
+        "nsdi-mongolia-geospatial-distribution-rules records copyright protection and license-agreement use",
+        "no administrative data license, version, or retrieval receipt recorded",
+        "no boundaries or administrative keys acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been acquired, schema-checked, and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no postcode rows, registry results, or geographic records acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "UPU format reference dated 2019-01",
+        "no current mapping version recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a current Mongol Post or authority-designated mapping artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, and attribution wording.",
+    "Before ingestion, accept only safe postcode and administrative-zone identifiers and reject address, street, building, recipient, precise-point, geometry, and query-result fields.",
+    "Record mapping coverage, current version, update cadence, and an authority correction path before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not query, store, or redistribute zipcode.mn registry results.",
+    "This pack does not assert that the UPU 2019 format reference is a current mapping or a complete current delivery specification.",
+    "This pack does not download, store, or redistribute Mongol Post, UPU, NSDI, postal-mapping, boundary, or address records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

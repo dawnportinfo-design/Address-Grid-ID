@@ -64,7 +64,7 @@ export type AddressLoginProviderConfig = {
 };
 
 export type VeygritProviderProps = AddressLoginProviderConfig & {
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 export type AddressLoginStartOptions = {

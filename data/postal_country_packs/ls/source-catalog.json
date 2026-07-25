@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "LS official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "lesotho-postal-services-government-reference",
+    "sourceName": "Lesotho Postal Services government reference",
+    "sourceUrl": "https://www.lena.gov.ls/e-service-structure-unveiled/",
+    "provider": "Lesotho News Agency / Government of Lesotho",
+    "licenseOrTerms": "Government news page; no postcode-mapping license or redistribution grant is recorded here, and no postal, contact, or address records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-service institutional reference; metadata only, not a national postcode format, mapping, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The government news agency identifies Lesotho Postal Services within its ministry.",
+      "This pack does not store or transform postal, contact, customer, recipient, or address records.",
+      "Institutional reference does not establish a reusable postcode mapping or delivery coverage."
+    ]
+  },
+  {
+    "sourceId": "lesotho-communications-authority-postal-report",
+    "sourceName": "Lesotho Communications Authority postal-sector annual report",
+    "sourceUrl": "https://lca.org.ls/wp-content/uploads/filr/3963/LCA-ANNUAL-REPORT_2023-24_.pdf",
+    "provider": "Lesotho Communications Authority",
+    "licenseOrTerms": "Regulatory annual report; no postcode-mapping license or redistribution grant is recorded here, and no postal or address records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-sector regulatory reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The report identifies Lesotho Post as the designated national postal operator.",
+      "This pack stores source metadata only and does not include report content, postal, recipient, or address records.",
+      "Operator designation does not establish an offline reusable postcode mapping, rights, or delivery-point coverage."
+    ]
+  },
+  {
+    "sourceId": "un-salb-lesotho-admin-boundaries",
+    "sourceName": "United Nations SALB validated Lesotho administrative boundaries",
+    "sourceUrl": "https://salb.un.org/en/data/lso",
+    "provider": "United Nations Second Administrative Level Boundaries programme / Lesotho national geospatial authority",
+    "licenseOrTerms": "Publicly downloadable validated administrative-boundary dataset; terms of use require separate confirmation before acquisition or redistribution, and no geometry or attribute records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "validated administrative-boundary source candidate; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "SALB lists validated administrative units with temporal validity through 2024-06-24 and downloadable formats.",
+      "This pack does not download, store, transform, or redistribute boundary geometries, administrative records, locations, or address data.",
+      "Administrative boundaries do not establish postal-code coverage, format, mapping rights, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "ls-postcode-mapping-required",
+    "sourceName": "Lesotho postcode format, mapping, rights, and update authority source",
+    "sourceUrl": "source-metadata-only:lesotho-postcode-mapping-required",
+    "provider": "Lesotho postal authority or authority-designated official publisher",
+    "licenseOrTerms": "Not yet verified; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The recorded official references do not establish an offline reusable postcode format or mapping.",
+      "Do not add real postcode records, address matching, or carrier deliverability assertions until authority, license, version, coverage, and correction evidence are recorded."
+    ]
+  }
+]

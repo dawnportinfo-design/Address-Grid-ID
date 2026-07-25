@@ -1,0 +1,410 @@
+{
+  "schemaId": "agid-postal-country-build-queue-v0.1",
+  "generatedAt": "2026-07-23T06:12:06.057Z",
+  "selectionRule": [
+    "Guatemala is first by explicit implementation decision.",
+    "Remaining Class B countries are ordered by reusable five-digit format checks, other recorded formats, unverified formats, then ISO country code.",
+    "Recorded format checks do not imply shared postal geography, authority, or deliverability.",
+    "Every queue item remains metadata-only until its country-specific release gates pass."
+  ],
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "items": [
+    {
+      "position": 1,
+      "countryCode": "GT",
+      "countryName": "Guatemala",
+      "postalPattern": "^\\d{5}$",
+      "phase": "source-readiness-gated",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Record a Guatemala postal authority or designated publisher with scope, rights, version, and correction path."
+    },
+    {
+      "position": 2,
+      "countryCode": "KE",
+      "countryName": "Kenya",
+      "postalPattern": "^\\d{5}$",
+      "phase": "country-specific-source-review-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 1,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Review country-specific source scope, license, version, and redistribution before any derived publication."
+    },
+    {
+      "position": 3,
+      "countryCode": "TZ",
+      "countryName": "Tanzania",
+      "postalPattern": "^\\d{5}$",
+      "phase": "country-specific-source-review-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 1,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Review country-specific source scope, license, version, and redistribution before any derived publication."
+    },
+    {
+      "position": 4,
+      "countryCode": "ZM",
+      "countryName": "Zambia",
+      "postalPattern": "^\\d{5}$",
+      "phase": "country-specific-source-review-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 1,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Review country-specific source scope, license, version, and redistribution before any derived publication."
+    },
+    {
+      "position": 5,
+      "countryCode": "AF",
+      "countryName": "Afghanistan",
+      "postalPattern": "^\\d{4}$",
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 6,
+      "countryCode": "AO",
+      "countryName": "Angola",
+      "postalPattern": "^\\d{4}$",
+      "phase": "country-specific-source-review-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 1,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Review country-specific source scope, license, version, and redistribution before any derived publication."
+    },
+    {
+      "position": 7,
+      "countryCode": "BD",
+      "countryName": "Bangladesh",
+      "postalPattern": "^\\d{4}$",
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 8,
+      "countryCode": "CD",
+      "countryName": "DR Congo",
+      "postalPattern": "^\\d{4,5}$",
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 9,
+      "countryCode": "ET",
+      "countryName": "Ethiopia",
+      "postalPattern": "^\\d{4}$",
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 10,
+      "countryCode": "GH",
+      "countryName": "Ghana",
+      "postalPattern": "^[A-Z]{2}-\\d{3}-\\d{4}$",
+      "phase": "country-specific-source-review-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 1,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Review country-specific source scope, license, version, and redistribution before any derived publication."
+    },
+    {
+      "position": 11,
+      "countryCode": "IE",
+      "countryName": "Ireland",
+      "postalPattern": "^[A-Z0-9]{3}\\s?[A-Z0-9]{4}$",
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 12,
+      "countryCode": "IN",
+      "countryName": "India",
+      "postalPattern": "^\\d{6}$",
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 13,
+      "countryCode": "NG",
+      "countryName": "Nigeria",
+      "postalPattern": "^\\d{6}$",
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 14,
+      "countryCode": "PG",
+      "countryName": "Papua New Guinea",
+      "postalPattern": "^\\d{3}$",
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 15,
+      "countryCode": "PH",
+      "countryName": "Philippines",
+      "postalPattern": "^\\d{4}$",
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 16,
+      "countryCode": "VN",
+      "countryName": "Vietnam",
+      "postalPattern": "^\\d{5,6}$",
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 17,
+      "countryCode": "KH",
+      "countryName": "Cambodia",
+      "postalPattern": null,
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 18,
+      "countryCode": "LA",
+      "countryName": "Laos",
+      "postalPattern": null,
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 19,
+      "countryCode": "MM",
+      "countryName": "Myanmar",
+      "postalPattern": null,
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 20,
+      "countryCode": "NP",
+      "countryName": "Nepal",
+      "postalPattern": null,
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 21,
+      "countryCode": "PK",
+      "countryName": "Pakistan",
+      "postalPattern": null,
+      "phase": "country-specific-source-discovery-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 0,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Create a metadata-only country source catalog and preserve the real postal lookup block."
+    },
+    {
+      "position": 22,
+      "countryCode": "UG",
+      "countryName": "Uganda",
+      "postalPattern": null,
+      "phase": "country-specific-source-review-required",
+      "sourceProfile": {
+        "countrySpecificPostalSourceCount": 1,
+        "globalLicensedFallbackAvailable": true
+      },
+      "publicationBoundary": {
+        "containsPersonalData": false,
+        "containsRawThirdPartyData": false,
+        "realPostalLookupEnabled": false,
+        "deliveryClaimEnabled": false
+      },
+      "nextSmallestImprovement": "Review country-specific source scope, license, version, and redistribution before any derived publication."
+    }
+  ]
+}

@@ -62,6 +62,20 @@ export type PostalSourceClassification = {
 
 const GLOBAL_OFFICIAL_POSTAL_SOURCES: OfficialPostalSourceProfile[] = [
   {
+    id: 'posta-uganda-postal-address',
+    countryCodes: ['UG'],
+    label: 'Posta Uganda postal-address service',
+    authority: 'postal-operator',
+    trustTier: 'official',
+    availability: 'web-search',
+    depth: 'locality',
+    url: 'https://ugapost.co.ug/our-services/physical-address/',
+    sourceNames: ['posta uganda', 'uganda post limited', 'ugapost.co.ug'],
+    openSourceIds: [],
+    requiresCredential: false,
+    notes: ['Official Uganda Post Limited service page for postal-address boxes; catalog as postal-network metadata only until a national postcode specification and reusable mapping are evidenced.'],
+  },
+  {
     id: 'upu-universal-postcode-database',
     countryCodes: ['*'],
     label: 'UPU Universal POST*CODE Database and Addressing Solutions',
@@ -145,6 +159,23 @@ const GLOBAL_OPEN_REFERENCE_SOURCES: OfficialPostalSourceProfile[] = [
 ];
 
 export const OFFICIAL_POSTAL_SOURCE_CATALOG: OfficialPostalSourceProfile[] = [
+  {
+    id: 'eurostat-gisco-postal-code-points-2024',
+    countryCodes: ['ES', 'PT'],
+    label: 'Eurostat GISCO postal-code points (2024)',
+    authority: 'official-open-data',
+    trustTier: 'official-derived',
+    availability: 'bulk-open-data',
+    depth: 'postcode',
+    url: 'https://ec.europa.eu/eurostat/web/gisco/geodata/administrative-units/postal-codes',
+    sourceNames: ['eurostat gisco postal code points', 'gisco postal-code points', 'eurostat gisco'],
+    openSourceIds: ['eurostat-gisco-postal-code-points-2024'],
+    requiresCredential: false,
+    notes: [
+      'For ES/PT, use only through the country scope ledger and its conditional-reuse, format-scope, freshness, and correction gates.',
+      'This source can support postcode-level metadata evidence only; it does not prove postal completeness, address validation, or delivery reachability.',
+    ],
+  },
   {
     id: 'japan-post-digital-address-api',
     countryCodes: ['JP'],
@@ -689,11 +720,11 @@ export const OFFICIAL_POSTAL_SOURCE_CATALOG: OfficialPostalSourceProfile[] = [
     trustTier: 'authoritative',
     availability: 'public-api',
     depth: 'postcode',
-    url: 'https://www.tcra.go.tz/services/postcode',
+    url: 'https://address.tcra.go.tz/services/postcode',
     sourceNames: ['tcra postcode', 'tanzania postcode', 'posta tanzania', 'tanzania posts corporation'],
     openSourceIds: [],
     requiresCredential: false,
-    notes: ['Official Tanzania Communications Regulatory Authority postcode service.'],
+    notes: ['Official Tanzania Communications Regulatory Authority postcode service with national postcode policy and format guidance.'],
   },
   {
     id: 'rwanda-national-post-office',

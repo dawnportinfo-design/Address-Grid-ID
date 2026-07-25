@@ -1,0 +1,44 @@
+[
+  {
+    "id": "uy-test-vector-1",
+    "input": {
+      "countryCode": "UY",
+      "municipalityId": "UY-M1",
+      "townId": "UY-M1-T1",
+      "chomeId": "UY-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "UY-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "uy-test-vector-2",
+    "input": {
+      "countryCode": "UY",
+      "municipalityId": "UY-M2",
+      "townId": "UY-M2-T2",
+      "chomeId": "UY-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "UY-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "uy-test-vector-3",
+    "input": {
+      "countryCode": "UY",
+      "municipalityId": "UY-M3",
+      "townId": "UY-M3-T3",
+      "chomeId": "UY-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "UY-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

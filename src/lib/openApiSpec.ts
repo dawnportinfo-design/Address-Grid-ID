@@ -1187,6 +1187,39 @@ export const AGID_OPENAPI_SPEC = {
         },
       },
     },
+    '/postal-codes/capabilities': {
+      get: {
+        tags: ['Postal'],
+        summary: 'Describe the privacy-safe postal code format API',
+        operationId: 'getPostalCodeCapabilities',
+        description: 'Lists format-only, metadata-only, and withheld jurisdiction policies. The API neither replicates official postal data nor queries postal providers.',
+        responses: {
+          '200': jsonResponse('#/components/schemas/AgidResultPostalCodeApiCapabilities'),
+        },
+      },
+    },
+    '/postal-codes/validate': {
+      post: {
+        tags: ['Postal'],
+        summary: 'Check a postal code against local format metadata only',
+        operationId: 'postPostalCodeValidate',
+        description: 'Accepts only a jurisdiction id and postal code. It never accepts an address or recipient, never calls a provider, and never asserts locality membership or delivery.',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/PostalCodeApiValidationRequest' },
+            },
+          },
+        },
+        responses: {
+          '200': jsonResponse('#/components/schemas/AgidResultPostalCodeApiValidation'),
+          '400': errorResponse,
+          '403': errorResponse,
+          '404': errorResponse,
+        },
+      },
+    },
     '/address/standard-library/capabilities': {
       get: {
         tags: ['Address'],
@@ -4919,6 +4952,89 @@ export const AGID_OPENAPI_SPEC = {
                 },
                 additionalProperties: true,
               },
+            },
+          },
+        ],
+      },
+      PostalCodeApiValidationRequest: {
+        type: 'object',
+        required: ['jurisdictionId', 'postalCode'],
+        properties: {
+          jurisdictionId: {
+            type: 'string',
+            minLength: 2,
+            maxLength: 12,
+            description: 'AGID jurisdiction identifier. Sensitive regions may be withheld by publication policy.',
+          },
+          postalCode: {
+            type: 'string',
+            minLength: 1,
+            maxLength: 16,
+            description: 'A code to check for shape only. It is not stored or echoed in the response.',
+          },
+        },
+        additionalProperties: false,
+      },
+      PostalCodeApiValidation: {
+        type: 'object',
+        required: [
+          'modelVersion',
+          'jurisdictionId',
+          'cohort',
+          'publicationStatus',
+          'status',
+          'formatMatched',
+          'lookupPerformed',
+          'deliveryConfirmed',
+          'storesPostalCode',
+          'warnings',
+        ],
+        properties: {
+          modelVersion: { type: 'string' },
+          jurisdictionId: { type: 'string' },
+          cohort: { type: 'string', enum: ['mature-system', 'restricted-source', 'neutrality-gated', 'unknown'] },
+          publicationStatus: { type: 'string', enum: ['format-only', 'metadata-only', 'withheld'] },
+          status: { type: 'string', enum: ['valid-format', 'invalid-format', 'metadata-only', 'guarded', 'unsupported'] },
+          formatMatched: { type: ['boolean', 'null'] },
+          lookupPerformed: { type: 'boolean', const: false },
+          deliveryConfirmed: { type: 'boolean', const: false },
+          storesPostalCode: { type: 'boolean', const: false },
+          warnings: { type: 'array', items: { type: 'string' } },
+        },
+        additionalProperties: false,
+      },
+      PostalCodeApiCapabilities: {
+        type: 'object',
+        required: ['modelVersion', 'accepts', 'inputBoundary', 'outputBoundary', 'cohorts', 'syntheticTestVectors', 'nonClaims'],
+        properties: {
+          modelVersion: { type: 'string' },
+          accepts: { type: 'array', items: { type: 'string' } },
+          inputBoundary: { type: 'object', additionalProperties: true },
+          outputBoundary: { type: 'object', additionalProperties: true },
+          cohorts: { type: 'array', items: { type: 'object', additionalProperties: true } },
+          syntheticTestVectors: { type: 'object', additionalProperties: true },
+          nonClaims: { type: 'array', items: { type: 'string' } },
+        },
+        additionalProperties: true,
+      },
+      AgidResultPostalCodeApiValidation: {
+        allOf: [
+          { $ref: '#/components/schemas/AgidResultBase' },
+          {
+            type: 'object',
+            properties: {
+              data: { $ref: '#/components/schemas/PostalCodeApiValidation' },
+            },
+          },
+        ],
+      },
+      AgidResultPostalCodeApiCapabilities: {
+        allOf: [
+          { $ref: '#/components/schemas/AgidResultBase' },
+          {
+            type: 'object',
+            properties: {
+              data: { $ref: '#/components/schemas/PostalCodeApiCapabilities' },
             },
           },
         ],

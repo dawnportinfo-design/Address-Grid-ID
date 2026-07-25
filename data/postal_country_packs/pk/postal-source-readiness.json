@@ -1,0 +1,103 @@
+{
+  "schemaId": "agid-pakistan-postal-source-readiness-v0.1",
+  "countryCode": "PK",
+  "countryName": "Pakistan",
+  "evaluatedAt": "2026-07-23T06:12:06.057Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "authorityVerified": false,
+    "fixedLegacyPatternRejected": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "pakistan-post-postcode-directory",
+      "scope": "postal-operator-postcode-directory",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": null,
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-operator-directory-recorded",
+      "label": "The official Pakistan Post post-code directory is cataloged as metadata only",
+      "status": "passed",
+      "evidence": [
+        "pakistan-post-postcode-directory",
+        "postalMappingEvidence=false",
+        "redistributionStatus=metadata-only"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "An authority-published national postal-code format specification is evidenced",
+      "status": "blocked",
+      "evidence": [
+        "nationalPattern=null",
+        "authorityVerified=false",
+        "fixedLegacyPatternRejected=true"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-evidence",
+      "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "redistribution-rights",
+      "label": "Redistribution rights for any postal-code mapping or linked directory are verified",
+      "status": "blocked",
+      "evidence": [
+        "redistributionStatus=metadata-only for every source"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-update-cadence",
+      "label": "The usable postal mapping has a version, retrieval date, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "version=null for every source",
+        "updateCadence=unknown for every source"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "An authority-published national postal-code format specification, scope statement, and format-change policy.",
+    "A versioned postcode-to-locality or delivery-point mapping with geographic coverage and documented corrections.",
+    "Field-level reuse, attribution, and redistribution terms for any mapping, directory, linked download, or derived output.",
+    "Publication date, retrieval date, update cadence, coverage limits, and correction path for the mapping."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not assert a national Pakistan postal-code regex.",
+    "This pack does not assert an address-to-postcode match, operational coverage, or delivery-point coverage."
+  ]
+}

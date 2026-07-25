@@ -1,0 +1,44 @@
+[
+  {
+    "id": "pe-test-vector-1",
+    "input": {
+      "countryCode": "PE",
+      "municipalityId": "PE-M1",
+      "townId": "PE-M1-T1",
+      "chomeId": "PE-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "PE-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "pe-test-vector-2",
+    "input": {
+      "countryCode": "PE",
+      "municipalityId": "PE-M2",
+      "townId": "PE-M2-T2",
+      "chomeId": "PE-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "PE-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "pe-test-vector-3",
+    "input": {
+      "countryCode": "PE",
+      "municipalityId": "PE-M3",
+      "townId": "PE-M3-T3",
+      "chomeId": "PE-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "PE-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

@@ -1,0 +1,5870 @@
+{
+  "manifest": {
+    "schemaId": "agid-postal-country-pack-v0.1",
+    "version": "agid-postal-country-pack-v0.1",
+    "strategyVersion": "agid-postal-country-pack-strategy-v0.1",
+    "engineVersion": "agid-postal-code-engine-v0.1-rc",
+    "generatedAt": "2026-07-23T08:51:40.365Z",
+    "countryCode": "MK",
+    "countryName": "North Macedonia",
+    "repositoryName": "agid-postal-pack-mk",
+    "packageName": "@agid/agid-postal-pack-mk",
+    "requiredLayers": [
+      "manifest",
+      "source-catalog",
+      "country-profile",
+      "admin-boundary-index",
+      "locality-index",
+      "locality-alias-history",
+      "landform-index",
+      "settlement-cluster-index",
+      "planning-cell-index",
+      "route-evidence-index",
+      "quality-evidence-index",
+      "vpl-seed-regions",
+      "postal-system-priors",
+      "governance-notes",
+      "license-ledger",
+      "privacy-threat-model",
+      "test-vectors"
+    ],
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "officialStatus": "draft",
+    "counts": {
+      "sources": 8,
+      "localities": 48,
+      "boundaries": 12,
+      "landforms": 1,
+      "settlementClusters": 6,
+      "vplSeeds": 3,
+      "planningCells": 191,
+      "routeEvidence": 48,
+      "qualityEvidence": 36,
+      "officialMunicipalityRecords": 0,
+      "testVectors": 3
+    }
+  },
+  "recommendation": {
+    "version": "agid-postal-country-pack-strategy-v0.1",
+    "countryCode": "MK",
+    "countryName": "North Macedonia",
+    "tier": "weak-coarse-postal-code",
+    "repositoryMode": "country-pack-recommended",
+    "repositoryName": "agid-postal-pack-mk",
+    "packageName": "@agid/agid-postal-pack-mk",
+    "packWeight": "standard-pack",
+    "recommendedUse": "supplemental-agid-postal-draft",
+    "requiredLayers": [
+      "manifest",
+      "source-catalog",
+      "country-profile",
+      "admin-boundary-index",
+      "locality-index",
+      "locality-alias-history",
+      "landform-index",
+      "settlement-cluster-index",
+      "planning-cell-index",
+      "route-evidence-index",
+      "quality-evidence-index",
+      "vpl-seed-regions",
+      "postal-system-priors",
+      "governance-notes",
+      "license-ledger",
+      "privacy-threat-model",
+      "test-vectors"
+    ],
+    "preseededRecords": [
+      "country profile: population band, land area band, terrain class, postal maturity class",
+      "stable locality IDs independent of mutable city-name strings",
+      "administrative boundary references and source freshness metadata",
+      "landform and route evidence slots appropriate to the country terrain",
+      "settlement clusters and VPL seed regions for draft postal-zone design",
+      "license ledger for every imported source; third-party raw datasets are not bundled by default"
+    ],
+    "maintenanceRules": [
+      "Keep the AGID Postal Forge engine, UI, and core tests in the central repository.",
+      "Keep country-specific locality aliases, landforms, source metadata, and VPL seeds in the country pack.",
+      "Version every source by provider, license, retrieval date, and transformation script.",
+      "Use stable locality IDs; visible names can change without forcing postal code churn.",
+      "Run schema, no-raw-address, municipality-separation, and sample code conformance tests before publishing.",
+      "Publish generated codes as simulation or draft unless official authority, carrier pilot, privacy, data trust, and transition gates pass."
+    ],
+    "splitRationale": [
+      "Country packs keep the main app small and let operators load only the country they need.",
+      "Country experts can maintain local names, landforms, languages, and source notes without touching the core engine.",
+      "License risk is isolated because each country pack has its own source catalog and data license ledger."
+    ],
+    "compatibilityContract": {
+      "schemaId": "agid-postal-country-pack-v0.1",
+      "enginePackage": "@agid/postal-forge-core",
+      "countryPackDoesNotContain": [
+        "personal-addresses",
+        "recipient-names",
+        "phone-numbers",
+        "private-aoid-bodies",
+        "agid-s-payloads",
+        "raw-third-party-datasets-without-license"
+      ]
+    }
+  },
+  "countryProfile": {
+    "countryCode": "MK",
+    "countryName": "North Macedonia",
+    "region": "Europe",
+    "terrain": "mountain",
+    "classHint": "B",
+    "planningCentroid": {
+      "lat": 41.61,
+      "lng": 21.75
+    },
+    "sourceNote": "Country-repository bootstrap uses synthetic planning metadata only. Postal format, mapping, authority, license, coverage, and update policy are unverified here; no postal lookup, address autofill, or delivery claim is enabled."
+  },
+  "sourceCatalog": [
+    {
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "sourceName": "AGID-generated country pack fixtures",
+      "sourceUrl": "local:AGID",
+      "provider": "AGID project",
+      "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+      "redistributionStatus": "agid-metadata-redistributable",
+      "role": "synthetic locality, VPL seed, and conformance fixtures",
+      "transformedFields": [
+        "countryCode",
+        "localityId",
+        "codePart",
+        "planningCell",
+        "routeEvidence",
+        "qualityEvidence",
+        "testVector"
+      ],
+      "confidenceNotes": [
+        "Contains no personal addresses and no recipient data.",
+        "Useful for OSS demos and conformance tests; not official postal authority data."
+      ]
+    },
+    {
+      "sourceId": "official-boundary-required",
+      "sourceName": "MK official boundary and locality sources",
+      "sourceUrl": "source-metadata-only:official-authority-required",
+      "provider": "government, municipality, postal authority, or carrier pilot authority",
+      "licenseOrTerms": "source-specific; not bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official validation gate before pilot or public release",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "This pack records the required source slot only.",
+        "No official raw boundary, road, population, postal, or address dataset is bundled."
+      ]
+    },
+    {
+      "sourceId": "open-map-evidence-slot",
+      "sourceName": "Open map evidence slot",
+      "sourceUrl": "source-metadata-only:open-map-provider",
+      "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+      "licenseOrTerms": "source-specific; license review required",
+      "redistributionStatus": "license-review-required",
+      "role": "road, landform, port, settlement, and map preview evidence",
+      "transformedFields": [
+        "featureClass",
+        "evidenceQuality",
+        "sourceFreshness"
+      ],
+      "confidenceNotes": [
+        "Open map records are not bundled by default.",
+        "Any derived database must keep source-specific attribution and redistribution obligations."
+      ]
+    },
+    {
+      "sourceId": "north-macedonia-postal-agency-universal-service-provider",
+      "sourceName": "Postal Agency of North Macedonia universal-service provider reference",
+      "sourceUrl": "https://ap.mk/mk/node/491",
+      "provider": "Postal Agency of the Republic of North Macedonia",
+      "licenseOrTerms": "Official regulatory reference that records JSC Post of North Macedonia as the universal-service provider. It is recorded as authority metadata only and does not provide a postcode-mapping license, format, or redistribution grant. No postal, address, recipient, or location record is bundled.",
+      "redistributionStatus": "source-metadata-only",
+      "role": "postal regulator and universal-service operator reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The regulator records the universal-service provider and nationwide service obligation.",
+        "Operator authority is separate from postcode format, mapping rights, coverage, and correction evidence.",
+        "No carrier operational data is retained."
+      ]
+    },
+    {
+      "sourceId": "north-macedonia-post-office-location-search",
+      "sourceName": "North Macedonia Post office-location search",
+      "sourceUrl": "https://www.posta.com.mk/locations_en/",
+      "provider": "JSC Post of North Macedonia",
+      "licenseOrTerms": "Official office-location search surface. Its result schema includes excluded address, contact, and work-time fields, and no bulk postcode-mapping reuse grant is recorded. The interface is not queried and no result, postcode, locality, address, telephone, or location record is bundled.",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official postal office-search authority reference and safety-boundary evidence; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "A searchable site is not a safe offline dataset or a redistribution license.",
+        "Excluded office and location fields prevent acquisition until a separate safe postcode-only artifact exists.",
+        "No query result is retained."
+      ]
+    },
+    {
+      "sourceId": "north-macedonia-makstat-territorial-units",
+      "sourceName": "MakStat territorial-units statistical table",
+      "sourceUrl": "https://makstat.stat.gov.mk/PXWeb/pxweb/en/MakStat/MakStat__ProstorniEdinici/125_PrEdn_reg_09_BrOpstiniNM_ml.px",
+      "provider": "State Statistical Office of the Republic of North Macedonia",
+      "licenseOrTerms": "MakStat states that data are available free of charge and require source attribution; the table is an aggregate territorial-units summary. No postcode mapping, address, locality, boundary, or geographic-key record is acquired or bundled.",
+      "redistributionStatus": "source-metadata-only",
+      "role": "attributed territorial-statistics reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The source supplies clear reuse and attribution context for aggregate territorial statistics.",
+        "The recorded table does not supply postcode mappings or administrative geographic keys for routing.",
+        "No raw statistical table data is retained in this pack."
+      ]
+    },
+    {
+      "sourceId": "north-macedonia-cadastre-admin-boundary-and-address-catalog",
+      "sourceName": "North Macedonia cadastre administrative-boundary and address catalog",
+      "sourceUrl": "https://www.katastar.gov.mk/%D0%BF%D0%BE%D0%B4%D0%B0%D1%82%D0%BE%D1%86%D0%B8-%D0%BE%D0%B4-%D0%B3%D0%BA%D0%B8%D1%81/%D0%BF%D0%BE%D0%B4%D0%B0%D1%82%D0%BE%D1%86%D0%B8-%D0%B7%D0%B0-%D0%B0%D0%B4%D0%BC%D0%B8%D0%BD%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%B8%D0%B2%D0%BD%D0%B8-%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B8/",
+      "provider": "Agency for Real Estate Cadastre of the Republic of North Macedonia",
+      "licenseOrTerms": "Official catalog describes administrative-boundary products alongside street and house-number products. Resource-specific reuse terms and a safe postcode-only or administrative-key schema are not verified; no boundary, street, house, parcel, geometry, or location record is acquired or bundled.",
+      "redistributionStatus": "source-metadata-only",
+      "role": "administrative-geography catalog and safety-boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The mixed catalog cannot be treated as an approved administrative-key extraction source.",
+        "No geometry or cadastral, street, house-number, or address data is retained.",
+        "Administrative publication does not establish postal-code coverage, mapping rights, or delivery capability."
+      ]
+    },
+    {
+      "sourceId": "mk-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "sourceName": "North Macedonia current postcode format, safe mapping, rights, coverage, and correction authority source",
+      "sourceUrl": "source-metadata-only:north-macedonia-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "provider": "Postal Agency of the Republic of North Macedonia or authority-designated official publisher",
+      "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with explicit reuse terms, coverage, version, and correction evidence; not bundled",
+      "redistributionStatus": "not-bundled",
+      "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The office-search surface and aggregate statistics are not substitutes for a safe offline postcode mapping.",
+        "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+      ]
+    }
+  ],
+  "postalSourceReadiness": {
+    "schemaId": "agid-north-macedonia-postal-source-readiness-v0.1",
+    "countryCode": "MK",
+    "countryName": "North Macedonia",
+    "evaluatedAt": "2026-07-23T08:51:40.365Z",
+    "postalFormat": {
+      "nationalPattern": null,
+      "formatAuthorityEvidence": false,
+      "unverifiedFormatInferenceRejected": true
+    },
+    "publicationStatus": "draft",
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "realPostalLookupEnabled": false,
+    "deliveryClaimEnabled": false,
+    "sources": [
+      {
+        "sourceId": "north-macedonia-postal-agency-universal-service-provider",
+        "scope": "postal-regulator-and-operator-reference",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "Postal Agency publication dated 2022-02-02",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawAcquisitionStatus": "not-attempted",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "north-macedonia-post-office-location-search",
+        "scope": "official-postal-office-search-surface",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "retrieved 2026-07-23; publication version not recorded",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "provider-released",
+        "rawAcquisitionStatus": "source-contains-excluded-fields",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "north-macedonia-makstat-territorial-units",
+        "scope": "attributed-statistical-administrative-summary",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "table PD093M16; latest update 2023-06-02",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "provider-released",
+        "rawAcquisitionStatus": "not-attempted",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "north-macedonia-cadastre-admin-boundary-and-address-catalog",
+        "scope": "administrative-boundary-and-address-catalog",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "retrieved 2026-07-23; dataset release version and reuse terms not recorded",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawAcquisitionStatus": "terms-not-verified",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "mk-current-postcode-format-mapping-rights-coverage-and-correction-required",
+        "scope": "current-postcode-format-mapping-rights-coverage-and-correction-evidence",
+        "authorityStatus": "unresolved",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "not-bundled",
+        "version": null,
+        "retrievedAt": null,
+        "updateCadence": "unknown",
+        "rawAcquisitionStatus": "not-attempted",
+        "rawRecordsBundled": false
+      }
+    ],
+    "gates": [
+      {
+        "id": "no-personal-or-raw-third-party-data",
+        "label": "The published pack remains metadata and synthetic fixtures only",
+        "status": "passed",
+        "evidence": [
+          "containsPersonalData=false",
+          "containsRawThirdPartyData=false",
+          "rawRecordsBundled=false for every source"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-regulator-and-operator-recorded",
+        "label": "The Postal Agency and national universal-service operator are recorded as authority metadata only",
+        "status": "passed",
+        "evidence": [
+          "north-macedonia-postal-agency-universal-service-provider",
+          "operator reference is not a postcode mapping",
+          "postalMappingEvidence=false"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "attributed-statistical-territorial-summary-recorded",
+        "label": "The State Statistical Office territorial-units summary records free reuse with mandatory source attribution",
+        "status": "passed",
+        "evidence": [
+          "north-macedonia-makstat-territorial-units",
+          "free of charge with source attribution",
+          "aggregate statistical summary is not a postcode mapping"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "source-acquisition-plan-fails-closed",
+        "label": "Any future mapping snapshot remains external and requires a safe schema, rights, version, coverage, and correction evidence",
+        "status": "passed",
+        "evidence": [
+          "rawSnapshotStorage=external-nonpublic",
+          "rawRecordsBundled=false",
+          "address, office, contact, parcel, coordinate, and geometry fields rejected",
+          "allowMappingIngestion=false until all mapping gates are evidenced"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-format-authority-evidence",
+        "label": "An authority-published national postcode format is recorded independently of an office search surface",
+        "status": "blocked",
+        "evidence": [
+          "nationalPattern=null",
+          "formatAuthorityEvidence=false",
+          "unverifiedFormatInferenceRejected=true",
+          "Post office search is not queried"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "postal-mapping-reuse-rights",
+        "label": "A current official postcode mapping has explicit, verified reuse terms",
+        "status": "blocked",
+        "evidence": [
+          "no safe postcode-only mapping license or terms recorded",
+          "postal office search is not a bulk redistribution grant",
+          "mk-current-postcode-format-mapping-rights-coverage-and-correction-required unresolved"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "administrative-geodata-rights-and-safe-schema",
+        "label": "Administrative keys or boundaries have explicit reusable terms and a schema independent of street, house, parcel, and location fields",
+        "status": "blocked",
+        "evidence": [
+          "cadastre catalog includes street and house-number products",
+          "cadastre release terms and safe source schema are not verified",
+          "no administrative records or geometries acquired"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "postal-code-mapping-and-coverage-evidence",
+        "label": "A current official postcode mapping has been acquired, schema-checked, and coverage-validated for offline reuse",
+        "status": "blocked",
+        "evidence": [
+          "postalMappingEvidence=false for every source",
+          "no search results, postcode rows, or geographic records acquired",
+          "coverage-not-validated"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "version-freshness-and-correction-path",
+        "label": "The mapping has a current version, update cadence, and correction path",
+        "status": "blocked",
+        "evidence": [
+          "office-search publication version not recorded",
+          "no current mapping version recorded",
+          "correction-path-not-recorded"
+        ],
+        "blocksRealPostalLookup": true
+      }
+    ],
+    "nextRequiredEvidence": [
+      "Obtain a current Postal Agency or authority-designated postcode-only artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, and attribution wording.",
+      "Before ingestion, accept only safe postcode and administrative-zone identifiers and reject office address, street, house, building, recipient, telephone, work-time, precise-point, geometry, parcel, property, and query-result fields.",
+      "Record mapping coverage, current version, update cadence, and an authority correction path before enabling any real lookup or delivery claim."
+    ],
+    "nonClaims": [
+      "This pack does not provide a real postcode lookup.",
+      "This pack does not query, store, or redistribute North Macedonia Post office-search results.",
+      "This pack does not assert a national North Macedonia postal-code regex.",
+      "This pack does not download, store, or redistribute postal office, postcode, address, contact, property, parcel, boundary, or location records.",
+      "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+      "This pack does not assert delivery-point or carrier deliverability coverage."
+    ]
+  },
+  "licenseLedger": [
+    {
+      "subject": "AGID-created country pack metadata",
+      "licenseOrTerms": "Apache-2.0",
+      "redistribution": "allowed",
+      "notes": "Includes manifest, synthetic locality fixtures, VPL seeds, generated test vectors, and safety rules."
+    },
+    {
+      "subject": "Official postal, boundary, road, population, and locality datasets",
+      "licenseOrTerms": "source-specific",
+      "redistribution": "metadata-only",
+      "notes": "Do not bundle raw official records unless a separate DATA_LICENSES entry permits redistribution."
+    },
+    {
+      "subject": "Open map provider extracts",
+      "licenseOrTerms": "source-specific",
+      "redistribution": "review-required",
+      "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+    }
+  ],
+  "officialMunicipalitySummary": {
+    "mode": "synthetic-fixture",
+    "countryCode": "MK",
+    "sourceCount": 0,
+    "recordCount": 0,
+    "municipalityCount": 0,
+    "townCount": 0,
+    "blockCount": 0,
+    "sourceIds": [],
+    "coverageNote": "No normalized official municipality dataset was provided; AGID uses safe synthetic planning fixtures only."
+  },
+  "adminBoundaryIndex": [
+    {
+      "boundaryId": "boundary-mk-m1",
+      "localityId": "MK-M1",
+      "label": "Central Valley Municipality",
+      "boundaryClass": "municipality",
+      "geometryRef": "source-required://MK-M1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m1-t1",
+      "localityId": "MK-M1-T1",
+      "label": "Central Quarter",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://MK-M1-T1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m1-t2",
+      "localityId": "MK-M1-T2",
+      "label": "North District",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://MK-M1-T2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m1-t3",
+      "localityId": "MK-M1-T3",
+      "label": "Harbor / Market Area",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://MK-M1-T3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m2",
+      "localityId": "MK-M2",
+      "label": "Upper Valley Municipality",
+      "boundaryClass": "municipality",
+      "geometryRef": "source-required://MK-M2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m2-t1",
+      "localityId": "MK-M2-T1",
+      "label": "Central Quarter",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://MK-M2-T1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m2-t2",
+      "localityId": "MK-M2-T2",
+      "label": "North District",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://MK-M2-T2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m2-t3",
+      "localityId": "MK-M2-T3",
+      "label": "Harbor / Market Area",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://MK-M2-T3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m3",
+      "localityId": "MK-M3",
+      "label": "Ridge Municipality",
+      "boundaryClass": "municipality",
+      "geometryRef": "source-required://MK-M3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m3-t1",
+      "localityId": "MK-M3-T1",
+      "label": "Central Quarter",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://MK-M3-T1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m3-t2",
+      "localityId": "MK-M3-T2",
+      "label": "North District",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://MK-M3-T2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-mk-m3-t3",
+      "localityId": "MK-M3-T3",
+      "label": "Harbor / Market Area",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://MK-M3-T3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    }
+  ],
+  "localityIndex": [
+    {
+      "localityId": "MK-M1",
+      "stableId": "mk-municipality-mk-m1",
+      "name": "Central Valley Municipality",
+      "kind": "municipality",
+      "parentId": null,
+      "codePart": "NP",
+      "aliases": [
+        {
+          "label": "Central Valley Municipality",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Valley Postal Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T1",
+      "stableId": "mk-town-mk-m1-t1",
+      "name": "Central Quarter",
+      "kind": "town",
+      "parentId": "MK-M1",
+      "codePart": "23",
+      "aliases": [
+        {
+          "label": "Central Quarter",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Valley Municipality Central Quarter",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T1-C0",
+      "stableId": "mk-block-mk-m1-t1-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "MK-M1-T1",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T1-C1",
+      "stableId": "mk-block-mk-m1-t1-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "MK-M1-T1",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T1-C2",
+      "stableId": "mk-block-mk-m1-t1-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "MK-M1-T1",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T1-C3",
+      "stableId": "mk-block-mk-m1-t1-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "MK-M1-T1",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T2",
+      "stableId": "mk-town-mk-m1-t2",
+      "name": "North District",
+      "kind": "town",
+      "parentId": "MK-M1",
+      "codePart": "RD",
+      "aliases": [
+        {
+          "label": "North District",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Valley Municipality North District",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T2-C0",
+      "stableId": "mk-block-mk-m1-t2-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "MK-M1-T2",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T2-C1",
+      "stableId": "mk-block-mk-m1-t2-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "MK-M1-T2",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T2-C2",
+      "stableId": "mk-block-mk-m1-t2-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "MK-M1-T2",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T2-C3",
+      "stableId": "mk-block-mk-m1-t2-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "MK-M1-T2",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T3",
+      "stableId": "mk-town-mk-m1-t3",
+      "name": "Harbor / Market Area",
+      "kind": "town",
+      "parentId": "MK-M1",
+      "codePart": "DX",
+      "aliases": [
+        {
+          "label": "Harbor / Market Area",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Valley Municipality Harbor / Market Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T3-C0",
+      "stableId": "mk-block-mk-m1-t3-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "MK-M1-T3",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T3-C1",
+      "stableId": "mk-block-mk-m1-t3-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "MK-M1-T3",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T3-C2",
+      "stableId": "mk-block-mk-m1-t3-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "MK-M1-T3",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M1-T3-C3",
+      "stableId": "mk-block-mk-m1-t3-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "MK-M1-T3",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2",
+      "stableId": "mk-municipality-mk-m2",
+      "name": "Upper Valley Municipality",
+      "kind": "municipality",
+      "parentId": null,
+      "codePart": "6W",
+      "aliases": [
+        {
+          "label": "Upper Valley Municipality",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Upper Valley Postal Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T1",
+      "stableId": "mk-town-mk-m2-t1",
+      "name": "Central Quarter",
+      "kind": "town",
+      "parentId": "MK-M2",
+      "codePart": "SF",
+      "aliases": [
+        {
+          "label": "Central Quarter",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Upper Valley Municipality Central Quarter",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T1-C0",
+      "stableId": "mk-block-mk-m2-t1-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "MK-M2-T1",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T1-C1",
+      "stableId": "mk-block-mk-m2-t1-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "MK-M2-T1",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T1-C2",
+      "stableId": "mk-block-mk-m2-t1-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "MK-M2-T1",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T1-C3",
+      "stableId": "mk-block-mk-m2-t1-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "MK-M2-T1",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T2",
+      "stableId": "mk-town-mk-m2-t2",
+      "name": "North District",
+      "kind": "town",
+      "parentId": "MK-M2",
+      "codePart": "QN",
+      "aliases": [
+        {
+          "label": "North District",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Upper Valley Municipality North District",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T2-C0",
+      "stableId": "mk-block-mk-m2-t2-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "MK-M2-T2",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T2-C1",
+      "stableId": "mk-block-mk-m2-t2-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "MK-M2-T2",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T2-C2",
+      "stableId": "mk-block-mk-m2-t2-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "MK-M2-T2",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T2-C3",
+      "stableId": "mk-block-mk-m2-t2-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "MK-M2-T2",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T3",
+      "stableId": "mk-town-mk-m2-t3",
+      "name": "Harbor / Market Area",
+      "kind": "town",
+      "parentId": "MK-M2",
+      "codePart": "W8",
+      "aliases": [
+        {
+          "label": "Harbor / Market Area",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Upper Valley Municipality Harbor / Market Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T3-C0",
+      "stableId": "mk-block-mk-m2-t3-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "MK-M2-T3",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T3-C1",
+      "stableId": "mk-block-mk-m2-t3-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "MK-M2-T3",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T3-C2",
+      "stableId": "mk-block-mk-m2-t3-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "MK-M2-T3",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M2-T3-C3",
+      "stableId": "mk-block-mk-m2-t3-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "MK-M2-T3",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3",
+      "stableId": "mk-municipality-mk-m3",
+      "name": "Ridge Municipality",
+      "kind": "municipality",
+      "parentId": null,
+      "codePart": "42",
+      "aliases": [
+        {
+          "label": "Ridge Municipality",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Ridge Postal Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T1",
+      "stableId": "mk-town-mk-m3-t1",
+      "name": "Central Quarter",
+      "kind": "town",
+      "parentId": "MK-M3",
+      "codePart": "D2",
+      "aliases": [
+        {
+          "label": "Central Quarter",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Ridge Municipality Central Quarter",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T1-C0",
+      "stableId": "mk-block-mk-m3-t1-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "MK-M3-T1",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T1-C1",
+      "stableId": "mk-block-mk-m3-t1-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "MK-M3-T1",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T1-C2",
+      "stableId": "mk-block-mk-m3-t1-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "MK-M3-T1",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T1-C3",
+      "stableId": "mk-block-mk-m3-t1-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "MK-M3-T1",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T2",
+      "stableId": "mk-town-mk-m3-t2",
+      "name": "North District",
+      "kind": "town",
+      "parentId": "MK-M3",
+      "codePart": "X3",
+      "aliases": [
+        {
+          "label": "North District",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Ridge Municipality North District",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T2-C0",
+      "stableId": "mk-block-mk-m3-t2-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "MK-M3-T2",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T2-C1",
+      "stableId": "mk-block-mk-m3-t2-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "MK-M3-T2",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T2-C2",
+      "stableId": "mk-block-mk-m3-t2-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "MK-M3-T2",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T2-C3",
+      "stableId": "mk-block-mk-m3-t2-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "MK-M3-T2",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T3",
+      "stableId": "mk-town-mk-m3-t3",
+      "name": "Harbor / Market Area",
+      "kind": "town",
+      "parentId": "MK-M3",
+      "codePart": "ER",
+      "aliases": [
+        {
+          "label": "Harbor / Market Area",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Ridge Municipality Harbor / Market Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T3-C0",
+      "stableId": "mk-block-mk-m3-t3-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "MK-M3-T3",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T3-C1",
+      "stableId": "mk-block-mk-m3-t3-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "MK-M3-T3",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T3-C2",
+      "stableId": "mk-block-mk-m3-t3-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "MK-M3-T3",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "MK-M3-T3-C3",
+      "stableId": "mk-block-mk-m3-t3-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "MK-M3-T3",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    }
+  ],
+  "landformIndex": [
+    {
+      "landformId": "mk-mixed-terrain",
+      "label": "Mixed administrative and settlement terrain",
+      "kind": "mixed",
+      "relatedLocalityIds": [
+        "MK-M1",
+        "MK-M2",
+        "MK-M3"
+      ],
+      "sourceId": "open-map-evidence-slot"
+    }
+  ],
+  "settlementClusterIndex": [
+    {
+      "clusterId": "mk-cluster-mk-m1-mk-m1-t1",
+      "label": "Central Valley Municipality / Central Quarter",
+      "localityId": "MK-M1-T1",
+      "agidCellSeed": "MK:NP:23:11",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "mk-cluster-mk-m1-mk-m1-t2",
+      "label": "Central Valley Municipality / North District",
+      "localityId": "MK-M1-T2",
+      "agidCellSeed": "MK:NP:RD:12",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "mk-cluster-mk-m2-mk-m2-t1",
+      "label": "Upper Valley Municipality / Central Quarter",
+      "localityId": "MK-M2-T1",
+      "agidCellSeed": "MK:6W:SF:21",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "mk-cluster-mk-m2-mk-m2-t2",
+      "label": "Upper Valley Municipality / North District",
+      "localityId": "MK-M2-T2",
+      "agidCellSeed": "MK:6W:QN:22",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "mk-cluster-mk-m3-mk-m3-t1",
+      "label": "Ridge Municipality / Central Quarter",
+      "localityId": "MK-M3-T1",
+      "agidCellSeed": "MK:42:D2:31",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "mk-cluster-mk-m3-mk-m3-t2",
+      "label": "Ridge Municipality / North District",
+      "localityId": "MK-M3-T2",
+      "agidCellSeed": "MK:42:X3:32",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    }
+  ],
+  "vplSeedRegions": [
+    {
+      "vplId": "mk-vpl-1",
+      "label": "Central Valley Municipality synthetic postal locality 1",
+      "nonAdministrative": true,
+      "localityId": "MK-M1",
+      "codeSeed": "GXW",
+      "reasons": [
+        "reduce-address-ambiguity",
+        "support-draft-postal-zone-design",
+        "separate-local-delivery-context"
+      ],
+      "status": "draft"
+    },
+    {
+      "vplId": "mk-vpl-2",
+      "label": "Upper Valley Municipality synthetic postal locality 2",
+      "nonAdministrative": true,
+      "localityId": "MK-M2",
+      "codeSeed": "HTS",
+      "reasons": [
+        "reduce-address-ambiguity",
+        "support-draft-postal-zone-design",
+        "separate-local-delivery-context"
+      ],
+      "status": "draft"
+    },
+    {
+      "vplId": "mk-vpl-3",
+      "label": "Ridge Municipality synthetic postal locality 3",
+      "nonAdministrative": true,
+      "localityId": "MK-M3",
+      "codeSeed": "JQP",
+      "reasons": [
+        "reduce-address-ambiguity",
+        "support-draft-postal-zone-design",
+        "separate-local-delivery-context"
+      ],
+      "status": "draft"
+    }
+  ],
+  "planningCellIndex": [
+    {
+      "cellId": "mk-planning-cell-0001",
+      "agid": "MK02DA2SYZRT",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.758779
+      },
+      "codeSeed": "MK-NP-23-001",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0002",
+      "agid": "MK02DA2TFCAB",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.627221,
+        "lng": 21.775001
+      },
+      "codeSeed": "MK-6W-RD-002",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0003",
+      "agid": "MK02DA2TKY2A",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.64182,
+        "lng": 21.787416
+      },
+      "codeSeed": "MK-42-DX-003",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0004",
+      "agid": "MK02DA2TNBQZ",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.651575,
+        "lng": 21.794135
+      },
+      "codeSeed": "MK-NP-SF-004",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0005",
+      "agid": "MK02DA35AQZZ",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.655,
+        "lng": 21.794135
+      },
+      "codeSeed": "MK-6W-QN-005",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0006",
+      "agid": "MK02DA2TNX2T",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.651575,
+        "lng": 21.787416
+      },
+      "codeSeed": "MK-42-W8-006",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0007",
+      "agid": "MK02DA2TGKR7",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.64182,
+        "lng": 21.775001
+      },
+      "codeSeed": "MK-NP-D2-007",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0008",
+      "agid": "MK02DA2T3THZ",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.627221,
+        "lng": 21.758779
+      },
+      "codeSeed": "MK-6W-X3-008",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0009",
+      "agid": "MK02DA2RKY4S",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.741221
+      },
+      "codeSeed": "MK-42-ER-009",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0010",
+      "agid": "MK02DA2R4BVM",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.592779,
+        "lng": 21.724999
+      },
+      "codeSeed": "MK-NP-23-010",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0011",
+      "agid": "MK02DA2QZQ30",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.57818,
+        "lng": 21.712584
+      },
+      "codeSeed": "MK-6W-RD-011",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0012",
+      "agid": "MK02DA2JP86N",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.568425,
+        "lng": 21.705865
+      },
+      "codeSeed": "MK-42-DX-012",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0013",
+      "agid": "MK02DA2JQPW0",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.565,
+        "lng": 21.705865
+      },
+      "codeSeed": "MK-NP-SF-013",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0014",
+      "agid": "MK02DA2QRRGT",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.568425,
+        "lng": 21.712584
+      },
+      "codeSeed": "MK-6W-QN-014",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0015",
+      "agid": "MK02DA2QXG48",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.57818,
+        "lng": 21.724999
+      },
+      "codeSeed": "MK-42-W8-015",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0016",
+      "agid": "MK02DA2RT5V9",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.592779,
+        "lng": 21.741221
+      },
+      "codeSeed": "MK-NP-D2-016",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0017",
+      "agid": "MK02DA2SZ4VP",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.762096
+      },
+      "codeSeed": "MK-6W-X3-017",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0018",
+      "agid": "MK02DA2THWNB",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.633726,
+        "lng": 21.784445
+      },
+      "codeSeed": "MK-42-ER-018",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0019",
+      "agid": "MK02DAWTN1J6",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.653841,
+        "lng": 21.801551
+      },
+      "codeSeed": "MK-NP-23-019",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0020",
+      "agid": "MK02DAWTHQQ0",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.667281,
+        "lng": 21.810809
+      },
+      "codeSeed": "MK-6W-RD-020",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0021",
+      "agid": "MK02DAWTE4BN",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.672,
+        "lng": 21.810809
+      },
+      "codeSeed": "MK-42-DX-021",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0022",
+      "agid": "MK02DAWTJZQS",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.667281,
+        "lng": 21.801551
+      },
+      "codeSeed": "MK-NP-SF-022",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0023",
+      "agid": "MK02DA2TP3KB",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.653841,
+        "lng": 21.784445
+      },
+      "codeSeed": "MK-6W-QN-023",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0024",
+      "agid": "MK02DA2T3D44",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.633726,
+        "lng": 21.762096
+      },
+      "codeSeed": "MK-42-W8-024",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0025",
+      "agid": "MK02DA2RKVAC",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.737904
+      },
+      "codeSeed": "MK-NP-D2-025",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0026",
+      "agid": "MK02DA2R10YP",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.586274,
+        "lng": 21.715555
+      },
+      "codeSeed": "MK-6W-X3-026",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0027",
+      "agid": "MK02DA2JQ5P4",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.566159,
+        "lng": 21.698449
+      },
+      "codeSeed": "MK-42-ER-027",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0028",
+      "agid": "MK02DA2JWM32",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.552719,
+        "lng": 21.689191
+      },
+      "codeSeed": "MK-NP-23-028",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0029",
+      "agid": "MK02DA2JWVV3",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.548,
+        "lng": 21.689191
+      },
+      "codeSeed": "MK-6W-RD-029",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0030",
+      "agid": "MK02DA2JSB6X",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.552719,
+        "lng": 21.698449
+      },
+      "codeSeed": "MK-42-DX-030",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0031",
+      "agid": "MK02DA2QS38M",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.566159,
+        "lng": 21.715555
+      },
+      "codeSeed": "MK-NP-SF-031",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0032",
+      "agid": "MK02DA2RWE2P",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.586274,
+        "lng": 21.737904
+      },
+      "codeSeed": "MK-6W-QN-032",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0033",
+      "agid": "MK02DA2SRVAB",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.765412
+      },
+      "codeSeed": "MK-42-W8-033",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0034",
+      "agid": "MK02DA2TKCYW",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.640232,
+        "lng": 21.79389
+      },
+      "codeSeed": "MK-NP-D2-034",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0035",
+      "agid": "MK02DAWTG8CJ",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.665861,
+        "lng": 21.815686
+      },
+      "codeSeed": "MK-6W-X3-035",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0036",
+      "agid": "MK02DAWT6VH7",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.682986,
+        "lng": 21.827482
+      },
+      "codeSeed": "MK-42-ER-036",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0037",
+      "agid": "MK02DAWT7BVY",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.689,
+        "lng": 21.827482
+      },
+      "codeSeed": "MK-NP-23-037",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0038",
+      "agid": "MK02DAWT8R4H",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.682986,
+        "lng": 21.815686
+      },
+      "codeSeed": "MK-6W-RD-038",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0039",
+      "agid": "MK02DA35CJMY",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.665861,
+        "lng": 21.79389
+      },
+      "codeSeed": "MK-42-DX-039",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0040",
+      "agid": "MK02DA2TVDZH",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.640232,
+        "lng": 21.765412
+      },
+      "codeSeed": "MK-NP-SF-040",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0041",
+      "agid": "MK02DA2RJ4VN",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.734588
+      },
+      "codeSeed": "MK-6W-QN-041",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0042",
+      "agid": "MK02DA2JN7ZP",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.579768,
+        "lng": 21.70611
+      },
+      "codeSeed": "MK-42-W8-042",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0043",
+      "agid": "MK02DA2J4M0J",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.554139,
+        "lng": 21.684314
+      },
+      "codeSeed": "MK-NP-D2-043",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0044",
+      "agid": "MK02DA2KBJR7",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.537014,
+        "lng": 21.672518
+      },
+      "codeSeed": "MK-6W-X3-044",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0045",
+      "agid": "MK02DA2KC8FW",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.531,
+        "lng": 21.672518
+      },
+      "codeSeed": "MK-42-ER-045",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0046",
+      "agid": "MK02DA2K8HD4",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.537014,
+        "lng": 21.684314
+      },
+      "codeSeed": "MK-NP-23-046",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0047",
+      "agid": "MK02DA2JRYCX",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.554139,
+        "lng": 21.70611
+      },
+      "codeSeed": "MK-6W-RD-047",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0048",
+      "agid": "MK02DA2RX2C5",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.579768,
+        "lng": 21.734588
+      },
+      "codeSeed": "MK-42-DX-048",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0049",
+      "agid": "MK02DA2SRYV6",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.768729
+      },
+      "codeSeed": "MK-NP-SF-049",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0050",
+      "agid": "MK02DAX5ABEP",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.646738,
+        "lng": 21.803335
+      },
+      "codeSeed": "MK-6W-QN-050",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0051",
+      "agid": "MK02DAWT4003",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.677882,
+        "lng": 21.829821
+      },
+      "codeSeed": "MK-42-W8-051",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0052",
+      "agid": "MK02DAWRPDGS",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.698692,
+        "lng": 21.844155
+      },
+      "codeSeed": "MK-NP-D2-052",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0053",
+      "agid": "MK02DAWRQJFM",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.706,
+        "lng": 21.844155
+      },
+      "codeSeed": "MK-6W-X3-053",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0054",
+      "agid": "MK02DAWSSAB6",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.698692,
+        "lng": 21.829821
+      },
+      "codeSeed": "MK-42-ER-054",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0055",
+      "agid": "MK02DAWTCACJ",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.677882,
+        "lng": 21.803335
+      },
+      "codeSeed": "MK-NP-23-055",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0056",
+      "agid": "MK02DA2TSFSZ",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.646738,
+        "lng": 21.768729
+      },
+      "codeSeed": "MK-6W-RD-056",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0057",
+      "agid": "MK02DA2RHZYF",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.731271
+      },
+      "codeSeed": "MK-42-DX-057",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0058",
+      "agid": "MK02DA2JHAZW",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.573262,
+        "lng": 21.696665
+      },
+      "codeSeed": "MK-NP-SF-058",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0059",
+      "agid": "MK02DA2KAYVV",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.542118,
+        "lng": 21.670179
+      },
+      "codeSeed": "MK-6W-QN-059",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0060",
+      "agid": "MK02DA2GC6CP",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.521308,
+        "lng": 21.655845
+      },
+      "codeSeed": "MK-42-W8-060",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0061",
+      "agid": "MK02DA2GBXVK",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.514,
+        "lng": 21.655845
+      },
+      "codeSeed": "MK-NP-D2-061",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0062",
+      "agid": "MK02DA2KJHCK",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.521308,
+        "lng": 21.670179
+      },
+      "codeSeed": "MK-6W-X3-062",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0063",
+      "agid": "MK02DA2JXWNG",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.542118,
+        "lng": 21.696665
+      },
+      "codeSeed": "MK-42-ER-063",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0064",
+      "agid": "MK02DA2Q2TA0",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.573262,
+        "lng": 21.731271
+      },
+      "codeSeed": "MK-NP-23-064",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0065",
+      "agid": "MK02DA2SR81J",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.772045
+      },
+      "codeSeed": "MK-6W-RD-065",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0066",
+      "agid": "MK02DAWTPAFQ",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.653243,
+        "lng": 21.812779
+      },
+      "codeSeed": "MK-42-DX-066",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0067",
+      "agid": "MK02DAWRN298",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.689903,
+        "lng": 21.843956
+      },
+      "codeSeed": "MK-NP-SF-067",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0068",
+      "agid": "MK02DAWRVBDR",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.714398,
+        "lng": 21.860829
+      },
+      "codeSeed": "MK-6W-QN-068",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0069",
+      "agid": "MK02DAWRX75C",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.723,
+        "lng": 21.860829
+      },
+      "codeSeed": "MK-42-W8-069",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0070",
+      "agid": "MK02DAWRRYEP",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.714398,
+        "lng": 21.843956
+      },
+      "codeSeed": "MK-NP-D2-070",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0071",
+      "agid": "MK02DAWT9SF6",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.689903,
+        "lng": 21.812779
+      },
+      "codeSeed": "MK-6W-X3-071",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0072",
+      "agid": "MK02DA2TR8X6",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.653243,
+        "lng": 21.772045
+      },
+      "codeSeed": "MK-42-ER-072",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0073",
+      "agid": "MK02DA2REEDQ",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.727955
+      },
+      "codeSeed": "MK-NP-23-073",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0074",
+      "agid": "MK02DA2JG3YW",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.566757,
+        "lng": 21.687221
+      },
+      "codeSeed": "MK-6W-RD-074",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0075",
+      "agid": "MK02DA2GJ7G2",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.530097,
+        "lng": 21.656044
+      },
+      "codeSeed": "MK-42-DX-075",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0076",
+      "agid": "MK02DB85871Q",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.505602,
+        "lng": 21.639171
+      },
+      "codeSeed": "MK-NP-SF-076",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0077",
+      "agid": "MK02DB85F6BV",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.497,
+        "lng": 21.639171
+      },
+      "codeSeed": "MK-6W-QN-077",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0078",
+      "agid": "MK02DA2GA1TP",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.505602,
+        "lng": 21.656044
+      },
+      "codeSeed": "MK-42-W8-078",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0079",
+      "agid": "MK02DA2K5YY5",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.530097,
+        "lng": 21.687221
+      },
+      "codeSeed": "MK-NP-D2-079",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0080",
+      "agid": "MK02DA2QVC3V",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.566757,
+        "lng": 21.727955
+      },
+      "codeSeed": "MK-6W-X3-080",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0081",
+      "agid": "MK02DA2SQYHD",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.775362
+      },
+      "codeSeed": "MK-42-ER-081",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0082",
+      "agid": "MK02DAWTT7TQ",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.659749,
+        "lng": 21.822224
+      },
+      "codeSeed": "MK-NP-23-082",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0083",
+      "agid": "MK02DAWRGBGX",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.701924,
+        "lng": 21.858091
+      },
+      "codeSeed": "MK-6W-RD-083",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0084",
+      "agid": "MK02DAWQYXS4",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.730104,
+        "lng": 21.877502
+      },
+      "codeSeed": "MK-42-DX-084",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0085",
+      "agid": "MK02DAWQSMT6",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.74,
+        "lng": 21.877502
+      },
+      "codeSeed": "MK-NP-SF-085",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0086",
+      "agid": "MK02DAWQ2YED",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.730104,
+        "lng": 21.858091
+      },
+      "codeSeed": "MK-6W-QN-086",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0087",
+      "agid": "MK02DAWST458",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.701924,
+        "lng": 21.822224
+      },
+      "codeSeed": "MK-42-W8-087",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0088",
+      "agid": "MK02DA358EVH",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.659749,
+        "lng": 21.775362
+      },
+      "codeSeed": "MK-NP-D2-088",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0089",
+      "agid": "MK02DA2REHX1",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.724638
+      },
+      "codeSeed": "MK-6W-X3-089",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0090",
+      "agid": "MK02DA2J46EP",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.560251,
+        "lng": 21.677776
+      },
+      "codeSeed": "MK-42-ER-090",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0091",
+      "agid": "MK02DA2G60SM",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.518076,
+        "lng": 21.641909
+      },
+      "codeSeed": "MK-NP-23-091",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0092",
+      "agid": "MK02DB85DB0K",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.489896,
+        "lng": 21.622498
+      },
+      "codeSeed": "MK-6W-RD-092",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0093",
+      "agid": "MK02DB85KBAK",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.48,
+        "lng": 21.622498
+      },
+      "codeSeed": "MK-42-DX-093",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0094",
+      "agid": "MK02DB85FHY4",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.489896,
+        "lng": 21.641909
+      },
+      "codeSeed": "MK-NP-SF-094",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0095",
+      "agid": "MK02DA2KHK9B",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.518076,
+        "lng": 21.677776
+      },
+      "codeSeed": "MK-6W-QN-095",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0096",
+      "agid": "MK02DA2QTBG5",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.560251,
+        "lng": 21.724638
+      },
+      "codeSeed": "MK-42-W8-096",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0097",
+      "agid": "MK02DA2SQRKZ",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.778678
+      },
+      "codeSeed": "MK-NP-D2-097",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0098",
+      "agid": "MK02DAWTWPEJ",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.666254,
+        "lng": 21.831669
+      },
+      "codeSeed": "MK-6W-X3-098",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0099",
+      "agid": "MK02DAWR3Y34",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.713945,
+        "lng": 21.872226
+      },
+      "codeSeed": "MK-42-ER-099",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0100",
+      "agid": "MK02DAWJSKAB",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.74581,
+        "lng": 21.894175
+      },
+      "codeSeed": "MK-NP-23-100",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0101",
+      "agid": "MK02DAWJYHW5",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.757,
+        "lng": 21.894175
+      },
+      "codeSeed": "MK-6W-RD-101",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0102",
+      "agid": "MK02DAWQT10Z",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.74581,
+        "lng": 21.872226
+      },
+      "codeSeed": "MK-42-DX-102",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0103",
+      "agid": "MK02DAWS3DV1",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.713945,
+        "lng": 21.831669
+      },
+      "codeSeed": "MK-NP-SF-103",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0104",
+      "agid": "MK02DA358SKA",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.666254,
+        "lng": 21.778678
+      },
+      "codeSeed": "MK-6W-QN-104",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0105",
+      "agid": "MK02DA2REPXB",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.721322
+      },
+      "codeSeed": "MK-42-W8-105",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0106",
+      "agid": "MK02DA2J0XFP",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.553746,
+        "lng": 21.668331
+      },
+      "codeSeed": "MK-NP-D2-106",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0107",
+      "agid": "MK02DB85AA15",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.506055,
+        "lng": 21.627774
+      },
+      "codeSeed": "MK-6W-X3-107",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0108",
+      "agid": "MK02DB9T9PXT",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.47419,
+        "lng": 21.605825
+      },
+      "codeSeed": "MK-42-ER-108",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0109",
+      "agid": "MK02DB9SPWZS",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.463,
+        "lng": 21.605825
+      },
+      "codeSeed": "MK-NP-23-109",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0110",
+      "agid": "MK02DB85MBDM",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.47419,
+        "lng": 21.627774
+      },
+      "codeSeed": "MK-6W-RD-110",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0111",
+      "agid": "MK02DA2KN2V0",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.506055,
+        "lng": 21.668331
+      },
+      "codeSeed": "MK-42-DX-111",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0112",
+      "agid": "MK02DA2QGSY0",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.553746,
+        "lng": 21.721322
+      },
+      "codeSeed": "MK-NP-SF-112",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0113",
+      "agid": "MK02DA2SP4PK",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.781995
+      },
+      "codeSeed": "MK-6W-QN-113",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0114",
+      "agid": "MK02DAWV9VYR",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.67276,
+        "lng": 21.841114
+      },
+      "codeSeed": "MK-42-W8-114",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0115",
+      "agid": "MK02DAWJNE32",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.725966,
+        "lng": 21.886361
+      },
+      "codeSeed": "MK-NP-D2-115",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0116",
+      "agid": "MK02DAWK87AN",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.761516,
+        "lng": 21.910849
+      },
+      "codeSeed": "MK-6W-X3-116",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0117",
+      "agid": "MK02DAWKF2Y4",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.774,
+        "lng": 21.910849
+      },
+      "codeSeed": "MK-42-ER-117",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0118",
+      "agid": "MK02DAWJZJ67",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.761516,
+        "lng": 21.886361
+      },
+      "codeSeed": "MK-NP-23-118",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0119",
+      "agid": "MK02DAWRZGYQ",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.725966,
+        "lng": 21.841114
+      },
+      "codeSeed": "MK-6W-RD-119",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0120",
+      "agid": "MK02DA35E8M4",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.67276,
+        "lng": 21.781995
+      },
+      "codeSeed": "MK-42-DX-120",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0121",
+      "agid": "MK02DA2R972J",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.718005
+      },
+      "codeSeed": "MK-NP-SF-121",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0122",
+      "agid": "MK02DA2GNGFW",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.54724,
+        "lng": 21.658886
+      },
+      "codeSeed": "MK-6W-QN-122",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0123",
+      "agid": "MK02DB9TJD7Q",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.494034,
+        "lng": 21.613639
+      },
+      "codeSeed": "MK-42-W8-123",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0124",
+      "agid": "MK02DB9SVGEG",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.458484,
+        "lng": 21.589151
+      },
+      "codeSeed": "MK-NP-D2-124",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0125",
+      "agid": "MK02DB9S4F9B",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.446,
+        "lng": 21.589151
+      },
+      "codeSeed": "MK-6W-X3-125",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0126",
+      "agid": "MK02DB9SKH7P",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.458484,
+        "lng": 21.613639
+      },
+      "codeSeed": "MK-42-ER-126",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0127",
+      "agid": "MK02DB851FTM",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.494034,
+        "lng": 21.658886
+      },
+      "codeSeed": "MK-NP-23-127",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0128",
+      "agid": "MK02DA2QM3QV",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.54724,
+        "lng": 21.718005
+      },
+      "codeSeed": "MK-6W-RD-128",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0129",
+      "agid": "MK02DA2SP05V",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.785311
+      },
+      "codeSeed": "MK-42-DX-129",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0130",
+      "agid": "MK02DAWVBGAK",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.679266,
+        "lng": 21.850558
+      },
+      "codeSeed": "MK-NP-SF-130",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0131",
+      "agid": "MK02DAWJGHHY",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.737986,
+        "lng": 21.900496
+      },
+      "codeSeed": "MK-6W-QN-131",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0132",
+      "agid": "MK02DAWKD9ZE",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.777222,
+        "lng": 21.927522
+      },
+      "codeSeed": "MK-42-W8-132",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0133",
+      "agid": "MK02DAWKMP0H",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.791,
+        "lng": 21.927522
+      },
+      "codeSeed": "MK-NP-D2-133",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0134",
+      "agid": "MK02DAWK4A7Y",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.777222,
+        "lng": 21.900496
+      },
+      "codeSeed": "MK-6W-X3-134",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0135",
+      "agid": "MK02DAWQ1BAK",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.737986,
+        "lng": 21.850558
+      },
+      "codeSeed": "MK-42-ER-135",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0136",
+      "agid": "MK02DA35HHFH",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.679266,
+        "lng": 21.785311
+      },
+      "codeSeed": "MK-NP-23-136",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0137",
+      "agid": "MK02DA2R9165",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.714689
+      },
+      "codeSeed": "MK-6W-RD-137",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0138",
+      "agid": "MK02DA2GPVEV",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.540734,
+        "lng": 21.649442
+      },
+      "codeSeed": "MK-42-DX-138",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0139",
+      "agid": "MK02DB9T8N24",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.482014,
+        "lng": 21.599504
+      },
+      "codeSeed": "MK-NP-SF-139",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0140",
+      "agid": "MK02DB9RZ4FS",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.442778,
+        "lng": 21.572478
+      },
+      "codeSeed": "MK-6W-QN-140",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0141",
+      "agid": "MK02DB9Q0ATA",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.429,
+        "lng": 21.572478
+      },
+      "codeSeed": "MK-42-W8-141",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0142",
+      "agid": "MK02DB9SFC44",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.442778,
+        "lng": 21.599504
+      },
+      "codeSeed": "MK-NP-D2-142",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0143",
+      "agid": "MK02DB85V4ET",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.482014,
+        "lng": 21.649442
+      },
+      "codeSeed": "MK-6W-X3-143",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0144",
+      "agid": "MK02DA2QMW9F",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.540734,
+        "lng": 21.714689
+      },
+      "codeSeed": "MK-42-ER-144",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0145",
+      "agid": "MK02DA2TA1B9",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.788628
+      },
+      "codeSeed": "MK-NP-23-145",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0146",
+      "agid": "MK02DAWRJXAV",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.685771,
+        "lng": 21.860003
+      },
+      "codeSeed": "MK-6W-RD-146",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0147",
+      "agid": "MK02DAWJ3J9F",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.750007,
+        "lng": 21.914631
+      },
+      "codeSeed": "MK-42-DX-147",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0148",
+      "agid": "MK02DAWG9NRS",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.792928,
+        "lng": 21.944195
+      },
+      "codeSeed": "MK-NP-SF-148",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0149",
+      "agid": "MK02DAVFPTCM",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.808,
+        "lng": 21.944195
+      },
+      "codeSeed": "MK-6W-QN-149",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0150",
+      "agid": "MK02DAWKPS5V",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.792928,
+        "lng": 21.914631
+      },
+      "codeSeed": "MK-42-W8-150",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0151",
+      "agid": "MK02DAWQFJB7",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.750007,
+        "lng": 21.860003
+      },
+      "codeSeed": "MK-NP-D2-151",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0152",
+      "agid": "MK02DA35KYKA",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.685771,
+        "lng": 21.788628
+      },
+      "codeSeed": "MK-6W-X3-152",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0153",
+      "agid": "MK02DA2R9RRN",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.711372
+      },
+      "codeSeed": "MK-42-ER-153",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0154",
+      "agid": "MK02DA2GTYBV",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.534229,
+        "lng": 21.639997
+      },
+      "codeSeed": "MK-NP-23-154",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0155",
+      "agid": "MK02DB9SZ3Y0",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.469993,
+        "lng": 21.585369
+      },
+      "codeSeed": "MK-6W-RD-155",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0156",
+      "agid": "MK02DB9Q3AFX",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.427072,
+        "lng": 21.555805
+      },
+      "codeSeed": "MK-42-DX-156",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0157",
+      "agid": "MK02DB9QFV59",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.412,
+        "lng": 21.555805
+      },
+      "codeSeed": "MK-NP-SF-157",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0158",
+      "agid": "MK02DB9PZ31W",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.427072,
+        "lng": 21.585369
+      },
+      "codeSeed": "MK-6W-QN-158",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0159",
+      "agid": "MK02DB85Q1A5",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.469993,
+        "lng": 21.639997
+      },
+      "codeSeed": "MK-42-W8-159",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0160",
+      "agid": "MK02DA2MAJE0",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.534229,
+        "lng": 21.711372
+      },
+      "codeSeed": "MK-NP-D2-160",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0161",
+      "agid": "MK02DA2TAGT7",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.791944
+      },
+      "codeSeed": "MK-6W-X3-161",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0162",
+      "agid": "MK02DAWREGCF",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.692277,
+        "lng": 21.869448
+      },
+      "codeSeed": "MK-42-ER-162",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0163",
+      "agid": "MK02DAWGMTNB",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.762028,
+        "lng": 21.928766
+      },
+      "codeSeed": "MK-NP-23-163",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0164",
+      "agid": "MK02DAVFVHWW",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.808634,
+        "lng": 21.960869
+      },
+      "codeSeed": "MK-6W-RD-164",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0165",
+      "agid": "MK02DAVF41WX",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.825,
+        "lng": 21.960869
+      },
+      "codeSeed": "MK-42-DX-165",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0166",
+      "agid": "MK02DAVFMPMV",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.808634,
+        "lng": 21.928766
+      },
+      "codeSeed": "MK-NP-SF-166",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0167",
+      "agid": "MK02DAWQKNWA",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.762028,
+        "lng": 21.869448
+      },
+      "codeSeed": "MK-6W-QN-167",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0168",
+      "agid": "MK02DA35N0RD",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.692277,
+        "lng": 21.791944
+      },
+      "codeSeed": "MK-42-W8-168",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0169",
+      "agid": "MK02DA2X7FFC",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.708056
+      },
+      "codeSeed": "MK-NP-D2-169",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0170",
+      "agid": "MK02DA2G3DZK",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.527723,
+        "lng": 21.630552
+      },
+      "codeSeed": "MK-6W-X3-170",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0171",
+      "agid": "MK02DB9RQET6",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.457972,
+        "lng": 21.571234
+      },
+      "codeSeed": "MK-42-ER-171",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0172",
+      "agid": "MK02DB9QPYVP",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.411366,
+        "lng": 21.539131
+      },
+      "codeSeed": "MK-NP-23-172",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0173",
+      "agid": "MK02DB9MB4VM",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.395,
+        "lng": 21.539131
+      },
+      "codeSeed": "MK-6W-RD-173",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0174",
+      "agid": "MK02DB9Q8GSB",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.411366,
+        "lng": 21.571234
+      },
+      "codeSeed": "MK-42-DX-174",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0175",
+      "agid": "MK02DB86BX0C",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.457972,
+        "lng": 21.630552
+      },
+      "codeSeed": "MK-NP-SF-175",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0176",
+      "agid": "MK02DA2K1Z3H",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.527723,
+        "lng": 21.708056
+      },
+      "codeSeed": "MK-6W-QN-176",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0177",
+      "agid": "MK02DA2TAQBQ",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.795261
+      },
+      "codeSeed": "MK-42-W8-177",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0178",
+      "agid": "MK02DAWR8HF6",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.698783,
+        "lng": 21.878892
+      },
+      "codeSeed": "MK-NP-D2-178",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0179",
+      "agid": "MK02DAWGHRCY",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.774049,
+        "lng": 21.942901
+      },
+      "codeSeed": "MK-6W-X3-179",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0180",
+      "agid": "MK02DAVGA5Q8",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.82434,
+        "lng": 21.977542
+      },
+      "codeSeed": "MK-42-ER-180",
+      "routeBucket": "MK-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0181",
+      "agid": "MK02DAVKNPGP",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.842,
+        "lng": 21.977542
+      },
+      "codeSeed": "MK-NP-23-181",
+      "routeBucket": "MK-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0182",
+      "agid": "MK02DAVFEBVH",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.82434,
+        "lng": 21.942901
+      },
+      "codeSeed": "MK-6W-RD-182",
+      "routeBucket": "MK-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0183",
+      "agid": "MK02DAWMBPHZ",
+      "localityId": "MK-M1-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.774049,
+        "lng": 21.878892
+      },
+      "codeSeed": "MK-42-DX-183",
+      "routeBucket": "MK-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0184",
+      "agid": "MK02DA36ARYR",
+      "localityId": "MK-M2-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.698783,
+        "lng": 21.795261
+      },
+      "codeSeed": "MK-NP-SF-184",
+      "routeBucket": "MK-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0185",
+      "agid": "MK02DA2X70ZR",
+      "localityId": "MK-M2-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.61,
+        "lng": 21.704739
+      },
+      "codeSeed": "MK-6W-QN-185",
+      "routeBucket": "MK-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0186",
+      "agid": "MK02DA2G1WAK",
+      "localityId": "MK-M2-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.521217,
+        "lng": 21.621108
+      },
+      "codeSeed": "MK-42-W8-186",
+      "routeBucket": "MK-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0187",
+      "agid": "MK02DB9RWQFK",
+      "localityId": "MK-M3-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.445951,
+        "lng": 21.557099
+      },
+      "codeSeed": "MK-NP-D2-187",
+      "routeBucket": "MK-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0188",
+      "agid": "MK02DB9K0TCE",
+      "localityId": "MK-M3-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.39566,
+        "lng": 21.522458
+      },
+      "codeSeed": "MK-6W-X3-188",
+      "routeBucket": "MK-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0189",
+      "agid": "MK02DB9KWNBR",
+      "localityId": "MK-M3-T3",
+      "vplId": "mk-vpl-3",
+      "centroid": {
+        "lat": 41.378,
+        "lng": 21.522458
+      },
+      "codeSeed": "MK-42-ER-189",
+      "routeBucket": "MK-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0190",
+      "agid": "MK02DB9QD8F4",
+      "localityId": "MK-M1-T1",
+      "vplId": "mk-vpl-1",
+      "centroid": {
+        "lat": 41.39566,
+        "lng": 21.557099
+      },
+      "codeSeed": "MK-NP-23-190",
+      "routeBucket": "MK-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "mk-planning-cell-0191",
+      "agid": "MK02DB86JNBA",
+      "localityId": "MK-M1-T2",
+      "vplId": "mk-vpl-2",
+      "centroid": {
+        "lat": 41.445951,
+        "lng": 21.621108
+      },
+      "codeSeed": "MK-6W-RD-191",
+      "routeBucket": "MK-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    }
+  ],
+  "routeEvidenceIndex": [
+    {
+      "routeId": "mk-route-evidence-001",
+      "label": "MK corridor evidence slot 1",
+      "fromLocalityId": "MK-M1-T1",
+      "toLocalityId": "MK-M1-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/001",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-002",
+      "label": "MK road evidence slot 2",
+      "fromLocalityId": "MK-M1-T2",
+      "toLocalityId": "MK-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/002",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-003",
+      "label": "MK road evidence slot 3",
+      "fromLocalityId": "MK-M1-T3",
+      "toLocalityId": "MK-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/003",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-004",
+      "label": "MK corridor evidence slot 4",
+      "fromLocalityId": "MK-M2-T1",
+      "toLocalityId": "MK-M2-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/004",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-005",
+      "label": "MK road evidence slot 5",
+      "fromLocalityId": "MK-M2-T2",
+      "toLocalityId": "MK-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/005",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-006",
+      "label": "MK road evidence slot 6",
+      "fromLocalityId": "MK-M2-T3",
+      "toLocalityId": "MK-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/006",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-007",
+      "label": "MK corridor evidence slot 7",
+      "fromLocalityId": "MK-M3-T1",
+      "toLocalityId": "MK-M3-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/007",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-008",
+      "label": "MK road evidence slot 8",
+      "fromLocalityId": "MK-M3-T2",
+      "toLocalityId": "MK-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/008",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-009",
+      "label": "MK road evidence slot 9",
+      "fromLocalityId": "MK-M3-T3",
+      "toLocalityId": "MK-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/009",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-010",
+      "label": "MK corridor evidence slot 10",
+      "fromLocalityId": "MK-M1-T1",
+      "toLocalityId": "MK-M1-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/010",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-011",
+      "label": "MK road evidence slot 11",
+      "fromLocalityId": "MK-M1-T2",
+      "toLocalityId": "MK-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/011",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-012",
+      "label": "MK road evidence slot 12",
+      "fromLocalityId": "MK-M1-T3",
+      "toLocalityId": "MK-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/012",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-013",
+      "label": "MK corridor evidence slot 13",
+      "fromLocalityId": "MK-M2-T1",
+      "toLocalityId": "MK-M2-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/013",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-014",
+      "label": "MK road evidence slot 14",
+      "fromLocalityId": "MK-M2-T2",
+      "toLocalityId": "MK-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/014",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-015",
+      "label": "MK road evidence slot 15",
+      "fromLocalityId": "MK-M2-T3",
+      "toLocalityId": "MK-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/015",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-016",
+      "label": "MK corridor evidence slot 16",
+      "fromLocalityId": "MK-M3-T1",
+      "toLocalityId": "MK-M3-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/016",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-017",
+      "label": "MK road evidence slot 17",
+      "fromLocalityId": "MK-M3-T2",
+      "toLocalityId": "MK-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/017",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-018",
+      "label": "MK road evidence slot 18",
+      "fromLocalityId": "MK-M3-T3",
+      "toLocalityId": "MK-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/018",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-019",
+      "label": "MK corridor evidence slot 19",
+      "fromLocalityId": "MK-M1-T1",
+      "toLocalityId": "MK-M1-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/019",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-020",
+      "label": "MK road evidence slot 20",
+      "fromLocalityId": "MK-M1-T2",
+      "toLocalityId": "MK-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/020",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-021",
+      "label": "MK road evidence slot 21",
+      "fromLocalityId": "MK-M1-T3",
+      "toLocalityId": "MK-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/021",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-022",
+      "label": "MK corridor evidence slot 22",
+      "fromLocalityId": "MK-M2-T1",
+      "toLocalityId": "MK-M2-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/022",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-023",
+      "label": "MK road evidence slot 23",
+      "fromLocalityId": "MK-M2-T2",
+      "toLocalityId": "MK-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/023",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-024",
+      "label": "MK road evidence slot 24",
+      "fromLocalityId": "MK-M2-T3",
+      "toLocalityId": "MK-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/024",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-025",
+      "label": "MK corridor evidence slot 25",
+      "fromLocalityId": "MK-M3-T1",
+      "toLocalityId": "MK-M3-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/025",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-026",
+      "label": "MK road evidence slot 26",
+      "fromLocalityId": "MK-M3-T2",
+      "toLocalityId": "MK-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/026",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-027",
+      "label": "MK road evidence slot 27",
+      "fromLocalityId": "MK-M3-T3",
+      "toLocalityId": "MK-M1-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/027",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-028",
+      "label": "MK corridor evidence slot 28",
+      "fromLocalityId": "MK-M1-T1",
+      "toLocalityId": "MK-M1-T1",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/028",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-029",
+      "label": "MK road evidence slot 29",
+      "fromLocalityId": "MK-M1-T2",
+      "toLocalityId": "MK-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/029",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-030",
+      "label": "MK road evidence slot 30",
+      "fromLocalityId": "MK-M1-T3",
+      "toLocalityId": "MK-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/030",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-031",
+      "label": "MK corridor evidence slot 31",
+      "fromLocalityId": "MK-M2-T1",
+      "toLocalityId": "MK-M2-T1",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/031",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-032",
+      "label": "MK road evidence slot 32",
+      "fromLocalityId": "MK-M2-T2",
+      "toLocalityId": "MK-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/032",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-033",
+      "label": "MK road evidence slot 33",
+      "fromLocalityId": "MK-M2-T3",
+      "toLocalityId": "MK-M3-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/033",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-034",
+      "label": "MK corridor evidence slot 34",
+      "fromLocalityId": "MK-M3-T1",
+      "toLocalityId": "MK-M3-T1",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/034",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-035",
+      "label": "MK road evidence slot 35",
+      "fromLocalityId": "MK-M3-T2",
+      "toLocalityId": "MK-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/035",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-036",
+      "label": "MK road evidence slot 36",
+      "fromLocalityId": "MK-M3-T3",
+      "toLocalityId": "MK-M1-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/036",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-037",
+      "label": "MK corridor evidence slot 37",
+      "fromLocalityId": "MK-M1-T1",
+      "toLocalityId": "MK-M1-T1",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/037",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-038",
+      "label": "MK road evidence slot 38",
+      "fromLocalityId": "MK-M1-T2",
+      "toLocalityId": "MK-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/038",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-039",
+      "label": "MK road evidence slot 39",
+      "fromLocalityId": "MK-M1-T3",
+      "toLocalityId": "MK-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/039",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-040",
+      "label": "MK corridor evidence slot 40",
+      "fromLocalityId": "MK-M2-T1",
+      "toLocalityId": "MK-M2-T1",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/040",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-041",
+      "label": "MK road evidence slot 41",
+      "fromLocalityId": "MK-M2-T2",
+      "toLocalityId": "MK-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/041",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-042",
+      "label": "MK road evidence slot 42",
+      "fromLocalityId": "MK-M2-T3",
+      "toLocalityId": "MK-M3-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/042",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-043",
+      "label": "MK corridor evidence slot 43",
+      "fromLocalityId": "MK-M3-T1",
+      "toLocalityId": "MK-M3-T1",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/043",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-044",
+      "label": "MK road evidence slot 44",
+      "fromLocalityId": "MK-M3-T2",
+      "toLocalityId": "MK-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/044",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-045",
+      "label": "MK road evidence slot 45",
+      "fromLocalityId": "MK-M3-T3",
+      "toLocalityId": "MK-M1-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/045",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-046",
+      "label": "MK corridor evidence slot 46",
+      "fromLocalityId": "MK-M1-T1",
+      "toLocalityId": "MK-M1-T1",
+      "mode": "corridor",
+      "evidenceRef": "source-required://MK/route/046",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-047",
+      "label": "MK road evidence slot 47",
+      "fromLocalityId": "MK-M1-T2",
+      "toLocalityId": "MK-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/047",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "mk-route-evidence-048",
+      "label": "MK road evidence slot 48",
+      "fromLocalityId": "MK-M1-T3",
+      "toLocalityId": "MK-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://MK/route/048",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    }
+  ],
+  "qualityEvidenceIndex": [
+    {
+      "evidenceId": "mk-quality-country",
+      "subjectId": "MK",
+      "subjectType": "country",
+      "addressQuality": 0.48,
+      "boundaryQuality": 0.66,
+      "routeQuality": 0.55,
+      "populationQuality": 0.6,
+      "confidenceBand": "high",
+      "verificationRequired": true,
+      "notes": [
+        "country-level-quality-prior",
+        "not-a-claim-of-official-postal-completeness"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-mk-m1",
+      "subjectId": "MK-M1",
+      "subjectType": "municipality",
+      "addressQuality": 0.46,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.54,
+      "populationQuality": 0.59,
+      "confidenceBand": "medium",
+      "verificationRequired": true,
+      "notes": [
+        "synthetic-planning-quality-slot",
+        "replace-with-reviewed-official-or-open-data-before-pilot"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-mk-m2",
+      "subjectId": "MK-M2",
+      "subjectType": "municipality",
+      "addressQuality": 0.47,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.54,
+      "populationQuality": 0.59,
+      "confidenceBand": "medium",
+      "verificationRequired": true,
+      "notes": [
+        "synthetic-planning-quality-slot",
+        "replace-with-reviewed-official-or-open-data-before-pilot"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-mk-m3",
+      "subjectId": "MK-M3",
+      "subjectType": "municipality",
+      "addressQuality": 0.47,
+      "boundaryQuality": 0.66,
+      "routeQuality": 0.55,
+      "populationQuality": 0.6,
+      "confidenceBand": "medium",
+      "verificationRequired": true,
+      "notes": [
+        "synthetic-planning-quality-slot",
+        "replace-with-reviewed-official-or-open-data-before-pilot"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-001",
+      "subjectId": "mk-planning-cell-0001",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-002",
+      "subjectId": "mk-planning-cell-0007",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-003",
+      "subjectId": "mk-planning-cell-0013",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-004",
+      "subjectId": "mk-planning-cell-0019",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-005",
+      "subjectId": "mk-planning-cell-0025",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-006",
+      "subjectId": "mk-planning-cell-0031",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-007",
+      "subjectId": "mk-planning-cell-0037",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-008",
+      "subjectId": "mk-planning-cell-0043",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-009",
+      "subjectId": "mk-planning-cell-0049",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-010",
+      "subjectId": "mk-planning-cell-0055",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-011",
+      "subjectId": "mk-planning-cell-0061",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-012",
+      "subjectId": "mk-planning-cell-0067",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-013",
+      "subjectId": "mk-planning-cell-0073",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-014",
+      "subjectId": "mk-planning-cell-0079",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-015",
+      "subjectId": "mk-planning-cell-0085",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-016",
+      "subjectId": "mk-planning-cell-0091",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-017",
+      "subjectId": "mk-planning-cell-0097",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-018",
+      "subjectId": "mk-planning-cell-0103",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-019",
+      "subjectId": "mk-planning-cell-0109",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-020",
+      "subjectId": "mk-planning-cell-0115",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-021",
+      "subjectId": "mk-planning-cell-0121",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-022",
+      "subjectId": "mk-planning-cell-0127",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-023",
+      "subjectId": "mk-planning-cell-0133",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-024",
+      "subjectId": "mk-planning-cell-0139",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-025",
+      "subjectId": "mk-planning-cell-0145",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-026",
+      "subjectId": "mk-planning-cell-0151",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-027",
+      "subjectId": "mk-planning-cell-0157",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-028",
+      "subjectId": "mk-planning-cell-0163",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-029",
+      "subjectId": "mk-planning-cell-0169",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-030",
+      "subjectId": "mk-planning-cell-0175",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-031",
+      "subjectId": "mk-planning-cell-0181",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "mk-quality-cell-032",
+      "subjectId": "mk-planning-cell-0187",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    }
+  ],
+  "postalSystemPriors": [
+    {
+      "templateId": "france-like",
+      "visibleFormat": "CC-NN NNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "First two digits act as a broad administrative area, with three local digits below.",
+        "administrative departments",
+        "stable municipalities"
+      ]
+    },
+    {
+      "templateId": "agid-native",
+      "visibleFormat": "CC-AAAA-NNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "Keeps visible code close to AGID hash structure while hiding the full AGID.",
+        "low-data regions",
+        "offline-first operation"
+      ]
+    },
+    {
+      "templateId": "japan-like",
+      "visibleFormat": "CC-NNN-NNNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "Country prefix plus 3+4 numeric hierarchy. Good for dense settlement networks and later subdivision.",
+        "dense cities",
+        "municipal hierarchy"
+      ]
+    },
+    {
+      "templateId": "ghana-like",
+      "visibleFormat": "CC-AA-NNN-NNNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "Country prefix, AGID-derived area letters, and numeric local grid. Best when public digital address UX is acceptable.",
+        "digital address adoption",
+        "public map/grid linkage"
+      ]
+    }
+  ],
+  "governanceNotes": [
+    "This country pack is not an official postal authority dataset.",
+    "Use simulation or draft status until government, municipality, postal authority, or carrier pilot approval is recorded.",
+    "Visible postal codes must remain within one municipality and preserve stable locality IDs across renames.",
+    "Old-to-new transition mappings are required before split, merge, or reshaping events."
+  ],
+  "privacyThreatModel": [
+    "Do not store personal addresses, recipient names, phone numbers, AOID private bodies, AGID-S payloads, or proof codes in this pack.",
+    "Do not publish household-level, sensitive-facility-level, refuge-level, or high-risk precise zones.",
+    "Use source metadata and geometry references until redistribution rights are verified.",
+    "Use no-raw-address test vectors before publishing pack releases."
+  ],
+  "testVectors": [
+    {
+      "id": "mk-test-vector-1",
+      "input": {
+        "countryCode": "MK",
+        "municipalityId": "MK-M1",
+        "townId": "MK-M1-T1",
+        "chomeId": "MK-M1-T1-C1"
+      },
+      "expected": {
+        "candidateCodePrefix": "MK-",
+        "sameMunicipalityOnly": true,
+        "containsPersonalData": false
+      }
+    },
+    {
+      "id": "mk-test-vector-2",
+      "input": {
+        "countryCode": "MK",
+        "municipalityId": "MK-M2",
+        "townId": "MK-M2-T2",
+        "chomeId": "MK-M2-T2-C2"
+      },
+      "expected": {
+        "candidateCodePrefix": "MK-",
+        "sameMunicipalityOnly": true,
+        "containsPersonalData": false
+      }
+    },
+    {
+      "id": "mk-test-vector-3",
+      "input": {
+        "countryCode": "MK",
+        "municipalityId": "MK-M3",
+        "townId": "MK-M3-T3",
+        "chomeId": "MK-M3-T3-C3"
+      },
+      "expected": {
+        "candidateCodePrefix": "MK-",
+        "sameMunicipalityOnly": true,
+        "containsPersonalData": false
+      }
+    }
+  ]
+}

@@ -16,5 +16,17 @@
     "licenseOrTerms": "source-specific",
     "redistribution": "review-required",
     "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+  },
+  {
+    "subject": "TCRA Tanzania postcode service and publication-notice metadata",
+    "licenseOrTerms": "Official regulator webpages; reuse rights for postcode mappings, lists, and linked records are not recorded",
+    "redistribution": "metadata-only",
+    "notes": "This release records format and source metadata only. It does not query, bundle, derive, or retain postcode, address, locality, recipient, map, or delivery-point records. The webpages do not provide mapping reuse rights."
+  },
+  {
+    "subject": "Tanzania postcode mapping and delivery-point coverage",
+    "licenseOrTerms": "Not yet verified",
+    "redistribution": "not-bundled",
+    "notes": "The national five-digit format is recorded as format-only evidence. No postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, operational-coverage assertion, or derived equivalent is included until version, redistribution, coverage, and correction evidence are recorded."
   }
 ]

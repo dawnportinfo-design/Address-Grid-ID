@@ -1,0 +1,170 @@
+{
+  "schemaId": "agid-jordan-postal-source-readiness-v0.1",
+  "countryCode": "JO",
+  "countryName": "Jordan",
+  "evaluatedAt": "2026-07-23T08:42:10.184Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "formatAuthorityEvidence": false,
+    "unverifiedFormatInferenceRejected": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "jordan-open-government-data-license-v1",
+      "scope": "government-open-data-reuse-license",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "Jordan Open Government Data License issue v1.0",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "jordan-post-offices-open-data-catalog-2025",
+      "scope": "postal-office-dataset-catalog-and-safety-boundary",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "catalog last updated 2025-07-16",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "rejected-unsafe-fields",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "upu-jordan-designated-operator",
+      "scope": "upu-designated-postal-operator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "UPU postal entities status list dated 2024-03-15",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "jo-current-postcode-format-coverage-and-correction-required",
+      "scope": "current-postcode-format-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "government-open-data-license-recorded",
+      "label": "Jordan’s open-government license permits use, reuse, and redistribution of platform data subject to its terms",
+      "status": "passed",
+      "evidence": [
+        "jordan-open-government-data-license-v1",
+        "license=Jordan Open Government Data License v1.0",
+        "field-level safety remains independently required"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-office-dataset-safety-boundary-recorded",
+      "label": "Jordan Post’s open-data catalog is recorded without acquiring its address-bearing office records",
+      "status": "passed",
+      "evidence": [
+        "jordan-post-offices-open-data-catalog-2025",
+        "rawAcquisitionStatus=rejected-unsafe-fields",
+        "rawRecordsBundled=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires safe schema, rights, version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "unsafe address, location, and property fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "An authority-published national postcode format is recorded independently of an address-bearing office dataset",
+      "status": "blocked",
+      "evidence": [
+        "nationalPattern=null",
+        "formatAuthorityEvidence=false",
+        "unverifiedFormatInferenceRejected=true",
+        "no pattern inferred from postal-office records"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "safe-postcode-only-source",
+      "label": "An official, explicitly reusable postcode-only or postcode-to-safe-administrative-key source is available",
+      "status": "blocked",
+      "evidence": [
+        "Jordan Post catalog records address and property fields alongside postal codes",
+        "unsafe source fields prevent acquisition under AGID publication boundary",
+        "no safe filtered official feed or schema contract recorded"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been acquired, schema-checked, and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no postcode rows or office records acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "catalog last updated 2025-07-16",
+        "no safe mapping version recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a Jordan Post or government-published postcode-only artifact, or a documented safe field-level export contract, with explicit license, version, coverage, and correction metadata; never ingest address, office-location, property, or query fields.",
+    "Before ingestion, accept only safe postcode and administrative-zone identifiers and reject address, street, building, recipient, precise-point, geometry, property, and query-result fields.",
+    "Record mapping coverage, current version, update cadence, and an authority correction path before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not assert a national Jordan postcode regex.",
+    "This pack does not download, store, or redistribute Jordan Post office, address, property, postal-mapping, boundary, or location records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

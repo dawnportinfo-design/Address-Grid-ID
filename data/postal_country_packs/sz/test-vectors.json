@@ -1,0 +1,44 @@
+[
+  {
+    "id": "sz-test-vector-1",
+    "input": {
+      "countryCode": "SZ",
+      "municipalityId": "SZ-M1",
+      "townId": "SZ-M1-T1",
+      "chomeId": "SZ-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "SZ-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "sz-test-vector-2",
+    "input": {
+      "countryCode": "SZ",
+      "municipalityId": "SZ-M2",
+      "townId": "SZ-M2-T2",
+      "chomeId": "SZ-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "SZ-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "sz-test-vector-3",
+    "input": {
+      "countryCode": "SZ",
+      "municipalityId": "SZ-M3",
+      "townId": "SZ-M3-T3",
+      "chomeId": "SZ-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "SZ-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

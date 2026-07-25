@@ -52,5 +52,20 @@
       "Open map records are not bundled by default.",
       "Any derived database must keep source-specific attribution and redistribution obligations."
     ]
+  },
+  {
+    "sourceId": "pakistan-post-postcode-directory",
+    "sourceName": "Pakistan Post post-code directory",
+    "sourceUrl": "https://pakpost.gov.pk/postcodes.php",
+    "provider": "Pakistan Post",
+    "licenseOrTerms": "Official post-code directory webpage; no postal-mapping data license or redistribution grant is recorded, and neither directory records nor linked downloads are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-operator post-code directory surface; metadata only, not a reusable national regex, mapping, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official Pakistan Post page presents a post-code directory and links to downloadable delivery and non-delivery directory material.",
+      "This pack does not download, read, query, store, transform, or redistribute directory records, linked documents, locality records, or displayed addresses.",
+      "The page alone does not establish a machine-readable national format specification, a versioned mapping, redistribution rights, or current operational coverage."
+    ]
   }
 ]

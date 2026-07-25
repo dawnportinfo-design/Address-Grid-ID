@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "RO official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "ancom-cnpr-universal-service-2025-2029",
+    "sourceName": "ANCOM CNPR universal postal service designation",
+    "sourceUrl": "https://www.ancom.ro/en/reglementare-ro-en/servicii-postale-en/universal-service/usp-in-the-field-of-postal-services/",
+    "provider": "National Authority for Management and Regulation in Communications of Romania (ANCOM)",
+    "licenseOrTerms": "Official regulator reference records National Company Romanian Post as universal-service provider through 2029-12-31. It is authority metadata only and does not provide a postcode-mapping license, format mapping, or redistribution grant. No postal, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal regulator and universal-service operator reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The regulator provides current operator and universal-service authority metadata.",
+      "Universal-service designation does not establish postcode mapping rights, current coverage, correction process, or delivery-point evidence.",
+      "No carrier operational data is retained."
+    ]
+  },
+  {
+    "sourceId": "data-gov-ro-romania-postal-codes-ogl-2016",
+    "sourceName": "Romania postal-codes open-data catalog",
+    "sourceUrl": "https://data.gov.ro/en/dataset/coduri-postale-romania",
+    "provider": "Romanian Post via data.gov.ro",
+    "licenseOrTerms": "Government open-data catalog labels the resource OGL-ROU-1.0 and records a six-digit numeric postal-code system, but the catalog was last updated 2016-09-06 and describes street-level detail. No resource is downloaded or ingested because it is historical and its schema exceeds the AGID safety boundary.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "historical postcode-format and license reference; metadata only, not a current postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The source supports the national six-digit format, not a current offline mapping.",
+      "OGL-ROU-1.0 does not cure staleness or permit storage of excluded street-level fields in this pack.",
+      "No postcode, locality, street, number, or administrative record is retained."
+    ]
+  },
+  {
+    "sourceId": "posta-romana-current-zip-code-search",
+    "sourceName": "Romanian Post current zip-code search",
+    "sourceUrl": "https://www.posta-romana.ro/en/search-zip-code.html",
+    "provider": "National Company Romanian Post S.A.",
+    "licenseOrTerms": "Official search surface supports postcode and address queries and returns street-and-number and postal-unit result fields. No bulk postcode-mapping reuse grant or publication version is recorded; the interface is not queried and no result, postcode, address, office, contact, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-code search authority and safety-boundary reference; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "A searchable site is not a safe offline dataset or a redistribution license.",
+      "Its address-bearing results cannot be used as a source for the public pack.",
+      "No query result is retained."
+    ]
+  },
+  {
+    "sourceId": "ancpi-administrative-boundaries-open-information-license",
+    "sourceName": "ANCPI administrative-boundaries open-information application",
+    "sourceUrl": "https://geoportal.ancpi.ro/portal/apps/webappviewer/index.html?id=faeba2d173374445b1f13512bd477bb2",
+    "provider": "National Agency for Cadastre and Real Estate Publicity (ANCPI)",
+    "licenseOrTerms": "Official application states acceptance of an open-information license for administrative-boundary spatial data and reports a 2026-05-05 update. Boundary geometry remains excluded from AGID; no geometry, point, address, parcel, or administrative record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "current administrative-boundary license and freshness reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The license is recorded separately from a safe key-only extraction.",
+      "Boundary geometry is excluded by the publication-safety boundary.",
+      "Administrative boundary availability does not establish postcode coverage or address-to-postcode mapping."
+    ]
+  },
+  {
+    "sourceId": "ro-current-postcode-mapping-coverage-and-correction-required",
+    "sourceName": "Romania current postcode mapping, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:romania-current-postcode-mapping-coverage-and-correction-required",
+    "provider": "Romanian Post or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with coverage, version, and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The historical OGL catalog and current search surface are not substitutes for a current safe offline mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+    ]
+  }
+]

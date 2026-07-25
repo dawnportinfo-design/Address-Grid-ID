@@ -52,5 +52,34 @@
       "Open map records are not bundled by default.",
       "Any derived database must keep source-specific attribution and redistribution obligations."
     ]
+  },
+  {
+    "sourceId": "cambodia-post-location",
+    "sourceName": "Cambodia Post location page",
+    "sourceUrl": "https://cambodiapost.com.kh/location",
+    "provider": "Cambodia Post",
+    "licenseOrTerms": "Official location page with linked terms and privacy policy; no postal-mapping data license or redistribution grant is recorded, and no location records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-operator location page; metadata only, not a national postcode format, mapping, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official page presents Cambodia Post location categories and linked terms and privacy material.",
+      "This pack does not query, store, transform, or redistribute location records or displayed addresses.",
+      "Public format signals on this page do not establish an authority-published national postal-code regex."
+    ]
+  },
+  {
+    "sourceId": "mptc-cambodia-post-autonomous-unit",
+    "sourceName": "MPTC autonomous-unit listing for Cambodia Post",
+    "sourceUrl": "https://mptc.gov.kh/en/",
+    "provider": "Ministry of Post and Telecommunications, Cambodia",
+    "licenseOrTerms": "Official ministry webpage; no postal-mapping data license or redistribution grant is recorded, and no raw records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "government-to-postal-operator relationship evidence; metadata only, not postal-code mapping evidence",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The ministry webpage lists Cambodia Post among its autonomous units.",
+      "This pack records only source metadata and does not infer a postal-code format, mapping coverage, or deliverability from that relationship."
+    ]
   }
 ]

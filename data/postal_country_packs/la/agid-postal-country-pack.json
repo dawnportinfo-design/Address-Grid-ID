@@ -4,7 +4,7 @@
     "version": "agid-postal-country-pack-v0.1",
     "strategyVersion": "agid-postal-country-pack-strategy-v0.1",
     "engineVersion": "agid-postal-code-engine-v0.1-rc",
-    "generatedAt": "2026-06-20T00:00:00.000Z",
+    "generatedAt": "2026-07-23T06:12:06.057Z",
     "countryCode": "LA",
     "countryName": "Laos",
     "repositoryName": "agid-postal-pack-la",
@@ -32,7 +32,7 @@
     "containsRawThirdPartyData": false,
     "officialStatus": "draft",
     "counts": {
-      "sources": 3,
+      "sources": 5,
       "localities": 48,
       "boundaries": 12,
       "landforms": 1,
@@ -118,7 +118,7 @@
       "lat": 19.8563,
       "lng": 102.4955
     },
-    "sourceNote": "Postal coverage is sparse outside cities; combine postal hints with AGID and administrative hierarchy."
+    "sourceNote": "Lao postal law defines post codes by delivery geography and the official postal service exposes a postcode page, but a reusable national regex, mapping, rights, and update policy are not authority-verified here. Do not format-validate or autofill until those gates are recorded."
   },
   "sourceCatalog": [
     {
@@ -174,8 +174,162 @@
         "Open map records are not bundled by default.",
         "Any derived database must keep source-specific attribution and redistribution obligations."
       ]
+    },
+    {
+      "sourceId": "laos-postal-service-postcode-page",
+      "sourceName": "Laos Postal Service postcode page",
+      "sourceUrl": "https://www.laopost.com.la/about/postcode",
+      "provider": "Laos Postal Service",
+      "licenseOrTerms": "Official postcode webpage; no postal-mapping data license or redistribution grant is recorded, and no postcode or location records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official postal-operator postcode page; metadata only, not a national postcode regex, mapping, or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The official postal-service site exposes a postcode page and postal-service navigation.",
+        "This pack does not query, store, transform, or redistribute the page content, postcode records, branch records, or displayed addresses.",
+        "The page alone does not establish a reusable national format, a versioned mapping, or redistribution rights."
+      ]
+    },
+    {
+      "sourceId": "lao-postal-law-post-code-definition",
+      "sourceName": "Lao Law on Postal Services, Article 11 post-code definition",
+      "sourceUrl": "https://www.laotradeportal.gov.la/en-gb/site/display/1164",
+      "provider": "Lao Trade Portal publication of Law No. 45/NA",
+      "licenseOrTerms": "Published legal text; no postal mapping or derived-data redistribution grant is recorded",
+      "redistributionStatus": "source-metadata-only",
+      "role": "legal postal-code governance evidence; metadata only, not a published postcode-to-locality mapping",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "Article 11 defines post codes as delivery geography indicators and assigns the Ministry of Post and Telecommunications a role in defining them with relevant authorities.",
+        "This pack records the legal source metadata only and does not infer a fixed national regex, mapping coverage, or delivery-point evidence."
+      ]
     }
   ],
+  "postalSourceReadiness": {
+    "schemaId": "agid-laos-postal-source-readiness-v0.1",
+    "countryCode": "LA",
+    "countryName": "Laos",
+    "evaluatedAt": "2026-07-23T06:12:06.057Z",
+    "postalFormat": {
+      "nationalPattern": null,
+      "authorityVerified": false,
+      "fixedLegacyPatternRejected": true
+    },
+    "publicationStatus": "draft",
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "realPostalLookupEnabled": false,
+    "deliveryClaimEnabled": false,
+    "sources": [
+      {
+        "sourceId": "laos-postal-service-postcode-page",
+        "scope": "postal-operator-postcode-page",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "lao-postal-law-post-code-definition",
+        "scope": "postal-law-post-code-definition",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "Law No. 45/NA (2013)",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      }
+    ],
+    "gates": [
+      {
+        "id": "no-personal-or-raw-third-party-data",
+        "label": "The published pack remains metadata and synthetic fixtures only",
+        "status": "passed",
+        "evidence": [
+          "containsPersonalData=false",
+          "containsRawThirdPartyData=false",
+          "rawRecordsBundled=false for every source"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-operator-postcode-page-recorded",
+        "label": "The official Lao postal-service postcode page is cataloged as metadata only",
+        "status": "passed",
+        "evidence": [
+          "laos-postal-service-postcode-page",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-law-role-recorded",
+        "label": "The postal law records the ministry role in defining post codes",
+        "status": "passed",
+        "evidence": [
+          "lao-postal-law-post-code-definition",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-format-authority-evidence",
+        "label": "An authority-published national postal-code format is evidenced",
+        "status": "blocked",
+        "evidence": [
+          "nationalPattern=null",
+          "authorityVerified=false",
+          "fixedLegacyPatternRejected=true"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "postal-code-mapping-evidence",
+        "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+        "status": "blocked",
+        "evidence": [
+          "postalMappingEvidence=false for every source"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "redistribution-rights",
+        "label": "Redistribution rights for any derived postal mapping are verified",
+        "status": "blocked",
+        "evidence": [
+          "redistributionStatus=metadata-only for every source"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "version-freshness-and-update-cadence",
+        "label": "The postal mapping has a version, retrieval date, and update cadence",
+        "status": "blocked",
+        "evidence": [
+          "laos-postal-service-postcode-page version=null",
+          "updateCadence=unknown for every source"
+        ],
+        "blocksRealPostalLookup": true
+      }
+    ],
+    "nextRequiredEvidence": [
+      "An authority-published national postal-code format and format-change policy.",
+      "A versioned postcode-to-locality or delivery-point mapping with geographic coverage.",
+      "Field-level reuse, attribution, and redistribution terms for any mapping or derived output.",
+      "Publication date, retrieval date, update cadence, and correction path for the mapping."
+    ],
+    "nonClaims": [
+      "This pack does not provide a real postcode lookup.",
+      "This pack does not assert a national Laos postal-code regex.",
+      "This pack does not assert an address-to-postcode match or delivery-point coverage."
+    ]
+  },
   "licenseLedger": [
     {
       "subject": "AGID-created country pack metadata",
@@ -194,6 +348,18 @@
       "licenseOrTerms": "source-specific",
       "redistribution": "review-required",
       "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+    },
+    {
+      "subject": "Laos Postal Service postcode page and postal-law source metadata",
+      "licenseOrTerms": "Official postal-service webpage and published legal text; reuse rights for postal mapping are not recorded",
+      "redistribution": "metadata-only",
+      "notes": "This release records source metadata only. It does not query, bundle, or derive postcode, branch, address, recipient, or delivery-point records. The sources do not provide a reusable national regex or mapping reuse right."
+    },
+    {
+      "subject": "Laos national postal-code format and delivery-point mapping",
+      "licenseOrTerms": "Not yet verified",
+      "redistribution": "not-bundled",
+      "notes": "No fixed national regex, postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, or derived equivalent is included until authority, version, redistribution, and correction evidence are recorded."
     }
   ],
   "officialMunicipalitySummary": {

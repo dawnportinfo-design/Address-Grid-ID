@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ro-test-vector-1",
+    "input": {
+      "countryCode": "RO",
+      "municipalityId": "RO-M1",
+      "townId": "RO-M1-T1",
+      "chomeId": "RO-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "RO-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "ro-test-vector-2",
+    "input": {
+      "countryCode": "RO",
+      "municipalityId": "RO-M2",
+      "townId": "RO-M2-T2",
+      "chomeId": "RO-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "RO-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "ro-test-vector-3",
+    "input": {
+      "countryCode": "RO",
+      "municipalityId": "RO-M3",
+      "townId": "RO-M3-T3",
+      "chomeId": "RO-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "RO-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

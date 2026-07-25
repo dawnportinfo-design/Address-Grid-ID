@@ -1,0 +1,218 @@
+{
+  "schemaId": "agid-serbia-postal-source-readiness-v0.1",
+  "countryCode": "RS",
+  "countryName": "Serbia",
+  "evaluatedAt": "2026-07-23T09:31:11.513Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "formatAuthorityEvidence": false,
+    "unverifiedFormatInferenceRejected": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "serbia-ratel-universal-postal-service",
+      "scope": "postal-regulator-and-operator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "RATEL universal-postal-service page retrieved 2026-07-23",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "serbia-posta-proper-addressing-and-pak-locator",
+      "scope": "postal-addressing-and-pak-locator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "Pošta Srbije addressing and PAK locator pages retrieved 2026-07-23",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "source-contains-excluded-fields",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "serbia-open-data-portal-reuse-license",
+      "scope": "open-data-reuse-governance-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "Serbian Open Data Portal terms retrieved 2026-07-23",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "serbia-rgz-administrative-units-register",
+      "scope": "administrative-units-register-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "RGZ Administrative Units Register page retrieved 2026-07-23; resource-level reuse terms not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "terms-not-verified",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "serbia-rgz-address-register-exclusion",
+      "scope": "address-register-exclusion-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "RGZ Address Register page retrieved 2026-07-23",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "source-contains-excluded-fields",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "rs-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "scope": "current-postcode-format-mapping-rights-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-regulator-and-operator-recorded",
+      "label": "The national postal regulator and universal-service context are recorded as metadata only",
+      "status": "passed",
+      "evidence": [
+        "serbia-ratel-universal-postal-service",
+        "postalMappingEvidence=false",
+        "no carrier operational data retained"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "addressing-and-pak-service-bounded",
+      "label": "The operator addressing and PAK lookup surface is recorded without querying or retaining address-level results",
+      "status": "passed",
+      "evidence": [
+        "serbia-posta-proper-addressing-and-pak-locator",
+        "source-contains-excluded-fields",
+        "postalMappingEvidence=false",
+        "no lookup request sent"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "administrative-authority-and-reuse-framework-recorded",
+      "label": "The open-data reuse framework and administrative register authority are recorded without acquiring data entries",
+      "status": "passed",
+      "evidence": [
+        "serbia-open-data-portal-reuse-license",
+        "serbia-rgz-administrative-units-register",
+        "serbia-rgz-address-register-exclusion",
+        "rawRecordsBundled=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires a safe schema, rights, current version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "address, PAK, office, contact, cadastral, coordinate, and geometry fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "A current official format definition authorizes a national postcode pattern claim",
+      "status": "blocked",
+      "evidence": [
+        "Posta Srbije addressing pages distinguish postal number and PAK but do not supply an independently verified national format definition",
+        "unverifiedFormatInferenceRejected=true",
+        "nationalPattern=null"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-mapping-reuse-rights",
+      "label": "A current official postcode mapping has explicit reuse terms suitable for a safe offline artifact",
+      "status": "blocked",
+      "evidence": [
+        "PAK locator is address-input based and was not queried",
+        "no current postcode mapping artifact acquired",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "administrative-geodata-rights-and-safe-schema",
+      "label": "Administrative geographic keys have explicit resource-level reuse terms and a safe non-geometry schema",
+      "status": "blocked",
+      "evidence": [
+        "RGZ register includes geospatial data",
+        "resource-level terms for a key-only artifact not recorded",
+        "Address Register contains excluded street, house, parcel, and address-code fields",
+        "no key-only extract acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been schema-checked and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no postcode or PAK rows acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and authority correction path",
+      "status": "blocked",
+      "evidence": [
+        "mapping-version-not-recorded",
+        "no mapping update cadence recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a current authority-published national postcode format and postcode-only or safe administrative-key mapping artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, version, attribution wording, and coverage.",
+    "Do not query the PAK locator or use its address-level results. Before ingestion, accept only safe postcode and administrative-zone identifiers, reject address, street, number, postal-address-code, PAK, postal-unit, office, contact, precise-point, geometry, parcel, property, and cadastral fields, and verify that the publication is current.",
+    "Record the authority correction path, update cadence, and coverage validation before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode or PAK lookup.",
+    "This pack does not infer a Serbian national postcode pattern from the recorded addressing or PAK service.",
+    "This pack does not query, download, store, or redistribute PAK results, postcode mappings, administrative-register entries, Address Register records, addresses, offices, contacts, properties, parcels, boundaries, or location records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

@@ -4,7 +4,7 @@
     "version": "agid-postal-country-pack-v0.1",
     "strategyVersion": "agid-postal-country-pack-strategy-v0.1",
     "engineVersion": "agid-postal-code-engine-v0.1-rc",
-    "generatedAt": "2026-06-20T00:00:00.000Z",
+    "generatedAt": "2026-07-23T06:12:06.057Z",
     "countryCode": "TZ",
     "countryName": "Tanzania",
     "repositoryName": "agid-postal-pack-tz",
@@ -32,7 +32,7 @@
     "containsRawThirdPartyData": false,
     "officialStatus": "draft",
     "counts": {
-      "sources": 3,
+      "sources": 5,
       "localities": 48,
       "boundaries": 12,
       "landforms": 1,
@@ -118,7 +118,7 @@
       "lat": -6.369,
       "lng": 34.8888
     },
-    "sourceNote": "Use region/district candidates and keep postal code as a hint, not a strict delivery guarantee."
+    "sourceNote": "TCRA specifies a five-digit numeric national postcode format; use format validation only while mapping scope, redistribution rights, and freshness remain under review."
   },
   "sourceCatalog": [
     {
@@ -174,8 +174,153 @@
         "Open map records are not bundled by default.",
         "Any derived database must keep source-specific attribution and redistribution obligations."
       ]
+    },
+    {
+      "sourceId": "tcra-tanzania-postcode",
+      "sourceName": "Tanzania Communications Regulatory Authority postcode service",
+      "sourceUrl": "https://address.tcra.go.tz/services/postcode",
+      "provider": "Tanzania Communications Regulatory Authority (TCRA)",
+      "licenseOrTerms": "Official regulator service page; no postcode-mapping data license or redistribution grant is recorded, and no search, map, or postcode records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official national postcode policy and format evidence; metadata only, not a reusable postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The official TCRA service describes its statutory postcode role and a five-digit numeric national format.",
+        "This pack does not submit queries or download, read, store, transform, or redistribute postcode lists, maps, locality records, or displayed addresses.",
+        "Format evidence alone does not establish a versioned mapping, redistribution rights, operational coverage, or delivery-point validity."
+      ]
+    },
+    {
+      "sourceId": "tcra-tanzania-postcode-list-publication",
+      "sourceName": "TCRA publication of postcode list notice",
+      "sourceUrl": "https://tcra.go.tz/services/publication-of-postcode-list",
+      "provider": "Tanzania Communications Regulatory Authority (TCRA)",
+      "licenseOrTerms": "Official regulator publication notice; no postcode-list or derived-data redistribution grant is recorded, and no list records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official postcode-list publication provenance; metadata only, not a reusable list or change-feed dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The TCRA notice records publication of a Tanzania postcode list under a government gazette notice.",
+        "This pack records notice metadata only and does not download, read, store, transform, or redistribute the list, locality records, or displayed addresses.",
+        "A publication notice does not supply current list versioning, field-level reuse rights, correction cadence, or operational-coverage evidence."
+      ]
     }
   ],
+  "postalSourceReadiness": {
+    "schemaId": "agid-tanzania-postal-source-readiness-v0.1",
+    "countryCode": "TZ",
+    "countryName": "Tanzania",
+    "evaluatedAt": "2026-07-23T06:12:06.057Z",
+    "postalFormat": {
+      "pattern": "^\\d{5}$",
+      "authorityVerified": true,
+      "verifiedFormatOnly": true
+    },
+    "publicationStatus": "draft",
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "realPostalLookupEnabled": false,
+    "deliveryClaimEnabled": false,
+    "sources": [
+      {
+        "sourceId": "tcra-tanzania-postcode",
+        "scope": "national-postcode-policy-and-service",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "tcra-tanzania-postcode-list-publication",
+        "scope": "postcode-list-publication-notice",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      }
+    ],
+    "gates": [
+      {
+        "id": "no-personal-or-raw-third-party-data",
+        "label": "The published pack remains metadata and synthetic fixtures only",
+        "status": "passed",
+        "evidence": [
+          "containsPersonalData=false",
+          "containsRawThirdPartyData=false",
+          "rawRecordsBundled=false for every source"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-format-authority-evidence",
+        "label": "The TCRA national five-digit numeric postcode format is recorded as format-only authority evidence",
+        "status": "passed",
+        "evidence": [
+          "tcra-tanzania-postcode",
+          "postalFormat.pattern=^\\d{5}$",
+          "authorityVerified=true",
+          "verifiedFormatOnly=true"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postcode-list-publication-recorded",
+        "label": "The TCRA postcode-list publication notice is cataloged as metadata only",
+        "status": "passed",
+        "evidence": [
+          "tcra-tanzania-postcode-list-publication",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-code-mapping-evidence",
+        "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+        "status": "blocked",
+        "evidence": [
+          "postalMappingEvidence=false for every source",
+          "A national format is not a mapping."
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "redistribution-rights",
+        "label": "Redistribution rights for any postcode mapping, list, or derived output are verified",
+        "status": "blocked",
+        "evidence": [
+          "redistributionStatus=metadata-only for every source"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "version-freshness-and-update-cadence",
+        "label": "The usable postcode mapping has a version, retrieval date, update cadence, and correction path",
+        "status": "blocked",
+        "evidence": [
+          "version=null for every source",
+          "updateCadence=unknown for every source"
+        ],
+        "blocksRealPostalLookup": true
+      }
+    ],
+    "nextRequiredEvidence": [
+      "A versioned postcode-to-locality or delivery-point mapping with geographic coverage and documented corrections.",
+      "Field-level reuse, attribution, and redistribution terms for any mapping, list, map, search result, or derived output.",
+      "Publication date, retrieval date, update cadence, coverage limits, and correction path for the mapping and publication list."
+    ],
+    "nonClaims": [
+      "This pack does not provide a real postcode lookup.",
+      "This pack records only the national five-digit format, not a postcode-to-locality match.",
+      "This pack does not assert operational coverage or delivery-point coverage."
+    ]
+  },
   "licenseLedger": [
     {
       "subject": "AGID-created country pack metadata",
@@ -194,6 +339,18 @@
       "licenseOrTerms": "source-specific",
       "redistribution": "review-required",
       "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+    },
+    {
+      "subject": "TCRA Tanzania postcode service and publication-notice metadata",
+      "licenseOrTerms": "Official regulator webpages; reuse rights for postcode mappings, lists, and linked records are not recorded",
+      "redistribution": "metadata-only",
+      "notes": "This release records format and source metadata only. It does not query, bundle, derive, or retain postcode, address, locality, recipient, map, or delivery-point records. The webpages do not provide mapping reuse rights."
+    },
+    {
+      "subject": "Tanzania postcode mapping and delivery-point coverage",
+      "licenseOrTerms": "Not yet verified",
+      "redistribution": "not-bundled",
+      "notes": "The national five-digit format is recorded as format-only evidence. No postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, operational-coverage assertion, or derived equivalent is included until version, redistribution, coverage, and correction evidence are recorded."
     }
   ],
   "officialMunicipalitySummary": {

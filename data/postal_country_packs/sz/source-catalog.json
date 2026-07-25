@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "SZ official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "eswatini-postcode-table",
+    "sourceName": "EswatiniPost postcode table",
+    "sourceUrl": "https://www.eswatinipost.co.sz/postcode.php",
+    "provider": "EswatiniPost",
+    "licenseOrTerms": "Official postcode table page; no data reuse, bulk-download, API, derived-data, or redistribution permission is recorded here, and no postcode or locality record is bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postcode table reference; metadata only, not an AGID lookup or offline postcode mapping dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The page describes Eswatini postcode entries and shows region-grouped codes.",
+      "This pack does not copy, store, transform, or redistribute postcode, locality, address, or delivery records.",
+      "The page does not establish a stable reusable format specification, mapping version, rights, coverage, or correction path."
+    ]
+  },
+  {
+    "sourceId": "eswatini-post-designated-operator",
+    "sourceName": "EswatiniPost designated postal operator reference",
+    "sourceUrl": "https://www.eswatinipost.co.sz/about.php",
+    "provider": "EswatiniPost",
+    "licenseOrTerms": "Official institutional page; no postcode-mapping license or redistribution grant is recorded here, and no postal, tracking, contact, or address records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "designated-postal-operator reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "EswatiniPost identifies itself as the licensed designated postal operator.",
+      "This pack does not query, store, transform, or redistribute tracking, postal, contact, recipient, or address records.",
+      "Operator status does not establish an offline reusable postcode mapping, rights, or delivery-point coverage."
+    ]
+  },
+  {
+    "sourceId": "eswatini-government-postal-policy",
+    "sourceName": "Government of Eswatini Directorate of Communications postal-policy mandate",
+    "sourceUrl": "https://www.gov.sz/index.php/component/content/?Itemid=397&id=387",
+    "provider": "Government of the Kingdom of Eswatini",
+    "licenseOrTerms": "Government policy page; no postcode-mapping license or redistribution grant is recorded here, and no records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "government postal-policy reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The Directorate states a mandate covering postal-services policy and regulatory frameworks.",
+      "This pack stores source metadata only and does not include policy text, postal, recipient, or address records.",
+      "Policy mandate does not establish a reusable postcode format, mapping, or delivery-point coverage."
+    ]
+  },
+  {
+    "sourceId": "sz-postcode-mapping-required",
+    "sourceName": "Eswatini postcode format, mapping, rights, and update authority source",
+    "sourceUrl": "source-metadata-only:eswatini-postcode-mapping-required",
+    "provider": "Eswatini postal authority or authority-designated official publisher",
+    "licenseOrTerms": "Not yet verified; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The recorded official references do not establish an offline reusable postcode format or mapping.",
+      "Do not add real postcode records, address matching, or carrier deliverability assertions until authority, license, version, coverage, and correction evidence are recorded."
+    ]
+  }
+]

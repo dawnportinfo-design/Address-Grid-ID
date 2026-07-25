@@ -1,0 +1,6194 @@
+{
+  "manifest": {
+    "schemaId": "agid-postal-country-pack-v0.1",
+    "version": "agid-postal-country-pack-v0.1",
+    "strategyVersion": "agid-postal-country-pack-strategy-v0.1",
+    "engineVersion": "agid-postal-code-engine-v0.1-rc",
+    "generatedAt": "2026-07-23T09:40:43.135Z",
+    "countryCode": "AZ",
+    "countryName": "Azerbaijan",
+    "repositoryName": "agid-postal-pack-az",
+    "packageName": "@agid/agid-postal-pack-az",
+    "requiredLayers": [
+      "manifest",
+      "source-catalog",
+      "country-profile",
+      "admin-boundary-index",
+      "locality-index",
+      "locality-alias-history",
+      "landform-index",
+      "settlement-cluster-index",
+      "planning-cell-index",
+      "route-evidence-index",
+      "quality-evidence-index",
+      "vpl-seed-regions",
+      "postal-system-priors",
+      "governance-notes",
+      "license-ledger",
+      "privacy-threat-model",
+      "test-vectors"
+    ],
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "officialStatus": "draft",
+    "counts": {
+      "sources": 8,
+      "localities": 48,
+      "boundaries": 12,
+      "landforms": 1,
+      "settlementClusters": 6,
+      "vplSeeds": 3,
+      "planningCells": 205,
+      "routeEvidence": 52,
+      "qualityEvidence": 39,
+      "officialMunicipalityRecords": 0,
+      "testVectors": 3
+    }
+  },
+  "recommendation": {
+    "version": "agid-postal-country-pack-strategy-v0.1",
+    "countryCode": "AZ",
+    "countryName": "Azerbaijan",
+    "tier": "weak-coarse-postal-code",
+    "repositoryMode": "country-pack-recommended",
+    "repositoryName": "agid-postal-pack-az",
+    "packageName": "@agid/agid-postal-pack-az",
+    "packWeight": "standard-pack",
+    "recommendedUse": "supplemental-agid-postal-draft",
+    "requiredLayers": [
+      "manifest",
+      "source-catalog",
+      "country-profile",
+      "admin-boundary-index",
+      "locality-index",
+      "locality-alias-history",
+      "landform-index",
+      "settlement-cluster-index",
+      "planning-cell-index",
+      "route-evidence-index",
+      "quality-evidence-index",
+      "vpl-seed-regions",
+      "postal-system-priors",
+      "governance-notes",
+      "license-ledger",
+      "privacy-threat-model",
+      "test-vectors"
+    ],
+    "preseededRecords": [
+      "country profile: population band, land area band, terrain class, postal maturity class",
+      "stable locality IDs independent of mutable city-name strings",
+      "administrative boundary references and source freshness metadata",
+      "landform and route evidence slots appropriate to the country terrain",
+      "settlement clusters and VPL seed regions for draft postal-zone design",
+      "license ledger for every imported source; third-party raw datasets are not bundled by default"
+    ],
+    "maintenanceRules": [
+      "Keep the AGID Postal Forge engine, UI, and core tests in the central repository.",
+      "Keep country-specific locality aliases, landforms, source metadata, and VPL seeds in the country pack.",
+      "Version every source by provider, license, retrieval date, and transformation script.",
+      "Use stable locality IDs; visible names can change without forcing postal code churn.",
+      "Run schema, no-raw-address, municipality-separation, and sample code conformance tests before publishing.",
+      "Publish generated codes as simulation or draft unless official authority, carrier pilot, privacy, data trust, and transition gates pass."
+    ],
+    "splitRationale": [
+      "Country packs keep the main app small and let operators load only the country they need.",
+      "Country experts can maintain local names, landforms, languages, and source notes without touching the core engine.",
+      "License risk is isolated because each country pack has its own source catalog and data license ledger."
+    ],
+    "compatibilityContract": {
+      "schemaId": "agid-postal-country-pack-v0.1",
+      "enginePackage": "@agid/postal-forge-core",
+      "countryPackDoesNotContain": [
+        "personal-addresses",
+        "recipient-names",
+        "phone-numbers",
+        "private-aoid-bodies",
+        "agid-s-payloads",
+        "raw-third-party-datasets-without-license"
+      ]
+    }
+  },
+  "countryProfile": {
+    "countryCode": "AZ",
+    "countryName": "Azerbaijan",
+    "region": "Asia",
+    "terrain": "mountain",
+    "classHint": "B",
+    "planningCentroid": {
+      "lat": 40.14,
+      "lng": 47.58
+    },
+    "sourceNote": "Country-repository bootstrap uses synthetic planning metadata only. Postal format, mapping, authority, license, coverage, and update policy are unverified here; no postal lookup, address autofill, or delivery claim is enabled."
+  },
+  "sourceCatalog": [
+    {
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "sourceName": "AGID-generated country pack fixtures",
+      "sourceUrl": "local:AGID",
+      "provider": "AGID project",
+      "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+      "redistributionStatus": "agid-metadata-redistributable",
+      "role": "synthetic locality, VPL seed, and conformance fixtures",
+      "transformedFields": [
+        "countryCode",
+        "localityId",
+        "codePart",
+        "planningCell",
+        "routeEvidence",
+        "qualityEvidence",
+        "testVector"
+      ],
+      "confidenceNotes": [
+        "Contains no personal addresses and no recipient data.",
+        "Useful for OSS demos and conformance tests; not official postal authority data."
+      ]
+    },
+    {
+      "sourceId": "official-boundary-required",
+      "sourceName": "AZ official boundary and locality sources",
+      "sourceUrl": "source-metadata-only:official-authority-required",
+      "provider": "government, municipality, postal authority, or carrier pilot authority",
+      "licenseOrTerms": "source-specific; not bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official validation gate before pilot or public release",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "This pack records the required source slot only.",
+        "No official raw boundary, road, population, postal, or address dataset is bundled."
+      ]
+    },
+    {
+      "sourceId": "open-map-evidence-slot",
+      "sourceName": "Open map evidence slot",
+      "sourceUrl": "source-metadata-only:open-map-provider",
+      "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+      "licenseOrTerms": "source-specific; license review required",
+      "redistributionStatus": "license-review-required",
+      "role": "road, landform, port, settlement, and map preview evidence",
+      "transformedFields": [
+        "featureClass",
+        "evidenceQuality",
+        "sourceFreshness"
+      ],
+      "confidenceNotes": [
+        "Open map records are not bundled by default.",
+        "Any derived database must keep source-specific attribution and redistribution obligations."
+      ]
+    },
+    {
+      "sourceId": "azerbaijan-azerpost-index-search-boundary",
+      "sourceName": "Azerbaijan Azerpost index-search boundary",
+      "sourceUrl": "https://www.azerpost.az/en/frequently-asked-questions/general-br-questions/how-can-i-find-out-the-postal-code-of-my-residential-address",
+      "provider": "Azerpost LLC",
+      "licenseOrTerms": "Official operator FAQ records an index-search service. It is not queried, does not provide a bulk-reuse grant, and no postcode, address, office, recipient, or location record is bundled.",
+      "redistributionStatus": "source-metadata-only",
+      "role": "postal index-search boundary reference; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "No lookup request is sent.",
+        "Interactive availability is not a redistribution grant.",
+        "No operational postal data is retained."
+      ]
+    },
+    {
+      "sourceId": "azerbaijan-azerpost-addressing-rule",
+      "sourceName": "Azerbaijan Azerpost mail-receiving and addressing procedure",
+      "sourceUrl": "https://www.azerpost.az/storage/pages/3/procedure-for-receiving-mailings-1.pdf",
+      "provider": "Azerpost LLC",
+      "licenseOrTerms": "Official operator procedure is recorded as metadata only. It contains address-oriented instructions and is not used to acquire or retain personal, address, or postcode data; it also does not independently authorize a current national postcode-format or mapping claim.",
+      "redistributionStatus": "source-metadata-only",
+      "role": "postal addressing-rule boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "Address-oriented content is excluded from all artifacts.",
+        "No postcode row or address data is retained.",
+        "The pack deliberately does not infer a format from examples."
+      ]
+    },
+    {
+      "sourceId": "azerbaijan-idda-open-data-portal",
+      "sourceName": "Azerbaijan IDDA Open Data Portal",
+      "sourceUrl": "https://opendata.az/az",
+      "provider": "Innovation and Digital Development Agency (IDDA)",
+      "licenseOrTerms": "Official portal catalog is recorded as a governance surface only. No dataset, resource-level license, version, coverage, or correction path is selected or inferred; no data is acquired or bundled.",
+      "redistributionStatus": "source-metadata-only",
+      "role": "open-data governance reference; metadata only, not a selected postcode or administrative dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "A portal catalog is not a dataset-level reuse grant.",
+        "No dataset entry is retained.",
+        "A future artifact must establish its own safe schema and currentness."
+      ]
+    },
+    {
+      "sourceId": "azerbaijan-electronic-land-cadastre-system",
+      "sourceName": "Azerbaijan Electronic Land Cadastre Information System reference",
+      "sourceUrl": "https://emlak.gov.az/az/page/view/32",
+      "provider": "State Service on Property Issues",
+      "licenseOrTerms": "Official cadastral-system page describes administrative boundaries and cadastral functions. Resource-level reuse terms are not recorded, and cadastral, boundary, property, and geometry data are excluded; no record is acquired or bundled.",
+      "redistributionStatus": "source-metadata-only",
+      "role": "administrative and cadastral authority reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The source includes fields outside the permitted schema.",
+        "No geographic or cadastral record is retained.",
+        "Administrative authority does not establish postcode mapping or delivery coverage."
+      ]
+    },
+    {
+      "sourceId": "az-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "sourceName": "Azerbaijan current postcode format, safe mapping, rights, coverage, and correction authority source",
+      "sourceUrl": "source-metadata-only:azerbaijan-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "provider": "Azerpost, IDDA, or authority-designated official publisher",
+      "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with explicit format authority, reuse terms, coverage, version, and correction evidence; not bundled",
+      "redistributionStatus": "not-bundled",
+      "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The search surface is not a substitute for a safe offline mapping.",
+        "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+      ]
+    }
+  ],
+  "postalSourceReadiness": {
+    "schemaId": "agid-azerbaijan-postal-source-readiness-v0.1",
+    "countryCode": "AZ",
+    "countryName": "Azerbaijan",
+    "evaluatedAt": "2026-07-23T09:40:43.135Z",
+    "postalFormat": {
+      "nationalPattern": null,
+      "formatAuthorityEvidence": false,
+      "unverifiedFormatInferenceRejected": true
+    },
+    "publicationStatus": "draft",
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "realPostalLookupEnabled": false,
+    "deliveryClaimEnabled": false,
+    "sources": [
+      {
+        "sourceId": "azerbaijan-azerpost-index-search-boundary",
+        "scope": "postal-index-search-boundary-reference",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "Azerpost index-search FAQ retrieved 2026-07-23",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "provider-released",
+        "rawAcquisitionStatus": "source-contains-excluded-fields",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "azerbaijan-azerpost-addressing-rule",
+        "scope": "postal-addressing-rule-reference",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "Azerpost mail-receiving and addressing procedure retrieved 2026-07-23",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawAcquisitionStatus": "source-contains-excluded-fields",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "azerbaijan-idda-open-data-portal",
+        "scope": "open-data-governance-reference",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "IDDA Open Data Portal retrieved 2026-07-23; selected resource and terms not recorded",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "provider-released",
+        "rawAcquisitionStatus": "terms-not-verified",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "azerbaijan-electronic-land-cadastre-system",
+        "scope": "administrative-and-cadastral-authority-reference",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "Electronic Land Cadastre Information System reference retrieved 2026-07-23; resource-level reuse terms not recorded",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawAcquisitionStatus": "source-contains-excluded-fields",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "az-current-postcode-format-mapping-rights-coverage-and-correction-required",
+        "scope": "current-postcode-format-mapping-rights-coverage-and-correction-evidence",
+        "authorityStatus": "unresolved",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "not-bundled",
+        "version": null,
+        "retrievedAt": null,
+        "updateCadence": "unknown",
+        "rawAcquisitionStatus": "not-attempted",
+        "rawRecordsBundled": false
+      }
+    ],
+    "gates": [
+      {
+        "id": "no-personal-or-raw-third-party-data",
+        "label": "The published pack remains metadata and synthetic fixtures only",
+        "status": "passed",
+        "evidence": [
+          "containsPersonalData=false",
+          "containsRawThirdPartyData=false",
+          "rawRecordsBundled=false for every source"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-authority-surfaces-recorded",
+        "label": "The operator index search and addressing rule are recorded without extracting or querying address-level data",
+        "status": "passed",
+        "evidence": [
+          "azerbaijan-azerpost-index-search-boundary",
+          "azerbaijan-azerpost-addressing-rule",
+          "source-contains-excluded-fields",
+          "postalMappingEvidence=false"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "open-data-and-administrative-authorities-recorded",
+        "label": "The open-data portal and cadastral authority are recorded without acquiring datasets or geographic entries",
+        "status": "passed",
+        "evidence": [
+          "azerbaijan-idda-open-data-portal",
+          "azerbaijan-electronic-land-cadastre-system",
+          "rawRecordsBundled=false"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "source-acquisition-plan-fails-closed",
+        "label": "Any future mapping snapshot remains external and requires a safe schema, rights, current version, coverage, and correction evidence",
+        "status": "passed",
+        "evidence": [
+          "rawSnapshotStorage=external-nonpublic",
+          "rawRecordsBundled=false",
+          "address, office, contact, cadastral, coordinate, and geometry fields rejected",
+          "allowMappingIngestion=false until all mapping gates are evidenced"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-format-authority-evidence",
+        "label": "A current official format definition authorizes a national postcode pattern claim",
+        "status": "blocked",
+        "evidence": [
+          "operator materials are recorded without using examples as a format definition",
+          "unverifiedFormatInferenceRejected=true",
+          "nationalPattern=null"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "postal-mapping-reuse-rights",
+        "label": "A current official postcode mapping has explicit reuse terms suitable for a safe offline artifact",
+        "status": "blocked",
+        "evidence": [
+          "index search is not a bulk reuse grant",
+          "no current mapping artifact acquired",
+          "postalMappingEvidence=false"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "administrative-geodata-rights-and-safe-schema",
+        "label": "Administrative geographic keys have explicit resource-level reuse terms and a safe non-geometry schema",
+        "status": "blocked",
+        "evidence": [
+          "open-data portal catalog is not a selected dataset license",
+          "cadastre includes excluded boundary and cadastral data",
+          "no key-only extract acquired"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "postal-code-mapping-and-coverage-evidence",
+        "label": "A current official postcode mapping has been schema-checked and coverage-validated for offline reuse",
+        "status": "blocked",
+        "evidence": [
+          "postalMappingEvidence=false for every source",
+          "no postcode rows acquired",
+          "coverage-not-validated"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "version-freshness-and-correction-path",
+        "label": "The mapping has a current version, update cadence, and authority correction path",
+        "status": "blocked",
+        "evidence": [
+          "mapping-version-not-recorded",
+          "no mapping update cadence recorded",
+          "correction-path-not-recorded"
+        ],
+        "blocksRealPostalLookup": true
+      }
+    ],
+    "nextRequiredEvidence": [
+      "Obtain a current authority-published postcode format and postcode-only or safe administrative-key mapping artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, version, attribution wording, and coverage.",
+      "Before ingestion, accept only safe postcode and administrative-zone identifiers, reject address, street, number, postal-unit, office, contact, precise-point, geometry, parcel, property, and cadastral fields, and verify that the publication is current.",
+      "Record the authority correction path, update cadence, and coverage validation before enabling any real lookup or delivery claim."
+    ],
+    "nonClaims": [
+      "This pack does not provide a real postcode lookup.",
+      "This pack does not infer an Azerbaijan national postcode pattern from the recorded operator materials.",
+      "This pack does not query, download, store, or redistribute postcode mappings, administrative entries, addresses, offices, contacts, properties, parcels, boundaries, or location records.",
+      "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+      "This pack does not assert delivery-point or carrier deliverability coverage."
+    ]
+  },
+  "licenseLedger": [
+    {
+      "subject": "AGID-created country pack metadata",
+      "licenseOrTerms": "Apache-2.0",
+      "redistribution": "allowed",
+      "notes": "Includes manifest, synthetic locality fixtures, VPL seeds, generated test vectors, and safety rules."
+    },
+    {
+      "subject": "Official postal, boundary, road, population, and locality datasets",
+      "licenseOrTerms": "source-specific",
+      "redistribution": "metadata-only",
+      "notes": "Do not bundle raw official records unless a separate DATA_LICENSES entry permits redistribution."
+    },
+    {
+      "subject": "Open map provider extracts",
+      "licenseOrTerms": "source-specific",
+      "redistribution": "review-required",
+      "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+    }
+  ],
+  "officialMunicipalitySummary": {
+    "mode": "synthetic-fixture",
+    "countryCode": "AZ",
+    "sourceCount": 0,
+    "recordCount": 0,
+    "municipalityCount": 0,
+    "townCount": 0,
+    "blockCount": 0,
+    "sourceIds": [],
+    "coverageNote": "No normalized official municipality dataset was provided; AGID uses safe synthetic planning fixtures only."
+  },
+  "adminBoundaryIndex": [
+    {
+      "boundaryId": "boundary-az-m1",
+      "localityId": "AZ-M1",
+      "label": "Central Valley Municipality",
+      "boundaryClass": "municipality",
+      "geometryRef": "source-required://AZ-M1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m1-t1",
+      "localityId": "AZ-M1-T1",
+      "label": "Central Quarter",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://AZ-M1-T1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m1-t2",
+      "localityId": "AZ-M1-T2",
+      "label": "North District",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://AZ-M1-T2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m1-t3",
+      "localityId": "AZ-M1-T3",
+      "label": "Harbor / Market Area",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://AZ-M1-T3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m2",
+      "localityId": "AZ-M2",
+      "label": "Upper Valley Municipality",
+      "boundaryClass": "municipality",
+      "geometryRef": "source-required://AZ-M2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m2-t1",
+      "localityId": "AZ-M2-T1",
+      "label": "Central Quarter",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://AZ-M2-T1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m2-t2",
+      "localityId": "AZ-M2-T2",
+      "label": "North District",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://AZ-M2-T2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m2-t3",
+      "localityId": "AZ-M2-T3",
+      "label": "Harbor / Market Area",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://AZ-M2-T3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m3",
+      "localityId": "AZ-M3",
+      "label": "Ridge Municipality",
+      "boundaryClass": "municipality",
+      "geometryRef": "source-required://AZ-M3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m3-t1",
+      "localityId": "AZ-M3-T1",
+      "label": "Central Quarter",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://AZ-M3-T1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m3-t2",
+      "localityId": "AZ-M3-T2",
+      "label": "North District",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://AZ-M3-T2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-az-m3-t3",
+      "localityId": "AZ-M3-T3",
+      "label": "Harbor / Market Area",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://AZ-M3-T3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    }
+  ],
+  "localityIndex": [
+    {
+      "localityId": "AZ-M1",
+      "stableId": "az-municipality-az-m1",
+      "name": "Central Valley Municipality",
+      "kind": "municipality",
+      "parentId": null,
+      "codePart": "6Q",
+      "aliases": [
+        {
+          "label": "Central Valley Municipality",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Valley Postal Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T1",
+      "stableId": "az-town-az-m1-t1",
+      "name": "Central Quarter",
+      "kind": "town",
+      "parentId": "AZ-M1",
+      "codePart": "HM",
+      "aliases": [
+        {
+          "label": "Central Quarter",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Valley Municipality Central Quarter",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T1-C0",
+      "stableId": "az-block-az-m1-t1-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "AZ-M1-T1",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T1-C1",
+      "stableId": "az-block-az-m1-t1-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "AZ-M1-T1",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T1-C2",
+      "stableId": "az-block-az-m1-t1-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "AZ-M1-T1",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T1-C3",
+      "stableId": "az-block-az-m1-t1-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "AZ-M1-T1",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T2",
+      "stableId": "az-town-az-m1-t2",
+      "name": "North District",
+      "kind": "town",
+      "parentId": "AZ-M1",
+      "codePart": "SQ",
+      "aliases": [
+        {
+          "label": "North District",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Valley Municipality North District",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T2-C0",
+      "stableId": "az-block-az-m1-t2-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "AZ-M1-T2",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T2-C1",
+      "stableId": "az-block-az-m1-t2-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "AZ-M1-T2",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T2-C2",
+      "stableId": "az-block-az-m1-t2-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "AZ-M1-T2",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T2-C3",
+      "stableId": "az-block-az-m1-t2-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "AZ-M1-T2",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T3",
+      "stableId": "az-town-az-m1-t3",
+      "name": "Harbor / Market Area",
+      "kind": "town",
+      "parentId": "AZ-M1",
+      "codePart": "CQ",
+      "aliases": [
+        {
+          "label": "Harbor / Market Area",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Valley Municipality Harbor / Market Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T3-C0",
+      "stableId": "az-block-az-m1-t3-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "AZ-M1-T3",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T3-C1",
+      "stableId": "az-block-az-m1-t3-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "AZ-M1-T3",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T3-C2",
+      "stableId": "az-block-az-m1-t3-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "AZ-M1-T3",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M1-T3-C3",
+      "stableId": "az-block-az-m1-t3-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "AZ-M1-T3",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2",
+      "stableId": "az-municipality-az-m2",
+      "name": "Upper Valley Municipality",
+      "kind": "municipality",
+      "parentId": null,
+      "codePart": "DH",
+      "aliases": [
+        {
+          "label": "Upper Valley Municipality",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Upper Valley Postal Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T1",
+      "stableId": "az-town-az-m2-t1",
+      "name": "Central Quarter",
+      "kind": "town",
+      "parentId": "AZ-M2",
+      "codePart": "JD",
+      "aliases": [
+        {
+          "label": "Central Quarter",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Upper Valley Municipality Central Quarter",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T1-C0",
+      "stableId": "az-block-az-m2-t1-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "AZ-M2-T1",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T1-C1",
+      "stableId": "az-block-az-m2-t1-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "AZ-M2-T1",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T1-C2",
+      "stableId": "az-block-az-m2-t1-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "AZ-M2-T1",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T1-C3",
+      "stableId": "az-block-az-m2-t1-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "AZ-M2-T1",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T2",
+      "stableId": "az-town-az-m2-t2",
+      "name": "North District",
+      "kind": "town",
+      "parentId": "AZ-M2",
+      "codePart": "MG",
+      "aliases": [
+        {
+          "label": "North District",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Upper Valley Municipality North District",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T2-C0",
+      "stableId": "az-block-az-m2-t2-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "AZ-M2-T2",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T2-C1",
+      "stableId": "az-block-az-m2-t2-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "AZ-M2-T2",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T2-C2",
+      "stableId": "az-block-az-m2-t2-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "AZ-M2-T2",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T2-C3",
+      "stableId": "az-block-az-m2-t2-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "AZ-M2-T2",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T3",
+      "stableId": "az-town-az-m2-t3",
+      "name": "Harbor / Market Area",
+      "kind": "town",
+      "parentId": "AZ-M2",
+      "codePart": "KZ",
+      "aliases": [
+        {
+          "label": "Harbor / Market Area",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Upper Valley Municipality Harbor / Market Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T3-C0",
+      "stableId": "az-block-az-m2-t3-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "AZ-M2-T3",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T3-C1",
+      "stableId": "az-block-az-m2-t3-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "AZ-M2-T3",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T3-C2",
+      "stableId": "az-block-az-m2-t3-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "AZ-M2-T3",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M2-T3-C3",
+      "stableId": "az-block-az-m2-t3-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "AZ-M2-T3",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3",
+      "stableId": "az-municipality-az-m3",
+      "name": "Ridge Municipality",
+      "kind": "municipality",
+      "parentId": null,
+      "codePart": "5A",
+      "aliases": [
+        {
+          "label": "Ridge Municipality",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Ridge Postal Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T1",
+      "stableId": "az-town-az-m3-t1",
+      "name": "Central Quarter",
+      "kind": "town",
+      "parentId": "AZ-M3",
+      "codePart": "M6",
+      "aliases": [
+        {
+          "label": "Central Quarter",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Ridge Municipality Central Quarter",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T1-C0",
+      "stableId": "az-block-az-m3-t1-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "AZ-M3-T1",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T1-C1",
+      "stableId": "az-block-az-m3-t1-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "AZ-M3-T1",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T1-C2",
+      "stableId": "az-block-az-m3-t1-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "AZ-M3-T1",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T1-C3",
+      "stableId": "az-block-az-m3-t1-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "AZ-M3-T1",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T2",
+      "stableId": "az-town-az-m3-t2",
+      "name": "North District",
+      "kind": "town",
+      "parentId": "AZ-M3",
+      "codePart": "6W",
+      "aliases": [
+        {
+          "label": "North District",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Ridge Municipality North District",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T2-C0",
+      "stableId": "az-block-az-m3-t2-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "AZ-M3-T2",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T2-C1",
+      "stableId": "az-block-az-m3-t2-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "AZ-M3-T2",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T2-C2",
+      "stableId": "az-block-az-m3-t2-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "AZ-M3-T2",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T2-C3",
+      "stableId": "az-block-az-m3-t2-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "AZ-M3-T2",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T3",
+      "stableId": "az-town-az-m3-t3",
+      "name": "Harbor / Market Area",
+      "kind": "town",
+      "parentId": "AZ-M3",
+      "codePart": "NR",
+      "aliases": [
+        {
+          "label": "Harbor / Market Area",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Ridge Municipality Harbor / Market Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T3-C0",
+      "stableId": "az-block-az-m3-t3-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "AZ-M3-T3",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T3-C1",
+      "stableId": "az-block-az-m3-t3-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "AZ-M3-T3",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T3-C2",
+      "stableId": "az-block-az-m3-t3-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "AZ-M3-T3",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "AZ-M3-T3-C3",
+      "stableId": "az-block-az-m3-t3-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "AZ-M3-T3",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    }
+  ],
+  "landformIndex": [
+    {
+      "landformId": "az-mixed-terrain",
+      "label": "Mixed administrative and settlement terrain",
+      "kind": "mixed",
+      "relatedLocalityIds": [
+        "AZ-M1",
+        "AZ-M2",
+        "AZ-M3"
+      ],
+      "sourceId": "open-map-evidence-slot"
+    }
+  ],
+  "settlementClusterIndex": [
+    {
+      "clusterId": "az-cluster-az-m1-az-m1-t1",
+      "label": "Central Valley Municipality / Central Quarter",
+      "localityId": "AZ-M1-T1",
+      "agidCellSeed": "AZ:6Q:HM:11",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "az-cluster-az-m1-az-m1-t2",
+      "label": "Central Valley Municipality / North District",
+      "localityId": "AZ-M1-T2",
+      "agidCellSeed": "AZ:6Q:SQ:12",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "az-cluster-az-m2-az-m2-t1",
+      "label": "Upper Valley Municipality / Central Quarter",
+      "localityId": "AZ-M2-T1",
+      "agidCellSeed": "AZ:DH:JD:21",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "az-cluster-az-m2-az-m2-t2",
+      "label": "Upper Valley Municipality / North District",
+      "localityId": "AZ-M2-T2",
+      "agidCellSeed": "AZ:DH:MG:22",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "az-cluster-az-m3-az-m3-t1",
+      "label": "Ridge Municipality / Central Quarter",
+      "localityId": "AZ-M3-T1",
+      "agidCellSeed": "AZ:5A:M6:31",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "az-cluster-az-m3-az-m3-t2",
+      "label": "Ridge Municipality / North District",
+      "localityId": "AZ-M3-T2",
+      "agidCellSeed": "AZ:5A:6W:32",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    }
+  ],
+  "vplSeedRegions": [
+    {
+      "vplId": "az-vpl-1",
+      "label": "Central Valley Municipality synthetic postal locality 1",
+      "nonAdministrative": true,
+      "localityId": "AZ-M1",
+      "codeSeed": "HGF",
+      "reasons": [
+        "reduce-address-ambiguity",
+        "support-draft-postal-zone-design",
+        "separate-local-delivery-context"
+      ],
+      "status": "draft"
+    },
+    {
+      "vplId": "az-vpl-2",
+      "label": "Upper Valley Municipality synthetic postal locality 2",
+      "nonAdministrative": true,
+      "localityId": "AZ-M2",
+      "codeSeed": "GKJ",
+      "reasons": [
+        "reduce-address-ambiguity",
+        "support-draft-postal-zone-design",
+        "separate-local-delivery-context"
+      ],
+      "status": "draft"
+    },
+    {
+      "vplId": "az-vpl-3",
+      "label": "Ridge Municipality synthetic postal locality 3",
+      "nonAdministrative": true,
+      "localityId": "AZ-M3",
+      "codeSeed": "KA9",
+      "reasons": [
+        "reduce-address-ambiguity",
+        "support-draft-postal-zone-design",
+        "separate-local-delivery-context"
+      ],
+      "status": "draft"
+    }
+  ],
+  "planningCellIndex": [
+    {
+      "cellId": "az-planning-cell-0001",
+      "agid": "AZ0G0Y4PGBR8",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.588779
+      },
+      "codeSeed": "AZ-6Q-HM-001",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0002",
+      "agid": "AZ0G0Y4Q85HE",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.157221,
+        "lng": 47.605001
+      },
+      "codeSeed": "AZ-DH-SQ-002",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0003",
+      "agid": "AZ0G0Y4QJEP3",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.17182,
+        "lng": 47.617416
+      },
+      "codeSeed": "AZ-5A-CQ-003",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0004",
+      "agid": "AZ0G0Y4QMPWF",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.181575,
+        "lng": 47.624135
+      },
+      "codeSeed": "AZ-6Q-JD-004",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0005",
+      "agid": "AZ0G0Y4MAVXT",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.185,
+        "lng": 47.624135
+      },
+      "codeSeed": "AZ-DH-MG-005",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0006",
+      "agid": "AZ0G0Y4MCMJS",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.181575,
+        "lng": 47.617416
+      },
+      "codeSeed": "AZ-5A-KZ-006",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0007",
+      "agid": "AZ0G0Y4QCVJ9",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.17182,
+        "lng": 47.605001
+      },
+      "codeSeed": "AZ-6Q-M6-007",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0008",
+      "agid": "AZ0G0Y4P1D2C",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.157221,
+        "lng": 47.588779
+      },
+      "codeSeed": "AZ-DH-6W-008",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0009",
+      "agid": "AZ0G0Y4PDVMG",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.571221
+      },
+      "codeSeed": "AZ-5A-NR-009",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0010",
+      "agid": "AZ0G0YV9EWD4",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.122779,
+        "lng": 47.554999
+      },
+      "codeSeed": "AZ-6Q-HM-010",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0011",
+      "agid": "AZ0G0YV913K4",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.10818,
+        "lng": 47.542584
+      },
+      "codeSeed": "AZ-DH-SQ-011",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0012",
+      "agid": "AZ0G0YV71T54",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.098425,
+        "lng": 47.535865
+      },
+      "codeSeed": "AZ-5A-CQ-012",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0013",
+      "agid": "AZ0G0YV71GN2",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.095,
+        "lng": 47.535865
+      },
+      "codeSeed": "AZ-6Q-JD-013",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0014",
+      "agid": "AZ0G0YV70D0N",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.098425,
+        "lng": 47.542584
+      },
+      "codeSeed": "AZ-DH-MG-014",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0015",
+      "agid": "AZ0G0YV97BS5",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.10818,
+        "lng": 47.554999
+      },
+      "codeSeed": "AZ-5A-KZ-015",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0016",
+      "agid": "AZ0G0YV9BQHK",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.122779,
+        "lng": 47.571221
+      },
+      "codeSeed": "AZ-6Q-M6-016",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0017",
+      "agid": "AZ0G0Y4PGGPS",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.592096
+      },
+      "codeSeed": "AZ-DH-6W-017",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0018",
+      "agid": "AZ0G0Y4QERP5",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.163726,
+        "lng": 47.614445
+      },
+      "codeSeed": "AZ-5A-NR-018",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0019",
+      "agid": "AZ0G0Y4QN837",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.183841,
+        "lng": 47.631551
+      },
+      "codeSeed": "AZ-6Q-HM-019",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0020",
+      "agid": "AZ0G0Y4K6Y3B",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.197281,
+        "lng": 47.640809
+      },
+      "codeSeed": "AZ-DH-SQ-020",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0021",
+      "agid": "AZ0G0Y4K5WKQ",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.202,
+        "lng": 47.640809
+      },
+      "codeSeed": "AZ-5A-CQ-021",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0022",
+      "agid": "AZ0G0Y4K3ZW4",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.197281,
+        "lng": 47.631551
+      },
+      "codeSeed": "AZ-6Q-JD-022",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0023",
+      "agid": "AZ0G0Y4MCFR4",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.183841,
+        "lng": 47.614445
+      },
+      "codeSeed": "AZ-DH-MG-023",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0024",
+      "agid": "AZ0G0Y4QAGEJ",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.163726,
+        "lng": 47.592096
+      },
+      "codeSeed": "AZ-5A-KZ-024",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0025",
+      "agid": "AZ0G0Y4PDPS2",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.567904
+      },
+      "codeSeed": "AZ-6Q-M6-025",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0026",
+      "agid": "AZ0G0YV95SK7",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.116274,
+        "lng": 47.545555
+      },
+      "codeSeed": "AZ-DH-6W-026",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0027",
+      "agid": "AZ0G0YV8XYYF",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.096159,
+        "lng": 47.528449
+      },
+      "codeSeed": "AZ-5A-NR-027",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0028",
+      "agid": "AZ0G0YV7W2FS",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.082719,
+        "lng": 47.519191
+      },
+      "codeSeed": "AZ-6Q-HM-028",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0029",
+      "agid": "AZ0G0YV7SDA1",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.078,
+        "lng": 47.519191
+      },
+      "codeSeed": "AZ-DH-SQ-029",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0030",
+      "agid": "AZ0G0YV7VDQ4",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.082719,
+        "lng": 47.528449
+      },
+      "codeSeed": "AZ-5A-CQ-030",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0031",
+      "agid": "AZ0G0YV70XGE",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.096159,
+        "lng": 47.545555
+      },
+      "codeSeed": "AZ-6Q-JD-031",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0032",
+      "agid": "AZ0G0YV99S78",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.116274,
+        "lng": 47.567904
+      },
+      "codeSeed": "AZ-DH-MG-032",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0033",
+      "agid": "AZ0G0Y4PTEDZ",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.595412
+      },
+      "codeSeed": "AZ-5A-KZ-033",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0034",
+      "agid": "AZ0G0Y4QHY7G",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.170232,
+        "lng": 47.62389
+      },
+      "codeSeed": "AZ-6Q-M6-034",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0035",
+      "agid": "AZ0G0Y4K7MV2",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.195861,
+        "lng": 47.645686
+      },
+      "codeSeed": "AZ-DH-6W-035",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0036",
+      "agid": "AZ0G0Y4KCWM0",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.212986,
+        "lng": 47.657482
+      },
+      "codeSeed": "AZ-5A-NR-036",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0037",
+      "agid": "AZ0G0Y4GJM4W",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.219,
+        "lng": 47.657482
+      },
+      "codeSeed": "AZ-6Q-HM-037",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0038",
+      "agid": "AZ0G0Y4KDZCZ",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.212986,
+        "lng": 47.645686
+      },
+      "codeSeed": "AZ-DH-SQ-038",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0039",
+      "agid": "AZ0G0Y4K26ME",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.195861,
+        "lng": 47.62389
+      },
+      "codeSeed": "AZ-5A-CQ-039",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0040",
+      "agid": "AZ0G0Y4MMPGV",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.170232,
+        "lng": 47.595412
+      },
+      "codeSeed": "AZ-6Q-JD-040",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0041",
+      "agid": "AZ0G0Y4PCAFR",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.564588
+      },
+      "codeSeed": "AZ-DH-MG-041",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0042",
+      "agid": "AZ0G0YV91G48",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.109768,
+        "lng": 47.53611
+      },
+      "codeSeed": "AZ-5A-KZ-042",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0043",
+      "agid": "AZ0G0YV7XTCG",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.084139,
+        "lng": 47.514314
+      },
+      "codeSeed": "AZ-6Q-M6-043",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0044",
+      "agid": "AZ0G0YV2GTDX",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.067014,
+        "lng": 47.502518
+      },
+      "codeSeed": "AZ-DH-6W-044",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0045",
+      "agid": "AZ0G0YV2TGQX",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.061,
+        "lng": 47.502518
+      },
+      "codeSeed": "AZ-5A-NR-045",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0046",
+      "agid": "AZ0G0YV2R5E6",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.067014,
+        "lng": 47.514314
+      },
+      "codeSeed": "AZ-6Q-HM-046",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0047",
+      "agid": "AZ0G0YV74VBE",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.084139,
+        "lng": 47.53611
+      },
+      "codeSeed": "AZ-DH-SQ-047",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0048",
+      "agid": "AZ0G0YV6R2VZ",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.109768,
+        "lng": 47.564588
+      },
+      "codeSeed": "AZ-5A-CQ-048",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0049",
+      "agid": "AZ0G0Y4PT2YH",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.598729
+      },
+      "codeSeed": "AZ-6Q-JD-049",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0050",
+      "agid": "AZ0G0Y4QM34F",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.176738,
+        "lng": 47.633335
+      },
+      "codeSeed": "AZ-DH-MG-050",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0051",
+      "agid": "AZ0G0Y4KBJFA",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.207882,
+        "lng": 47.659821
+      },
+      "codeSeed": "AZ-5A-KZ-051",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0052",
+      "agid": "AZ0G0Y4GFY79",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.228692,
+        "lng": 47.674155
+      },
+      "codeSeed": "AZ-6Q-M6-052",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0053",
+      "agid": "AZ0G0Y4G46EC",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.236,
+        "lng": 47.674155
+      },
+      "codeSeed": "AZ-DH-6W-053",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0054",
+      "agid": "AZ0G0Y4GEJR2",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.228692,
+        "lng": 47.659821
+      },
+      "codeSeed": "AZ-5A-NR-054",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0055",
+      "agid": "AZ0G0Y4KFZ37",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.207882,
+        "lng": 47.633335
+      },
+      "codeSeed": "AZ-6Q-HM-055",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0056",
+      "agid": "AZ0G0Y4MJAP1",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.176738,
+        "lng": 47.598729
+      },
+      "codeSeed": "AZ-DH-SQ-056",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0057",
+      "agid": "AZ0G0Y4PCY8N",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.561271
+      },
+      "codeSeed": "AZ-5A-CQ-057",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0058",
+      "agid": "AZ0G0YV8YVP4",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.103262,
+        "lng": 47.526665
+      },
+      "codeSeed": "AZ-6Q-JD-058",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0059",
+      "agid": "AZ0G0YV2PKQR",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.072118,
+        "lng": 47.500179
+      },
+      "codeSeed": "AZ-DH-MG-059",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0060",
+      "agid": "AZ0G0YV26883",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.051308,
+        "lng": 47.485845
+      },
+      "codeSeed": "AZ-5A-KZ-060",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0061",
+      "agid": "AZ0G0YV27ACH",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.044,
+        "lng": 47.485845
+      },
+      "codeSeed": "AZ-6Q-M6-061",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0062",
+      "agid": "AZ0G0YV24FHX",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.051308,
+        "lng": 47.500179
+      },
+      "codeSeed": "AZ-DH-6W-062",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0063",
+      "agid": "AZ0G0YV7QFBK",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.072118,
+        "lng": 47.526665
+      },
+      "codeSeed": "AZ-5A-NR-063",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0064",
+      "agid": "AZ0G0YV6S63F",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.103262,
+        "lng": 47.561271
+      },
+      "codeSeed": "AZ-6Q-HM-064",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0065",
+      "agid": "AZ0G0Y4PT50C",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.602045
+      },
+      "codeSeed": "AZ-DH-SQ-065",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0066",
+      "agid": "AZ0G0Y4JZ2KE",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.183243,
+        "lng": 47.642779
+      },
+      "codeSeed": "AZ-5A-CQ-066",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0067",
+      "agid": "AZ0G0Y4GHCK0",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.219903,
+        "lng": 47.673956
+      },
+      "codeSeed": "AZ-6Q-JD-067",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0068",
+      "agid": "AZ0G0Y4FRNS6",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.244398,
+        "lng": 47.690829
+      },
+      "codeSeed": "AZ-DH-MG-068",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0069",
+      "agid": "AZ0G0Y4FYE84",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.253,
+        "lng": 47.690829
+      },
+      "codeSeed": "AZ-5A-KZ-069",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0070",
+      "agid": "AZ0G0Y4G0WS6",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.244398,
+        "lng": 47.673956
+      },
+      "codeSeed": "AZ-6Q-M6-070",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0071",
+      "agid": "AZ0G0Y4KK135",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.219903,
+        "lng": 47.642779
+      },
+      "codeSeed": "AZ-DH-6W-071",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0072",
+      "agid": "AZ0G0Y4MDVVZ",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.183243,
+        "lng": 47.602045
+      },
+      "codeSeed": "AZ-5A-NR-072",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0073",
+      "agid": "AZ0G0Y4PCQQS",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.557955
+      },
+      "codeSeed": "AZ-6Q-HM-073",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0074",
+      "agid": "AZ0G0YV8WWD4",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.096757,
+        "lng": 47.517221
+      },
+      "codeSeed": "AZ-DH-SQ-074",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0075",
+      "agid": "AZ0G0YV2FNDQ",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.060097,
+        "lng": 47.486044
+      },
+      "codeSeed": "AZ-5A-CQ-075",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0076",
+      "agid": "AZ0G0YV1WFQD",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.035602,
+        "lng": 47.469171
+      },
+      "codeSeed": "AZ-6Q-JD-076",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0077",
+      "agid": "AZ0G0YV12JZC",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.027,
+        "lng": 47.469171
+      },
+      "codeSeed": "AZ-DH-MG-077",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0078",
+      "agid": "AZ0G0YV1Y725",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.035602,
+        "lng": 47.486044
+      },
+      "codeSeed": "AZ-5A-KZ-078",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0079",
+      "agid": "AZ0G0YV2SBG0",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.060097,
+        "lng": 47.517221
+      },
+      "codeSeed": "AZ-6Q-M6-079",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0080",
+      "agid": "AZ0G0YV6XRMK",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.096757,
+        "lng": 47.557955
+      },
+      "codeSeed": "AZ-DH-6W-080",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0081",
+      "agid": "AZ0G0Y4PSEXE",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.605362
+      },
+      "codeSeed": "AZ-5A-NR-081",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0082",
+      "agid": "AZ0G0Y4JW9D8",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.189749,
+        "lng": 47.652224
+      },
+      "codeSeed": "AZ-6Q-HM-082",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0083",
+      "agid": "AZ0G0Y4GV9Y2",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.231924,
+        "lng": 47.688091
+      },
+      "codeSeed": "AZ-DH-SQ-083",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0084",
+      "agid": "AZ0G0Y4F2XVK",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.260104,
+        "lng": 47.707502
+      },
+      "codeSeed": "AZ-5A-CQ-084",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0085",
+      "agid": "AZ0G0Y3GYHHZ",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.27,
+        "lng": 47.707502
+      },
+      "codeSeed": "AZ-6Q-JD-085",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0086",
+      "agid": "AZ0G0Y3G2A9Q",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.260104,
+        "lng": 47.688091
+      },
+      "codeSeed": "AZ-DH-MG-086",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0087",
+      "agid": "AZ0G0Y4G9CM8",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.231924,
+        "lng": 47.652224
+      },
+      "codeSeed": "AZ-5A-KZ-087",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0088",
+      "agid": "AZ0G0Y4M95J5",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.189749,
+        "lng": 47.605362
+      },
+      "codeSeed": "AZ-6Q-M6-088",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0089",
+      "agid": "AZ0G0Y4PCN47",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.554638
+      },
+      "codeSeed": "AZ-DH-6W-089",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0090",
+      "agid": "AZ0G0YV828GT",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.090251,
+        "lng": 47.507776
+      },
+      "codeSeed": "AZ-5A-NR-090",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0091",
+      "agid": "AZ0G0YV1R3W1",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.048076,
+        "lng": 47.471909
+      },
+      "codeSeed": "AZ-6Q-HM-091",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0092",
+      "agid": "AZ0G0YV107GG",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.019896,
+        "lng": 47.452498
+      },
+      "codeSeed": "AZ-DH-SQ-092",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0093",
+      "agid": "AZ0G0YVN131A",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.01,
+        "lng": 47.452498
+      },
+      "codeSeed": "AZ-5A-CQ-093",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0094",
+      "agid": "AZ0G0YV0S4AV",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.019896,
+        "lng": 47.471909
+      },
+      "codeSeed": "AZ-6Q-JD-094",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0095",
+      "agid": "AZ0G0YV22ZYX",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.048076,
+        "lng": 47.507776
+      },
+      "codeSeed": "AZ-DH-MG-095",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0096",
+      "agid": "AZ0G0YV77NW3",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.090251,
+        "lng": 47.554638
+      },
+      "codeSeed": "AZ-5A-KZ-096",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0097",
+      "agid": "AZ0G0Y4PS2KM",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.608678
+      },
+      "codeSeed": "AZ-6Q-M6-097",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0098",
+      "agid": "AZ0G0Y4J2XQ3",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.196254,
+        "lng": 47.661669
+      },
+      "codeSeed": "AZ-DH-6W-098",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0099",
+      "agid": "AZ0G0Y4FSNY2",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.243945,
+        "lng": 47.702226
+      },
+      "codeSeed": "AZ-5A-NR-099",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0100",
+      "agid": "AZ0G0Y3H0Z5R",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.27581,
+        "lng": 47.724175
+      },
+      "codeSeed": "AZ-6Q-HM-100",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0101",
+      "agid": "AZ0G0Y3H5NG0",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.287,
+        "lng": 47.724175
+      },
+      "codeSeed": "AZ-DH-SQ-101",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0102",
+      "agid": "AZ0G0Y3GS3QF",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.27581,
+        "lng": 47.702226
+      },
+      "codeSeed": "AZ-5A-CQ-102",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0103",
+      "agid": "AZ0G0Y3FRKDG",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.243945,
+        "lng": 47.661669
+      },
+      "codeSeed": "AZ-6Q-JD-103",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0104",
+      "agid": "AZ0G0Y4M81NX",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.196254,
+        "lng": 47.608678
+      },
+      "codeSeed": "AZ-DH-MG-104",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0105",
+      "agid": "AZ0G0YV9MNSK",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.551322
+      },
+      "codeSeed": "AZ-5A-KZ-105",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0106",
+      "agid": "AZ0G0YV807MG",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.083746,
+        "lng": 47.498331
+      },
+      "codeSeed": "AZ-6Q-M6-106",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0107",
+      "agid": "AZ0G0YV1V5D2",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.036055,
+        "lng": 47.457774
+      },
+      "codeSeed": "AZ-DH-6W-107",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0108",
+      "agid": "AZ0G0YVN35TS",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.00419,
+        "lng": 47.435825
+      },
+      "codeSeed": "AZ-5A-NR-108",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0109",
+      "agid": "AZ0G0YVNT54P",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 39.993,
+        "lng": 47.435825
+      },
+      "codeSeed": "AZ-6Q-HM-109",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0110",
+      "agid": "AZ0G0YVN6H1J",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.00419,
+        "lng": 47.457774
+      },
+      "codeSeed": "AZ-DH-SQ-110",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0111",
+      "agid": "AZ0G0YV0N9BP",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.036055,
+        "lng": 47.498331
+      },
+      "codeSeed": "AZ-5A-CQ-111",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0112",
+      "agid": "AZ0G0YV7FB68",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.083746,
+        "lng": 47.551322
+      },
+      "codeSeed": "AZ-6Q-JD-112",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0113",
+      "agid": "AZ0G0Y4PS4NX",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.611995
+      },
+      "codeSeed": "AZ-DH-MG-113",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0114",
+      "agid": "AZ0G0Y4J1T3W",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.20276,
+        "lng": 47.671114
+      },
+      "codeSeed": "AZ-5A-KZ-114",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0115",
+      "agid": "AZ0G0Y4F4GK0",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.255966,
+        "lng": 47.716361
+      },
+      "codeSeed": "AZ-6Q-M6-115",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0116",
+      "agid": "AZ0G0Y3HEQ3H",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.291516,
+        "lng": 47.740849
+      },
+      "codeSeed": "AZ-DH-6W-116",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0117",
+      "agid": "AZ0G0Y3HJS38",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.304,
+        "lng": 47.740849
+      },
+      "codeSeed": "AZ-5A-NR-117",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0118",
+      "agid": "AZ0G0Y3HTVEY",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.291516,
+        "lng": 47.716361
+      },
+      "codeSeed": "AZ-6Q-HM-118",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0119",
+      "agid": "AZ0G0Y3G0QQB",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.255966,
+        "lng": 47.671114
+      },
+      "codeSeed": "AZ-DH-SQ-119",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0120",
+      "agid": "AZ0G0Y4KWW9C",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.20276,
+        "lng": 47.611995
+      },
+      "codeSeed": "AZ-5A-CQ-120",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0121",
+      "agid": "AZ0G0YV9MQZM",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.548005
+      },
+      "codeSeed": "AZ-6Q-JD-121",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0122",
+      "agid": "AZ0G0YV2MPR6",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.07724,
+        "lng": 47.488886
+      },
+      "codeSeed": "AZ-DH-MG-122",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0123",
+      "agid": "AZ0G0YV10PR7",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.024034,
+        "lng": 47.443639
+      },
+      "codeSeed": "AZ-5A-KZ-123",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0124",
+      "agid": "AZ0G0YVP7D3A",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 39.988484,
+        "lng": 47.419151
+      },
+      "codeSeed": "AZ-6Q-M6-124",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0125",
+      "agid": "AZ0G0YVPF3VG",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 39.976,
+        "lng": 47.419151
+      },
+      "codeSeed": "AZ-DH-6W-125",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0126",
+      "agid": "AZ0G0YVNGSJ5",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 39.988484,
+        "lng": 47.443639
+      },
+      "codeSeed": "AZ-5A-NR-126",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0127",
+      "agid": "AZ0G0YV0Q5G3",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.024034,
+        "lng": 47.488886
+      },
+      "codeSeed": "AZ-6Q-HM-127",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0128",
+      "agid": "AZ0G0YV7E5MX",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.07724,
+        "lng": 47.548005
+      },
+      "codeSeed": "AZ-DH-SQ-128",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0129",
+      "agid": "AZ0G0Y4PZ5EM",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.615311
+      },
+      "codeSeed": "AZ-5A-CQ-129",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0130",
+      "agid": "AZ0G0Y4GNF7R",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.209266,
+        "lng": 47.680558
+      },
+      "codeSeed": "AZ-6Q-JD-130",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0131",
+      "agid": "AZ0G0Y4EY6FA",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.267986,
+        "lng": 47.730496
+      },
+      "codeSeed": "AZ-DH-MG-131",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0132",
+      "agid": "AZ0G0Y3YHZ2F",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.307222,
+        "lng": 47.757522
+      },
+      "codeSeed": "AZ-5A-KZ-132",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0133",
+      "agid": "AZ0G0Y3Y62D2",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.321,
+        "lng": 47.757522
+      },
+      "codeSeed": "AZ-6Q-M6-133",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0134",
+      "agid": "AZ0G0Y3HMKQB",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.307222,
+        "lng": 47.730496
+      },
+      "codeSeed": "AZ-DH-6W-134",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0135",
+      "agid": "AZ0G0Y3G4W0V",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.267986,
+        "lng": 47.680558
+      },
+      "codeSeed": "AZ-5A-NR-135",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0136",
+      "agid": "AZ0G0Y4KVR6A",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.209266,
+        "lng": 47.615311
+      },
+      "codeSeed": "AZ-6Q-HM-136",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0137",
+      "agid": "AZ0G0YV9MY1W",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.544689
+      },
+      "codeSeed": "AZ-DH-SQ-137",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0138",
+      "agid": "AZ0G0YV2JJQB",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.070734,
+        "lng": 47.479442
+      },
+      "codeSeed": "AZ-5A-CQ-138",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0139",
+      "agid": "AZ0G0YVMRASC",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.012014,
+        "lng": 47.429504
+      },
+      "codeSeed": "AZ-6Q-JD-139",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0140",
+      "agid": "AZ0G0YVPGF7W",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 39.972778,
+        "lng": 47.402478
+      },
+      "codeSeed": "AZ-DH-MG-140",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0141",
+      "agid": "AZ0G0YVPNQ84",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 39.959,
+        "lng": 47.402478
+      },
+      "codeSeed": "AZ-5A-KZ-141",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0142",
+      "agid": "AZ0G0YVPC1TJ",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 39.972778,
+        "lng": 47.429504
+      },
+      "codeSeed": "AZ-6Q-M6-142",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0143",
+      "agid": "AZ0G0YV0WKBT",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.012014,
+        "lng": 47.479442
+      },
+      "codeSeed": "AZ-DH-6W-143",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0144",
+      "agid": "AZ0G0YV7HCBG",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.070734,
+        "lng": 47.544689
+      },
+      "codeSeed": "AZ-5A-NR-144",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0145",
+      "agid": "AZ0G0Y4PZ7G6",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.618628
+      },
+      "codeSeed": "AZ-6Q-HM-145",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0146",
+      "agid": "AZ0G0Y4GP9JW",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.215771,
+        "lng": 47.690003
+      },
+      "codeSeed": "AZ-DH-SQ-146",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0147",
+      "agid": "AZ0G0Y4ER0V2",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.280007,
+        "lng": 47.744631
+      },
+      "codeSeed": "AZ-5A-CQ-147",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0148",
+      "agid": "AZ0G0Y3Y3JSE",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.322928,
+        "lng": 47.774195
+      },
+      "codeSeed": "AZ-6Q-JD-148",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0149",
+      "agid": "AZ0G0Y3WMTF0",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.338,
+        "lng": 47.774195
+      },
+      "codeSeed": "AZ-DH-MG-149",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0150",
+      "agid": "AZ0G0Y3Y8379",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.322928,
+        "lng": 47.744631
+      },
+      "codeSeed": "AZ-5A-KZ-150",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0151",
+      "agid": "AZ0G0Y3GQD8B",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.280007,
+        "lng": 47.690003
+      },
+      "codeSeed": "AZ-6Q-M6-151",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0152",
+      "agid": "AZ0G0Y4KQC09",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.215771,
+        "lng": 47.618628
+      },
+      "codeSeed": "AZ-DH-6W-152",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0153",
+      "agid": "AZ0G0YV9NNDC",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.541372
+      },
+      "codeSeed": "AZ-5A-NR-153",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0154",
+      "agid": "AZ0G0YV2CH12",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.064229,
+        "lng": 47.469997
+      },
+      "codeSeed": "AZ-6Q-HM-154",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0155",
+      "agid": "AZ0G0YVNY4DS",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 39.999993,
+        "lng": 47.415369
+      },
+      "codeSeed": "AZ-DH-SQ-155",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0156",
+      "agid": "AZ0G0YVS9E8H",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 39.957072,
+        "lng": 47.385805
+      },
+      "codeSeed": "AZ-5A-CQ-156",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0157",
+      "agid": "AZ0G0YT6JM3A",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 39.942,
+        "lng": 47.385805
+      },
+      "codeSeed": "AZ-6Q-JD-157",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0158",
+      "agid": "AZ0G0YT9B9HH",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 39.957072,
+        "lng": 47.415369
+      },
+      "codeSeed": "AZ-DH-MG-158",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0159",
+      "agid": "AZ0G0YVN8XYE",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 39.999993,
+        "lng": 47.469997
+      },
+      "codeSeed": "AZ-5A-KZ-159",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0160",
+      "agid": "AZ0G0YV7MA33",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.064229,
+        "lng": 47.541372
+      },
+      "codeSeed": "AZ-6Q-M6-160",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0161",
+      "agid": "AZ0G0Y4PZDQC",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.621944
+      },
+      "codeSeed": "AZ-DH-6W-161",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0162",
+      "agid": "AZ0G0Y4GS040",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.222277,
+        "lng": 47.699448
+      },
+      "codeSeed": "AZ-5A-NR-162",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0163",
+      "agid": "AZ0G0Y3HAW68",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.292028,
+        "lng": 47.758766
+      },
+      "codeSeed": "AZ-6Q-HM-163",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0164",
+      "agid": "AZ0G0Y3ZCAFN",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.338634,
+        "lng": 47.790869
+      },
+      "codeSeed": "AZ-DH-SQ-164",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0165",
+      "agid": "AZ0G0Y3WC0H0",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.355,
+        "lng": 47.790869
+      },
+      "codeSeed": "AZ-5A-CQ-165",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0166",
+      "agid": "AZ0G0Y3XY4AX",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.338634,
+        "lng": 47.758766
+      },
+      "codeSeed": "AZ-6Q-JD-166",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0167",
+      "agid": "AZ0G0Y3HW35W",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.292028,
+        "lng": 47.699448
+      },
+      "codeSeed": "AZ-DH-MG-167",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0168",
+      "agid": "AZ0G0Y4KPD9G",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.222277,
+        "lng": 47.621944
+      },
+      "codeSeed": "AZ-5A-KZ-168",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0169",
+      "agid": "AZ0G0YV9NQ16",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.538056
+      },
+      "codeSeed": "AZ-6Q-M6-169",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0170",
+      "agid": "AZ0G0YV2AE62",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.057723,
+        "lng": 47.460552
+      },
+      "codeSeed": "AZ-DH-6W-170",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0171",
+      "agid": "AZ0G0YVP3T2R",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 39.987972,
+        "lng": 47.401234
+      },
+      "codeSeed": "AZ-5A-NR-171",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0172",
+      "agid": "AZ0G0YVSKEV7",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 39.941366,
+        "lng": 47.369131
+      },
+      "codeSeed": "AZ-6Q-HM-172",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0173",
+      "agid": "AZ0G0YT5PETM",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 39.925,
+        "lng": 47.369131
+      },
+      "codeSeed": "AZ-DH-SQ-173",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0174",
+      "agid": "AZ0G0YT6KVMG",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 39.941366,
+        "lng": 47.401234
+      },
+      "codeSeed": "AZ-5A-CQ-174",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0175",
+      "agid": "AZ0G0YVNJ351",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 39.987972,
+        "lng": 47.460552
+      },
+      "codeSeed": "AZ-6Q-JD-175",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0176",
+      "agid": "AZ0G0YV2ZWN0",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.057723,
+        "lng": 47.538056
+      },
+      "codeSeed": "AZ-DH-MG-176",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0177",
+      "agid": "AZ0G0Y4PZG69",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.625261
+      },
+      "codeSeed": "AZ-5A-KZ-177",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0178",
+      "agid": "AZ0G0Y4GYBP9",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.228783,
+        "lng": 47.708892
+      },
+      "codeSeed": "AZ-6Q-M6-178",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0179",
+      "agid": "AZ0G0Y3YPTKA",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.304049,
+        "lng": 47.772901
+      },
+      "codeSeed": "AZ-DH-6W-179",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0180",
+      "agid": "AZ0G0Y3WARG9",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.35434,
+        "lng": 47.807542
+      },
+      "codeSeed": "AZ-5A-NR-180",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0181",
+      "agid": "AZ0G0Y1B4R28",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.372,
+        "lng": 47.807542
+      },
+      "codeSeed": "AZ-6Q-HM-181",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0182",
+      "agid": "AZ0G0Y3WG515",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.35434,
+        "lng": 47.772901
+      },
+      "codeSeed": "AZ-DH-SQ-182",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0183",
+      "agid": "AZ0G0Y3HQMMN",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.304049,
+        "lng": 47.708892
+      },
+      "codeSeed": "AZ-5A-CQ-183",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0184",
+      "agid": "AZ0G0Y3CAH7M",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.228783,
+        "lng": 47.625261
+      },
+      "codeSeed": "AZ-6Q-JD-184",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0185",
+      "agid": "AZ0G0YV9NWRP",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.534739
+      },
+      "codeSeed": "AZ-DH-MG-185",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0186",
+      "agid": "AZ0G0YV1M0R6",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.051217,
+        "lng": 47.451108
+      },
+      "codeSeed": "AZ-5A-KZ-186",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0187",
+      "agid": "AZ0G0YVPVXRQ",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 39.975951,
+        "lng": 47.387099
+      },
+      "codeSeed": "AZ-6Q-M6-187",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0188",
+      "agid": "AZ0G0YT5KC56",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 39.92566,
+        "lng": 47.352458
+      },
+      "codeSeed": "AZ-DH-6W-188",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0189",
+      "agid": "AZ0G0YT5FCHG",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 39.908,
+        "lng": 47.352458
+      },
+      "codeSeed": "AZ-5A-NR-189",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0190",
+      "agid": "AZ0G0YT68YAX",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 39.92566,
+        "lng": 47.387099
+      },
+      "codeSeed": "AZ-6Q-HM-190",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0191",
+      "agid": "AZ0G0YVNN7XR",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 39.975951,
+        "lng": 47.451108
+      },
+      "codeSeed": "AZ-DH-SQ-191",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0192",
+      "agid": "AZ0G0YV30SYF",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.051217,
+        "lng": 47.534739
+      },
+      "codeSeed": "AZ-5A-CQ-192",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0193",
+      "agid": "AZ0G0Y4S0E5Q",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.628577
+      },
+      "codeSeed": "AZ-6Q-JD-193",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0194",
+      "agid": "AZ0G0Y4FM4RE",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.235288,
+        "lng": 47.718337
+      },
+      "codeSeed": "AZ-DH-MG-194",
+      "routeBucket": "AZ-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0195",
+      "agid": "AZ0G0Y3YWHB0",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.31607,
+        "lng": 47.787036
+      },
+      "codeSeed": "AZ-5A-KZ-195",
+      "routeBucket": "AZ-route-03",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0196",
+      "agid": "AZ0G0Y1B60QD",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.370046,
+        "lng": 47.824216
+      },
+      "codeSeed": "AZ-6Q-M6-196",
+      "routeBucket": "AZ-route-04",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0197",
+      "agid": "AZ0G0Y1BK1S8",
+      "localityId": "AZ-M3-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.389,
+        "lng": 47.824216
+      },
+      "codeSeed": "AZ-DH-6W-197",
+      "routeBucket": "AZ-route-05",
+      "areaClass": "remote",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0198",
+      "agid": "AZ0G0Y1BXF5N",
+      "localityId": "AZ-M3-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.370046,
+        "lng": 47.787036
+      },
+      "codeSeed": "AZ-5A-NR-198",
+      "routeBucket": "AZ-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0199",
+      "agid": "AZ0G0Y3JASXQ",
+      "localityId": "AZ-M1-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.31607,
+        "lng": 47.718337
+      },
+      "codeSeed": "AZ-6Q-HM-199",
+      "routeBucket": "AZ-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0200",
+      "agid": "AZ0G0Y3FMX0D",
+      "localityId": "AZ-M1-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 40.235288,
+        "lng": 47.628577
+      },
+      "codeSeed": "AZ-DH-SQ-200",
+      "routeBucket": "AZ-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0201",
+      "agid": "AZ0G0YV9P0VN",
+      "localityId": "AZ-M1-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 40.14,
+        "lng": 47.531423
+      },
+      "codeSeed": "AZ-5A-CQ-201",
+      "routeBucket": "AZ-route-09",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0202",
+      "agid": "AZ0G0YV1HZPF",
+      "localityId": "AZ-M2-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 40.044712,
+        "lng": 47.441663
+      },
+      "codeSeed": "AZ-6Q-JD-202",
+      "routeBucket": "AZ-route-10",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0203",
+      "agid": "AZ0G0YVS69YY",
+      "localityId": "AZ-M2-T2",
+      "vplId": "az-vpl-2",
+      "centroid": {
+        "lat": 39.96393,
+        "lng": 47.372964
+      },
+      "codeSeed": "AZ-DH-MG-203",
+      "routeBucket": "AZ-route-11",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0204",
+      "agid": "AZ0G0YT59C4H",
+      "localityId": "AZ-M2-T3",
+      "vplId": "az-vpl-3",
+      "centroid": {
+        "lat": 39.909954,
+        "lng": 47.335784
+      },
+      "codeSeed": "AZ-5A-KZ-204",
+      "routeBucket": "AZ-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "az-planning-cell-0205",
+      "agid": "AZ0G0YSGVYP3",
+      "localityId": "AZ-M3-T1",
+      "vplId": "az-vpl-1",
+      "centroid": {
+        "lat": 39.891,
+        "lng": 47.335784
+      },
+      "codeSeed": "AZ-6Q-M6-205",
+      "routeBucket": "AZ-route-01",
+      "areaClass": "remote",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    }
+  ],
+  "routeEvidenceIndex": [
+    {
+      "routeId": "az-route-evidence-001",
+      "label": "AZ corridor evidence slot 1",
+      "fromLocalityId": "AZ-M1-T1",
+      "toLocalityId": "AZ-M1-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/001",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-002",
+      "label": "AZ road evidence slot 2",
+      "fromLocalityId": "AZ-M1-T2",
+      "toLocalityId": "AZ-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/002",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-003",
+      "label": "AZ road evidence slot 3",
+      "fromLocalityId": "AZ-M1-T3",
+      "toLocalityId": "AZ-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/003",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-004",
+      "label": "AZ corridor evidence slot 4",
+      "fromLocalityId": "AZ-M2-T1",
+      "toLocalityId": "AZ-M2-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/004",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-005",
+      "label": "AZ road evidence slot 5",
+      "fromLocalityId": "AZ-M2-T2",
+      "toLocalityId": "AZ-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/005",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-006",
+      "label": "AZ road evidence slot 6",
+      "fromLocalityId": "AZ-M2-T3",
+      "toLocalityId": "AZ-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/006",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-007",
+      "label": "AZ corridor evidence slot 7",
+      "fromLocalityId": "AZ-M3-T1",
+      "toLocalityId": "AZ-M3-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/007",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-008",
+      "label": "AZ road evidence slot 8",
+      "fromLocalityId": "AZ-M3-T2",
+      "toLocalityId": "AZ-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/008",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-009",
+      "label": "AZ road evidence slot 9",
+      "fromLocalityId": "AZ-M3-T3",
+      "toLocalityId": "AZ-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/009",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-010",
+      "label": "AZ corridor evidence slot 10",
+      "fromLocalityId": "AZ-M1-T1",
+      "toLocalityId": "AZ-M1-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/010",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-011",
+      "label": "AZ road evidence slot 11",
+      "fromLocalityId": "AZ-M1-T2",
+      "toLocalityId": "AZ-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/011",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-012",
+      "label": "AZ road evidence slot 12",
+      "fromLocalityId": "AZ-M1-T3",
+      "toLocalityId": "AZ-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/012",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-013",
+      "label": "AZ corridor evidence slot 13",
+      "fromLocalityId": "AZ-M2-T1",
+      "toLocalityId": "AZ-M2-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/013",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-014",
+      "label": "AZ road evidence slot 14",
+      "fromLocalityId": "AZ-M2-T2",
+      "toLocalityId": "AZ-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/014",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-015",
+      "label": "AZ road evidence slot 15",
+      "fromLocalityId": "AZ-M2-T3",
+      "toLocalityId": "AZ-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/015",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-016",
+      "label": "AZ corridor evidence slot 16",
+      "fromLocalityId": "AZ-M3-T1",
+      "toLocalityId": "AZ-M3-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/016",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-017",
+      "label": "AZ road evidence slot 17",
+      "fromLocalityId": "AZ-M3-T2",
+      "toLocalityId": "AZ-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/017",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-018",
+      "label": "AZ road evidence slot 18",
+      "fromLocalityId": "AZ-M3-T3",
+      "toLocalityId": "AZ-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/018",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-019",
+      "label": "AZ corridor evidence slot 19",
+      "fromLocalityId": "AZ-M1-T1",
+      "toLocalityId": "AZ-M1-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/019",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-020",
+      "label": "AZ road evidence slot 20",
+      "fromLocalityId": "AZ-M1-T2",
+      "toLocalityId": "AZ-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/020",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-021",
+      "label": "AZ road evidence slot 21",
+      "fromLocalityId": "AZ-M1-T3",
+      "toLocalityId": "AZ-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/021",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-022",
+      "label": "AZ corridor evidence slot 22",
+      "fromLocalityId": "AZ-M2-T1",
+      "toLocalityId": "AZ-M2-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/022",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-023",
+      "label": "AZ road evidence slot 23",
+      "fromLocalityId": "AZ-M2-T2",
+      "toLocalityId": "AZ-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/023",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-024",
+      "label": "AZ road evidence slot 24",
+      "fromLocalityId": "AZ-M2-T3",
+      "toLocalityId": "AZ-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/024",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-025",
+      "label": "AZ corridor evidence slot 25",
+      "fromLocalityId": "AZ-M3-T1",
+      "toLocalityId": "AZ-M3-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/025",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-026",
+      "label": "AZ road evidence slot 26",
+      "fromLocalityId": "AZ-M3-T2",
+      "toLocalityId": "AZ-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/026",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-027",
+      "label": "AZ road evidence slot 27",
+      "fromLocalityId": "AZ-M3-T3",
+      "toLocalityId": "AZ-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/027",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-028",
+      "label": "AZ corridor evidence slot 28",
+      "fromLocalityId": "AZ-M1-T1",
+      "toLocalityId": "AZ-M1-T3",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/028",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-029",
+      "label": "AZ road evidence slot 29",
+      "fromLocalityId": "AZ-M1-T2",
+      "toLocalityId": "AZ-M1-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/029",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-030",
+      "label": "AZ road evidence slot 30",
+      "fromLocalityId": "AZ-M1-T3",
+      "toLocalityId": "AZ-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/030",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-031",
+      "label": "AZ corridor evidence slot 31",
+      "fromLocalityId": "AZ-M2-T1",
+      "toLocalityId": "AZ-M3-T2",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/031",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-032",
+      "label": "AZ road evidence slot 32",
+      "fromLocalityId": "AZ-M2-T2",
+      "toLocalityId": "AZ-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/032",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-033",
+      "label": "AZ road evidence slot 33",
+      "fromLocalityId": "AZ-M2-T3",
+      "toLocalityId": "AZ-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/033",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-034",
+      "label": "AZ corridor evidence slot 34",
+      "fromLocalityId": "AZ-M3-T1",
+      "toLocalityId": "AZ-M1-T2",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/034",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-035",
+      "label": "AZ road evidence slot 35",
+      "fromLocalityId": "AZ-M3-T2",
+      "toLocalityId": "AZ-M3-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/035",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-036",
+      "label": "AZ road evidence slot 36",
+      "fromLocalityId": "AZ-M3-T3",
+      "toLocalityId": "AZ-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/036",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-037",
+      "label": "AZ corridor evidence slot 37",
+      "fromLocalityId": "AZ-M1-T1",
+      "toLocalityId": "AZ-M2-T2",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/037",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-038",
+      "label": "AZ road evidence slot 38",
+      "fromLocalityId": "AZ-M1-T2",
+      "toLocalityId": "AZ-M1-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/038",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-039",
+      "label": "AZ road evidence slot 39",
+      "fromLocalityId": "AZ-M1-T3",
+      "toLocalityId": "AZ-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/039",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-040",
+      "label": "AZ corridor evidence slot 40",
+      "fromLocalityId": "AZ-M2-T1",
+      "toLocalityId": "AZ-M3-T2",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/040",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-041",
+      "label": "AZ road evidence slot 41",
+      "fromLocalityId": "AZ-M2-T2",
+      "toLocalityId": "AZ-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/041",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-042",
+      "label": "AZ road evidence slot 42",
+      "fromLocalityId": "AZ-M2-T3",
+      "toLocalityId": "AZ-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/042",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-043",
+      "label": "AZ corridor evidence slot 43",
+      "fromLocalityId": "AZ-M3-T1",
+      "toLocalityId": "AZ-M1-T2",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/043",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-044",
+      "label": "AZ road evidence slot 44",
+      "fromLocalityId": "AZ-M3-T2",
+      "toLocalityId": "AZ-M3-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/044",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-045",
+      "label": "AZ road evidence slot 45",
+      "fromLocalityId": "AZ-M3-T3",
+      "toLocalityId": "AZ-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/045",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-046",
+      "label": "AZ corridor evidence slot 46",
+      "fromLocalityId": "AZ-M1-T1",
+      "toLocalityId": "AZ-M2-T2",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/046",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-047",
+      "label": "AZ road evidence slot 47",
+      "fromLocalityId": "AZ-M1-T2",
+      "toLocalityId": "AZ-M1-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/047",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-048",
+      "label": "AZ road evidence slot 48",
+      "fromLocalityId": "AZ-M1-T3",
+      "toLocalityId": "AZ-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/048",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-049",
+      "label": "AZ corridor evidence slot 49",
+      "fromLocalityId": "AZ-M2-T1",
+      "toLocalityId": "AZ-M3-T2",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/049",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-050",
+      "label": "AZ road evidence slot 50",
+      "fromLocalityId": "AZ-M2-T2",
+      "toLocalityId": "AZ-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/050",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-051",
+      "label": "AZ road evidence slot 51",
+      "fromLocalityId": "AZ-M2-T3",
+      "toLocalityId": "AZ-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://AZ/route/051",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "az-route-evidence-052",
+      "label": "AZ corridor evidence slot 52",
+      "fromLocalityId": "AZ-M3-T1",
+      "toLocalityId": "AZ-M1-T2",
+      "mode": "corridor",
+      "evidenceRef": "source-required://AZ/route/052",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    }
+  ],
+  "qualityEvidenceIndex": [
+    {
+      "evidenceId": "az-quality-country",
+      "subjectId": "AZ",
+      "subjectType": "country",
+      "addressQuality": 0.48,
+      "boundaryQuality": 0.66,
+      "routeQuality": 0.55,
+      "populationQuality": 0.6,
+      "confidenceBand": "high",
+      "verificationRequired": true,
+      "notes": [
+        "country-level-quality-prior",
+        "not-a-claim-of-official-postal-completeness"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-az-m1",
+      "subjectId": "AZ-M1",
+      "subjectType": "municipality",
+      "addressQuality": 0.46,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.54,
+      "populationQuality": 0.59,
+      "confidenceBand": "medium",
+      "verificationRequired": true,
+      "notes": [
+        "synthetic-planning-quality-slot",
+        "replace-with-reviewed-official-or-open-data-before-pilot"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-az-m2",
+      "subjectId": "AZ-M2",
+      "subjectType": "municipality",
+      "addressQuality": 0.47,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.54,
+      "populationQuality": 0.59,
+      "confidenceBand": "medium",
+      "verificationRequired": true,
+      "notes": [
+        "synthetic-planning-quality-slot",
+        "replace-with-reviewed-official-or-open-data-before-pilot"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-az-m3",
+      "subjectId": "AZ-M3",
+      "subjectType": "municipality",
+      "addressQuality": 0.47,
+      "boundaryQuality": 0.66,
+      "routeQuality": 0.55,
+      "populationQuality": 0.6,
+      "confidenceBand": "medium",
+      "verificationRequired": true,
+      "notes": [
+        "synthetic-planning-quality-slot",
+        "replace-with-reviewed-official-or-open-data-before-pilot"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-001",
+      "subjectId": "az-planning-cell-0001",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-002",
+      "subjectId": "az-planning-cell-0007",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-003",
+      "subjectId": "az-planning-cell-0013",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-004",
+      "subjectId": "az-planning-cell-0019",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-005",
+      "subjectId": "az-planning-cell-0025",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-006",
+      "subjectId": "az-planning-cell-0031",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-007",
+      "subjectId": "az-planning-cell-0037",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-008",
+      "subjectId": "az-planning-cell-0043",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-009",
+      "subjectId": "az-planning-cell-0049",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-010",
+      "subjectId": "az-planning-cell-0055",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-011",
+      "subjectId": "az-planning-cell-0061",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-012",
+      "subjectId": "az-planning-cell-0067",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-013",
+      "subjectId": "az-planning-cell-0073",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-014",
+      "subjectId": "az-planning-cell-0079",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-015",
+      "subjectId": "az-planning-cell-0085",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-016",
+      "subjectId": "az-planning-cell-0091",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-017",
+      "subjectId": "az-planning-cell-0097",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-018",
+      "subjectId": "az-planning-cell-0103",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-019",
+      "subjectId": "az-planning-cell-0109",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-020",
+      "subjectId": "az-planning-cell-0115",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-021",
+      "subjectId": "az-planning-cell-0121",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-022",
+      "subjectId": "az-planning-cell-0127",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-023",
+      "subjectId": "az-planning-cell-0133",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-024",
+      "subjectId": "az-planning-cell-0139",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-025",
+      "subjectId": "az-planning-cell-0145",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-026",
+      "subjectId": "az-planning-cell-0151",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-027",
+      "subjectId": "az-planning-cell-0157",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-028",
+      "subjectId": "az-planning-cell-0163",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-029",
+      "subjectId": "az-planning-cell-0169",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-030",
+      "subjectId": "az-planning-cell-0175",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-031",
+      "subjectId": "az-planning-cell-0181",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-032",
+      "subjectId": "az-planning-cell-0187",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-033",
+      "subjectId": "az-planning-cell-0193",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-034",
+      "subjectId": "az-planning-cell-0199",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "az-quality-cell-035",
+      "subjectId": "az-planning-cell-0205",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.36,
+      "boundaryQuality": 0.6,
+      "routeQuality": 0.43,
+      "populationQuality": 0.54,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:remote",
+        "no-personal-address-derived-score"
+      ]
+    }
+  ],
+  "postalSystemPriors": [
+    {
+      "templateId": "france-like",
+      "visibleFormat": "CC-NN NNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "First two digits act as a broad administrative area, with three local digits below.",
+        "administrative departments",
+        "stable municipalities"
+      ]
+    },
+    {
+      "templateId": "agid-native",
+      "visibleFormat": "CC-AAAA-NNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "Keeps visible code close to AGID hash structure while hiding the full AGID.",
+        "low-data regions",
+        "offline-first operation"
+      ]
+    },
+    {
+      "templateId": "japan-like",
+      "visibleFormat": "CC-NNN-NNNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "Country prefix plus 3+4 numeric hierarchy. Good for dense settlement networks and later subdivision.",
+        "dense cities",
+        "municipal hierarchy"
+      ]
+    },
+    {
+      "templateId": "ghana-like",
+      "visibleFormat": "CC-AA-NNN-NNNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "Country prefix, AGID-derived area letters, and numeric local grid. Best when public digital address UX is acceptable.",
+        "digital address adoption",
+        "public map/grid linkage"
+      ]
+    }
+  ],
+  "governanceNotes": [
+    "This country pack is not an official postal authority dataset.",
+    "Use simulation or draft status until government, municipality, postal authority, or carrier pilot approval is recorded.",
+    "Visible postal codes must remain within one municipality and preserve stable locality IDs across renames.",
+    "Old-to-new transition mappings are required before split, merge, or reshaping events."
+  ],
+  "privacyThreatModel": [
+    "Do not store personal addresses, recipient names, phone numbers, AOID private bodies, AGID-S payloads, or proof codes in this pack.",
+    "Do not publish household-level, sensitive-facility-level, refuge-level, or high-risk precise zones.",
+    "Use source metadata and geometry references until redistribution rights are verified.",
+    "Use no-raw-address test vectors before publishing pack releases."
+  ],
+  "testVectors": [
+    {
+      "id": "az-test-vector-1",
+      "input": {
+        "countryCode": "AZ",
+        "municipalityId": "AZ-M1",
+        "townId": "AZ-M1-T1",
+        "chomeId": "AZ-M1-T1-C1"
+      },
+      "expected": {
+        "candidateCodePrefix": "AZ-",
+        "sameMunicipalityOnly": true,
+        "containsPersonalData": false
+      }
+    },
+    {
+      "id": "az-test-vector-2",
+      "input": {
+        "countryCode": "AZ",
+        "municipalityId": "AZ-M2",
+        "townId": "AZ-M2-T2",
+        "chomeId": "AZ-M2-T2-C2"
+      },
+      "expected": {
+        "candidateCodePrefix": "AZ-",
+        "sameMunicipalityOnly": true,
+        "containsPersonalData": false
+      }
+    },
+    {
+      "id": "az-test-vector-3",
+      "input": {
+        "countryCode": "AZ",
+        "municipalityId": "AZ-M3",
+        "townId": "AZ-M3-T3",
+        "chomeId": "AZ-M3-T3-C3"
+      },
+      "expected": {
+        "candidateCodePrefix": "AZ-",
+        "sameMunicipalityOnly": true,
+        "containsPersonalData": false
+      }
+    }
+  ]
+}

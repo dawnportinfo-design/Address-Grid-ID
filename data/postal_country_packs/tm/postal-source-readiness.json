@@ -1,0 +1,193 @@
+{
+  "schemaId": "agid-turkmenistan-postal-source-readiness-v0.1",
+  "countryCode": "TM",
+  "countryName": "Turkmenistan",
+  "evaluatedAt": "2026-07-23T08:38:10.171Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "formatAuthorityEvidence": false,
+    "unverifiedFormatInferenceRejected": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "turkmenistan-postal-communication-law-2021",
+      "scope": "postal-law-and-privacy-boundary",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "Law on Postal Communication published 2021-11-18",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "turkmenistan-government-turkmenpochta-operator-reference",
+      "scope": "government-postal-operator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "government reference published 2021-10-09",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "turkmenpost-official-service-surface",
+      "scope": "official-postal-service-surface",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "retrieved 2026-07-23; publication version not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "turkmenistan-2024-administrative-division-resolution",
+      "scope": "administrative-division-authority-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "resolution published 2024-09-30",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "terms-not-verified",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "tm-current-postcode-mapping-rights-coverage-and-correction-required",
+      "scope": "current-postcode-format-mapping-rights-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-law-and-privacy-boundary-recorded",
+      "label": "Postal law records a national operator role and protects postal-address and user data",
+      "status": "passed",
+      "evidence": [
+        "turkmenistan-postal-communication-law-2021",
+        "postal address and user data are not acquired",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-operator-surfaces-recorded",
+      "label": "Government and Turkmenpost service references are recorded as metadata only",
+      "status": "passed",
+      "evidence": [
+        "turkmenistan-government-turkmenpochta-operator-reference",
+        "turkmenpost-official-service-surface",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires safe schema, rights, version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "unsafe location and personal fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "An authority-published national postcode format is recorded independently of a personal-address or tracking service",
+      "status": "blocked",
+      "evidence": [
+        "nationalPattern=null",
+        "formatAuthorityEvidence=false",
+        "unverifiedFormatInferenceRejected=true",
+        "no format is inferred from unrelated interfaces or examples"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-mapping-reuse-rights",
+      "label": "A current official postcode mapping has explicit, verified reuse terms",
+      "status": "blocked",
+      "evidence": [
+        "no official mapping license or terms recorded",
+        "official postal surfaces are metadata-only",
+        "tm-current-postcode-mapping-rights-coverage-and-correction-required unresolved"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "administrative-geodata-reuse-rights",
+      "label": "Administrative keys or boundaries have explicit reusable terms independent of personal or cadastral data",
+      "status": "blocked",
+      "evidence": [
+        "administrative-division resolution records authority, not data reuse terms",
+        "land-cadastre sources may contain restricted parcel or owner information",
+        "no administrative data acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been acquired, schema-checked, and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no postcode rows, service results, or geographic records acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "no current mapping version recorded",
+        "correction-path-not-recorded",
+        "service publication version not recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a current Turkmenpost or authority-designated mapping artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, and attribution wording.",
+    "Before ingestion, accept only safe postcode and administrative-zone identifiers and reject address, street, building, recipient, precise-point, geometry, cadastral, owner, and query-result fields.",
+    "Record mapping coverage, current version, update cadence, and an authority correction path before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not assert a national Turkmenistan postal-code regex.",
+    "This pack does not download, store, or redistribute Turkmenpost, government, cadastral, postal-mapping, boundary, address, tracking, or user records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

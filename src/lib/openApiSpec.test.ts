@@ -77,6 +77,8 @@ test('OpenAPI paths stay relative to /api/v1 and cover core integration surfaces
     '/address/parse',
     '/address/verify',
     '/address/verify/capabilities',
+    '/postal-codes/capabilities',
+    '/postal-codes/validate',
     '/address/standard-library/capabilities',
     '/address/standard-library/resolve',
     '/credential-issuers/trust-registry/snapshot',
@@ -209,6 +211,11 @@ test('OpenAPI components include shared AGID result and error schemas', () => {
   assert.ok('AddressVerifyRequest' in AGID_OPENAPI_SPEC.components.schemas);
   assert.ok('AgidResultAddressVerification' in AGID_OPENAPI_SPEC.components.schemas);
   assert.ok('AgidResultAddressVerificationCapabilities' in AGID_OPENAPI_SPEC.components.schemas);
+  assert.ok('PostalCodeApiValidationRequest' in AGID_OPENAPI_SPEC.components.schemas);
+  assert.ok('PostalCodeApiValidation' in AGID_OPENAPI_SPEC.components.schemas);
+  assert.ok('PostalCodeApiCapabilities' in AGID_OPENAPI_SPEC.components.schemas);
+  assert.ok('AgidResultPostalCodeApiValidation' in AGID_OPENAPI_SPEC.components.schemas);
+  assert.ok('AgidResultPostalCodeApiCapabilities' in AGID_OPENAPI_SPEC.components.schemas);
   assert.ok('CredentialIssuerTrustRegistrySnapshotRequest' in AGID_OPENAPI_SPEC.components.schemas);
   assert.ok('CredentialIssuerTrustEvaluateRequest' in AGID_OPENAPI_SPEC.components.schemas);
   assert.ok('CredentialIssuerTrustVerifyCredentialRequest' in AGID_OPENAPI_SPEC.components.schemas);

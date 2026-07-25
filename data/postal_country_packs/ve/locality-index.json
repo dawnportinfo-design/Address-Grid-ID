@@ -1,0 +1,782 @@
+[
+  {
+    "localityId": "VE-M1",
+    "stableId": "ve-municipality-ve-m1",
+    "name": "Central Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "VM",
+    "aliases": [
+      {
+        "label": "Central Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T1",
+    "stableId": "ve-town-ve-m1-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "VE-M1",
+    "codePart": "GP",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T1-C0",
+    "stableId": "ve-block-ve-m1-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "VE-M1-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T1-C1",
+    "stableId": "ve-block-ve-m1-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "VE-M1-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T1-C2",
+    "stableId": "ve-block-ve-m1-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "VE-M1-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T1-C3",
+    "stableId": "ve-block-ve-m1-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "VE-M1-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T2",
+    "stableId": "ve-town-ve-m1-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "VE-M1",
+    "codePart": "66",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T2-C0",
+    "stableId": "ve-block-ve-m1-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "VE-M1-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T2-C1",
+    "stableId": "ve-block-ve-m1-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "VE-M1-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T2-C2",
+    "stableId": "ve-block-ve-m1-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "VE-M1-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T2-C3",
+    "stableId": "ve-block-ve-m1-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "VE-M1-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T3",
+    "stableId": "ve-town-ve-m1-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "VE-M1",
+    "codePart": "ZX",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Central Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T3-C0",
+    "stableId": "ve-block-ve-m1-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "VE-M1-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T3-C1",
+    "stableId": "ve-block-ve-m1-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "VE-M1-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T3-C2",
+    "stableId": "ve-block-ve-m1-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "VE-M1-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M1-T3-C3",
+    "stableId": "ve-block-ve-m1-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "VE-M1-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2",
+    "stableId": "ve-municipality-ve-m2",
+    "name": "North Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "97",
+    "aliases": [
+      {
+        "label": "North Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T1",
+    "stableId": "ve-town-ve-m2-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "VE-M2",
+    "codePart": "YA",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T1-C0",
+    "stableId": "ve-block-ve-m2-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "VE-M2-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T1-C1",
+    "stableId": "ve-block-ve-m2-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "VE-M2-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T1-C2",
+    "stableId": "ve-block-ve-m2-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "VE-M2-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T1-C3",
+    "stableId": "ve-block-ve-m2-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "VE-M2-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T2",
+    "stableId": "ve-town-ve-m2-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "VE-M2",
+    "codePart": "4W",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T2-C0",
+    "stableId": "ve-block-ve-m2-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "VE-M2-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T2-C1",
+    "stableId": "ve-block-ve-m2-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "VE-M2-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T2-C2",
+    "stableId": "ve-block-ve-m2-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "VE-M2-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T2-C3",
+    "stableId": "ve-block-ve-m2-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "VE-M2-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T3",
+    "stableId": "ve-town-ve-m2-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "VE-M2",
+    "codePart": "HQ",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T3-C0",
+    "stableId": "ve-block-ve-m2-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "VE-M2-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T3-C1",
+    "stableId": "ve-block-ve-m2-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "VE-M2-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T3-C2",
+    "stableId": "ve-block-ve-m2-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "VE-M2-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M2-T3-C3",
+    "stableId": "ve-block-ve-m2-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "VE-M2-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3",
+    "stableId": "ve-municipality-ve-m3",
+    "name": "South Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "ZT",
+    "aliases": [
+      {
+        "label": "South Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "South Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T1",
+    "stableId": "ve-town-ve-m3-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "VE-M3",
+    "codePart": "ED",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "South Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T1-C0",
+    "stableId": "ve-block-ve-m3-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "VE-M3-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T1-C1",
+    "stableId": "ve-block-ve-m3-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "VE-M3-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T1-C2",
+    "stableId": "ve-block-ve-m3-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "VE-M3-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T1-C3",
+    "stableId": "ve-block-ve-m3-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "VE-M3-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T2",
+    "stableId": "ve-town-ve-m3-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "VE-M3",
+    "codePart": "J3",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "South Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T2-C0",
+    "stableId": "ve-block-ve-m3-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "VE-M3-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T2-C1",
+    "stableId": "ve-block-ve-m3-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "VE-M3-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T2-C2",
+    "stableId": "ve-block-ve-m3-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "VE-M3-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T2-C3",
+    "stableId": "ve-block-ve-m3-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "VE-M3-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T3",
+    "stableId": "ve-town-ve-m3-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "VE-M3",
+    "codePart": "9V",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "South Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T3-C0",
+    "stableId": "ve-block-ve-m3-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "VE-M3-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T3-C1",
+    "stableId": "ve-block-ve-m3-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "VE-M3-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T3-C2",
+    "stableId": "ve-block-ve-m3-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "VE-M3-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "VE-M3-T3-C3",
+    "stableId": "ve-block-ve-m3-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "VE-M3-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  }
+]

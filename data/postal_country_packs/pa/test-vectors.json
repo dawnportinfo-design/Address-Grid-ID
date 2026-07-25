@@ -1,0 +1,44 @@
+[
+  {
+    "id": "pa-test-vector-1",
+    "input": {
+      "countryCode": "PA",
+      "municipalityId": "PA-M1",
+      "townId": "PA-M1-T1",
+      "chomeId": "PA-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "PA-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "pa-test-vector-2",
+    "input": {
+      "countryCode": "PA",
+      "municipalityId": "PA-M2",
+      "townId": "PA-M2-T2",
+      "chomeId": "PA-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "PA-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "pa-test-vector-3",
+    "input": {
+      "countryCode": "PA",
+      "municipalityId": "PA-M3",
+      "townId": "PA-M3-T3",
+      "chomeId": "PA-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "PA-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

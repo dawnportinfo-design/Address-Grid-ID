@@ -16,5 +16,17 @@
     "licenseOrTerms": "source-specific",
     "redistribution": "review-required",
     "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+  },
+  {
+    "subject": "Myanmar Post postcode-search and ministry website-list source metadata",
+    "licenseOrTerms": "Official postal-operator and government webpages; reuse rights for postal mapping are not recorded",
+    "redistribution": "metadata-only",
+    "notes": "This release records source metadata only. It does not submit search queries or bundle, derive, or retain postcode, address, locality, recipient, branch, or delivery-point records. The sources do not provide a reusable national regex or mapping reuse right."
+  },
+  {
+    "subject": "Myanmar national postal-code format and delivery-point mapping",
+    "licenseOrTerms": "Not yet verified",
+    "redistribution": "not-bundled",
+    "notes": "No fixed national regex, postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, operational-coverage assertion, or derived equivalent is included until authority, version, redistribution, coverage, and correction evidence are recorded."
   }
 ]

@@ -1,0 +1,674 @@
+[
+  {
+    "routeId": "uy-route-evidence-001",
+    "label": "UY mixed evidence slot 1",
+    "fromLocalityId": "UY-M1-T1",
+    "toLocalityId": "UY-M1-T3",
+    "mode": "mixed",
+    "evidenceRef": "source-required://UY/route/001",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-002",
+    "label": "UY road evidence slot 2",
+    "fromLocalityId": "UY-M1-T2",
+    "toLocalityId": "UY-M1-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/002",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-003",
+    "label": "UY road evidence slot 3",
+    "fromLocalityId": "UY-M1-T3",
+    "toLocalityId": "UY-M3-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/003",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-004",
+    "label": "UY road evidence slot 4",
+    "fromLocalityId": "UY-M2-T1",
+    "toLocalityId": "UY-M2-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/004",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-005",
+    "label": "UY road evidence slot 5",
+    "fromLocalityId": "UY-M2-T2",
+    "toLocalityId": "UY-M2-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/005",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-006",
+    "label": "UY mixed evidence slot 6",
+    "fromLocalityId": "UY-M2-T3",
+    "toLocalityId": "UY-M1-T2",
+    "mode": "mixed",
+    "evidenceRef": "source-required://UY/route/006",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-007",
+    "label": "UY road evidence slot 7",
+    "fromLocalityId": "UY-M3-T1",
+    "toLocalityId": "UY-M3-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/007",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-008",
+    "label": "UY road evidence slot 8",
+    "fromLocalityId": "UY-M3-T2",
+    "toLocalityId": "UY-M3-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/008",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-009",
+    "label": "UY road evidence slot 9",
+    "fromLocalityId": "UY-M3-T3",
+    "toLocalityId": "UY-M2-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/009",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-010",
+    "label": "UY road evidence slot 10",
+    "fromLocalityId": "UY-M1-T1",
+    "toLocalityId": "UY-M1-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/010",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-011",
+    "label": "UY mixed evidence slot 11",
+    "fromLocalityId": "UY-M1-T2",
+    "toLocalityId": "UY-M1-T1",
+    "mode": "mixed",
+    "evidenceRef": "source-required://UY/route/011",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-012",
+    "label": "UY road evidence slot 12",
+    "fromLocalityId": "UY-M1-T3",
+    "toLocalityId": "UY-M3-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/012",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-013",
+    "label": "UY road evidence slot 13",
+    "fromLocalityId": "UY-M2-T1",
+    "toLocalityId": "UY-M2-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/013",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-014",
+    "label": "UY road evidence slot 14",
+    "fromLocalityId": "UY-M2-T2",
+    "toLocalityId": "UY-M2-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/014",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-015",
+    "label": "UY road evidence slot 15",
+    "fromLocalityId": "UY-M2-T3",
+    "toLocalityId": "UY-M1-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/015",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-016",
+    "label": "UY mixed evidence slot 16",
+    "fromLocalityId": "UY-M3-T1",
+    "toLocalityId": "UY-M3-T3",
+    "mode": "mixed",
+    "evidenceRef": "source-required://UY/route/016",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-017",
+    "label": "UY road evidence slot 17",
+    "fromLocalityId": "UY-M3-T2",
+    "toLocalityId": "UY-M3-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/017",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-018",
+    "label": "UY road evidence slot 18",
+    "fromLocalityId": "UY-M3-T3",
+    "toLocalityId": "UY-M2-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/018",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-019",
+    "label": "UY road evidence slot 19",
+    "fromLocalityId": "UY-M1-T1",
+    "toLocalityId": "UY-M1-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/019",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-020",
+    "label": "UY road evidence slot 20",
+    "fromLocalityId": "UY-M1-T2",
+    "toLocalityId": "UY-M1-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/020",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-021",
+    "label": "UY mixed evidence slot 21",
+    "fromLocalityId": "UY-M1-T3",
+    "toLocalityId": "UY-M3-T2",
+    "mode": "mixed",
+    "evidenceRef": "source-required://UY/route/021",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-022",
+    "label": "UY road evidence slot 22",
+    "fromLocalityId": "UY-M2-T1",
+    "toLocalityId": "UY-M2-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/022",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-023",
+    "label": "UY road evidence slot 23",
+    "fromLocalityId": "UY-M2-T2",
+    "toLocalityId": "UY-M2-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/023",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-024",
+    "label": "UY road evidence slot 24",
+    "fromLocalityId": "UY-M2-T3",
+    "toLocalityId": "UY-M1-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/024",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-025",
+    "label": "UY road evidence slot 25",
+    "fromLocalityId": "UY-M3-T1",
+    "toLocalityId": "UY-M3-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/025",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-026",
+    "label": "UY mixed evidence slot 26",
+    "fromLocalityId": "UY-M3-T2",
+    "toLocalityId": "UY-M3-T1",
+    "mode": "mixed",
+    "evidenceRef": "source-required://UY/route/026",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-027",
+    "label": "UY road evidence slot 27",
+    "fromLocalityId": "UY-M3-T3",
+    "toLocalityId": "UY-M2-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/027",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-028",
+    "label": "UY road evidence slot 28",
+    "fromLocalityId": "UY-M1-T1",
+    "toLocalityId": "UY-M1-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/028",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-029",
+    "label": "UY road evidence slot 29",
+    "fromLocalityId": "UY-M1-T2",
+    "toLocalityId": "UY-M3-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/029",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-030",
+    "label": "UY road evidence slot 30",
+    "fromLocalityId": "UY-M1-T3",
+    "toLocalityId": "UY-M3-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/030",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-031",
+    "label": "UY mixed evidence slot 31",
+    "fromLocalityId": "UY-M2-T1",
+    "toLocalityId": "UY-M2-T2",
+    "mode": "mixed",
+    "evidenceRef": "source-required://UY/route/031",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-032",
+    "label": "UY road evidence slot 32",
+    "fromLocalityId": "UY-M2-T2",
+    "toLocalityId": "UY-M1-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/032",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-033",
+    "label": "UY road evidence slot 33",
+    "fromLocalityId": "UY-M2-T3",
+    "toLocalityId": "UY-M1-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/033",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-034",
+    "label": "UY road evidence slot 34",
+    "fromLocalityId": "UY-M3-T1",
+    "toLocalityId": "UY-M3-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/034",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-035",
+    "label": "UY road evidence slot 35",
+    "fromLocalityId": "UY-M3-T2",
+    "toLocalityId": "UY-M2-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/035",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-036",
+    "label": "UY mixed evidence slot 36",
+    "fromLocalityId": "UY-M3-T3",
+    "toLocalityId": "UY-M2-T1",
+    "mode": "mixed",
+    "evidenceRef": "source-required://UY/route/036",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-037",
+    "label": "UY road evidence slot 37",
+    "fromLocalityId": "UY-M1-T1",
+    "toLocalityId": "UY-M1-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/037",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-038",
+    "label": "UY road evidence slot 38",
+    "fromLocalityId": "UY-M1-T2",
+    "toLocalityId": "UY-M3-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/038",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-039",
+    "label": "UY road evidence slot 39",
+    "fromLocalityId": "UY-M1-T3",
+    "toLocalityId": "UY-M3-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/039",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-040",
+    "label": "UY road evidence slot 40",
+    "fromLocalityId": "UY-M2-T1",
+    "toLocalityId": "UY-M2-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/040",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-041",
+    "label": "UY mixed evidence slot 41",
+    "fromLocalityId": "UY-M2-T2",
+    "toLocalityId": "UY-M1-T3",
+    "mode": "mixed",
+    "evidenceRef": "source-required://UY/route/041",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-042",
+    "label": "UY road evidence slot 42",
+    "fromLocalityId": "UY-M2-T3",
+    "toLocalityId": "UY-M1-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/042",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-043",
+    "label": "UY road evidence slot 43",
+    "fromLocalityId": "UY-M3-T1",
+    "toLocalityId": "UY-M3-T2",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/043",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-044",
+    "label": "UY road evidence slot 44",
+    "fromLocalityId": "UY-M3-T2",
+    "toLocalityId": "UY-M2-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/044",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-045",
+    "label": "UY road evidence slot 45",
+    "fromLocalityId": "UY-M3-T3",
+    "toLocalityId": "UY-M2-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/045",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-046",
+    "label": "UY mixed evidence slot 46",
+    "fromLocalityId": "UY-M1-T1",
+    "toLocalityId": "UY-M1-T2",
+    "mode": "mixed",
+    "evidenceRef": "source-required://UY/route/046",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-047",
+    "label": "UY road evidence slot 47",
+    "fromLocalityId": "UY-M1-T2",
+    "toLocalityId": "UY-M3-T3",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/047",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  },
+  {
+    "routeId": "uy-route-evidence-048",
+    "label": "UY road evidence slot 48",
+    "fromLocalityId": "UY-M1-T3",
+    "toLocalityId": "UY-M3-T1",
+    "mode": "road",
+    "evidenceRef": "source-required://UY/route/048",
+    "sourceId": "open-map-evidence-slot",
+    "status": "source-required",
+    "riskFlags": [
+      "confirm-road-passability",
+      "local-route-review"
+    ]
+  }
+]

@@ -52,5 +52,50 @@
       "Open map records are not bundled by default.",
       "Any derived database must keep source-specific attribution and redistribution obligations."
     ]
+  },
+  {
+    "sourceId": "nepal-post-national-postal-codes",
+    "sourceName": "Nepal Postal Service national postal-codes publication",
+    "sourceUrl": "https://nepalpost.gov.np/content/1716/1716-postal-codes-of-nepal/",
+    "provider": "Department of Postal Service, Government of Nepal",
+    "licenseOrTerms": "Official national postal-code publication page; no mapping data license or redistribution grant is recorded, and neither its PDF nor postal-code records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official national postal-code publication surface; metadata only, not a reusable national regex, mapping, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The Department of Postal Service hosts a national postal-codes publication page.",
+      "This pack does not download, read, store, transform, or redistribute the linked PDF, postal-code records, locality records, or displayed addresses.",
+      "The publication page alone does not establish a machine-readable national format, a versioned mapping, or redistribution rights."
+    ]
+  },
+  {
+    "sourceId": "pokhara-postal-directorate-postal-code-2025",
+    "sourceName": "Postal Directorate Pokhara postal-code 2025 publication",
+    "sourceUrl": "https://pokhara.nepalpost.gov.np/content/12/postal-code--2025/",
+    "provider": "Postal Directorate Pokhara, Department of Postal Service, Government of Nepal",
+    "licenseOrTerms": "Official regional postal-code publication page; no mapping data license or redistribution grant is recorded, and neither its PDF nor postal-code records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official regional publication and recency signal; metadata only, not a national mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official postal directorate page publishes a postal-code item labeled 2025.",
+      "This pack records page metadata only and does not download, read, store, transform, or redistribute its linked document or postal records.",
+      "A regional publication does not establish national format scope, mapping completeness, or reuse rights."
+    ]
+  },
+  {
+    "sourceId": "parbat-district-post-new-postal-code-notice",
+    "sourceName": "District Post Office Parbat new postal-code notice",
+    "sourceUrl": "https://parbat.nepalpost.gov.np/content/13299/information-of-a-new-postal-cord-/",
+    "provider": "District Post Office Parbat, Department of Postal Service, Government of Nepal",
+    "licenseOrTerms": "Official district postal-code notice page; no mapping data license or redistribution grant is recorded, and neither its PDF nor postal-code records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-code change-notice surface; metadata only, not a national mapping or change-feed dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The official district post office page presents a notice titled as new postal-code information.",
+      "This pack records page metadata only and does not download, read, store, transform, or redistribute the linked notice, postal records, or displayed addresses.",
+      "A change notice without an authoritative machine-readable delta, version, scope, rights, and correction policy cannot support lookup or autofill."
+    ]
   }
 ]

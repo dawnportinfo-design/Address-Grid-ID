@@ -1,0 +1,44 @@
+[
+  {
+    "id": "py-test-vector-1",
+    "input": {
+      "countryCode": "PY",
+      "municipalityId": "PY-M1",
+      "townId": "PY-M1-T1",
+      "chomeId": "PY-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "PY-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "py-test-vector-2",
+    "input": {
+      "countryCode": "PY",
+      "municipalityId": "PY-M2",
+      "townId": "PY-M2-T2",
+      "chomeId": "PY-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "PY-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "py-test-vector-3",
+    "input": {
+      "countryCode": "PY",
+      "municipalityId": "PY-M3",
+      "townId": "PY-M3-T3",
+      "chomeId": "PY-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "PY-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

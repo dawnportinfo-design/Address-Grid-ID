@@ -1,0 +1,44 @@
+[
+  {
+    "id": "sv-test-vector-1",
+    "input": {
+      "countryCode": "SV",
+      "municipalityId": "SV-M1",
+      "townId": "SV-M1-T1",
+      "chomeId": "SV-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "SV-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "sv-test-vector-2",
+    "input": {
+      "countryCode": "SV",
+      "municipalityId": "SV-M2",
+      "townId": "SV-M2-T2",
+      "chomeId": "SV-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "SV-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "sv-test-vector-3",
+    "input": {
+      "countryCode": "SV",
+      "municipalityId": "SV-M3",
+      "townId": "SV-M3-T3",
+      "chomeId": "SV-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "SV-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

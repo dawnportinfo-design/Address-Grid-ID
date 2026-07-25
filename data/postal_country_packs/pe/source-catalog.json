@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "PE official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "mtc-peru-national-postcode-guidance",
+    "sourceName": "MTC Peru national postcode guidance",
+    "sourceUrl": "https://www.gob.pe/es/521-consulta-tu-codigo-postal-nacional",
+    "provider": "Ministerio de Transportes y Comunicaciones (MTC), Peru",
+    "licenseOrTerms": "Official public guidance page; it states the five-digit format but does not grant a postcode-mapping dataset or delivery-coverage claim, and no postal, locality, or address record is bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "authority-published five-digit national postcode-format reference; metadata only, not an offline mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The MTC page was last changed on 2024-01-14 and states that the national postcode has five digits.",
+      "This pack records the format rule only and does not query the location-aware service or copy postcode, locality, address, or location records.",
+      "Format guidance does not establish current postcode mapping coverage or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "mtc-peru-postal-statistics-2022",
+    "sourceName": "MTC postal-sector statistics 2022",
+    "sourceUrl": "https://cdn.www.gob.pe/uploads/document/file/5212120/Bolet%C3%ADn%20Estad%C3%ADstico%20del%20Sector%20Postal%20del%20A%C3%B1o%202022.pdf?v=1696049618",
+    "provider": "Ministerio de Transportes y Comunicaciones (MTC), Peru",
+    "licenseOrTerms": "Official statistics publication; no bulk postcode-mapping license or redistribution grant is recorded here, and no statistics, postcode, locality, address, or geographic records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "national postcode structure and 2022 scope reference; metadata only, not a current offline mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The 2022 publication documents a five-digit national postcode structure and its official consultation service.",
+      "This pack stores no mapping rows, service results, location queries, addresses, or geographic coordinates.",
+      "A historic statistics publication does not establish a current reusable mapping, coverage, correction process, or carrier deliverability."
+    ]
+  },
+  {
+    "sourceId": "mtc-peru-postcode-open-data",
+    "sourceName": "MTC Peru postcode open-data catalog entry",
+    "sourceUrl": "https://www.datosabiertos.gob.pe/dataset/mtc-codigo-postal-peru",
+    "provider": "Ministerio de Transportes y Comunicaciones (MTC) via Plataforma Nacional de Datos Abiertos",
+    "licenseOrTerms": "Catalog metadata records public access and the Open Data Commons Attribution License for an XLSX resource released and modified 2018-03-23; automated resource retrieval returned HTTP 403 on 2026-07-23, so no raw snapshot, table, or derived data is bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "licensed open-data catalog evidence and controlled acquisition target; metadata only until a lawful raw snapshot is separately acquired and schema-reviewed",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The catalog records a public MTC postcode dataset with an explicit attribution license.",
+      "The automated retrieval failure is recorded instead of bypassed; raw source material remains outside public packs and no data is derived.",
+      "The 2018 metadata does not establish current coverage, update cadence, correction path, or delivery-point capability."
+    ]
+  },
+  {
+    "sourceId": "pe-current-postcode-mapping-required",
+    "sourceName": "Peru current postcode mapping, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:peru-current-postcode-mapping-required",
+    "provider": "Ministerio de Transportes y Comunicaciones (MTC) or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current mapping; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The cataloged open-data resource is explicitly licensed, but its raw content and current coverage were not validated after automated retrieval returned HTTP 403.",
+      "Do not add real postcode records, address matching, delivery coverage, or carrier claims until a current mapping, coverage evidence, and correction path are recorded."
+    ]
+  }
+]

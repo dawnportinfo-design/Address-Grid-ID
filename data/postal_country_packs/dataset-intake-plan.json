@@ -4,10 +4,10 @@
   "containsPersonalData": false,
   "containsRawThirdPartyData": false,
   "summary": {
-    "totalCountries": 85,
+    "totalCountries": 86,
     "p0Countries": 17,
-    "generatedPackCountries": 78,
-    "validPackCountries": 78,
+    "generatedPackCountries": 79,
+    "validPackCountries": 79,
     "sourceCatalogOnlyCountries": 7,
     "normalizedOfficialMunicipalityNeeded": 65,
     "byClass": {
@@ -18,13 +18,13 @@
       "rapid-growth": 4,
       "island": 2,
       "polar": 1,
-      "source-catalog-only": 31
+      "source-catalog-only": 32
     },
     "byStage": {
       "source-catalog-only": 7,
       "synthetic-planning-fixture": 65,
       "normalized-official-municipality-needed": 0,
-      "open-geodata-ready": 13,
+      "open-geodata-ready": 14,
       "pilot-dataset-ready": 0
     }
   },
@@ -1233,6 +1233,39 @@
       "datasetClass": "source-catalog-only",
       "stage": "synthetic-planning-fixture",
       "packRepositoryName": "agid-postal-pack-gq",
+      "packGenerated": true,
+      "packValid": true,
+      "sourceReadiness": "global-fallback-only",
+      "preferredSourceIds": [],
+      "sourceUrls": [],
+      "containsPersonalData": false,
+      "containsRawThirdPartyData": false,
+      "minimumPublicDataset": [
+        "manifest",
+        "source-catalog",
+        "license-ledger",
+        "locality-index",
+        "quality-evidence-index",
+        "test-vectors",
+        "no-raw-address-policy",
+        "admin-boundary-index",
+        "route-evidence-slots"
+      ],
+      "nextActions": [
+        "ingest normalized official municipality dataset when redistribution terms are reviewed",
+        "attach open geodata source references without bundling raw third-party records"
+      ],
+      "blockers": [
+        "country-specific-source-needed"
+      ]
+    },
+    {
+      "countryCode": "GT",
+      "countryName": "Guatemala",
+      "priority": "P1",
+      "datasetClass": "source-catalog-only",
+      "stage": "synthetic-planning-fixture",
+      "packRepositoryName": "agid-postal-pack-gt",
       "packGenerated": true,
       "packValid": true,
       "sourceReadiness": "global-fallback-only",
@@ -2689,7 +2722,7 @@
         "tcra-tanzania-postcode"
       ],
       "sourceUrls": [
-        "https://www.tcra.go.tz/services/postcode"
+        "https://address.tcra.go.tz/services/postcode"
       ],
       "containsPersonalData": false,
       "containsRawThirdPartyData": false,
@@ -2714,13 +2747,17 @@
       "countryName": "Uganda",
       "priority": "P1",
       "datasetClass": "rapid-growth",
-      "stage": "synthetic-planning-fixture",
+      "stage": "open-geodata-ready",
       "packRepositoryName": "agid-postal-pack-ug",
       "packGenerated": true,
       "packValid": true,
-      "sourceReadiness": "global-fallback-only",
-      "preferredSourceIds": [],
-      "sourceUrls": [],
+      "sourceReadiness": "official-or-open-source-linked",
+      "preferredSourceIds": [
+        "posta-uganda-postal-address"
+      ],
+      "sourceUrls": [
+        "https://ugapost.co.ug/our-services/physical-address/"
+      ],
       "containsPersonalData": false,
       "containsRawThirdPartyData": false,
       "minimumPublicDataset": [
@@ -2735,12 +2772,9 @@
         "route-evidence-slots"
       ],
       "nextActions": [
-        "ingest normalized official municipality dataset when redistribution terms are reviewed",
-        "attach open geodata source references without bundling raw third-party records"
+        "run sample municipality import and compare against source catalog freshness"
       ],
-      "blockers": [
-        "country-specific-source-needed"
-      ]
+      "blockers": []
     },
     {
       "countryCode": "US",

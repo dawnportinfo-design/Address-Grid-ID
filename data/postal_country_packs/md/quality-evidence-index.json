@@ -1,0 +1,542 @@
+[
+  {
+    "evidenceId": "md-quality-country",
+    "subjectId": "MD",
+    "subjectType": "country",
+    "addressQuality": 0.48,
+    "boundaryQuality": 0.66,
+    "routeQuality": 0.55,
+    "populationQuality": 0.6,
+    "confidenceBand": "high",
+    "verificationRequired": true,
+    "notes": [
+      "country-level-quality-prior",
+      "not-a-claim-of-official-postal-completeness"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-md-m1",
+    "subjectId": "MD-M1",
+    "subjectType": "municipality",
+    "addressQuality": 0.46,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.54,
+    "populationQuality": 0.59,
+    "confidenceBand": "medium",
+    "verificationRequired": true,
+    "notes": [
+      "synthetic-planning-quality-slot",
+      "replace-with-reviewed-official-or-open-data-before-pilot"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-md-m2",
+    "subjectId": "MD-M2",
+    "subjectType": "municipality",
+    "addressQuality": 0.47,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.54,
+    "populationQuality": 0.59,
+    "confidenceBand": "medium",
+    "verificationRequired": true,
+    "notes": [
+      "synthetic-planning-quality-slot",
+      "replace-with-reviewed-official-or-open-data-before-pilot"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-md-m3",
+    "subjectId": "MD-M3",
+    "subjectType": "municipality",
+    "addressQuality": 0.47,
+    "boundaryQuality": 0.66,
+    "routeQuality": 0.55,
+    "populationQuality": 0.6,
+    "confidenceBand": "medium",
+    "verificationRequired": true,
+    "notes": [
+      "synthetic-planning-quality-slot",
+      "replace-with-reviewed-official-or-open-data-before-pilot"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-001",
+    "subjectId": "md-planning-cell-0001",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:urban-core",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-002",
+    "subjectId": "md-planning-cell-0007",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-003",
+    "subjectId": "md-planning-cell-0013",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-004",
+    "subjectId": "md-planning-cell-0019",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-005",
+    "subjectId": "md-planning-cell-0025",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-006",
+    "subjectId": "md-planning-cell-0031",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:urban-core",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-007",
+    "subjectId": "md-planning-cell-0037",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-008",
+    "subjectId": "md-planning-cell-0043",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-009",
+    "subjectId": "md-planning-cell-0049",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-010",
+    "subjectId": "md-planning-cell-0055",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-011",
+    "subjectId": "md-planning-cell-0061",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:urban-core",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-012",
+    "subjectId": "md-planning-cell-0067",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-013",
+    "subjectId": "md-planning-cell-0073",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-014",
+    "subjectId": "md-planning-cell-0079",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-015",
+    "subjectId": "md-planning-cell-0085",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-016",
+    "subjectId": "md-planning-cell-0091",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:urban-core",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-017",
+    "subjectId": "md-planning-cell-0097",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-018",
+    "subjectId": "md-planning-cell-0103",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-019",
+    "subjectId": "md-planning-cell-0109",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-020",
+    "subjectId": "md-planning-cell-0115",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-021",
+    "subjectId": "md-planning-cell-0121",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:urban-core",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-022",
+    "subjectId": "md-planning-cell-0127",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-023",
+    "subjectId": "md-planning-cell-0133",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-024",
+    "subjectId": "md-planning-cell-0139",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-025",
+    "subjectId": "md-planning-cell-0145",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-026",
+    "subjectId": "md-planning-cell-0151",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:urban-core",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-027",
+    "subjectId": "md-planning-cell-0157",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-028",
+    "subjectId": "md-planning-cell-0163",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-029",
+    "subjectId": "md-planning-cell-0169",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-030",
+    "subjectId": "md-planning-cell-0175",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-031",
+    "subjectId": "md-planning-cell-0181",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:urban-core",
+      "no-personal-address-derived-score"
+    ]
+  },
+  {
+    "evidenceId": "md-quality-cell-032",
+    "subjectId": "md-planning-cell-0187",
+    "subjectType": "planning-cell",
+    "addressQuality": 0.45,
+    "boundaryQuality": 0.65,
+    "routeQuality": 0.52,
+    "populationQuality": 0.58,
+    "confidenceBand": "low",
+    "verificationRequired": true,
+    "notes": [
+      "area-class:rural",
+      "no-personal-address-derived-score"
+    ]
+  }
+]

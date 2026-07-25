@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ge-test-vector-1",
+    "input": {
+      "countryCode": "GE",
+      "municipalityId": "GE-M1",
+      "townId": "GE-M1-T1",
+      "chomeId": "GE-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "GE-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "ge-test-vector-2",
+    "input": {
+      "countryCode": "GE",
+      "municipalityId": "GE-M2",
+      "townId": "GE-M2-T2",
+      "chomeId": "GE-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "GE-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "ge-test-vector-3",
+    "input": {
+      "countryCode": "GE",
+      "municipalityId": "GE-M3",
+      "townId": "GE-M3-T3",
+      "chomeId": "GE-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "GE-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

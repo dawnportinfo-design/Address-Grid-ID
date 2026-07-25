@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "AZ official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "azerbaijan-azerpost-index-search-boundary",
+    "sourceName": "Azerbaijan Azerpost index-search boundary",
+    "sourceUrl": "https://www.azerpost.az/en/frequently-asked-questions/general-br-questions/how-can-i-find-out-the-postal-code-of-my-residential-address",
+    "provider": "Azerpost LLC",
+    "licenseOrTerms": "Official operator FAQ records an index-search service. It is not queried, does not provide a bulk-reuse grant, and no postcode, address, office, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal index-search boundary reference; metadata only, not an offline postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "No lookup request is sent.",
+      "Interactive availability is not a redistribution grant.",
+      "No operational postal data is retained."
+    ]
+  },
+  {
+    "sourceId": "azerbaijan-azerpost-addressing-rule",
+    "sourceName": "Azerbaijan Azerpost mail-receiving and addressing procedure",
+    "sourceUrl": "https://www.azerpost.az/storage/pages/3/procedure-for-receiving-mailings-1.pdf",
+    "provider": "Azerpost LLC",
+    "licenseOrTerms": "Official operator procedure is recorded as metadata only. It contains address-oriented instructions and is not used to acquire or retain personal, address, or postcode data; it also does not independently authorize a current national postcode-format or mapping claim.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal addressing-rule boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Address-oriented content is excluded from all artifacts.",
+      "No postcode row or address data is retained.",
+      "The pack deliberately does not infer a format from examples."
+    ]
+  },
+  {
+    "sourceId": "azerbaijan-idda-open-data-portal",
+    "sourceName": "Azerbaijan IDDA Open Data Portal",
+    "sourceUrl": "https://opendata.az/az",
+    "provider": "Innovation and Digital Development Agency (IDDA)",
+    "licenseOrTerms": "Official portal catalog is recorded as a governance surface only. No dataset, resource-level license, version, coverage, or correction path is selected or inferred; no data is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "open-data governance reference; metadata only, not a selected postcode or administrative dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "A portal catalog is not a dataset-level reuse grant.",
+      "No dataset entry is retained.",
+      "A future artifact must establish its own safe schema and currentness."
+    ]
+  },
+  {
+    "sourceId": "azerbaijan-electronic-land-cadastre-system",
+    "sourceName": "Azerbaijan Electronic Land Cadastre Information System reference",
+    "sourceUrl": "https://emlak.gov.az/az/page/view/32",
+    "provider": "State Service on Property Issues",
+    "licenseOrTerms": "Official cadastral-system page describes administrative boundaries and cadastral functions. Resource-level reuse terms are not recorded, and cadastral, boundary, property, and geometry data are excluded; no record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative and cadastral authority reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The source includes fields outside the permitted schema.",
+      "No geographic or cadastral record is retained.",
+      "Administrative authority does not establish postcode mapping or delivery coverage."
+    ]
+  },
+  {
+    "sourceId": "az-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Azerbaijan current postcode format, safe mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:azerbaijan-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "provider": "Azerpost, IDDA, or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with explicit format authority, reuse terms, coverage, version, and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The search surface is not a substitute for a safe offline mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+    ]
+  }
+]

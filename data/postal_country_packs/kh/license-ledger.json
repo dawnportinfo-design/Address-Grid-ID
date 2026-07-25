@@ -16,5 +16,17 @@
     "licenseOrTerms": "source-specific",
     "redistribution": "review-required",
     "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+  },
+  {
+    "subject": "Cambodia Post location and MPTC relationship source metadata",
+    "licenseOrTerms": "Official operator and ministry webpages; terms and reuse rights for postal mapping are not recorded",
+    "redistribution": "metadata-only",
+    "notes": "This release records source metadata only. It does not query, bundle, or derive location, postcode, address, post-office, recipient, or delivery-point records. The webpages do not establish a national postal-code format or mapping reuse right."
+  },
+  {
+    "subject": "Cambodia national postal-code format and delivery-point mapping",
+    "licenseOrTerms": "Not yet verified",
+    "redistribution": "not-bundled",
+    "notes": "No fixed national regex, postcode mapping, address-to-postcode lookup, delivery-point record, carrier response, or derived equivalent is included until authority, version, redistribution, and correction evidence are recorded."
   }
 ]

@@ -1,0 +1,193 @@
+{
+  "schemaId": "agid-bulgaria-postal-source-readiness-v0.1",
+  "countryCode": "BG",
+  "countryName": "Bulgaria",
+  "evaluatedAt": "2026-07-23T09:06:40.554Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "formatAuthorityEvidence": false,
+    "unverifiedFormatInferenceRejected": true
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "bulgaria-crc-postal-code-formation-system",
+      "scope": "postal-code-system-regulatory-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "official gazette publication 2011; current source-specific mapping version not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "bulgaria-crc-national-postcode-index-catalog",
+      "scope": "national-postcode-index-catalog",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "current index publication version not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "terms-not-verified",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "bulgaria-crc-universal-service-operator-2026",
+      "scope": "postal-regulator-and-operator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "CRC publication 2026; individual license reference",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "bulgaria-cadastre-public-sector-reuse-framework",
+      "scope": "cadastre-reuse-governance-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "public-sector information access and reuse service; resource-specific terms not recorded",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "source-contains-excluded-fields",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "bg-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "scope": "current-postcode-format-mapping-rights-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-regulator-and-operator-recorded",
+      "label": "The postal regulator and current universal-service operator reference are recorded as metadata only",
+      "status": "passed",
+      "evidence": [
+        "bulgaria-crc-universal-service-operator-2026",
+        "postalMappingEvidence=false",
+        "no carrier operational data retained"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-code-system-and-index-catalog-recorded",
+      "label": "The official postal-code formation system and national index catalog are recorded without inferring format or mapping rights",
+      "status": "passed",
+      "evidence": [
+        "bulgaria-crc-postal-code-formation-system",
+        "bulgaria-crc-national-postcode-index-catalog",
+        "nationalPattern=null",
+        "formatAuthorityEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires a safe schema, rights, current version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "address, office, contact, cadastral, coordinate, and geometry fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "A current official format definition authorizes a national postcode pattern claim",
+      "status": "blocked",
+      "evidence": [
+        "postal-code formation system is recorded without a separately verifiable current format definition",
+        "unverifiedFormatInferenceRejected=true",
+        "nationalPattern=null"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-mapping-reuse-rights",
+      "label": "A current official postcode mapping has explicit reuse terms suitable for a safe offline artifact",
+      "status": "blocked",
+      "evidence": [
+        "national index catalog terms-not-verified",
+        "no current mapping artifact acquired",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "administrative-geodata-rights-and-safe-schema",
+      "label": "Administrative geographic keys have explicit resource-level reuse terms and a safe non-geometry schema",
+      "status": "blocked",
+      "evidence": [
+        "cadastre reuse page is governance-level only",
+        "cadastre products can contain excluded property, address, and geometry fields",
+        "no key-only extract acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been schema-checked and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no postcode rows or index entries acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and authority correction path",
+      "status": "blocked",
+      "evidence": [
+        "current index publication version not recorded",
+        "mapping-version-not-recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain a current authority-published postcode format and postcode-only or safe administrative-key mapping artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, version, attribution wording, and coverage.",
+    "Before ingestion, accept only safe postcode and administrative-zone identifiers, reject address, street, number, postal-unit, office, contact, precise-point, geometry, parcel, property, and cadastral fields, and verify that the publication is current.",
+    "Record the authority correction path, update cadence, and coverage validation before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not infer a Bulgarian national postcode pattern from the recorded system or index catalog.",
+    "This pack does not download, store, or redistribute national index entries, postcode mappings, cadastral records, addresses, offices, contacts, properties, parcels, boundaries, or location records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

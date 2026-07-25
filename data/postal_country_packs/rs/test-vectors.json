@@ -1,0 +1,44 @@
+[
+  {
+    "id": "rs-test-vector-1",
+    "input": {
+      "countryCode": "RS",
+      "municipalityId": "RS-M1",
+      "townId": "RS-M1-T1",
+      "chomeId": "RS-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "RS-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "rs-test-vector-2",
+    "input": {
+      "countryCode": "RS",
+      "municipalityId": "RS-M2",
+      "townId": "RS-M2-T2",
+      "chomeId": "RS-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "RS-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "rs-test-vector-3",
+    "input": {
+      "countryCode": "RS",
+      "municipalityId": "RS-M3",
+      "townId": "RS-M3-T3",
+      "chomeId": "RS-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "RS-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

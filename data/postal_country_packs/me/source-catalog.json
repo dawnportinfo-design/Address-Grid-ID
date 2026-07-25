@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "ME official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "montenegro-ekip-universal-postal-operator",
+    "sourceName": "Montenegro EKIP universal postal operator reference",
+    "sourceUrl": "https://ekip.me/page/postal-services/universal-service-1/universal-postal-operator/content",
+    "provider": "Agency for Electronic Communications and Postal Services of Montenegro (EKIP)",
+    "licenseOrTerms": "Official regulator reference records Pošta Crne Gore as universal postal operator under special license 01-1 dated 2007-02-15. It is authority metadata only and does not provide a postcode-mapping license, format mapping, or redistribution grant. No postal, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal regulator and universal-service operator reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The regulator establishes the national universal postal operator context.",
+      "Operator designation does not establish postcode mapping rights, current coverage, correction process, or delivery-point evidence.",
+      "No carrier operational data is retained."
+    ]
+  },
+  {
+    "sourceId": "montenegro-posta-crne-gore-addressing-rules-2020",
+    "sourceName": "Pošta Crne Gore special conditions for postal services",
+    "sourceUrl": "https://www.postacg.me/wp-content/uploads/30.-Pravilnik-o-posebnim-uslovima-za-obavljanje-postanskih-usluga-Poste-Crne-Gore.pdf",
+    "provider": "Pošta Crne Gore A.D. Podgorica",
+    "licenseOrTerms": "Official operator rule published 2020-06-10 states that its postal codes have five digits. Current applicability and a bulk postcode-mapping reuse grant are not verified; no postcode mapping, address, recipient, postal-unit, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-code format authority and addressing-rule reference; metadata only, not a current postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The source supports a five-digit format claim only.",
+      "The 2020 publication is not treated as proof of current operational applicability.",
+      "No postal-code row or address data is retained."
+    ]
+  },
+  {
+    "sourceId": "montenegro-data-gov-municipalities-catalog",
+    "sourceName": "Montenegro Open Data Portal municipalities catalog",
+    "sourceUrl": "https://data.gov.me/en/dataset/lista-opstina-crne-gore",
+    "provider": "Ministry of Public Administration of Montenegro",
+    "licenseOrTerms": "Official portal dataset page lists a municipalities resource but reports no license provided and a 2024-11-19 update. The portal-wide terms cannot replace dataset-level license evidence; no municipality code, name, or record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-key catalog and unresolved-resource-license reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "A portal catalog does not establish resource-specific reuse permission.",
+      "No municipal key or locality data is retained.",
+      "The source does not establish postal mapping, coverage, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "montenegro-monstat-municipalities-classification",
+    "sourceName": "MONSTAT municipalities classification",
+    "sourceUrl": "https://monstat.org/eng/page.php?id=105&pageid=105",
+    "provider": "Statistical Office of Montenegro (MONSTAT)",
+    "licenseOrTerms": "Official classification reference describes the 2022 list of municipalities and its code-and-name structure, but MONSTAT records an all-rights-reserved copyright notice. No classification entry, geographic key, boundary, or postcode record is acquired or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official administrative-classification and copyright-boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The classification authority is recorded separately from a redistributable artifact.",
+      "No source value is retained.",
+      "Administrative classification does not establish postal-code coverage or address-to-postcode mapping."
+    ]
+  },
+  {
+    "sourceId": "me-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Montenegro current postcode format, safe mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:montenegro-current-postcode-format-mapping-rights-coverage-and-correction-required",
+    "provider": "EKIP, Pošta Crne Gore, or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current safe postcode-only artifact with explicit format-currentness, reuse terms, coverage, version, and correction evidence; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The operator rule is not a substitute for a current safe offline mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until all release evidence is recorded."
+    ]
+  }
+]

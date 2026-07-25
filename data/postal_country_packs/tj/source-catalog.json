@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "TJ official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "tajik-post-postcode-list",
+    "sourceName": "Tajik Post postcode list",
+    "sourceUrl": "https://tajikpost.tj/ru/%D0%BF%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C-%D0%BF%D0%BE%D1%87%D1%82%D0%BE%D0%B2%D1%8B%D1%85-%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%BE%D0%B2-%D1%82%D0%B0%D0%B4%D0%B6%D0%B8%D0%BA%D0%B8%D1%81/",
+    "provider": "Unitary State Enterprise Tajik Post",
+    "licenseOrTerms": "Official postal operator list establishes a six-digit postcode syntax. No bulk mapping, derived-data, or redistribution grant is recorded on the source. The list is not downloaded, copied, or redistributed, and no postcode, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postcode-format reference; metadata only, not a current reusable offline mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Only the six-digit format pattern is represented; no individual postcode or locality record is retained.",
+      "The source is not treated as a reusable mapping without explicit terms.",
+      "Format evidence does not establish current mapping rights, coverage, correction workflow, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "upu-tajikistan-designated-operator",
+    "sourceName": "UPU Tajikistan designated postal operator entry",
+    "sourceUrl": "https://www.upu.int/UPU/media/upu/PostalEntitiesFiles/statusOfPostalEntities/20240315dPRMAnListOfEntities_En.pdf",
+    "provider": "Universal Postal Union (UPU)",
+    "licenseOrTerms": "UPU status list dated 2024-03-15 records the Tajikistan designated operator. It does not state bulk postcode-mapping reuse permission, and no operator, postcode, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "international designated-operator authority reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The UPU entry supplies operator authority metadata only.",
+      "This pack does not access any postal lookup result.",
+      "Operator designation alone does not establish mapping rights, current coverage, or delivery-point capability."
+    ]
+  },
+  {
+    "sourceId": "tajstat-regions-2024-open-license",
+    "sourceName": "Tajstat Regions in the Republic of Tajikistan 2024 publication",
+    "sourceUrl": "https://www.stat.tj/en/released-statistical-publication-regions-in-the-republic-of-tajikistan-2024/",
+    "provider": "Agency on Statistics under the President of the Republic of Tajikistan",
+    "licenseOrTerms": "Tajstat site materials are published under Creative Commons Attribution 4.0 International, with source attribution required. This 2024 statistical publication describes administrative structure but is not a postcode mapping, boundary dataset, or machine-readable administrative-key source. No publication, key, geometry, locality, address, recipient, or location record is downloaded or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "reusable administrative-structure metadata reference; not a postal mapping, boundary, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The CC BY 4.0 terms are recorded for future source-specific evaluation.",
+      "No administrative dataset is acquired because this publication does not evidence a reusable postal-key or boundary schema.",
+      "Administrative structure information does not establish postcode mapping coverage or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "tj-current-postcode-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Tajikistan current postcode mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:tajikistan-current-postcode-mapping-rights-coverage-and-correction-required",
+    "provider": "Tajik Post or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current reusable mapping; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The recorded official list establishes format, not a reusable current mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until current rights, version, coverage, and correction evidence are recorded."
+    ]
+  }
+]

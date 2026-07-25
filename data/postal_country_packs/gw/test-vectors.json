@@ -1,0 +1,44 @@
+[
+  {
+    "id": "gw-test-vector-1",
+    "input": {
+      "countryCode": "GW",
+      "municipalityId": "GW-M1",
+      "townId": "GW-M1-T1",
+      "chomeId": "GW-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "GW-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "gw-test-vector-2",
+    "input": {
+      "countryCode": "GW",
+      "municipalityId": "GW-M2",
+      "townId": "GW-M2-T2",
+      "chomeId": "GW-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "GW-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "gw-test-vector-3",
+    "input": {
+      "countryCode": "GW",
+      "municipalityId": "GW-M3",
+      "townId": "GW-M3-T3",
+      "chomeId": "GW-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "GW-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

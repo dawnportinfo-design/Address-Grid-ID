@@ -1,0 +1,147 @@
+{
+  "schemaId": "agid-honduras-postal-source-readiness-v0.1",
+  "countryCode": "HN",
+  "countryName": "Honduras",
+  "evaluatedAt": "2026-07-23T06:12:06.057Z",
+  "postalFormat": {
+    "nationalPattern": null,
+    "formatAuthorityEvidence": false
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "honducor-transparency-portal",
+      "scope": "postal-operator-transparency-profile",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": null,
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "hn-ine-dee-2024",
+      "scope": "administrative-division-statistics",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "DEE 2024",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "hn-sen-geoportal",
+      "scope": "official-statistical-geoportal",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": null,
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "hn-postcode-mapping-required",
+      "scope": "postcode-format-mapping-rights-and-update-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-operator-source-recorded",
+      "label": "The Honduras postal operator transparency profile is cataloged as metadata only",
+      "status": "passed",
+      "evidence": [
+        "honducor-transparency-portal",
+        "postalMappingEvidence=false",
+        "redistributionStatus=metadata-only"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "administrative-and-geoportal-sources-recorded",
+      "label": "Official administrative and geoportal references are cataloged as metadata only",
+      "status": "passed",
+      "evidence": [
+        "hn-ine-dee-2024",
+        "hn-sen-geoportal",
+        "postalMappingEvidence=false for both sources"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-authority-evidence",
+      "label": "An authority-published national postcode format is evidenced",
+      "status": "blocked",
+      "evidence": [
+        "hn-postcode-mapping-required authorityStatus=unresolved",
+        "nationalPattern=null"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-evidence",
+      "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "redistribution-rights",
+      "label": "Redistribution rights for any derived postal mapping are verified",
+      "status": "blocked",
+      "evidence": [
+        "hn-postcode-mapping-required redistributionStatus=not-bundled"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-update-cadence",
+      "label": "The postal mapping has a version, retrieval date, update cadence, and correction path",
+      "status": "blocked",
+      "evidence": [
+        "hn-postcode-mapping-required version=null",
+        "hn-postcode-mapping-required retrievedAt=null",
+        "hn-postcode-mapping-required updateCadence=unknown"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "A Honduras postal authority or authority-designated publisher for postcode format and mapping scope.",
+    "A versioned postcode-to-locality or delivery-point mapping with geographic coverage and correction policy.",
+    "Field-level reuse, attribution, and redistribution terms for any mapping or derived output.",
+    "Publication date, retrieval date, update cadence, and correction path for the mapping."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not assert a national postcode format.",
+    "This pack does not assert an address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "schemaId": "agid-montenegro-postal-source-readiness-v0.1",
+  "countryCode": "ME",
+  "countryName": "Montenegro",
+  "evaluatedAt": "2026-07-23T09:23:41.111Z",
+  "postalFormat": {
+    "nationalPattern": "^[0-9]{5}$",
+    "formatAuthorityEvidence": true,
+    "sourceFreshness": "operator-addressing-rule-published-2020-current-applicability-not-verified"
+  },
+  "publicationStatus": "draft",
+  "containsPersonalData": false,
+  "containsRawThirdPartyData": false,
+  "realPostalLookupEnabled": false,
+  "deliveryClaimEnabled": false,
+  "sources": [
+    {
+      "sourceId": "montenegro-ekip-universal-postal-operator",
+      "scope": "postal-regulator-and-operator-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "special license 01-1 dated 2007-02-15; regulator page retrieved 2026-07-23",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "provider-released",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "montenegro-posta-crne-gore-addressing-rules-2020",
+      "scope": "official-postcode-format-and-addressing-rule",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "operator special-conditions rule published 2020-06-10; current applicability not verified",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "montenegro-data-gov-municipalities-catalog",
+      "scope": "administrative-key-open-data-catalog-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "municipalities catalog last updated 2024-11-19; resource page reports no license provided",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "terms-not-verified",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "montenegro-monstat-municipalities-classification",
+      "scope": "official-administrative-classification-reference",
+      "authorityStatus": "recorded",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "metadata-only",
+      "version": "List of municipalities 2022; MONSTAT copyright notice 2025",
+      "retrievedAt": "2026-07-23",
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "copyright-restricted",
+      "rawRecordsBundled": false
+    },
+    {
+      "sourceId": "me-current-postcode-format-mapping-rights-coverage-and-correction-required",
+      "scope": "current-postcode-format-mapping-rights-coverage-and-correction-evidence",
+      "authorityStatus": "unresolved",
+      "postalMappingEvidence": false,
+      "redistributionStatus": "not-bundled",
+      "version": null,
+      "retrievedAt": null,
+      "updateCadence": "unknown",
+      "rawAcquisitionStatus": "not-attempted",
+      "rawRecordsBundled": false
+    }
+  ],
+  "gates": [
+    {
+      "id": "no-personal-or-raw-third-party-data",
+      "label": "The published pack remains metadata and synthetic fixtures only",
+      "status": "passed",
+      "evidence": [
+        "containsPersonalData=false",
+        "containsRawThirdPartyData=false",
+        "rawRecordsBundled=false for every source"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-regulator-and-operator-recorded",
+      "label": "The regulator and national universal postal operator are recorded as metadata only",
+      "status": "passed",
+      "evidence": [
+        "montenegro-ekip-universal-postal-operator",
+        "special-license reference recorded",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "national-postcode-format-authority-recorded",
+      "label": "The national five-digit postal format is recorded from the operator addressing rule",
+      "status": "passed",
+      "evidence": [
+        "montenegro-posta-crne-gore-addressing-rules-2020",
+        "nationalPattern=^[0-9]{5}$",
+        "format evidence is not a current mapping artifact"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "administrative-key-catalogs-recorded",
+      "label": "Official municipality catalog and classification authorities are recorded without acquiring entries",
+      "status": "passed",
+      "evidence": [
+        "montenegro-data-gov-municipalities-catalog",
+        "montenegro-monstat-municipalities-classification",
+        "rawRecordsBundled=false"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "source-acquisition-plan-fails-closed",
+      "label": "Any future mapping snapshot remains external and requires a safe schema, rights, current version, coverage, and correction evidence",
+      "status": "passed",
+      "evidence": [
+        "rawSnapshotStorage=external-nonpublic",
+        "rawRecordsBundled=false",
+        "address, office, contact, cadastral, coordinate, and geometry fields rejected",
+        "allowMappingIngestion=false until all mapping gates are evidenced"
+      ],
+      "blocksRealPostalLookup": false
+    },
+    {
+      "id": "postal-format-currentness",
+      "label": "The operator addressing rule has current-applicability evidence for operational use",
+      "status": "blocked",
+      "evidence": [
+        "operator format rule published 2020-06-10",
+        "current applicability not verified",
+        "sourceFreshness=operator-addressing-rule-published-2020-current-applicability-not-verified"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-mapping-reuse-rights",
+      "label": "A current official postcode mapping has explicit reuse terms suitable for a safe offline artifact",
+      "status": "blocked",
+      "evidence": [
+        "no current mapping artifact acquired",
+        "operator rule is not a mapping redistribution grant",
+        "postalMappingEvidence=false"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "administrative-geodata-rights-and-safe-schema",
+      "label": "Administrative geographic keys have explicit resource-level reuse terms and a safe non-geometry schema",
+      "status": "blocked",
+      "evidence": [
+        "data.gov municipalities resource reports no license provided",
+        "MONSTAT classification has copyright notice",
+        "no key-only artifact acquired"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "postal-code-mapping-and-coverage-evidence",
+      "label": "A current official postcode mapping has been schema-checked and coverage-validated for offline reuse",
+      "status": "blocked",
+      "evidence": [
+        "postalMappingEvidence=false for every source",
+        "no postcode rows acquired",
+        "coverage-not-validated"
+      ],
+      "blocksRealPostalLookup": true
+    },
+    {
+      "id": "version-freshness-and-correction-path",
+      "label": "The mapping has a current version, update cadence, and authority correction path",
+      "status": "blocked",
+      "evidence": [
+        "mapping-version-not-recorded",
+        "no mapping update cadence recorded",
+        "correction-path-not-recorded"
+      ],
+      "blocksRealPostalLookup": true
+    }
+  ],
+  "nextRequiredEvidence": [
+    "Obtain current regulator- or operator-confirmed applicability of the five-digit format and a postcode-only or safe administrative-key mapping artifact with explicit reuse terms; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, version, attribution wording, and coverage.",
+    "Before ingestion, accept only safe postcode and administrative-zone identifiers, reject address, street, number, postal-unit, office, contact, precise-point, geometry, parcel, property, and cadastral fields, and verify that the publication is current.",
+    "Record mapping coverage, update cadence, and an authority correction path before enabling any real lookup or delivery claim."
+  ],
+  "nonClaims": [
+    "This pack does not provide a real postcode lookup.",
+    "This pack does not treat the 2020 operator addressing rule as proof of current operational applicability.",
+    "This pack does not download, store, or redistribute postcode mappings, municipality lists, classification entries, addresses, offices, contacts, properties, parcels, boundaries, or location records.",
+    "This pack does not assert a household, building, street, point, or address-to-postcode match.",
+    "This pack does not assert delivery-point or carrier deliverability coverage."
+  ]
+}

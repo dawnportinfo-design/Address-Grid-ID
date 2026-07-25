@@ -1,0 +1,119 @@
+export const KYRGYZSTAN_POSTAL_SOURCE_READINESS_SCHEMA_ID = 'agid-kyrgyzstan-postal-source-readiness-v0.1';
+
+export type KyrgyzstanPostalSourceReadinessSource = {
+  sourceId: 'kyrgyz-post-postal-code-search' | 'mdd-kr-postal-services' | 'upu-kyrgyzstan-designated-operators' | 'kg-open-data-admin-classifier' | 'kg-current-postcode-mapping-rights-coverage-and-correction-required';
+  scope: 'official-postcode-search-surface' | 'government-postal-service-reference' | 'upu-designated-operator-reference' | 'administrative-key-availability-and-terms' | 'current-postcode-format-mapping-rights-coverage-and-correction-evidence';
+  authorityStatus: 'recorded' | 'unresolved';
+  postalMappingEvidence: false;
+  redistributionStatus: 'metadata-only' | 'not-bundled';
+  version: string | null;
+  retrievedAt: string | null;
+  updateCadence: 'unknown' | 'provider-released';
+  rawAcquisitionStatus: 'not-attempted' | 'license-unspecified';
+  rawRecordsBundled: false;
+};
+
+export type KyrgyzstanPostalSourceReadinessGate = { id: string; label: string; status: 'passed' | 'blocked'; evidence: string[]; blocksRealPostalLookup: boolean };
+
+export type KyrgyzstanPostalSourceReadiness = {
+  schemaId: typeof KYRGYZSTAN_POSTAL_SOURCE_READINESS_SCHEMA_ID;
+  countryCode: 'KG';
+  countryName: 'Kyrgyzstan';
+  evaluatedAt: string;
+  postalFormat: { nationalPattern: null; formatAuthorityEvidence: false; unverifiedFormatInferenceRejected: true };
+  publicationStatus: 'draft';
+  containsPersonalData: false;
+  containsRawThirdPartyData: false;
+  realPostalLookupEnabled: false;
+  deliveryClaimEnabled: false;
+  sources: KyrgyzstanPostalSourceReadinessSource[];
+  gates: KyrgyzstanPostalSourceReadinessGate[];
+  nextRequiredEvidence: string[];
+  nonClaims: string[];
+};
+
+export type KyrgyzstanPostalSourceReadinessValidation = { valid: boolean; errors: string[] };
+export type KyrgyzstanPostalSourceIngestionPlan = {
+  rawSnapshotStorage: 'external-nonpublic';
+  rawRecordsBundled: false;
+  allowMappingIngestion: boolean;
+  mappingReuseTermsVerified: boolean;
+  mappingVersion: string | null;
+  coverageEvidenceRecorded: boolean;
+  correctionPathRecorded: boolean;
+  proposedColumns: string[];
+};
+
+const DEFAULT_EVALUATED_AT = '2026-07-23T00:00:00.000Z';
+const UNSAFE_SOURCE_FIELD = /(^|_)(address|street|house|building|premise|recipient|phone|email|latitude|longitude|coordinate|geometry)(_|$)/;
+
+export function validateKyrgyzstanPostalSourceIngestionPlan(plan: KyrgyzstanPostalSourceIngestionPlan): string[] {
+  const errors: string[] = [];
+  if (plan.rawSnapshotStorage !== 'external-nonpublic') errors.push('raw-snapshot-storage-not-external');
+  if (plan.rawRecordsBundled !== false) errors.push('raw-records-must-not-be-bundled');
+  for (const column of plan.proposedColumns.map(column => column.trim().toLowerCase())) if (UNSAFE_SOURCE_FIELD.test(column)) errors.push(`unsafe-column:${column}`);
+  if (plan.allowMappingIngestion && !plan.mappingReuseTermsVerified) errors.push('mapping-reuse-terms-not-verified');
+  if (plan.allowMappingIngestion && !plan.mappingVersion) errors.push('mapping-version-not-recorded');
+  if (plan.allowMappingIngestion && !plan.coverageEvidenceRecorded) errors.push('mapping-coverage-not-recorded');
+  if (plan.allowMappingIngestion && !plan.correctionPathRecorded) errors.push('mapping-correction-path-not-recorded');
+  return errors;
+}
+
+export function buildKyrgyzstanPostalSourceReadiness(input: { evaluatedAt?: string } = {}): KyrgyzstanPostalSourceReadiness {
+  return {
+    schemaId: KYRGYZSTAN_POSTAL_SOURCE_READINESS_SCHEMA_ID,
+    countryCode: 'KG',
+    countryName: 'Kyrgyzstan',
+    evaluatedAt: input.evaluatedAt || DEFAULT_EVALUATED_AT,
+    postalFormat: { nationalPattern: null, formatAuthorityEvidence: false, unverifiedFormatInferenceRejected: true },
+    publicationStatus: 'draft',
+    containsPersonalData: false,
+    containsRawThirdPartyData: false,
+    realPostalLookupEnabled: false,
+    deliveryClaimEnabled: false,
+    sources: [
+      { sourceId: 'kyrgyz-post-postal-code-search', scope: 'official-postcode-search-surface', authorityStatus: 'recorded', postalMappingEvidence: false, redistributionStatus: 'metadata-only', version: 'retrieved 2026-07-23; publication version not recorded', retrievedAt: '2026-07-23', updateCadence: 'provider-released', rawAcquisitionStatus: 'not-attempted', rawRecordsBundled: false },
+      { sourceId: 'mdd-kr-postal-services', scope: 'government-postal-service-reference', authorityStatus: 'recorded', postalMappingEvidence: false, redistributionStatus: 'metadata-only', version: 'published 2024; no mapping version recorded', retrievedAt: '2026-07-23', updateCadence: 'unknown', rawAcquisitionStatus: 'not-attempted', rawRecordsBundled: false },
+      { sourceId: 'upu-kyrgyzstan-designated-operators', scope: 'upu-designated-operator-reference', authorityStatus: 'recorded', postalMappingEvidence: false, redistributionStatus: 'metadata-only', version: 'UPU Postal Addressing Systems update 2026.1', retrievedAt: '2026-07-23', updateCadence: 'provider-released', rawAcquisitionStatus: 'not-attempted', rawRecordsBundled: false },
+      { sourceId: 'kg-open-data-admin-classifier', scope: 'administrative-key-availability-and-terms', authorityStatus: 'recorded', postalMappingEvidence: false, redistributionStatus: 'metadata-only', version: 'catalog resource last updated 2019-11-04; license unspecified', retrievedAt: '2026-07-23', updateCadence: 'unknown', rawAcquisitionStatus: 'license-unspecified', rawRecordsBundled: false },
+      { sourceId: 'kg-current-postcode-mapping-rights-coverage-and-correction-required', scope: 'current-postcode-format-mapping-rights-coverage-and-correction-evidence', authorityStatus: 'unresolved', postalMappingEvidence: false, redistributionStatus: 'not-bundled', version: null, retrievedAt: null, updateCadence: 'unknown', rawAcquisitionStatus: 'not-attempted', rawRecordsBundled: false },
+    ],
+    gates: [
+      { id: 'no-personal-or-raw-third-party-data', label: 'The published pack remains metadata and synthetic fixtures only', status: 'passed', evidence: ['containsPersonalData=false', 'containsRawThirdPartyData=false', 'rawRecordsBundled=false for every source'], blocksRealPostalLookup: false },
+      { id: 'postal-operator-surfaces-recorded', label: 'Kyrgyz Post, the Ministry, and UPU operator references are recorded as metadata only', status: 'passed', evidence: ['kyrgyz-post-postal-code-search', 'mdd-kr-postal-services', 'upu-kyrgyzstan-designated-operators', 'postalMappingEvidence=false'], blocksRealPostalLookup: false },
+      { id: 'source-acquisition-plan-fails-closed', label: 'Any future mapping snapshot remains external and requires safe schema, rights, version, coverage, and correction evidence', status: 'passed', evidence: ['rawSnapshotStorage=external-nonpublic', 'rawRecordsBundled=false', 'unsafe location and personal fields rejected', 'allowMappingIngestion=false until all mapping gates are evidenced'], blocksRealPostalLookup: false },
+      { id: 'postal-format-authority-evidence', label: 'An authority-published national postcode format is recorded independently of a personal-address search', status: 'blocked', evidence: ['nationalPattern=null', 'formatAuthorityEvidence=false', 'unverifiedFormatInferenceRejected=true', 'Kyrgyz Post search is not queried'], blocksRealPostalLookup: true },
+      { id: 'postal-mapping-reuse-rights', label: 'A current official postcode mapping has explicit, verified reuse terms', status: 'blocked', evidence: ['official search surface states no bulk mapping reuse grant', 'no official mapping license or terms recorded', 'kg-current-postcode-mapping-rights-coverage-and-correction-required unresolved'], blocksRealPostalLookup: true },
+      { id: 'administrative-geodata-reuse-rights', label: 'Administrative keys or boundaries have explicit reusable terms independent of address datasets', status: 'blocked', evidence: ['kg-open-data-admin-classifier license is unspecified', 'catalog resource last updated 2019-11-04', 'no administrative records acquired'], blocksRealPostalLookup: true },
+      { id: 'postal-code-mapping-and-coverage-evidence', label: 'A current official postcode mapping has been acquired, schema-checked, and coverage-validated for offline reuse', status: 'blocked', evidence: ['postalMappingEvidence=false for every source', 'no search results, postcode rows, or geographic records acquired', 'coverage-not-validated'], blocksRealPostalLookup: true },
+      { id: 'version-freshness-and-correction-path', label: 'The mapping has a current version, update cadence, and correction path', status: 'blocked', evidence: ['no current mapping version recorded', 'correction-path-not-recorded', 'administrative classifier catalog resource is from 2019'], blocksRealPostalLookup: true },
+    ],
+    nextRequiredEvidence: ['Obtain a current Kyrgyz Post, Kyrgyz Express Post, or authority-designated mapping artifact with an explicit reuse license; retain any raw snapshot outside public packs and record its hash, URL, retrieval time, and attribution wording.', 'Before ingestion, accept only safe postcode and administrative-zone identifiers and reject address, street, building, recipient, precise-point, geometry, and query-result fields.', 'Record mapping coverage, current version, update cadence, and an authority correction path before enabling any real lookup or delivery claim.'],
+    nonClaims: ['This pack does not provide a real postcode lookup.', 'This pack does not query, store, or redistribute the Kyrgyz Post postal-code search results.', 'This pack does not assert a national Kyrgyzstan postal-code regex.', 'This pack does not download, store, or redistribute Kyrgyz Post, Ministry, UPU, government open-data, postal-mapping, boundary, or address records.', 'This pack does not assert a household, building, street, point, or address-to-postcode match.', 'This pack does not assert delivery-point or carrier deliverability coverage.'],
+  };
+}
+
+export function validateKyrgyzstanPostalSourceReadiness(readiness: KyrgyzstanPostalSourceReadiness): KyrgyzstanPostalSourceReadinessValidation {
+  const errors: string[] = [];
+  const sourceIds = new Set<string>(readiness.sources.map(source => source.sourceId));
+  const gateById = new Map(readiness.gates.map(gate => [gate.id, gate]));
+  if (readiness.schemaId !== KYRGYZSTAN_POSTAL_SOURCE_READINESS_SCHEMA_ID) errors.push('schema-id-mismatch');
+  if (readiness.countryCode !== 'KG' || readiness.countryName !== 'Kyrgyzstan') errors.push('country-mismatch');
+  if (readiness.postalFormat.nationalPattern !== null || readiness.postalFormat.formatAuthorityEvidence !== false || readiness.postalFormat.unverifiedFormatInferenceRejected !== true) errors.push('postal-format-not-safely-unresolved');
+  if (readiness.publicationStatus !== 'draft') errors.push('publication-status-not-draft');
+  if (readiness.containsPersonalData !== false) errors.push('personal-data-not-false');
+  if (readiness.containsRawThirdPartyData !== false) errors.push('raw-third-party-data-not-false');
+  if (readiness.realPostalLookupEnabled !== false) errors.push('real-postal-lookup-enabled');
+  if (readiness.deliveryClaimEnabled !== false) errors.push('delivery-claim-enabled');
+  for (const sourceId of ['kyrgyz-post-postal-code-search', 'mdd-kr-postal-services', 'upu-kyrgyzstan-designated-operators', 'kg-open-data-admin-classifier', 'kg-current-postcode-mapping-rights-coverage-and-correction-required']) if (!sourceIds.has(sourceId)) errors.push(`source-missing:${sourceId}`);
+  for (const source of readiness.sources) {
+    if (source.postalMappingEvidence !== false) errors.push(`postal-mapping-evidence-not-false:${source.sourceId}`);
+    if (source.rawRecordsBundled !== false) errors.push(`raw-records-bundled:${source.sourceId}`);
+  }
+  for (const gateId of ['postal-operator-surfaces-recorded', 'source-acquisition-plan-fails-closed']) if (gateById.get(gateId)?.status !== 'passed') errors.push(`required-passed-gate-missing:${gateId}`);
+  for (const gateId of ['postal-format-authority-evidence', 'postal-mapping-reuse-rights', 'administrative-geodata-reuse-rights', 'postal-code-mapping-and-coverage-evidence', 'version-freshness-and-correction-path']) {
+    const gate = gateById.get(gateId);
+    if (!gate || gate.status !== 'blocked' || gate.blocksRealPostalLookup !== true) errors.push(`required-blocked-gate-missing:${gateId}`);
+  }
+  return { valid: errors.length === 0, errors };
+}

@@ -1,0 +1,5821 @@
+{
+  "manifest": {
+    "schemaId": "agid-postal-country-pack-v0.1",
+    "version": "agid-postal-country-pack-v0.1",
+    "strategyVersion": "agid-postal-country-pack-strategy-v0.1",
+    "engineVersion": "agid-postal-code-engine-v0.1-rc",
+    "generatedAt": "2026-07-23T07:44:09.328Z",
+    "countryCode": "PA",
+    "countryName": "Panama",
+    "repositoryName": "agid-postal-pack-pa",
+    "packageName": "@agid/agid-postal-pack-pa",
+    "requiredLayers": [
+      "manifest",
+      "source-catalog",
+      "country-profile",
+      "admin-boundary-index",
+      "locality-index",
+      "locality-alias-history",
+      "landform-index",
+      "settlement-cluster-index",
+      "postal-system-priors",
+      "governance-notes",
+      "license-ledger",
+      "privacy-threat-model",
+      "test-vectors",
+      "planning-cell-index",
+      "route-evidence-index",
+      "quality-evidence-index"
+    ],
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "officialStatus": "draft",
+    "counts": {
+      "sources": 7,
+      "localities": 48,
+      "boundaries": 12,
+      "landforms": 1,
+      "settlementClusters": 6,
+      "vplSeeds": 3,
+      "planningCells": 192,
+      "routeEvidence": 48,
+      "qualityEvidence": 36,
+      "officialMunicipalityRecords": 0,
+      "testVectors": 3
+    }
+  },
+  "recommendation": {
+    "version": "agid-postal-country-pack-strategy-v0.1",
+    "countryCode": "PA",
+    "countryName": "Panama",
+    "tier": "weak-coarse-postal-code",
+    "repositoryMode": "country-pack-recommended",
+    "repositoryName": "agid-postal-pack-pa",
+    "packageName": "@agid/agid-postal-pack-pa",
+    "packWeight": "light-pack",
+    "recommendedUse": "supplemental-agid-postal-draft",
+    "requiredLayers": [
+      "manifest",
+      "source-catalog",
+      "country-profile",
+      "admin-boundary-index",
+      "locality-index",
+      "locality-alias-history",
+      "landform-index",
+      "settlement-cluster-index",
+      "postal-system-priors",
+      "governance-notes",
+      "license-ledger",
+      "privacy-threat-model",
+      "test-vectors"
+    ],
+    "preseededRecords": [
+      "country profile: population band, land area band, terrain class, postal maturity class",
+      "official and historical locality names, aliases, romanizations, and language tags",
+      "stable locality IDs independent of mutable city-name strings",
+      "administrative boundary references and source freshness metadata",
+      "landform references: islands, valleys, deserts, deltas, mountains, forests, wetlands, or coastal corridors as applicable",
+      "settlement clusters and landmark-only delivery areas for weak addressing regions",
+      "license ledger for every imported source; third-party raw datasets are not bundled by default"
+    ],
+    "maintenanceRules": [
+      "Keep the AGID Postal Forge engine, UI, and core tests in the central repository.",
+      "Keep country-specific city names, locality aliases, landforms, source metadata, and VPL seeds in the country pack.",
+      "Version every source by provider, license, retrieval date, and transformation script.",
+      "Use stable locality IDs; visible names can change without forcing postal code churn.",
+      "Run conformance tests before publishing: schema, no raw address, boundary, locality separation, and sample code generation.",
+      "Publish generated codes as simulation or draft unless official authority, carrier pilot, privacy, data trust, and transition gates pass."
+    ],
+    "splitRationale": [
+      "Country packs keep the main app small and let operators load only the country they need.",
+      "Country experts can maintain local names, landforms, languages, and source notes without touching the core engine.",
+      "License risk is isolated because each country pack has its own source catalog and data license ledger.",
+      "High-risk countries can ship thin, coarse, privacy-first packs instead of precise public datasets."
+    ],
+    "compatibilityContract": {
+      "schemaId": "agid-postal-country-pack-v0.1",
+      "enginePackage": "@agid/postal-forge-core",
+      "countryPackDoesNotContain": [
+        "personal-addresses",
+        "recipient-names",
+        "phone-numbers",
+        "private-aoid-bodies",
+        "agid-s-payloads",
+        "raw-third-party-datasets-without-license"
+      ]
+    }
+  },
+  "countryProfile": {
+    "countryCode": "PA",
+    "countryName": "Panama",
+    "region": "Americas",
+    "terrain": "mixed",
+    "classHint": "B",
+    "planningCentroid": {
+      "lat": 8.54,
+      "lng": -80.78
+    },
+    "sourceNote": "Country-repository bootstrap uses synthetic planning metadata only. Postal format, mapping, authority, license, coverage, and update policy are unverified here; no postal lookup, address autofill, or delivery claim is enabled."
+  },
+  "sourceCatalog": [
+    {
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "sourceName": "AGID-generated country pack fixtures",
+      "sourceUrl": "local:AGID",
+      "provider": "AGID project",
+      "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+      "redistributionStatus": "agid-metadata-redistributable",
+      "role": "synthetic locality, VPL seed, and conformance fixtures",
+      "transformedFields": [
+        "countryCode",
+        "localityId",
+        "codePart",
+        "planningCell",
+        "routeEvidence",
+        "qualityEvidence",
+        "testVector"
+      ],
+      "confidenceNotes": [
+        "Contains no personal addresses and no recipient data.",
+        "Useful for OSS demos and conformance tests; not official postal authority data."
+      ]
+    },
+    {
+      "sourceId": "official-boundary-required",
+      "sourceName": "PA official boundary and locality sources",
+      "sourceUrl": "source-metadata-only:official-authority-required",
+      "provider": "government, municipality, postal authority, or carrier pilot authority",
+      "licenseOrTerms": "source-specific; not bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official validation gate before pilot or public release",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "This pack records the required source slot only.",
+        "No official raw boundary, road, population, postal, or address dataset is bundled."
+      ]
+    },
+    {
+      "sourceId": "open-map-evidence-slot",
+      "sourceName": "Open map evidence slot",
+      "sourceUrl": "source-metadata-only:open-map-provider",
+      "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+      "licenseOrTerms": "source-specific; license review required",
+      "redistributionStatus": "license-review-required",
+      "role": "road, landform, port, settlement, and map preview evidence",
+      "transformedFields": [
+        "featureClass",
+        "evidenceQuality",
+        "sourceFreshness"
+      ],
+      "confidenceNotes": [
+        "Open map records are not bundled by default.",
+        "Any derived database must keep source-specific attribution and redistribution obligations."
+      ]
+    },
+    {
+      "sourceId": "panama-national-postcode-system",
+      "sourceName": "Sistema de Codigos Postales de Panama",
+      "sourceUrl": "https://www.codigospostalespanama.gob.pa/",
+      "provider": "Correos Panama / Correos y Telegrafos Nacionales de Panama",
+      "licenseOrTerms": "Official postcode-system interface; no bulk-download, API, derived-data, or redistribution permission is recorded here, and no query result, geographic key, postal record, or address is bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "national postcode-system reference; metadata only, not an AGID lookup, offline postcode mapping, or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The official system supports search by province, district, and corregimiento and describes a full-code presentation.",
+        "This pack does not query, store, transform, infer, or redistribute results, geographic keys, postal records, addresses, buildings, or points.",
+        "Interface availability does not establish offline reuse rights, a stable format specification, mapping version, correction path, or delivery-point coverage."
+      ]
+    },
+    {
+      "sourceId": "correos-panama-postal-services",
+      "sourceName": "Correos Panama postal services",
+      "sourceUrl": "https://www.correospanama.gob.pa/servicios-postales/",
+      "provider": "Correos y Telegrafos Nacionales de Panama",
+      "licenseOrTerms": "Official postal-service page; no postcode-mapping license or redistribution grant is recorded here, and no postal, tracking, contact, or address records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "postal-operator service reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The page identifies national postal services operated by Correos Panama.",
+        "This pack does not query, store, transform, or redistribute postal, tracking, contact, or address records.",
+        "Service availability does not establish a reusable postcode mapping, rights, or delivery-point coverage."
+      ]
+    },
+    {
+      "sourceId": "panama-miambiente-admin-boundaries",
+      "sourceName": "MiAmbiente Panama political-administrative boundary geoportal",
+      "sourceUrl": "https://geoportal.miambiente.gob.pa/server/rest/services/Nodo_Caracteristica_General/MapServer/13",
+      "provider": "Ministerio de Ambiente (MiAmbiente), Panama",
+      "licenseOrTerms": "Official geoportal layer description; no data reuse or redistribution terms are recorded here, and no geometry, attribute, or address records are bundled",
+      "redistributionStatus": "source-metadata-only",
+      "role": "official province, comarca, district, and corregimiento boundary reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The layer groups province/comarca, district, and corregimiento administrative levels and lists geospatial service formats.",
+        "This pack does not query, store, transform, or redistribute geoportal records, geometries, layers, or address data.",
+        "Administrative boundaries do not establish postal-code coverage, format, mapping rights, or delivery capability."
+      ]
+    },
+    {
+      "sourceId": "pa-postcode-mapping-required",
+      "sourceName": "Panama postcode format, mapping, rights, and update authority source",
+      "sourceUrl": "source-metadata-only:panama-postcode-mapping-required",
+      "provider": "Panama postal authority or authority-designated official publisher",
+      "licenseOrTerms": "Not yet verified; not bundled",
+      "redistributionStatus": "not-bundled",
+      "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+      "transformedFields": [],
+      "confidenceNotes": [
+        "The recorded official interfaces and references do not establish an offline reusable postcode format or mapping.",
+        "Do not add real postcode records, address matching, geographic-key inference, or carrier deliverability assertions until authority, license, version, coverage, and correction evidence are recorded."
+      ]
+    }
+  ],
+  "postalSourceReadiness": {
+    "schemaId": "agid-panama-postal-source-readiness-v0.1",
+    "countryCode": "PA",
+    "countryName": "Panama",
+    "evaluatedAt": "2026-07-23T07:44:09.328Z",
+    "postalFormat": {
+      "nationalPattern": null,
+      "formatAuthorityEvidence": false
+    },
+    "publicationStatus": "draft",
+    "containsPersonalData": false,
+    "containsRawThirdPartyData": false,
+    "realPostalLookupEnabled": false,
+    "deliveryClaimEnabled": false,
+    "sources": [
+      {
+        "sourceId": "panama-national-postcode-system",
+        "scope": "official-national-postcode-system-interface",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "announced 2026-05-07",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "correos-panama-postal-services",
+        "scope": "postal-operator-service-reference",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": null,
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "provider-released",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "panama-miambiente-admin-boundaries",
+        "scope": "official-administrative-boundaries-geoportal",
+        "authorityStatus": "recorded",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "metadata-only",
+        "version": "2018 administrative-boundary item",
+        "retrievedAt": "2026-07-23",
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      },
+      {
+        "sourceId": "pa-postcode-mapping-required",
+        "scope": "postcode-mapping-rights-and-update-evidence",
+        "authorityStatus": "unresolved",
+        "postalMappingEvidence": false,
+        "redistributionStatus": "not-bundled",
+        "version": null,
+        "retrievedAt": null,
+        "updateCadence": "unknown",
+        "rawRecordsBundled": false
+      }
+    ],
+    "gates": [
+      {
+        "id": "no-personal-or-raw-third-party-data",
+        "label": "The published pack remains metadata and synthetic fixtures only",
+        "status": "passed",
+        "evidence": [
+          "containsPersonalData=false",
+          "containsRawThirdPartyData=false",
+          "rawRecordsBundled=false for every source"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "official-postcode-system-recorded",
+        "label": "The Panama national postcode system is cataloged as metadata only",
+        "status": "passed",
+        "evidence": [
+          "panama-national-postcode-system",
+          "postalMappingEvidence=false",
+          "redistributionStatus=metadata-only"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-operator-and-administrative-geo-sources-recorded",
+        "label": "Postal operator and official administrative-boundary references are cataloged as metadata only",
+        "status": "passed",
+        "evidence": [
+          "correos-panama-postal-services",
+          "panama-miambiente-admin-boundaries",
+          "postalMappingEvidence=false for both sources"
+        ],
+        "blocksRealPostalLookup": false
+      },
+      {
+        "id": "postal-format-authority-evidence",
+        "label": "A stable authority-published national postcode format is evidenced for offline reuse",
+        "status": "blocked",
+        "evidence": [
+          "pa-postcode-mapping-required authorityStatus=unresolved",
+          "nationalPattern=null"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "postal-code-mapping-evidence",
+        "label": "A versioned postcode-to-locality or delivery-point mapping is evidenced for offline reuse",
+        "status": "blocked",
+        "evidence": [
+          "postalMappingEvidence=false for every source"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "redistribution-rights",
+        "label": "Redistribution rights for any derived postal mapping are verified",
+        "status": "blocked",
+        "evidence": [
+          "pa-postcode-mapping-required redistributionStatus=not-bundled"
+        ],
+        "blocksRealPostalLookup": true
+      },
+      {
+        "id": "version-freshness-and-update-cadence",
+        "label": "The postal mapping has a version, retrieval date, update cadence, and correction path",
+        "status": "blocked",
+        "evidence": [
+          "pa-postcode-mapping-required version=null",
+          "pa-postcode-mapping-required retrievedAt=null",
+          "pa-postcode-mapping-required updateCadence=unknown"
+        ],
+        "blocksRealPostalLookup": true
+      }
+    ],
+    "nextRequiredEvidence": [
+      "An authority-published specification for the Panama postcode format that is stable and permitted for offline reuse.",
+      "A versioned postcode-to-locality or delivery-point mapping with geographic coverage and correction policy.",
+      "Field-level reuse, attribution, and redistribution terms for any mapping or derived output.",
+      "Publication date, retrieval date, update cadence, and correction path for the mapping."
+    ],
+    "nonClaims": [
+      "This pack does not query or provide a real postcode lookup.",
+      "This pack does not assert a national postcode format.",
+      "This pack does not store or infer a household, building, point, or address-to-postcode match.",
+      "This pack does not assert delivery-point or carrier deliverability coverage."
+    ]
+  },
+  "licenseLedger": [
+    {
+      "subject": "AGID-created country pack metadata",
+      "licenseOrTerms": "Apache-2.0",
+      "redistribution": "allowed",
+      "notes": "Includes manifest, synthetic locality fixtures, VPL seeds, generated test vectors, and safety rules."
+    },
+    {
+      "subject": "Official postal, boundary, road, population, and locality datasets",
+      "licenseOrTerms": "source-specific",
+      "redistribution": "metadata-only",
+      "notes": "Do not bundle raw official records unless a separate DATA_LICENSES entry permits redistribution."
+    },
+    {
+      "subject": "Open map provider extracts",
+      "licenseOrTerms": "source-specific",
+      "redistribution": "review-required",
+      "notes": "OSM, Overture, Natural Earth, GeoNames, and similar data must be reviewed per source before bundling."
+    }
+  ],
+  "officialMunicipalitySummary": {
+    "mode": "synthetic-fixture",
+    "countryCode": "PA",
+    "sourceCount": 0,
+    "recordCount": 0,
+    "municipalityCount": 0,
+    "townCount": 0,
+    "blockCount": 0,
+    "sourceIds": [],
+    "coverageNote": "No normalized official municipality dataset was provided; AGID uses safe synthetic planning fixtures only."
+  },
+  "adminBoundaryIndex": [
+    {
+      "boundaryId": "boundary-pa-m1",
+      "localityId": "PA-M1",
+      "label": "Central Municipality",
+      "boundaryClass": "municipality",
+      "geometryRef": "source-required://PA-M1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m1-t1",
+      "localityId": "PA-M1-T1",
+      "label": "Central Quarter",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://PA-M1-T1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m1-t2",
+      "localityId": "PA-M1-T2",
+      "label": "North District",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://PA-M1-T2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m1-t3",
+      "localityId": "PA-M1-T3",
+      "label": "Harbor / Market Area",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://PA-M1-T3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m2",
+      "localityId": "PA-M2",
+      "label": "North Municipality",
+      "boundaryClass": "municipality",
+      "geometryRef": "source-required://PA-M2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m2-t1",
+      "localityId": "PA-M2-T1",
+      "label": "Central Quarter",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://PA-M2-T1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m2-t2",
+      "localityId": "PA-M2-T2",
+      "label": "North District",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://PA-M2-T2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m2-t3",
+      "localityId": "PA-M2-T3",
+      "label": "Harbor / Market Area",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://PA-M2-T3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m3",
+      "localityId": "PA-M3",
+      "label": "South Municipality",
+      "boundaryClass": "municipality",
+      "geometryRef": "source-required://PA-M3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m3-t1",
+      "localityId": "PA-M3-T1",
+      "label": "Central Quarter",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://PA-M3-T1",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m3-t2",
+      "localityId": "PA-M3-T2",
+      "label": "North District",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://PA-M3-T2",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    },
+    {
+      "boundaryId": "boundary-pa-m3-t3",
+      "localityId": "PA-M3-T3",
+      "label": "Harbor / Market Area",
+      "boundaryClass": "town",
+      "geometryRef": "source-required://PA-M3-T3",
+      "sourceId": "official-boundary-required",
+      "precision": "official-required"
+    }
+  ],
+  "localityIndex": [
+    {
+      "localityId": "PA-M1",
+      "stableId": "pa-municipality-pa-m1",
+      "name": "Central Municipality",
+      "kind": "municipality",
+      "parentId": null,
+      "codePart": "BZ",
+      "aliases": [
+        {
+          "label": "Central Municipality",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Postal Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T1",
+      "stableId": "pa-town-pa-m1-t1",
+      "name": "Central Quarter",
+      "kind": "town",
+      "parentId": "PA-M1",
+      "codePart": "TE",
+      "aliases": [
+        {
+          "label": "Central Quarter",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Municipality Central Quarter",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T1-C0",
+      "stableId": "pa-block-pa-m1-t1-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "PA-M1-T1",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T1-C1",
+      "stableId": "pa-block-pa-m1-t1-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "PA-M1-T1",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T1-C2",
+      "stableId": "pa-block-pa-m1-t1-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "PA-M1-T1",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T1-C3",
+      "stableId": "pa-block-pa-m1-t1-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "PA-M1-T1",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T2",
+      "stableId": "pa-town-pa-m1-t2",
+      "name": "North District",
+      "kind": "town",
+      "parentId": "PA-M1",
+      "codePart": "6F",
+      "aliases": [
+        {
+          "label": "North District",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Municipality North District",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T2-C0",
+      "stableId": "pa-block-pa-m1-t2-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "PA-M1-T2",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T2-C1",
+      "stableId": "pa-block-pa-m1-t2-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "PA-M1-T2",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T2-C2",
+      "stableId": "pa-block-pa-m1-t2-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "PA-M1-T2",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T2-C3",
+      "stableId": "pa-block-pa-m1-t2-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "PA-M1-T2",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T3",
+      "stableId": "pa-town-pa-m1-t3",
+      "name": "Harbor / Market Area",
+      "kind": "town",
+      "parentId": "PA-M1",
+      "codePart": "QC",
+      "aliases": [
+        {
+          "label": "Harbor / Market Area",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "Central Municipality Harbor / Market Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T3-C0",
+      "stableId": "pa-block-pa-m1-t3-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "PA-M1-T3",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T3-C1",
+      "stableId": "pa-block-pa-m1-t3-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "PA-M1-T3",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T3-C2",
+      "stableId": "pa-block-pa-m1-t3-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "PA-M1-T3",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M1-T3-C3",
+      "stableId": "pa-block-pa-m1-t3-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "PA-M1-T3",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2",
+      "stableId": "pa-municipality-pa-m2",
+      "name": "North Municipality",
+      "kind": "municipality",
+      "parentId": null,
+      "codePart": "NN",
+      "aliases": [
+        {
+          "label": "North Municipality",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "North Postal Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T1",
+      "stableId": "pa-town-pa-m2-t1",
+      "name": "Central Quarter",
+      "kind": "town",
+      "parentId": "PA-M2",
+      "codePart": "TH",
+      "aliases": [
+        {
+          "label": "Central Quarter",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "North Municipality Central Quarter",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T1-C0",
+      "stableId": "pa-block-pa-m2-t1-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "PA-M2-T1",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T1-C1",
+      "stableId": "pa-block-pa-m2-t1-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "PA-M2-T1",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T1-C2",
+      "stableId": "pa-block-pa-m2-t1-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "PA-M2-T1",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T1-C3",
+      "stableId": "pa-block-pa-m2-t1-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "PA-M2-T1",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T2",
+      "stableId": "pa-town-pa-m2-t2",
+      "name": "North District",
+      "kind": "town",
+      "parentId": "PA-M2",
+      "codePart": "CT",
+      "aliases": [
+        {
+          "label": "North District",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "North Municipality North District",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T2-C0",
+      "stableId": "pa-block-pa-m2-t2-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "PA-M2-T2",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T2-C1",
+      "stableId": "pa-block-pa-m2-t2-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "PA-M2-T2",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T2-C2",
+      "stableId": "pa-block-pa-m2-t2-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "PA-M2-T2",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T2-C3",
+      "stableId": "pa-block-pa-m2-t2-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "PA-M2-T2",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T3",
+      "stableId": "pa-town-pa-m2-t3",
+      "name": "Harbor / Market Area",
+      "kind": "town",
+      "parentId": "PA-M2",
+      "codePart": "99",
+      "aliases": [
+        {
+          "label": "Harbor / Market Area",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "North Municipality Harbor / Market Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T3-C0",
+      "stableId": "pa-block-pa-m2-t3-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "PA-M2-T3",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T3-C1",
+      "stableId": "pa-block-pa-m2-t3-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "PA-M2-T3",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T3-C2",
+      "stableId": "pa-block-pa-m2-t3-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "PA-M2-T3",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M2-T3-C3",
+      "stableId": "pa-block-pa-m2-t3-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "PA-M2-T3",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3",
+      "stableId": "pa-municipality-pa-m3",
+      "name": "South Municipality",
+      "kind": "municipality",
+      "parentId": null,
+      "codePart": "QK",
+      "aliases": [
+        {
+          "label": "South Municipality",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "South Postal Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T1",
+      "stableId": "pa-town-pa-m3-t1",
+      "name": "Central Quarter",
+      "kind": "town",
+      "parentId": "PA-M3",
+      "codePart": "T8",
+      "aliases": [
+        {
+          "label": "Central Quarter",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "South Municipality Central Quarter",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T1-C0",
+      "stableId": "pa-block-pa-m3-t1-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "PA-M3-T1",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T1-C1",
+      "stableId": "pa-block-pa-m3-t1-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "PA-M3-T1",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T1-C2",
+      "stableId": "pa-block-pa-m3-t1-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "PA-M3-T1",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T1-C3",
+      "stableId": "pa-block-pa-m3-t1-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "PA-M3-T1",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T2",
+      "stableId": "pa-town-pa-m3-t2",
+      "name": "North District",
+      "kind": "town",
+      "parentId": "PA-M3",
+      "codePart": "EY",
+      "aliases": [
+        {
+          "label": "North District",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "South Municipality North District",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T2-C0",
+      "stableId": "pa-block-pa-m3-t2-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "PA-M3-T2",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T2-C1",
+      "stableId": "pa-block-pa-m3-t2-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "PA-M3-T2",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T2-C2",
+      "stableId": "pa-block-pa-m3-t2-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "PA-M3-T2",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T2-C3",
+      "stableId": "pa-block-pa-m3-t2-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "PA-M3-T2",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T3",
+      "stableId": "pa-town-pa-m3-t3",
+      "name": "Harbor / Market Area",
+      "kind": "town",
+      "parentId": "PA-M3",
+      "codePart": "7S",
+      "aliases": [
+        {
+          "label": "Harbor / Market Area",
+          "language": "en",
+          "status": "preferred"
+        },
+        {
+          "label": "South Municipality Harbor / Market Area",
+          "language": "en",
+          "status": "synthetic"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T3-C0",
+      "stableId": "pa-block-pa-m3-t3-c0",
+      "name": "Town-wide",
+      "kind": "block",
+      "parentId": "PA-M3-T3",
+      "codePart": "00",
+      "aliases": [
+        {
+          "label": "Town-wide",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T3-C1",
+      "stableId": "pa-block-pa-m3-t3-c1",
+      "name": "1-chome / Block 1",
+      "kind": "block",
+      "parentId": "PA-M3-T3",
+      "codePart": "01",
+      "aliases": [
+        {
+          "label": "1-chome / Block 1",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T3-C2",
+      "stableId": "pa-block-pa-m3-t3-c2",
+      "name": "2-chome / Block 2",
+      "kind": "block",
+      "parentId": "PA-M3-T3",
+      "codePart": "02",
+      "aliases": [
+        {
+          "label": "2-chome / Block 2",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    },
+    {
+      "localityId": "PA-M3-T3-C3",
+      "stableId": "pa-block-pa-m3-t3-c3",
+      "name": "3-chome / Block 3",
+      "kind": "block",
+      "parentId": "PA-M3-T3",
+      "codePart": "03",
+      "aliases": [
+        {
+          "label": "3-chome / Block 3",
+          "language": "en",
+          "status": "preferred"
+        }
+      ]
+    }
+  ],
+  "landformIndex": [
+    {
+      "landformId": "pa-mixed-terrain",
+      "label": "Mixed administrative and settlement terrain",
+      "kind": "mixed",
+      "relatedLocalityIds": [
+        "PA-M1",
+        "PA-M2",
+        "PA-M3"
+      ],
+      "sourceId": "open-map-evidence-slot"
+    }
+  ],
+  "settlementClusterIndex": [
+    {
+      "clusterId": "pa-cluster-pa-m1-pa-m1-t1",
+      "label": "Central Municipality / Central Quarter",
+      "localityId": "PA-M1-T1",
+      "agidCellSeed": "PA:BZ:TE:11",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "pa-cluster-pa-m1-pa-m1-t2",
+      "label": "Central Municipality / North District",
+      "localityId": "PA-M1-T2",
+      "agidCellSeed": "PA:BZ:6F:12",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "pa-cluster-pa-m2-pa-m2-t1",
+      "label": "North Municipality / Central Quarter",
+      "localityId": "PA-M2-T1",
+      "agidCellSeed": "PA:NN:TH:21",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "pa-cluster-pa-m2-pa-m2-t2",
+      "label": "North Municipality / North District",
+      "localityId": "PA-M2-T2",
+      "agidCellSeed": "PA:NN:CT:22",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "pa-cluster-pa-m3-pa-m3-t1",
+      "label": "South Municipality / Central Quarter",
+      "localityId": "PA-M3-T1",
+      "agidCellSeed": "PA:QK:T8:31",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    },
+    {
+      "clusterId": "pa-cluster-pa-m3-pa-m3-t2",
+      "label": "South Municipality / North District",
+      "localityId": "PA-M3-T2",
+      "agidCellSeed": "PA:QK:EY:32",
+      "deliveryHints": [
+        "confirm-official-boundary-before-pilot",
+        "keep-visible-code-municipality-scoped",
+        "check-road-route"
+      ],
+      "publicPrecision": "town"
+    }
+  ],
+  "vplSeedRegions": [
+    {
+      "vplId": "pa-vpl-1",
+      "label": "Central Municipality synthetic postal locality 1",
+      "nonAdministrative": true,
+      "localityId": "PA-M1",
+      "codeSeed": "97F",
+      "reasons": [
+        "reduce-address-ambiguity",
+        "support-draft-postal-zone-design",
+        "separate-local-delivery-context"
+      ],
+      "status": "draft"
+    },
+    {
+      "vplId": "pa-vpl-2",
+      "label": "North Municipality synthetic postal locality 2",
+      "nonAdministrative": true,
+      "localityId": "PA-M2",
+      "codeSeed": "8AK",
+      "reasons": [
+        "reduce-address-ambiguity",
+        "support-draft-postal-zone-design",
+        "separate-local-delivery-context"
+      ],
+      "status": "draft"
+    },
+    {
+      "vplId": "pa-vpl-3",
+      "label": "South Municipality synthetic postal locality 3",
+      "nonAdministrative": true,
+      "localityId": "PA-M3",
+      "codeSeed": "B29",
+      "reasons": [
+        "reduce-address-ambiguity",
+        "support-draft-postal-zone-design",
+        "separate-local-delivery-context"
+      ],
+      "status": "draft"
+    }
+  ],
+  "planningCellIndex": [
+    {
+      "cellId": "pa-planning-cell-0001",
+      "agid": "PA0E188YB6A2",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.771221
+      },
+      "codeSeed": "PA-BZ-TE-001",
+      "routeBucket": "PA-route-01",
+      "areaClass": "urban-core",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0002",
+      "agid": "PA0E188XQ5AM",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.557221,
+        "lng": -80.754999
+      },
+      "codeSeed": "PA-NN-6F-002",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0003",
+      "agid": "PA0E188X4XZR",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.57182,
+        "lng": -80.742584
+      },
+      "codeSeed": "PA-QK-QC-003",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0004",
+      "agid": "PA0E188X17Z6",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.581575,
+        "lng": -80.735865
+      },
+      "codeSeed": "PA-BZ-TH-004",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0005",
+      "agid": "PA0E188X0VNV",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.585,
+        "lng": -80.735865
+      },
+      "codeSeed": "PA-NN-CT-005",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0006",
+      "agid": "PA0E188X6XNE",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.581575,
+        "lng": -80.742584
+      },
+      "codeSeed": "PA-QK-99-006",
+      "routeBucket": "PA-route-06",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0007",
+      "agid": "PA0E188XFPCP",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.57182,
+        "lng": -80.754999
+      },
+      "codeSeed": "PA-BZ-T8-007",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0008",
+      "agid": "PA0E188XMNC7",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.557221,
+        "lng": -80.771221
+      },
+      "codeSeed": "PA-NN-EY-008",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0009",
+      "agid": "PA0E188HQ3E9",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.788779
+      },
+      "codeSeed": "PA-QK-7S-009",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0010",
+      "agid": "PA0E188H3C4Y",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.522779,
+        "lng": -80.805001
+      },
+      "codeSeed": "PA-BZ-TE-010",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0011",
+      "agid": "PA0E188GZJ4Q",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.50818,
+        "lng": -80.817416
+      },
+      "codeSeed": "PA-NN-6F-011",
+      "routeBucket": "PA-route-11",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0012",
+      "agid": "PA0E188FM6T9",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.498425,
+        "lng": -80.824135
+      },
+      "codeSeed": "PA-QK-QC-012",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0013",
+      "agid": "PA0E188FM1PY",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.495,
+        "lng": -80.824135
+      },
+      "codeSeed": "PA-BZ-TH-013",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0014",
+      "agid": "PA0E188FMV5B",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.498425,
+        "lng": -80.817416
+      },
+      "codeSeed": "PA-NN-CT-014",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0015",
+      "agid": "PA0E188H0SQP",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.50818,
+        "lng": -80.805001
+      },
+      "codeSeed": "PA-QK-99-015",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0016",
+      "agid": "PA0E188HFPRD",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.522779,
+        "lng": -80.788779
+      },
+      "codeSeed": "PA-BZ-T8-016",
+      "routeBucket": "PA-route-04",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0017",
+      "agid": "PA0E188YB385",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.767904
+      },
+      "codeSeed": "PA-NN-EY-017",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0018",
+      "agid": "PA0E188XTY0B",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.563726,
+        "lng": -80.745555
+      },
+      "codeSeed": "PA-QK-7S-018",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0019",
+      "agid": "PA0E188X05K7",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.583841,
+        "lng": -80.728449
+      },
+      "codeSeed": "PA-BZ-TE-019",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0020",
+      "agid": "PA0E188VM2N3",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.597281,
+        "lng": -80.719191
+      },
+      "codeSeed": "PA-NN-6F-020",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0021",
+      "agid": "PA0E188VKXD3",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.602,
+        "lng": -80.719191
+      },
+      "codeSeed": "PA-QK-QC-021",
+      "routeBucket": "PA-route-09",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0022",
+      "agid": "PA0E188RB6RJ",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.597281,
+        "lng": -80.728449
+      },
+      "codeSeed": "PA-BZ-TH-022",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0023",
+      "agid": "PA0E188X69PF",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.583841,
+        "lng": -80.745555
+      },
+      "codeSeed": "PA-NN-CT-023",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0024",
+      "agid": "PA0E188XJWG5",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.563726,
+        "lng": -80.767904
+      },
+      "codeSeed": "PA-QK-99-024",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0025",
+      "agid": "PA0E188HQCQT",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.792096
+      },
+      "codeSeed": "PA-BZ-T8-025",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0026",
+      "agid": "PA0E188H20H8",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.516274,
+        "lng": -80.814445
+      },
+      "codeSeed": "PA-NN-EY-026",
+      "routeBucket": "PA-route-02",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0027",
+      "agid": "PA0E188FPVVC",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.496159,
+        "lng": -80.831551
+      },
+      "codeSeed": "PA-QK-7S-027",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0028",
+      "agid": "PA0E188F56G0",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.482719,
+        "lng": -80.840809
+      },
+      "codeSeed": "PA-BZ-TE-028",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0029",
+      "agid": "PA0E188F5181",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.478,
+        "lng": -80.840809
+      },
+      "codeSeed": "PA-NN-6F-029",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0030",
+      "agid": "PA0E188FE5EK",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.482719,
+        "lng": -80.831551
+      },
+      "codeSeed": "PA-QK-QC-030",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0031",
+      "agid": "PA0E188CB974",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.496159,
+        "lng": -80.814445
+      },
+      "codeSeed": "PA-BZ-TH-031",
+      "routeBucket": "PA-route-07",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0032",
+      "agid": "PA0E188HFBAT",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.516274,
+        "lng": -80.792096
+      },
+      "codeSeed": "PA-NN-CT-032",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0033",
+      "agid": "PA0E188YBP0E",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.764588
+      },
+      "codeSeed": "PA-QK-99-033",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0034",
+      "agid": "PA0E188X3815",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.570232,
+        "lng": -80.73611
+      },
+      "codeSeed": "PA-BZ-T8-034",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0035",
+      "agid": "PA0E188VPJ93",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.595861,
+        "lng": -80.714314
+      },
+      "codeSeed": "PA-NN-EY-035",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0036",
+      "agid": "PA0E188V57ZA",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.612986,
+        "lng": -80.702518
+      },
+      "codeSeed": "PA-QK-7S-036",
+      "routeBucket": "PA-route-12",
+      "areaClass": "urban-core",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0037",
+      "agid": "PA0E188V5R6E",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.619,
+        "lng": -80.702518
+      },
+      "codeSeed": "PA-BZ-TE-037",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0038",
+      "agid": "PA0E188VE2KS",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.612986,
+        "lng": -80.714314
+      },
+      "codeSeed": "PA-NN-6F-038",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0039",
+      "agid": "PA0E188RBS1A",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.595861,
+        "lng": -80.73611
+      },
+      "codeSeed": "PA-QK-QC-039",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0040",
+      "agid": "PA0E188XDJ2F",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.570232,
+        "lng": -80.764588
+      },
+      "codeSeed": "PA-BZ-TH-040",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0041",
+      "agid": "PA0E188HSRG7",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.795412
+      },
+      "codeSeed": "PA-NN-CT-041",
+      "routeBucket": "PA-route-05",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0042",
+      "agid": "PA0E188GYC1C",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.509768,
+        "lng": -80.82389
+      },
+      "codeSeed": "PA-QK-99-042",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0043",
+      "agid": "PA0E188FV981",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.484139,
+        "lng": -80.845686
+      },
+      "codeSeed": "PA-BZ-T8-043",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0044",
+      "agid": "PA0E188F06EA",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.467014,
+        "lng": -80.857482
+      },
+      "codeSeed": "PA-NN-EY-044",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0045",
+      "agid": "PA0E188EZWQ5",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.461,
+        "lng": -80.857482
+      },
+      "codeSeed": "PA-QK-7S-045",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0046",
+      "agid": "PA0E188F740H",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.467014,
+        "lng": -80.845686
+      },
+      "codeSeed": "PA-BZ-TE-046",
+      "routeBucket": "PA-route-10",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0047",
+      "agid": "PA0E188FJ1M9",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.484139,
+        "lng": -80.82389
+      },
+      "codeSeed": "PA-NN-6F-047",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0048",
+      "agid": "PA0E188H66DV",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.509768,
+        "lng": -80.795412
+      },
+      "codeSeed": "PA-QK-QC-048",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0049",
+      "agid": "PA0E188YBT33",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.761271
+      },
+      "codeSeed": "PA-BZ-TH-049",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0050",
+      "agid": "PA0E188WRMPW",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.576738,
+        "lng": -80.726665
+      },
+      "codeSeed": "PA-NN-CT-050",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0051",
+      "agid": "PA0E188VTVXV",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.607882,
+        "lng": -80.700179
+      },
+      "codeSeed": "PA-QK-99-051",
+      "routeBucket": "PA-route-03",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0052",
+      "agid": "PA0E188V07RZ",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.628692,
+        "lng": -80.685845
+      },
+      "codeSeed": "PA-BZ-T8-052",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0053",
+      "agid": "PA0E188TZK45",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.636,
+        "lng": -80.685845
+      },
+      "codeSeed": "PA-NN-EY-053",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0054",
+      "agid": "PA0E188V7M2Y",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.628692,
+        "lng": -80.700179
+      },
+      "codeSeed": "PA-QK-7S-054",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0055",
+      "agid": "PA0E188VJS6H",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.607882,
+        "lng": -80.726665
+      },
+      "codeSeed": "PA-BZ-TE-055",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0056",
+      "agid": "PA0E188XC33C",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.576738,
+        "lng": -80.761271
+      },
+      "codeSeed": "PA-NN-6F-056",
+      "routeBucket": "PA-route-08",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0057",
+      "agid": "PA0E188HSM36",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.798729
+      },
+      "codeSeed": "PA-QK-QC-057",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0058",
+      "agid": "PA0E188FQRNX",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.503262,
+        "lng": -80.833335
+      },
+      "codeSeed": "PA-BZ-TH-058",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0059",
+      "agid": "PA0E187TZAVP",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.472118,
+        "lng": -80.859821
+      },
+      "codeSeed": "PA-NN-CT-059",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0060",
+      "agid": "PA0E187V44YM",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.451308,
+        "lng": -80.874155
+      },
+      "codeSeed": "PA-QK-99-060",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0061",
+      "agid": "PA0E187V4X3F",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.444,
+        "lng": -80.874155
+      },
+      "codeSeed": "PA-BZ-T8-061",
+      "routeBucket": "PA-route-01",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0062",
+      "agid": "PA0E187V1ZXJ",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.451308,
+        "lng": -80.859821
+      },
+      "codeSeed": "PA-NN-EY-062",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0063",
+      "agid": "PA0E188F8SNJ",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.472118,
+        "lng": -80.833335
+      },
+      "codeSeed": "PA-QK-7S-063",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0064",
+      "agid": "PA0E188C85J9",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.503262,
+        "lng": -80.798729
+      },
+      "codeSeed": "PA-BZ-TE-064",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0065",
+      "agid": "PA0E188Y9EBK",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.757955
+      },
+      "codeSeed": "PA-NN-6F-065",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0066",
+      "agid": "PA0E188WYG39",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.583243,
+        "lng": -80.717221
+      },
+      "codeSeed": "PA-QK-QC-066",
+      "routeBucket": "PA-route-06",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0067",
+      "agid": "PA0E188V233E",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.619903,
+        "lng": -80.686044
+      },
+      "codeSeed": "PA-BZ-TH-067",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0068",
+      "agid": "PA0E18954D60",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.644398,
+        "lng": -80.669171
+      },
+      "codeSeed": "PA-NN-CT-068",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0069",
+      "agid": "PA0E1895FC8F",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.653,
+        "lng": -80.669171
+      },
+      "codeSeed": "PA-QK-99-069",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0070",
+      "agid": "PA0E188TRQ38",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.644398,
+        "lng": -80.686044
+      },
+      "codeSeed": "PA-BZ-T8-070",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0071",
+      "agid": "PA0E188VC3JE",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.619903,
+        "lng": -80.717221
+      },
+      "codeSeed": "PA-NN-EY-071",
+      "routeBucket": "PA-route-11",
+      "areaClass": "urban-core",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0072",
+      "agid": "PA0E188X9EAB",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.583243,
+        "lng": -80.757955
+      },
+      "codeSeed": "PA-QK-7S-072",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0073",
+      "agid": "PA0E188HS7T4",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.802045
+      },
+      "codeSeed": "PA-BZ-TE-073",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0074",
+      "agid": "PA0E188FSKZ2",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.496757,
+        "lng": -80.842779
+      },
+      "codeSeed": "PA-NN-6F-074",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0075",
+      "agid": "PA0E187V7DHG",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.460097,
+        "lng": -80.873956
+      },
+      "codeSeed": "PA-QK-QC-075",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0076",
+      "agid": "PA0E187VHEZM",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.435602,
+        "lng": -80.890829
+      },
+      "codeSeed": "PA-BZ-TH-076",
+      "routeBucket": "PA-route-04",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0077",
+      "agid": "PA0E187VPJX3",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.427,
+        "lng": -80.890829
+      },
+      "codeSeed": "PA-NN-CT-077",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0078",
+      "agid": "PA0E187VV16C",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.435602,
+        "lng": -80.873956
+      },
+      "codeSeed": "PA-QK-99-078",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0079",
+      "agid": "PA0E188EXEZ7",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.460097,
+        "lng": -80.842779
+      },
+      "codeSeed": "PA-BZ-T8-079",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0080",
+      "agid": "PA0E188C9DHY",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.496757,
+        "lng": -80.802045
+      },
+      "codeSeed": "PA-NN-EY-080",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0081",
+      "agid": "PA0E188Y8ZHA",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.754638
+      },
+      "codeSeed": "PA-QK-7S-081",
+      "routeBucket": "PA-route-09",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0082",
+      "agid": "PA0E188VQWSG",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.589749,
+        "lng": -80.707776
+      },
+      "codeSeed": "PA-BZ-TE-082",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0083",
+      "agid": "PA0E189520G0",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.631924,
+        "lng": -80.671909
+      },
+      "codeSeed": "PA-NN-6F-083",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0084",
+      "agid": "PA0E1895H74A",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.660104,
+        "lng": -80.652498
+      },
+      "codeSeed": "PA-QK-QC-084",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0085",
+      "agid": "PA0E1895KE7E",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.67,
+        "lng": -80.652498
+      },
+      "codeSeed": "PA-BZ-TH-085",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0086",
+      "agid": "PA0E1895EST1",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.660104,
+        "lng": -80.671909
+      },
+      "codeSeed": "PA-NN-CT-086",
+      "routeBucket": "PA-route-02",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0087",
+      "agid": "PA0E188V83SN",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.631924,
+        "lng": -80.707776
+      },
+      "codeSeed": "PA-QK-99-087",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0088",
+      "agid": "PA0E188X859H",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.589749,
+        "lng": -80.754638
+      },
+      "codeSeed": "PA-BZ-T8-088",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0089",
+      "agid": "PA0E188HYS4B",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.805362
+      },
+      "codeSeed": "PA-NN-EY-089",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0090",
+      "agid": "PA0E188FWBBK",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.490251,
+        "lng": -80.852224
+      },
+      "codeSeed": "PA-QK-7S-090",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0091",
+      "agid": "PA0E187VEWNQ",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.448076,
+        "lng": -80.888091
+      },
+      "codeSeed": "PA-BZ-TE-091",
+      "routeBucket": "PA-route-07",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0092",
+      "agid": "PA0E187RAGAR",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.419896,
+        "lng": -80.907502
+      },
+      "codeSeed": "PA-NN-6F-092",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0093",
+      "agid": "PA0E187X1GNW",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.41,
+        "lng": -80.907502
+      },
+      "codeSeed": "PA-QK-QC-093",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0094",
+      "agid": "PA0E187VP52Y",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.419896,
+        "lng": -80.888091
+      },
+      "codeSeed": "PA-BZ-TH-094",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0095",
+      "agid": "PA0E188ES2YQ",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.448076,
+        "lng": -80.852224
+      },
+      "codeSeed": "PA-NN-CT-095",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0096",
+      "agid": "PA0E188CC4EX",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.490251,
+        "lng": -80.805362
+      },
+      "codeSeed": "PA-QK-99-096",
+      "routeBucket": "PA-route-12",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0097",
+      "agid": "PA0E188Y8HVQ",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.751322
+      },
+      "codeSeed": "PA-BZ-T8-097",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0098",
+      "agid": "PA0E188VS2EN",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.596254,
+        "lng": -80.698331
+      },
+      "codeSeed": "PA-NN-EY-098",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0099",
+      "agid": "PA0E1895VDPV",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.643945,
+        "lng": -80.657774
+      },
+      "codeSeed": "PA-QK-7S-099",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0100",
+      "agid": "PA0E18ESN7J2",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.67581,
+        "lng": -80.635825
+      },
+      "codeSeed": "PA-BZ-TE-100",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0101",
+      "agid": "PA0E18ESPD18",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.687,
+        "lng": -80.635825
+      },
+      "codeSeed": "PA-NN-6F-101",
+      "routeBucket": "PA-route-05",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0102",
+      "agid": "PA0E18ETD7BS",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.67581,
+        "lng": -80.657774
+      },
+      "codeSeed": "PA-QK-QC-102",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0103",
+      "agid": "PA0E188TVHRT",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.643945,
+        "lng": -80.698331
+      },
+      "codeSeed": "PA-BZ-TH-103",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0104",
+      "agid": "PA0E188R663J",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.596254,
+        "lng": -80.751322
+      },
+      "codeSeed": "PA-NN-CT-104",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0105",
+      "agid": "PA0E188HYY9J",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.808678
+      },
+      "codeSeed": "PA-QK-99-105",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0106",
+      "agid": "PA0E187TR3RX",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.483746,
+        "lng": -80.861669
+      },
+      "codeSeed": "PA-BZ-T8-106",
+      "routeBucket": "PA-route-10",
+      "areaClass": "urban-core",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0107",
+      "agid": "PA0E187VJTZ7",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.436055,
+        "lng": -80.902226
+      },
+      "codeSeed": "PA-NN-EY-107",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0108",
+      "agid": "PA0E187X5GBJ",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.40419,
+        "lng": -80.924175
+      },
+      "codeSeed": "PA-QK-7S-108",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0109",
+      "agid": "PA0E187XTFNJ",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.393,
+        "lng": -80.924175
+      },
+      "codeSeed": "PA-BZ-TE-109",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0110",
+      "agid": "PA0E187WRGQ7",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.40419,
+        "lng": -80.902226
+      },
+      "codeSeed": "PA-NN-6F-110",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0111",
+      "agid": "PA0E187VXE96",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.436055,
+        "lng": -80.861669
+      },
+      "codeSeed": "PA-QK-QC-111",
+      "routeBucket": "PA-route-03",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0112",
+      "agid": "PA0E188CDGNQ",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.483746,
+        "lng": -80.808678
+      },
+      "codeSeed": "PA-BZ-TH-112",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0113",
+      "agid": "PA0E188Y6670",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.748005
+      },
+      "codeSeed": "PA-NN-CT-113",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0114",
+      "agid": "PA0E188VXPCC",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.60276,
+        "lng": -80.688886
+      },
+      "codeSeed": "PA-QK-99-114",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0115",
+      "agid": "PA0E1895QQBF",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.655966,
+        "lng": -80.643639
+      },
+      "codeSeed": "PA-BZ-T8-115",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0116",
+      "agid": "PA0E18ESG7D2",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.691516,
+        "lng": -80.619151
+      },
+      "codeSeed": "PA-NN-EY-116",
+      "routeBucket": "PA-route-08",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0117",
+      "agid": "PA0E18ESV8P9",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.704,
+        "lng": -80.619151
+      },
+      "codeSeed": "PA-QK-7S-117",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0118",
+      "agid": "PA0E18ET89ZT",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.691516,
+        "lng": -80.643639
+      },
+      "codeSeed": "PA-BZ-TE-118",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0119",
+      "agid": "PA0E188TQKY6",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.655966,
+        "lng": -80.688886
+      },
+      "codeSeed": "PA-NN-6F-119",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0120",
+      "agid": "PA0E188RF8CZ",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.60276,
+        "lng": -80.748005
+      },
+      "codeSeed": "PA-QK-QC-120",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0121",
+      "agid": "PA0E188HY88N",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.811995
+      },
+      "codeSeed": "PA-BZ-TH-121",
+      "routeBucket": "PA-route-01",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0122",
+      "agid": "PA0E187TVV82",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.47724,
+        "lng": -80.871114
+      },
+      "codeSeed": "PA-NN-CT-122",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0123",
+      "agid": "PA0E187R9J2P",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.424034,
+        "lng": -80.916361
+      },
+      "codeSeed": "PA-QK-99-123",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0124",
+      "agid": "PA0E187XKGVP",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.388484,
+        "lng": -80.940849
+      },
+      "codeSeed": "PA-BZ-T8-124",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0125",
+      "agid": "PA0E187YAFCB",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.376,
+        "lng": -80.940849
+      },
+      "codeSeed": "PA-NN-EY-125",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0126",
+      "agid": "PA0E187XVWQA",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.388484,
+        "lng": -80.916361
+      },
+      "codeSeed": "PA-QK-7S-126",
+      "routeBucket": "PA-route-06",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0127",
+      "agid": "PA0E187VRTT3",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.424034,
+        "lng": -80.871114
+      },
+      "codeSeed": "PA-BZ-TE-127",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0128",
+      "agid": "PA0E188CK3QZ",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.47724,
+        "lng": -80.811995
+      },
+      "codeSeed": "PA-NN-6F-128",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0129",
+      "agid": "PA0E188Y6ATS",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.744689
+      },
+      "codeSeed": "PA-QK-QC-129",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0130",
+      "agid": "PA0E18942T9V",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.609266,
+        "lng": -80.679442
+      },
+      "codeSeed": "PA-BZ-TH-130",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0131",
+      "agid": "PA0E1896BG8A",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.667986,
+        "lng": -80.629504
+      },
+      "codeSeed": "PA-NN-CT-131",
+      "routeBucket": "PA-route-11",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0132",
+      "agid": "PA0E18ES14KD",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.707222,
+        "lng": -80.602478
+      },
+      "codeSeed": "PA-QK-99-132",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0133",
+      "agid": "PA0E18ERZ0JK",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.721,
+        "lng": -80.602478
+      },
+      "codeSeed": "PA-BZ-T8-133",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0134",
+      "agid": "PA0E18ESYNWY",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.707222,
+        "lng": -80.629504
+      },
+      "codeSeed": "PA-NN-EY-134",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0135",
+      "agid": "PA0E1895A9ZZ",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.667986,
+        "lng": -80.679442
+      },
+      "codeSeed": "PA-QK-7S-135",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0136",
+      "agid": "PA0E188RFSG0",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.609266,
+        "lng": -80.744689
+      },
+      "codeSeed": "PA-BZ-TE-136",
+      "routeBucket": "PA-route-04",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0137",
+      "agid": "PA0E188HY41J",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.815311
+      },
+      "codeSeed": "PA-NN-6F-137",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0138",
+      "agid": "PA0E187TWS7H",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.470734,
+        "lng": -80.880558
+      },
+      "codeSeed": "PA-QK-QC-138",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0139",
+      "agid": "PA0E187X8VYV",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.412014,
+        "lng": -80.930496
+      },
+      "codeSeed": "PA-BZ-TH-139",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0140",
+      "agid": "PA0E187HNTFY",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.372778,
+        "lng": -80.957522
+      },
+      "codeSeed": "PA-NN-CT-140",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0141",
+      "agid": "PA0E187HJ4FD",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.359,
+        "lng": -80.957522
+      },
+      "codeSeed": "PA-QK-99-141",
+      "routeBucket": "PA-route-09",
+      "areaClass": "urban-core",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0142",
+      "agid": "PA0E187Y8AA2",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.372778,
+        "lng": -80.930496
+      },
+      "codeSeed": "PA-BZ-T8-142",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0143",
+      "agid": "PA0E187W365R",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.412014,
+        "lng": -80.880558
+      },
+      "codeSeed": "PA-NN-EY-143",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0144",
+      "agid": "PA0E188CMNMW",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.470734,
+        "lng": -80.815311
+      },
+      "codeSeed": "PA-QK-7S-144",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0145",
+      "agid": "PA0E188Y6WX6",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.741372
+      },
+      "codeSeed": "PA-BZ-TE-145",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0146",
+      "agid": "PA0E1894VK2A",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.615771,
+        "lng": -80.669997
+      },
+      "codeSeed": "PA-NN-6F-146",
+      "routeBucket": "PA-route-02",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0147",
+      "agid": "PA0E18ESDK7C",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.680007,
+        "lng": -80.615369
+      },
+      "codeSeed": "PA-QK-QC-147",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0148",
+      "agid": "PA0E18EQ1618",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.722928,
+        "lng": -80.585805
+      },
+      "codeSeed": "PA-BZ-TH-148",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0149",
+      "agid": "PA0E18EQWNPR",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.738,
+        "lng": -80.585805
+      },
+      "codeSeed": "PA-NN-CT-149",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0150",
+      "agid": "PA0E18ERSS48",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.722928,
+        "lng": -80.615369
+      },
+      "codeSeed": "PA-QK-99-150",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0151",
+      "agid": "PA0E18ETKKZG",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.680007,
+        "lng": -80.669997
+      },
+      "codeSeed": "PA-BZ-T8-151",
+      "routeBucket": "PA-route-07",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0152",
+      "agid": "PA0E188RHM9P",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.615771,
+        "lng": -80.741372
+      },
+      "codeSeed": "PA-NN-EY-152",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0153",
+      "agid": "PA0E188GNQW9",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.818628
+      },
+      "codeSeed": "PA-QK-7S-153",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0154",
+      "agid": "PA0E187T229X",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.464229,
+        "lng": -80.890003
+      },
+      "codeSeed": "PA-BZ-TE-154",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0155",
+      "agid": "PA0E187XDBNV",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.399993,
+        "lng": -80.944631
+      },
+      "codeSeed": "PA-NN-6F-155",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0156",
+      "agid": "PA0E187HTTV0",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.357072,
+        "lng": -80.974195
+      },
+      "codeSeed": "PA-QK-QC-156",
+      "routeBucket": "PA-route-12",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0157",
+      "agid": "PA0E187H6BTT",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.342,
+        "lng": -80.974195
+      },
+      "codeSeed": "PA-BZ-TH-157",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0158",
+      "agid": "PA0E187YD8AB",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.357072,
+        "lng": -80.944631
+      },
+      "codeSeed": "PA-NN-CT-158",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0159",
+      "agid": "PA0E187WT2H8",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.399993,
+        "lng": -80.890003
+      },
+      "codeSeed": "PA-QK-99-159",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0160",
+      "agid": "PA0E188FAXEK",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.464229,
+        "lng": -80.818628
+      },
+      "codeSeed": "PA-BZ-T8-160",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0161",
+      "agid": "PA0E188Y15E7",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.738056
+      },
+      "codeSeed": "PA-NN-EY-161",
+      "routeBucket": "PA-route-05",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0162",
+      "agid": "PA0E1894QBJ5",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.622277,
+        "lng": -80.660552
+      },
+      "codeSeed": "PA-QK-7S-162",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0163",
+      "agid": "PA0E18ES8HAG",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.692028,
+        "lng": -80.601234
+      },
+      "codeSeed": "PA-BZ-TE-163",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0164",
+      "agid": "PA0E18EQG671",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.738634,
+        "lng": -80.569131
+      },
+      "codeSeed": "PA-NN-6F-164",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0165",
+      "agid": "PA0E18EQQP6Y",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.755,
+        "lng": -80.569131
+      },
+      "codeSeed": "PA-QK-QC-165",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0166",
+      "agid": "PA0E18ER357Z",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.738634,
+        "lng": -80.601234
+      },
+      "codeSeed": "PA-BZ-TH-166",
+      "routeBucket": "PA-route-10",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0167",
+      "agid": "PA0E18ETFVA3",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.692028,
+        "lng": -80.660552
+      },
+      "codeSeed": "PA-NN-CT-167",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0168",
+      "agid": "PA0E188RM03J",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.622277,
+        "lng": -80.738056
+      },
+      "codeSeed": "PA-QK-99-168",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0169",
+      "agid": "PA0E188GM976",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.821944
+      },
+      "codeSeed": "PA-BZ-T8-169",
+      "routeBucket": "PA-route-01",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0170",
+      "agid": "PA0E187VAWA8",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.457723,
+        "lng": -80.899448
+      },
+      "codeSeed": "PA-NN-EY-170",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0171",
+      "agid": "PA0E187J9AH1",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.387972,
+        "lng": -80.958766
+      },
+      "codeSeed": "PA-QK-7S-171",
+      "routeBucket": "PA-route-03",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0172",
+      "agid": "PA0E187H1TYN",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.341366,
+        "lng": -80.990869
+      },
+      "codeSeed": "PA-BZ-TE-172",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0173",
+      "agid": "PA0E1D84ZASB",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.325,
+        "lng": -80.990869
+      },
+      "codeSeed": "PA-NN-6F-173",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0174",
+      "agid": "PA0E187H9CEY",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.341366,
+        "lng": -80.958766
+      },
+      "codeSeed": "PA-QK-QC-174",
+      "routeBucket": "PA-route-06",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0175",
+      "agid": "PA0E187WPE3Q",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.387972,
+        "lng": -80.899448
+      },
+      "codeSeed": "PA-BZ-TH-175",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0176",
+      "agid": "PA0E188E1P4K",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.457723,
+        "lng": -80.821944
+      },
+      "codeSeed": "PA-NN-CT-176",
+      "routeBucket": "PA-route-08",
+      "areaClass": "urban-core",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0177",
+      "agid": "PA0E188Y13J5",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.734739
+      },
+      "codeSeed": "PA-QK-99-177",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0178",
+      "agid": "PA0E1894P15M",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.628783,
+        "lng": -80.651108
+      },
+      "codeSeed": "PA-BZ-T8-178",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0179",
+      "agid": "PA0E18EPS93Z",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.704049,
+        "lng": -80.587099
+      },
+      "codeSeed": "PA-NN-EY-179",
+      "routeBucket": "PA-route-11",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0180",
+      "agid": "PA0E18EQN5R0",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.75434,
+        "lng": -80.552458
+      },
+      "codeSeed": "PA-QK-7S-180",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0181",
+      "agid": "PA0E18EJXHJN",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.772,
+        "lng": -80.552458
+      },
+      "codeSeed": "PA-BZ-TE-181",
+      "routeBucket": "PA-route-01",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0182",
+      "agid": "PA0E18EQZ445",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.75434,
+        "lng": -80.587099
+      },
+      "codeSeed": "PA-NN-6F-182",
+      "routeBucket": "PA-route-02",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0183",
+      "agid": "PA0E18ET43XM",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.704049,
+        "lng": -80.651108
+      },
+      "codeSeed": "PA-QK-QC-183",
+      "routeBucket": "PA-route-03",
+      "areaClass": "peri-urban",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0184",
+      "agid": "PA0E188RNQA4",
+      "localityId": "PA-M2-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.628783,
+        "lng": -80.734739
+      },
+      "codeSeed": "PA-BZ-TH-184",
+      "routeBucket": "PA-route-04",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0185",
+      "agid": "PA0E188GMEB6",
+      "localityId": "PA-M2-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.54,
+        "lng": -80.825261
+      },
+      "codeSeed": "PA-NN-CT-185",
+      "routeBucket": "PA-route-05",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0186",
+      "agid": "PA0E187RKGAH",
+      "localityId": "PA-M2-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.451217,
+        "lng": -80.908892
+      },
+      "codeSeed": "PA-QK-99-186",
+      "routeBucket": "PA-route-06",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0187",
+      "agid": "PA0E187HRDV2",
+      "localityId": "PA-M3-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.375951,
+        "lng": -80.972901
+      },
+      "codeSeed": "PA-BZ-T8-187",
+      "routeBucket": "PA-route-07",
+      "areaClass": "rural",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0188",
+      "agid": "PA0E1D856GZM",
+      "localityId": "PA-M3-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.32566,
+        "lng": -81.007542
+      },
+      "codeSeed": "PA-NN-EY-188",
+      "routeBucket": "PA-route-08",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0189",
+      "agid": "PA0E1D85VNAY",
+      "localityId": "PA-M3-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.308,
+        "lng": -81.007542
+      },
+      "codeSeed": "PA-QK-7S-189",
+      "routeBucket": "PA-route-09",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0190",
+      "agid": "PA0E1D84WJFC",
+      "localityId": "PA-M1-T1",
+      "vplId": "pa-vpl-1",
+      "centroid": {
+        "lat": 8.32566,
+        "lng": -80.972901
+      },
+      "codeSeed": "PA-BZ-TE-190",
+      "routeBucket": "PA-route-10",
+      "areaClass": "rural",
+      "publicPrecision": "municipality",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0191",
+      "agid": "PA0E187Y0G2C",
+      "localityId": "PA-M1-T2",
+      "vplId": "pa-vpl-2",
+      "centroid": {
+        "lat": 8.375951,
+        "lng": -80.908892
+      },
+      "codeSeed": "PA-NN-6F-191",
+      "routeBucket": "PA-route-11",
+      "areaClass": "urban-core",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    },
+    {
+      "cellId": "pa-planning-cell-0192",
+      "agid": "PA0E188E1A68",
+      "localityId": "PA-M1-T3",
+      "vplId": "pa-vpl-3",
+      "centroid": {
+        "lat": 8.451217,
+        "lng": -80.825261
+      },
+      "codeSeed": "PA-QK-QC-192",
+      "routeBucket": "PA-route-12",
+      "areaClass": "peri-urban",
+      "publicPrecision": "town",
+      "sourceId": "agid-synthetic-country-pack-fixtures",
+      "noRawAddress": true
+    }
+  ],
+  "routeEvidenceIndex": [
+    {
+      "routeId": "pa-route-evidence-001",
+      "label": "PA mixed evidence slot 1",
+      "fromLocalityId": "PA-M1-T1",
+      "toLocalityId": "PA-M1-T3",
+      "mode": "mixed",
+      "evidenceRef": "source-required://PA/route/001",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-002",
+      "label": "PA road evidence slot 2",
+      "fromLocalityId": "PA-M1-T2",
+      "toLocalityId": "PA-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/002",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-003",
+      "label": "PA road evidence slot 3",
+      "fromLocalityId": "PA-M1-T3",
+      "toLocalityId": "PA-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/003",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-004",
+      "label": "PA road evidence slot 4",
+      "fromLocalityId": "PA-M2-T1",
+      "toLocalityId": "PA-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/004",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-005",
+      "label": "PA road evidence slot 5",
+      "fromLocalityId": "PA-M2-T2",
+      "toLocalityId": "PA-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/005",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-006",
+      "label": "PA mixed evidence slot 6",
+      "fromLocalityId": "PA-M2-T3",
+      "toLocalityId": "PA-M1-T2",
+      "mode": "mixed",
+      "evidenceRef": "source-required://PA/route/006",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-007",
+      "label": "PA road evidence slot 7",
+      "fromLocalityId": "PA-M3-T1",
+      "toLocalityId": "PA-M3-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/007",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-008",
+      "label": "PA road evidence slot 8",
+      "fromLocalityId": "PA-M3-T2",
+      "toLocalityId": "PA-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/008",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-009",
+      "label": "PA road evidence slot 9",
+      "fromLocalityId": "PA-M3-T3",
+      "toLocalityId": "PA-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/009",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-010",
+      "label": "PA road evidence slot 10",
+      "fromLocalityId": "PA-M1-T1",
+      "toLocalityId": "PA-M1-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/010",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-011",
+      "label": "PA mixed evidence slot 11",
+      "fromLocalityId": "PA-M1-T2",
+      "toLocalityId": "PA-M1-T1",
+      "mode": "mixed",
+      "evidenceRef": "source-required://PA/route/011",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-012",
+      "label": "PA road evidence slot 12",
+      "fromLocalityId": "PA-M1-T3",
+      "toLocalityId": "PA-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/012",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-013",
+      "label": "PA road evidence slot 13",
+      "fromLocalityId": "PA-M2-T1",
+      "toLocalityId": "PA-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/013",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-014",
+      "label": "PA road evidence slot 14",
+      "fromLocalityId": "PA-M2-T2",
+      "toLocalityId": "PA-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/014",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-015",
+      "label": "PA road evidence slot 15",
+      "fromLocalityId": "PA-M2-T3",
+      "toLocalityId": "PA-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/015",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-016",
+      "label": "PA mixed evidence slot 16",
+      "fromLocalityId": "PA-M3-T1",
+      "toLocalityId": "PA-M3-T3",
+      "mode": "mixed",
+      "evidenceRef": "source-required://PA/route/016",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-017",
+      "label": "PA road evidence slot 17",
+      "fromLocalityId": "PA-M3-T2",
+      "toLocalityId": "PA-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/017",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-018",
+      "label": "PA road evidence slot 18",
+      "fromLocalityId": "PA-M3-T3",
+      "toLocalityId": "PA-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/018",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-019",
+      "label": "PA road evidence slot 19",
+      "fromLocalityId": "PA-M1-T1",
+      "toLocalityId": "PA-M1-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/019",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-020",
+      "label": "PA road evidence slot 20",
+      "fromLocalityId": "PA-M1-T2",
+      "toLocalityId": "PA-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/020",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-021",
+      "label": "PA mixed evidence slot 21",
+      "fromLocalityId": "PA-M1-T3",
+      "toLocalityId": "PA-M3-T2",
+      "mode": "mixed",
+      "evidenceRef": "source-required://PA/route/021",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-022",
+      "label": "PA road evidence slot 22",
+      "fromLocalityId": "PA-M2-T1",
+      "toLocalityId": "PA-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/022",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-023",
+      "label": "PA road evidence slot 23",
+      "fromLocalityId": "PA-M2-T2",
+      "toLocalityId": "PA-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/023",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-024",
+      "label": "PA road evidence slot 24",
+      "fromLocalityId": "PA-M2-T3",
+      "toLocalityId": "PA-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/024",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-025",
+      "label": "PA road evidence slot 25",
+      "fromLocalityId": "PA-M3-T1",
+      "toLocalityId": "PA-M3-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/025",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-026",
+      "label": "PA mixed evidence slot 26",
+      "fromLocalityId": "PA-M3-T2",
+      "toLocalityId": "PA-M3-T1",
+      "mode": "mixed",
+      "evidenceRef": "source-required://PA/route/026",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-027",
+      "label": "PA road evidence slot 27",
+      "fromLocalityId": "PA-M3-T3",
+      "toLocalityId": "PA-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/027",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-028",
+      "label": "PA road evidence slot 28",
+      "fromLocalityId": "PA-M1-T1",
+      "toLocalityId": "PA-M3-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/028",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-029",
+      "label": "PA road evidence slot 29",
+      "fromLocalityId": "PA-M1-T2",
+      "toLocalityId": "PA-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/029",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-030",
+      "label": "PA road evidence slot 30",
+      "fromLocalityId": "PA-M1-T3",
+      "toLocalityId": "PA-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/030",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-031",
+      "label": "PA mixed evidence slot 31",
+      "fromLocalityId": "PA-M2-T1",
+      "toLocalityId": "PA-M1-T3",
+      "mode": "mixed",
+      "evidenceRef": "source-required://PA/route/031",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-032",
+      "label": "PA road evidence slot 32",
+      "fromLocalityId": "PA-M2-T2",
+      "toLocalityId": "PA-M1-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/032",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-033",
+      "label": "PA road evidence slot 33",
+      "fromLocalityId": "PA-M2-T3",
+      "toLocalityId": "PA-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/033",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-034",
+      "label": "PA road evidence slot 34",
+      "fromLocalityId": "PA-M3-T1",
+      "toLocalityId": "PA-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/034",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-035",
+      "label": "PA road evidence slot 35",
+      "fromLocalityId": "PA-M3-T2",
+      "toLocalityId": "PA-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/035",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-036",
+      "label": "PA mixed evidence slot 36",
+      "fromLocalityId": "PA-M3-T3",
+      "toLocalityId": "PA-M1-T2",
+      "mode": "mixed",
+      "evidenceRef": "source-required://PA/route/036",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-037",
+      "label": "PA road evidence slot 37",
+      "fromLocalityId": "PA-M1-T1",
+      "toLocalityId": "PA-M3-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/037",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-038",
+      "label": "PA road evidence slot 38",
+      "fromLocalityId": "PA-M1-T2",
+      "toLocalityId": "PA-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/038",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-039",
+      "label": "PA road evidence slot 39",
+      "fromLocalityId": "PA-M1-T3",
+      "toLocalityId": "PA-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/039",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-040",
+      "label": "PA road evidence slot 40",
+      "fromLocalityId": "PA-M2-T1",
+      "toLocalityId": "PA-M1-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/040",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-041",
+      "label": "PA mixed evidence slot 41",
+      "fromLocalityId": "PA-M2-T2",
+      "toLocalityId": "PA-M1-T1",
+      "mode": "mixed",
+      "evidenceRef": "source-required://PA/route/041",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-042",
+      "label": "PA road evidence slot 42",
+      "fromLocalityId": "PA-M2-T3",
+      "toLocalityId": "PA-M3-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/042",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-043",
+      "label": "PA road evidence slot 43",
+      "fromLocalityId": "PA-M3-T1",
+      "toLocalityId": "PA-M2-T3",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/043",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-044",
+      "label": "PA road evidence slot 44",
+      "fromLocalityId": "PA-M3-T2",
+      "toLocalityId": "PA-M2-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/044",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-045",
+      "label": "PA road evidence slot 45",
+      "fromLocalityId": "PA-M3-T3",
+      "toLocalityId": "PA-M1-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/045",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-046",
+      "label": "PA mixed evidence slot 46",
+      "fromLocalityId": "PA-M1-T1",
+      "toLocalityId": "PA-M3-T3",
+      "mode": "mixed",
+      "evidenceRef": "source-required://PA/route/046",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-047",
+      "label": "PA road evidence slot 47",
+      "fromLocalityId": "PA-M1-T2",
+      "toLocalityId": "PA-M3-T1",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/047",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    },
+    {
+      "routeId": "pa-route-evidence-048",
+      "label": "PA road evidence slot 48",
+      "fromLocalityId": "PA-M1-T3",
+      "toLocalityId": "PA-M2-T2",
+      "mode": "road",
+      "evidenceRef": "source-required://PA/route/048",
+      "sourceId": "open-map-evidence-slot",
+      "status": "source-required",
+      "riskFlags": [
+        "confirm-road-passability",
+        "local-route-review"
+      ]
+    }
+  ],
+  "qualityEvidenceIndex": [
+    {
+      "evidenceId": "pa-quality-country",
+      "subjectId": "PA",
+      "subjectType": "country",
+      "addressQuality": 0.48,
+      "boundaryQuality": 0.66,
+      "routeQuality": 0.55,
+      "populationQuality": 0.6,
+      "confidenceBand": "high",
+      "verificationRequired": true,
+      "notes": [
+        "country-level-quality-prior",
+        "not-a-claim-of-official-postal-completeness"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-pa-m1",
+      "subjectId": "PA-M1",
+      "subjectType": "municipality",
+      "addressQuality": 0.46,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.54,
+      "populationQuality": 0.59,
+      "confidenceBand": "medium",
+      "verificationRequired": true,
+      "notes": [
+        "synthetic-planning-quality-slot",
+        "replace-with-reviewed-official-or-open-data-before-pilot"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-pa-m2",
+      "subjectId": "PA-M2",
+      "subjectType": "municipality",
+      "addressQuality": 0.47,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.54,
+      "populationQuality": 0.59,
+      "confidenceBand": "medium",
+      "verificationRequired": true,
+      "notes": [
+        "synthetic-planning-quality-slot",
+        "replace-with-reviewed-official-or-open-data-before-pilot"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-pa-m3",
+      "subjectId": "PA-M3",
+      "subjectType": "municipality",
+      "addressQuality": 0.47,
+      "boundaryQuality": 0.66,
+      "routeQuality": 0.55,
+      "populationQuality": 0.6,
+      "confidenceBand": "medium",
+      "verificationRequired": true,
+      "notes": [
+        "synthetic-planning-quality-slot",
+        "replace-with-reviewed-official-or-open-data-before-pilot"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-001",
+      "subjectId": "pa-planning-cell-0001",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:urban-core",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-002",
+      "subjectId": "pa-planning-cell-0007",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-003",
+      "subjectId": "pa-planning-cell-0013",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-004",
+      "subjectId": "pa-planning-cell-0019",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-005",
+      "subjectId": "pa-planning-cell-0025",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-006",
+      "subjectId": "pa-planning-cell-0031",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:urban-core",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-007",
+      "subjectId": "pa-planning-cell-0037",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-008",
+      "subjectId": "pa-planning-cell-0043",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-009",
+      "subjectId": "pa-planning-cell-0049",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-010",
+      "subjectId": "pa-planning-cell-0055",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-011",
+      "subjectId": "pa-planning-cell-0061",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:urban-core",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-012",
+      "subjectId": "pa-planning-cell-0067",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-013",
+      "subjectId": "pa-planning-cell-0073",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-014",
+      "subjectId": "pa-planning-cell-0079",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-015",
+      "subjectId": "pa-planning-cell-0085",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-016",
+      "subjectId": "pa-planning-cell-0091",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:urban-core",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-017",
+      "subjectId": "pa-planning-cell-0097",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-018",
+      "subjectId": "pa-planning-cell-0103",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-019",
+      "subjectId": "pa-planning-cell-0109",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-020",
+      "subjectId": "pa-planning-cell-0115",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-021",
+      "subjectId": "pa-planning-cell-0121",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:urban-core",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-022",
+      "subjectId": "pa-planning-cell-0127",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-023",
+      "subjectId": "pa-planning-cell-0133",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-024",
+      "subjectId": "pa-planning-cell-0139",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-025",
+      "subjectId": "pa-planning-cell-0145",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-026",
+      "subjectId": "pa-planning-cell-0151",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:urban-core",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-027",
+      "subjectId": "pa-planning-cell-0157",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-028",
+      "subjectId": "pa-planning-cell-0163",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-029",
+      "subjectId": "pa-planning-cell-0169",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-030",
+      "subjectId": "pa-planning-cell-0175",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-031",
+      "subjectId": "pa-planning-cell-0181",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:urban-core",
+        "no-personal-address-derived-score"
+      ]
+    },
+    {
+      "evidenceId": "pa-quality-cell-032",
+      "subjectId": "pa-planning-cell-0187",
+      "subjectType": "planning-cell",
+      "addressQuality": 0.45,
+      "boundaryQuality": 0.65,
+      "routeQuality": 0.52,
+      "populationQuality": 0.58,
+      "confidenceBand": "low",
+      "verificationRequired": true,
+      "notes": [
+        "area-class:rural",
+        "no-personal-address-derived-score"
+      ]
+    }
+  ],
+  "postalSystemPriors": [
+    {
+      "templateId": "agid-native",
+      "visibleFormat": "CC-AAAA-NNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "Keeps visible code close to AGID hash structure while hiding the full AGID.",
+        "low-data regions",
+        "offline-first operation"
+      ]
+    },
+    {
+      "templateId": "japan-like",
+      "visibleFormat": "CC-NNN-NNNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "Country prefix plus 3+4 numeric hierarchy. Good for dense settlement networks and later subdivision.",
+        "dense cities",
+        "municipal hierarchy"
+      ]
+    },
+    {
+      "templateId": "india-like",
+      "visibleFormat": "CC-NNNNNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "Country prefix plus six numeric digits. Good for high population and multilingual input.",
+        "large population",
+        "many regions"
+      ]
+    },
+    {
+      "templateId": "france-like",
+      "visibleFormat": "CC-NN NNN",
+      "recommendedUse": "supplemental-agid-postal-draft",
+      "rationale": [
+        "First two digits act as a broad administrative area, with three local digits below.",
+        "administrative departments",
+        "stable municipalities"
+      ]
+    }
+  ],
+  "governanceNotes": [
+    "This country pack is not an official postal authority dataset.",
+    "Use simulation or draft status until government, municipality, postal authority, or carrier pilot approval is recorded.",
+    "Visible postal codes must remain within one municipality and preserve stable locality IDs across renames.",
+    "Old-to-new transition mappings are required before split, merge, or reshaping events."
+  ],
+  "privacyThreatModel": [
+    "Do not store personal addresses, recipient names, phone numbers, AOID private bodies, AGID-S payloads, or proof codes in this pack.",
+    "Do not publish household-level, sensitive-facility-level, refuge-level, or high-risk precise zones.",
+    "Use source metadata and geometry references until redistribution rights are verified.",
+    "Use no-raw-address test vectors before publishing pack releases."
+  ],
+  "testVectors": [
+    {
+      "id": "pa-test-vector-1",
+      "input": {
+        "countryCode": "PA",
+        "municipalityId": "PA-M1",
+        "townId": "PA-M1-T1",
+        "chomeId": "PA-M1-T1-C1"
+      },
+      "expected": {
+        "candidateCodePrefix": "PA-",
+        "sameMunicipalityOnly": true,
+        "containsPersonalData": false
+      }
+    },
+    {
+      "id": "pa-test-vector-2",
+      "input": {
+        "countryCode": "PA",
+        "municipalityId": "PA-M2",
+        "townId": "PA-M2-T2",
+        "chomeId": "PA-M2-T2-C2"
+      },
+      "expected": {
+        "candidateCodePrefix": "PA-",
+        "sameMunicipalityOnly": true,
+        "containsPersonalData": false
+      }
+    },
+    {
+      "id": "pa-test-vector-3",
+      "input": {
+        "countryCode": "PA",
+        "municipalityId": "PA-M3",
+        "townId": "PA-M3-T3",
+        "chomeId": "PA-M3-T3-C3"
+      },
+      "expected": {
+        "candidateCodePrefix": "PA-",
+        "sameMunicipalityOnly": true,
+        "containsPersonalData": false
+      }
+    }
+  ]
+}

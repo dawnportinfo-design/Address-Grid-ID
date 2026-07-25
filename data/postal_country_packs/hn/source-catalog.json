@@ -1,0 +1,115 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "HN official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "honducor-transparency-portal",
+    "sourceName": "Empresa de Correos de Honduras (HONDUCOR) transparency profile",
+    "sourceUrl": "https://portalunico.iaip.gob.hn/372/",
+    "provider": "Empresa de Correos de Honduras (HONDUCOR), via the Honduras transparency portal",
+    "licenseOrTerms": "Public transparency profile; no postcode-mapping license or redistribution grant is recorded, and no profile or postal records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "postal-operator identity and publication reference; metadata only, not a national postcode format, mapping, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The portal identifies HONDUCOR as the postal operator and presents institutional transparency material.",
+      "This pack does not query, store, transform, or redistribute operator, contact, address, or postal records.",
+      "The profile does not establish an authority-published national postcode format, mapping, rights, or delivery-point coverage."
+    ]
+  },
+  {
+    "sourceId": "hn-ine-dee-2024",
+    "sourceName": "Instituto Nacional de Estadistica de Honduras (INE) Directorio de Establecimientos Economicos 2024",
+    "sourceUrl": "https://ine.gob.hn/dee/",
+    "provider": "Instituto Nacional de Estadistica (INE), Honduras",
+    "licenseOrTerms": "Official statistical publication page; no bulk-data redistribution terms are recorded here, and no source records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative division reference; metadata only, not a postcode mapping or address dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "INE describes the 2024 directory as covering all 18 departments and 298 municipalities.",
+      "This pack stores source metadata only and does not include establishment, locality, household, or address records.",
+      "Administrative coverage does not establish postal-code coverage or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "hn-sen-geoportal",
+    "sourceName": "Sistema Estadistico Nacional de Honduras (SEN) Geoportal",
+    "sourceUrl": "https://sen.ine.gob.hn/Home/IndicadoresGeoportal",
+    "provider": "Sistema Estadistico Nacional / Instituto Nacional de Estadistica, Honduras",
+    "licenseOrTerms": "Official geoportal page; no data reuse or redistribution terms are recorded here, and no geoportal records are bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official statistical geography reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The portal exposes department and municipality as geographic disaggregation choices.",
+      "This pack does not query, store, transform, or redistribute geoportal records, geometries, or address data.",
+      "Geoportal availability does not establish postal-code format, mapping, rights, or delivery-point coverage."
+    ]
+  },
+  {
+    "sourceId": "hn-postcode-mapping-required",
+    "sourceName": "Honduras postcode format, mapping, rights, and update authority source",
+    "sourceUrl": "source-metadata-only:honduras-postcode-mapping-required",
+    "provider": "Honduras postal authority or authority-designated official publisher",
+    "licenseOrTerms": "Not yet verified; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national postcode format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The recorded official references do not establish a reusable national postcode format or mapping.",
+      "Do not add real postcode records, address matching, or carrier deliverability assertions until authority, license, version, coverage, and correction evidence are recorded."
+    ]
+  }
+]

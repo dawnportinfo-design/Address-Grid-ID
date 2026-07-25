@@ -1,0 +1,130 @@
+[
+  {
+    "sourceId": "agid-synthetic-country-pack-fixtures",
+    "sourceName": "AGID-generated country pack fixtures",
+    "sourceUrl": "local:AGID",
+    "provider": "AGID project",
+    "licenseOrTerms": "Apache-2.0 for AGID-created metadata",
+    "redistributionStatus": "agid-metadata-redistributable",
+    "role": "synthetic locality, VPL seed, and conformance fixtures",
+    "transformedFields": [
+      "countryCode",
+      "localityId",
+      "codePart",
+      "planningCell",
+      "routeEvidence",
+      "qualityEvidence",
+      "testVector"
+    ],
+    "confidenceNotes": [
+      "Contains no personal addresses and no recipient data.",
+      "Useful for OSS demos and conformance tests; not official postal authority data."
+    ]
+  },
+  {
+    "sourceId": "official-boundary-required",
+    "sourceName": "KG official boundary and locality sources",
+    "sourceUrl": "source-metadata-only:official-authority-required",
+    "provider": "government, municipality, postal authority, or carrier pilot authority",
+    "licenseOrTerms": "source-specific; not bundled",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official validation gate before pilot or public release",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "This pack records the required source slot only.",
+      "No official raw boundary, road, population, postal, or address dataset is bundled."
+    ]
+  },
+  {
+    "sourceId": "open-map-evidence-slot",
+    "sourceName": "Open map evidence slot",
+    "sourceUrl": "source-metadata-only:open-map-provider",
+    "provider": "OSM, Overture, Natural Earth, or local open-data provider after license review",
+    "licenseOrTerms": "source-specific; license review required",
+    "redistributionStatus": "license-review-required",
+    "role": "road, landform, port, settlement, and map preview evidence",
+    "transformedFields": [
+      "featureClass",
+      "evidenceQuality",
+      "sourceFreshness"
+    ],
+    "confidenceNotes": [
+      "Open map records are not bundled by default.",
+      "Any derived database must keep source-specific attribution and redistribution obligations."
+    ]
+  },
+  {
+    "sourceId": "kyrgyz-post-postal-code-search",
+    "sourceName": "Kyrgyz Post postal-code search surface",
+    "sourceUrl": "https://post.kg/language/en/postal-codes/",
+    "provider": "OJSC Kyrgyz Post",
+    "licenseOrTerms": "Official search surface requires personal address and building input to return an index. It does not state a national format, bulk mapping, query-result, derived-data, or redistribution permission. The surface is not queried, and no postcode, address, recipient, building, locality, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "official postal-code search-surface reference; metadata only, not an AGID lookup, offline mapping, or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The search surface is recorded without submitting a query.",
+      "No format is inferred from a personal-address search interface.",
+      "Search availability does not establish reusable mapping rights, coverage, version, correction workflow, or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "mdd-kr-postal-services",
+    "sourceName": "Ministry of Digital Development Kyrgyz Republic postal services reference",
+    "sourceUrl": "https://digital.gov.kg/uslugi-svyazi-i-pochty/pochtovye-uslugi/",
+    "provider": "Ministry of Digital Development of the Kyrgyz Republic",
+    "licenseOrTerms": "Official ministry service page records Kyrgyz Post postal services. No postcode-mapping or bulk redistribution terms are recorded here, and no postal, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "government postal-service authority reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The page supplies government context for postal services.",
+      "This pack does not query, store, transform, or redistribute any operational service result.",
+      "Service information alone does not establish a postal format, mapping rights, current coverage, or delivery-point capability."
+    ]
+  },
+  {
+    "sourceId": "upu-kyrgyzstan-designated-operators",
+    "sourceName": "UPU Kyrgyzstan designated operators entry",
+    "sourceUrl": "https://www.upu.int/en/Postal-Solutions/Programmes-Services/Addressing-Solutions?cid=169&csid=20",
+    "provider": "Universal Postal Union (UPU)",
+    "licenseOrTerms": "Current UPU Postal Addressing Systems entry identifies Kyrgyzstan and its designated operators. It does not state bulk postcode-mapping reuse permission, and no operator, postcode, locality, address, recipient, or location record is bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "international designated-operator authority reference; metadata only, not a postcode mapping or delivery-coverage dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The UPU entry is recorded as authority metadata only.",
+      "This pack does not access any postcode search or operator lookup result.",
+      "Operator designation alone does not establish format, mapping rights, current coverage, or delivery-point capability."
+    ]
+  },
+  {
+    "sourceId": "kg-open-data-admin-classifier",
+    "sourceName": "Kyrgyz Republic Open Data administrative-territorial classifier catalog entry",
+    "sourceUrl": "https://data.gov.kg/tr/dataset/klassifikator-administrativno-territorialnyh-edinic",
+    "provider": "Kyrgyz Republic Open Data Portal",
+    "licenseOrTerms": "Catalog entry exposes an administrative classifier resource but states that its license is not specified and lists a 2019-11-04 update. No resource, administrative key, boundary, geometry, locality, address, recipient, or location record is downloaded or bundled.",
+    "redistributionStatus": "source-metadata-only",
+    "role": "administrative-key availability and terms reference; metadata only, not a reusable administrative or postcode mapping dataset",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "The unspecified license prevents acquisition or redistribution.",
+      "The dated catalog entry is insufficient for current administrative or postal coverage.",
+      "Administrative classifier availability does not establish postcode mapping coverage or delivery capability."
+    ]
+  },
+  {
+    "sourceId": "kg-current-postcode-mapping-rights-coverage-and-correction-required",
+    "sourceName": "Kyrgyzstan current postcode format, mapping, rights, coverage, and correction authority source",
+    "sourceUrl": "source-metadata-only:kyrgyzstan-current-postcode-mapping-rights-coverage-and-correction-required",
+    "provider": "Kyrgyz Post, Kyrgyz Express Post, or authority-designated official publisher",
+    "licenseOrTerms": "Not yet acquired and verified as a current reusable format and mapping; not bundled",
+    "redistributionStatus": "not-bundled",
+    "role": "required gate for national format claims, real postcode lookup, address-to-postcode matching, or delivery-point claims",
+    "transformedFields": [],
+    "confidenceNotes": [
+      "Recorded official surfaces do not independently establish a reusable national format or mapping.",
+      "Do not add postcode rows, administrative keys, boundary data, address matching, delivery coverage, or carrier claims until current rights, version, coverage, and correction evidence are recorded."
+    ]
+  }
+]

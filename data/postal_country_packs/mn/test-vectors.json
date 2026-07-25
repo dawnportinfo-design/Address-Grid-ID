@@ -1,0 +1,44 @@
+[
+  {
+    "id": "mn-test-vector-1",
+    "input": {
+      "countryCode": "MN",
+      "municipalityId": "MN-M1",
+      "townId": "MN-M1-T1",
+      "chomeId": "MN-M1-T1-C1"
+    },
+    "expected": {
+      "candidateCodePrefix": "MN-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "mn-test-vector-2",
+    "input": {
+      "countryCode": "MN",
+      "municipalityId": "MN-M2",
+      "townId": "MN-M2-T2",
+      "chomeId": "MN-M2-T2-C2"
+    },
+    "expected": {
+      "candidateCodePrefix": "MN-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  },
+  {
+    "id": "mn-test-vector-3",
+    "input": {
+      "countryCode": "MN",
+      "municipalityId": "MN-M3",
+      "townId": "MN-M3-T3",
+      "chomeId": "MN-M3-T3-C3"
+    },
+    "expected": {
+      "candidateCodePrefix": "MN-",
+      "sameMunicipalityOnly": true,
+      "containsPersonalData": false
+    }
+  }
+]

@@ -1,0 +1,782 @@
+[
+  {
+    "localityId": "JO-M1",
+    "stableId": "jo-municipality-jo-m1",
+    "name": "Capital Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "8T",
+    "aliases": [
+      {
+        "label": "Capital Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Capital Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T1",
+    "stableId": "jo-town-jo-m1-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "JO-M1",
+    "codePart": "93",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Capital Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T1-C0",
+    "stableId": "jo-block-jo-m1-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "JO-M1-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T1-C1",
+    "stableId": "jo-block-jo-m1-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "JO-M1-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T1-C2",
+    "stableId": "jo-block-jo-m1-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "JO-M1-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T1-C3",
+    "stableId": "jo-block-jo-m1-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "JO-M1-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T2",
+    "stableId": "jo-town-jo-m1-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "JO-M1",
+    "codePart": "7Q",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Capital Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T2-C0",
+    "stableId": "jo-block-jo-m1-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "JO-M1-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T2-C1",
+    "stableId": "jo-block-jo-m1-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "JO-M1-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T2-C2",
+    "stableId": "jo-block-jo-m1-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "JO-M1-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T2-C3",
+    "stableId": "jo-block-jo-m1-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "JO-M1-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T3",
+    "stableId": "jo-town-jo-m1-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "JO-M1",
+    "codePart": "67",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Capital Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T3-C0",
+    "stableId": "jo-block-jo-m1-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "JO-M1-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T3-C1",
+    "stableId": "jo-block-jo-m1-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "JO-M1-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T3-C2",
+    "stableId": "jo-block-jo-m1-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "JO-M1-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M1-T3-C3",
+    "stableId": "jo-block-jo-m1-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "JO-M1-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2",
+    "stableId": "jo-municipality-jo-m2",
+    "name": "North Corridor Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "DB",
+    "aliases": [
+      {
+        "label": "North Corridor Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Corridor Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T1",
+    "stableId": "jo-town-jo-m2-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "JO-M2",
+    "codePart": "2W",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Corridor Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T1-C0",
+    "stableId": "jo-block-jo-m2-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "JO-M2-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T1-C1",
+    "stableId": "jo-block-jo-m2-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "JO-M2-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T1-C2",
+    "stableId": "jo-block-jo-m2-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "JO-M2-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T1-C3",
+    "stableId": "jo-block-jo-m2-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "JO-M2-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T2",
+    "stableId": "jo-town-jo-m2-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "JO-M2",
+    "codePart": "AS",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Corridor Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T2-C0",
+    "stableId": "jo-block-jo-m2-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "JO-M2-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T2-C1",
+    "stableId": "jo-block-jo-m2-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "JO-M2-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T2-C2",
+    "stableId": "jo-block-jo-m2-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "JO-M2-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T2-C3",
+    "stableId": "jo-block-jo-m2-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "JO-M2-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T3",
+    "stableId": "jo-town-jo-m2-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "JO-M2",
+    "codePart": "9N",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "North Corridor Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T3-C0",
+    "stableId": "jo-block-jo-m2-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "JO-M2-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T3-C1",
+    "stableId": "jo-block-jo-m2-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "JO-M2-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T3-C2",
+    "stableId": "jo-block-jo-m2-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "JO-M2-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M2-T3-C3",
+    "stableId": "jo-block-jo-m2-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "JO-M2-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3",
+    "stableId": "jo-municipality-jo-m3",
+    "name": "Oasis Municipality",
+    "kind": "municipality",
+    "parentId": null,
+    "codePart": "FX",
+    "aliases": [
+      {
+        "label": "Oasis Municipality",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Oasis Postal Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T1",
+    "stableId": "jo-town-jo-m3-t1",
+    "name": "Central Quarter",
+    "kind": "town",
+    "parentId": "JO-M3",
+    "codePart": "M3",
+    "aliases": [
+      {
+        "label": "Central Quarter",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Oasis Municipality Central Quarter",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T1-C0",
+    "stableId": "jo-block-jo-m3-t1-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "JO-M3-T1",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T1-C1",
+    "stableId": "jo-block-jo-m3-t1-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "JO-M3-T1",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T1-C2",
+    "stableId": "jo-block-jo-m3-t1-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "JO-M3-T1",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T1-C3",
+    "stableId": "jo-block-jo-m3-t1-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "JO-M3-T1",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T2",
+    "stableId": "jo-town-jo-m3-t2",
+    "name": "North District",
+    "kind": "town",
+    "parentId": "JO-M3",
+    "codePart": "C9",
+    "aliases": [
+      {
+        "label": "North District",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Oasis Municipality North District",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T2-C0",
+    "stableId": "jo-block-jo-m3-t2-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "JO-M3-T2",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T2-C1",
+    "stableId": "jo-block-jo-m3-t2-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "JO-M3-T2",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T2-C2",
+    "stableId": "jo-block-jo-m3-t2-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "JO-M3-T2",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T2-C3",
+    "stableId": "jo-block-jo-m3-t2-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "JO-M3-T2",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T3",
+    "stableId": "jo-town-jo-m3-t3",
+    "name": "Harbor / Market Area",
+    "kind": "town",
+    "parentId": "JO-M3",
+    "codePart": "KA",
+    "aliases": [
+      {
+        "label": "Harbor / Market Area",
+        "language": "en",
+        "status": "preferred"
+      },
+      {
+        "label": "Oasis Municipality Harbor / Market Area",
+        "language": "en",
+        "status": "synthetic"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T3-C0",
+    "stableId": "jo-block-jo-m3-t3-c0",
+    "name": "Town-wide",
+    "kind": "block",
+    "parentId": "JO-M3-T3",
+    "codePart": "00",
+    "aliases": [
+      {
+        "label": "Town-wide",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T3-C1",
+    "stableId": "jo-block-jo-m3-t3-c1",
+    "name": "1-chome / Block 1",
+    "kind": "block",
+    "parentId": "JO-M3-T3",
+    "codePart": "01",
+    "aliases": [
+      {
+        "label": "1-chome / Block 1",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T3-C2",
+    "stableId": "jo-block-jo-m3-t3-c2",
+    "name": "2-chome / Block 2",
+    "kind": "block",
+    "parentId": "JO-M3-T3",
+    "codePart": "02",
+    "aliases": [
+      {
+        "label": "2-chome / Block 2",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  },
+  {
+    "localityId": "JO-M3-T3-C3",
+    "stableId": "jo-block-jo-m3-t3-c3",
+    "name": "3-chome / Block 3",
+    "kind": "block",
+    "parentId": "JO-M3-T3",
+    "codePart": "03",
+    "aliases": [
+      {
+        "label": "3-chome / Block 3",
+        "language": "en",
+        "status": "preferred"
+      }
+    ]
+  }
+]
