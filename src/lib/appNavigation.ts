@@ -3,8 +3,13 @@ export const APP_NAVIGATION_MODEL_VERSION = 'agid-integrated-app-navigation-v2';
 export type AppSurfaceId =
   | 'open-source-home'
   | 'map-workspace'
+  | 'veygrit-wallet'
   | 'address-registration'
+  | 'friends'
   | 'address-portal'
+  | 'store-topics'
+  | 'store-discover'
+  | 'store-my-stores'
   | 'pos-terminal'
   | 'hotel-checkin'
   | 'oracle-opera-hotel-address'
@@ -14,6 +19,9 @@ export type AppSurfaceId =
   | 'address-dashboard'
   | 'address-review-console'
   | 'developer-console'
+  | 'address-login'
+  | 'merchant-console'
+  | 'playlist-commerce'
   | 'agid-address-element'
   | 'evidence-vault'
   | 'research-design-hub'
@@ -30,6 +38,8 @@ export type AppSurfaceDeployment = 'same-shell' | 'standalone-route' | 'embedded
 export type AppSurfaceStatus = 'ready' | 'partial' | 'planned';
 
 export type AppSurfaceMenuTier = 'primary' | 'secondary' | 'roadmap';
+
+export type AppSurfaceLicenseProfile = 'oss' | 'commercial-private';
 
 export type AppSurfaceAction =
   | 'navigate'
@@ -54,6 +64,7 @@ export type AppSurfaceDefinition = {
   roles: AppSurfaceRole[];
   icon: string;
   privacyBoundary: 'local-first' | 'redacted-admin' | 'operator' | 'embedded' | 'planned';
+  licenseProfile?: AppSurfaceLicenseProfile;
   copy: Record<'en' | 'ja', AppSurfaceCopy>;
 };
 
@@ -260,14 +271,39 @@ export const APP_SURFACES: AppSurfaceDefinition[] = [
     privacyBoundary: 'local-first',
     copy: {
       en: {
-        label: 'AGID Map',
-        shortLabel: 'Map',
-        description: 'Search, select, and inspect AGID cells.',
+        label: 'Home',
+        shortLabel: 'Home',
+        description: 'Addresses, active delivery, travel passes, and AGID map work in one daily home.',
       },
       ja: {
-        label: 'AGIDマップ',
-        shortLabel: '地図',
-        description: 'AGIDセルの検索、選択、表示。',
+        label: 'ホーム',
+        shortLabel: 'Home',
+        description: '住所、配送中、旅行パス、AGID地図を日常ホームに集約。',
+      },
+    },
+  },
+  {
+    id: 'veygrit-wallet',
+    group: 'core',
+    route: '/veygrit',
+    action: 'navigate',
+    deployment: 'standalone-route',
+    status: 'ready',
+    menuTier: 'secondary',
+    roles: ['user', 'admin', 'developer'],
+    icon: 'wallet',
+    privacyBoundary: 'local-first',
+    licenseProfile: 'commercial-private',
+    copy: {
+      en: {
+        label: 'Veygrit Address Wallet',
+        shortLabel: 'Veygrit',
+        description: 'Address Wallet OS for Vey ID, Google/Apple-only account creation, Store, Friends, and wallet-side EC revocation.',
+      },
+      ja: {
+        label: 'Veygrit住所ウォレット',
+        shortLabel: 'Veygrit',
+        description: 'Vey ID、Google/Appleのみの作成、Store、Friends、ウォレット側EC解除のAddress Wallet OS。',
       },
     },
   },
@@ -278,7 +314,7 @@ export const APP_SURFACES: AppSurfaceDefinition[] = [
     action: 'open-address-registration',
     deployment: 'same-shell',
     status: 'partial',
-    menuTier: 'primary',
+    menuTier: 'secondary',
     roles: ['user', 'operator', 'field', 'admin'],
     icon: 'home',
     privacyBoundary: 'local-first',
@@ -296,6 +332,30 @@ export const APP_SURFACES: AppSurfaceDefinition[] = [
     },
   },
   {
+    id: 'friends',
+    group: 'core',
+    route: '/portal#friends',
+    action: 'navigate',
+    deployment: 'standalone-route',
+    status: 'ready',
+    menuTier: 'primary',
+    roles: ['user', 'admin'],
+    icon: 'friends',
+    privacyBoundary: 'local-first',
+    copy: {
+      en: {
+        label: 'Friends',
+        shortLabel: 'Friends',
+        description: 'Manage family, friends, aliases, and scoped recipient permissions.',
+      },
+      ja: {
+        label: '友達',
+        shortLabel: '友達',
+        description: '家族、友達、alias、受取人向けscope許可を管理。',
+      },
+    },
+  },
+  {
     id: 'address-portal',
     group: 'core',
     route: '/portal',
@@ -308,14 +368,89 @@ export const APP_SURFACES: AppSurfaceDefinition[] = [
     privacyBoundary: 'local-first',
     copy: {
       en: {
-        label: 'Address Portal',
-        shortLabel: 'Portal',
-        description: 'Manage consent, scopes, revoke, export.',
+        label: 'My Page',
+        shortLabel: 'My',
+        description: 'Wallet profile for credentials, permissions, consent, account security snapshot, and safe export.',
       },
       ja: {
-        label: 'Address Portal',
-        shortLabel: 'Portal',
-        description: '同意、scope、取消、exportを管理。',
+        label: 'マイページ',
+        shortLabel: 'My',
+        description: 'Credential、許可、同意、アカウント安全状態、安全exportを管理。',
+      },
+    },
+  },
+  {
+    id: 'store-topics',
+    group: 'core',
+    route: '/playlist-commerce#topics',
+    action: 'navigate',
+    deployment: 'standalone-route',
+    status: 'ready',
+    menuTier: 'secondary',
+    roles: ['user', 'admin', 'developer'],
+    icon: 'topics',
+    privacyBoundary: 'local-first',
+    licenseProfile: 'commercial-private',
+    copy: {
+      en: {
+        label: 'Topics',
+        shortLabel: 'Topics',
+        description: 'Address-aware new, popular, nearby, campaign, and editor picks.',
+      },
+      ja: {
+        label: 'Topics',
+        shortLabel: 'Topics',
+        description: '住所に関係する新着、人気、近隣、キャンペーン、編集おすすめ。',
+      },
+    },
+  },
+  {
+    id: 'store-discover',
+    group: 'core',
+    route: '/playlist-commerce#discover',
+    action: 'navigate',
+    deployment: 'standalone-route',
+    status: 'ready',
+    menuTier: 'secondary',
+    roles: ['user', 'admin', 'developer'],
+    icon: 'discover',
+    privacyBoundary: 'local-first',
+    licenseProfile: 'commercial-private',
+    copy: {
+      en: {
+        label: 'Discover',
+        shortLabel: 'Discover',
+        description: 'Browse the fixed 32 address-commerce genres without ranking noise.',
+      },
+      ja: {
+        label: 'Discover',
+        shortLabel: 'Discover',
+        description: 'ランキングを混ぜず、32ジャンルだけで住所対応ストアを探す。',
+      },
+    },
+  },
+  {
+    id: 'store-my-stores',
+    group: 'core',
+    route: '/playlist-commerce#my-stores',
+    action: 'navigate',
+    deployment: 'standalone-route',
+    status: 'ready',
+    menuTier: 'secondary',
+    roles: ['user', 'admin', 'developer'],
+    icon: 'my-stores',
+    privacyBoundary: 'local-first',
+    licenseProfile: 'commercial-private',
+    copy: {
+      en: {
+        label: 'My Stores',
+        shortLabel: 'Stores',
+        description: 'Review connected EC stores and revoke wallet-linked store access.',
+      },
+      ja: {
+        label: 'My Stores',
+        shortLabel: 'Stores',
+        description: '連携済みECを確認し、ウォレット側から連携解除する。',
       },
     },
   },
@@ -334,12 +469,12 @@ export const APP_SURFACES: AppSurfaceDefinition[] = [
       en: {
         label: 'Settings & Policy',
         shortLabel: 'Policy',
-        description: 'Language, modes, providers, devices, high-risk defaults.',
+        description: 'Language, providers, devices, passkeys, revocation, and high-risk security defaults.',
       },
       ja: {
         label: '設定・ポリシー',
         shortLabel: '設定',
-        description: '言語、モード、外部連携、端末、高リスク設定。',
+        description: '言語、外部連携、端末、パスキー、失効、高リスク安全設定。',
       },
     },
   },
@@ -536,6 +671,80 @@ export const APP_SURFACES: AppSurfaceDefinition[] = [
     },
   },
   {
+    id: 'address-login',
+    group: 'developer',
+    route: '/address-login',
+    action: 'navigate',
+    deployment: 'standalone-route',
+    status: 'ready',
+    menuTier: 'secondary',
+    roles: ['user', 'admin', 'developer'],
+    icon: 'key',
+    privacyBoundary: 'embedded',
+    copy: {
+      en: {
+        label: 'Address Login',
+        shortLabel: 'Login',
+        description: 'Wallet consent, merchant callbacks, SDK, and no-raw-address login flows.',
+      },
+      ja: {
+        label: 'Address Login',
+        shortLabel: 'Login',
+        description: 'Wallet同意、Merchant callback、SDK、住所非開示ログイン。',
+      },
+    },
+  },
+  {
+    id: 'merchant-console',
+    group: 'developer',
+    route: '/merchant-console',
+    action: 'navigate',
+    deployment: 'standalone-route',
+    status: 'ready',
+    menuTier: 'secondary',
+    roles: ['admin', 'developer'],
+    icon: 'merchant',
+    privacyBoundary: 'redacted-admin',
+    licenseProfile: 'commercial-private',
+    copy: {
+      en: {
+        label: 'Merchant Console',
+        shortLabel: 'Merchant',
+        description: 'Commercial/private Address Login setup, callback validator, webhooks, policy gates, and synthetic test vectors.',
+      },
+      ja: {
+        label: 'Merchant Console',
+        shortLabel: 'Merchant',
+        description: '商用/private Address Login設定、callback検証、Webhook、policy gate、合成test vector。',
+      },
+    },
+  },
+  {
+    id: 'playlist-commerce',
+    group: 'developer',
+    route: '/playlist-commerce',
+    action: 'navigate',
+    deployment: 'standalone-route',
+    status: 'ready',
+    menuTier: 'secondary',
+    roles: ['developer', 'admin'],
+    icon: 'commerce',
+    privacyBoundary: 'embedded',
+    licenseProfile: 'commercial-private',
+    copy: {
+      en: {
+        label: 'Playlist Commerce',
+        shortLabel: 'Commerce',
+        description: 'Commercial/private Playlist SDK, no-address checkout, merchant webhooks, and wallet consent.',
+      },
+      ja: {
+        label: 'Playlist Commerce',
+        shortLabel: 'Commerce',
+        description: '商用/private Playlist SDK、住所非開示checkout、merchant webhook、wallet同意。',
+      },
+    },
+  },
+  {
     id: 'agid-address-element',
     group: 'developer',
     route: '/element',
@@ -693,6 +902,12 @@ export function getSideMenuPrimaryAppSurfaces(surfaces = getAppSurfaces()): AppS
   return getPrimaryAppSurfaces(surfaces).filter(surface => !isHeroWorkspaceGroup(surface.group));
 }
 
+export function getSideMenuStoreAppSurfaces(surfaces = getAppSurfaces()): AppSurfaceDefinition[] {
+  const storeIds: AppSurfaceId[] = ['store-topics', 'store-discover', 'store-my-stores'];
+  const byId = new Map(surfaces.map(surface => [surface.id, surface]));
+  return storeIds.map(id => byId.get(id)).filter(Boolean) as AppSurfaceDefinition[];
+}
+
 export function getSecondaryAppSurfaceGroups(
   surfaces = getAppSurfaces(),
 ): Array<{ group: AppSurfaceGroupDefinition; surfaces: AppSurfaceDefinition[] }> {
@@ -762,11 +977,18 @@ export function isStandaloneAppSurface(surface: AppSurfaceDefinition): boolean {
 
 export function isAppSurfaceActive(surface: AppSurfaceDefinition, locationLike = window.location): boolean {
   if (!surface.route) return false;
-  const [path] = surface.route.split('?');
+  const [routePath] = surface.route.split('?');
+  const [path, hashFragment] = routePath.split('#');
+  const expectedHash = hashFragment ? `#${hashFragment}` : '';
   if (path === '/') {
     return locationLike.pathname === '/' && !locationLike.hash.startsWith('#/');
   }
-  return locationLike.pathname === path || locationLike.hash === `#${path}`;
+  if (expectedHash) {
+    return (locationLike.pathname === path && locationLike.hash === expectedHash)
+      || locationLike.hash === `#${path}${expectedHash}`;
+  }
+  return (locationLike.pathname === path && (!locationLike.hash || locationLike.hash.startsWith('#/')))
+    || locationLike.hash === `#${path}`;
 }
 
 export function getRouteSurface(
@@ -795,7 +1017,7 @@ export function validateAppNavigation(surfaces = APP_SURFACES): AppNavigationVal
     }
   }
 
-  for (const required of ['/', '/pos', '/hotel', '/portal', '/dashboard', '/settings', '/field', '/machine', '/developer', '/element', '/research', '/postal-zones', '/locker', '/ops']) {
+  for (const required of ['/', '/veygrit', '/pos', '/hotel', '/portal', '/dashboard', '/settings', '/field', '/machine', '/developer', '/address-login', '/merchant-console', '/playlist-commerce', '/element', '/research', '/postal-zones', '/locker', '/ops']) {
     if (!surfaces.some(surface => surface.route?.split('?')[0] === required)) {
       errors.push(`missing-route:${required}`);
     }

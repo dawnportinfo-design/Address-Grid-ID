@@ -61,7 +61,7 @@ postalCode:
   format: AA NNN
   regex: ^[A-Z]{2}\s?\d{3}$
   api: null
-  source: Postal metadata from AGID East Africa regional table; open OSS source not configured
+  source: Somalia Ministry of Communications and Technology postal service information
 addressRules:
   languages:
     - code: so
@@ -92,6 +92,8 @@ addressRules:
     required: false
     usage: used
   openSourceIds:
+    - somalia-moct-posta
+    - rcmrd-gmes-africa-geoportal
     - osm-nominatim
     - osm-overpass
     - openaddresses
@@ -117,8 +119,9 @@ addressRules:
     - allen-coral-atlas
     - protected-planet-wdpa
     - gbif-occurrence
-    - rcmrd-gmes-africa-geoportal
 openSourceIds:
+  - somalia-moct-posta
+  - rcmrd-gmes-africa-geoportal
   - osm-nominatim
   - osm-overpass
   - openaddresses
@@ -144,4 +147,3 @@ openSourceIds:
   - allen-coral-atlas
   - protected-planet-wdpa
   - gbif-occurrence
-  - rcmrd-gmes-africa-geoportal

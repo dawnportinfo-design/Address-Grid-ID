@@ -5,12 +5,6 @@ export const VEYGRIT_ID_VERSION = 'veygrit-id-address-social-login-v1';
 export const VEYGRIT_ID_AUTH_PROVIDERS = [
   'google',
   'apple',
-  'email',
-  'passkey',
-  'line',
-  'wechat',
-  'microsoft',
-  'kakao',
 ] as const;
 export const VEYGRIT_ID_SCOPES = [
   'profile.basic',
@@ -316,11 +310,178 @@ export type VeygritIdIntegrationPlan = {
   modelVersion: typeof VEYGRIT_ID_VERSION;
   packageName: '@veygrit/id';
   buttonLabel: string;
+  accountCreationProviders: VeygritIdAuthProvider[];
   components: string[];
   backendEndpoints: string[];
   requiredPartnerGates: string[];
   recommendedFlow: string[];
   notes: string[];
+};
+
+export type VeygritIdSessionInput = {
+  account: VeygritIdAccount;
+  provider?: unknown;
+  providerSubject?: unknown;
+  deviceBindingRef?: unknown;
+  createdAt?: unknown;
+  expiresAt?: unknown;
+  authenticatedAt?: unknown;
+  stepUpAt?: unknown;
+  stepUpMethods?: unknown;
+  providerIdToken?: unknown;
+  providerAccessToken?: unknown;
+  providerRefreshToken?: unknown;
+  rawProviderProfile?: unknown;
+};
+
+export type VeygritIdSession = {
+  modelVersion: typeof VEYGRIT_ID_VERSION;
+  sessionRef: string;
+  status: 'active' | 'blocked' | 'expired';
+  subjectId: string;
+  provider: VeygritIdAuthProvider;
+  providerSubjectHash: string;
+  walletSessionRef: string;
+  deviceBindingRef?: string;
+  assurance: VeygritIdAccountAssurance;
+  createdAt: string;
+  authenticatedAt: string;
+  expiresAt: string;
+  sessionFreshUntil: string;
+  stepUpAt?: string;
+  stepUpMethods: Array<'passkey' | 'mfa' | 'device-bound'>;
+  errors: string[];
+  warnings: string[];
+  privacy: {
+    storesProviderIdToken: false;
+    storesProviderAccessToken: false;
+    storesProviderRefreshToken: false;
+    storesRawProviderProfile: false;
+    providerSubjectStoredAsHash: true;
+  };
+};
+
+export type VeygritIdPairwiseSubjectAlias = {
+  modelVersion: typeof VEYGRIT_ID_VERSION;
+  pairwiseSubjectAlias: string;
+  subjectId: string;
+  partnerId: string;
+  clientId: string;
+  origin: string;
+  stableFor: 'partner-client-origin';
+  merchantVisible: true;
+  privacy: {
+    globalSubjectIdExposedToMerchant: false;
+    rawEmailExposedToMerchant: false;
+    rawPhoneExposedToMerchant: false;
+  };
+};
+
+export type VeygritIdAuthorizationCode = {
+  modelVersion: typeof VEYGRIT_ID_VERSION;
+  status: 'issued' | 'blocked' | 'expired';
+  nextAction: 'exchange-code' | 'repair-session' | 'repair-grant' | 'refresh-request' | 'deny';
+  authorizationCodeRef?: string;
+  codeHash?: string;
+  pairwiseSubjectAlias: string;
+  walletSessionRef: string;
+  grantId: string;
+  clientId: string;
+  redirectUri: string;
+  stateHash: string;
+  nonceHash: string;
+  pkceChallengeHash: string;
+  approvedScopes: VeygritIdScope[];
+  claimKinds: VeygritIdConsentGrant['claimKinds'];
+  selectedAddressId?: string;
+  issuedAt: string;
+  expiresAt: string;
+  errors: string[];
+  warnings: string[];
+  privacy: {
+    rawAuthorizationCodeLogged: false;
+    rawAddressIncluded: false;
+    providerTokenIncluded: false;
+  };
+};
+
+export type VeygritIdTokenExchange = {
+  modelVersion: typeof VEYGRIT_ID_VERSION;
+  status: 'issued' | 'blocked' | 'expired';
+  tokenType: 'bearer-ref';
+  accessTokenRef?: string;
+  idTokenRef?: string;
+  addressCredentialRef?: string;
+  walletSessionRef: string;
+  pairwiseSubjectAlias: string;
+  expiresInSeconds: number;
+  claims: {
+    iss: 'https://id.veygrit.example';
+    aud: string;
+    sub: string;
+    nonceHash: string;
+    authTime: string;
+    scopeRefs: VeygritIdScope[];
+    claimKinds: VeygritIdConsentGrant['claimKinds'];
+  };
+  errors: string[];
+  warnings: string[];
+  privacy: {
+    rawAccessTokenLogged: false;
+    rawIdTokenLogged: false;
+    rawAddressIncluded: false;
+    refreshTokenIssued: false;
+  };
+};
+
+export type VeygritIdGuestCheckoutHandoff = {
+  modelVersion: typeof VEYGRIT_ID_VERSION;
+  mode: 'ec-guest-checkout';
+  status: 'ready' | 'blocked';
+  nextAction: 'create-guest-order' | 'repair-token-exchange' | 'request-address-consent' | 'deny';
+  partnerId: string;
+  clientId: string;
+  pairwiseSubjectAlias: string;
+  guestCheckoutAlias: string;
+  walletSessionRef: string;
+  walletConsentRef: string;
+  addressCredentialRef?: string;
+  carrierHandoffRef?: string;
+  scopeRefs: VeygritIdScope[];
+  claimKinds: VeygritIdConsentGrant['claimKinds'];
+  merchantAccountCreationRequired: false;
+  ecPasswordRequired: false;
+  walletLoginRequired: true;
+  ttlSeconds: number;
+  errors: string[];
+  warnings: string[];
+  privacy: {
+    rawAddressSharedWithMerchant: false;
+    rawPhoneSharedWithMerchant: false;
+    globalSubjectIdExposedToMerchant: false;
+    merchantCanCreateAccountSilently: false;
+    carrierCredentialsSharedWithMerchant: false;
+    oneTimeUse: true;
+  };
+};
+
+export type VeygritIdConnectionRevocation = {
+  modelVersion: typeof VEYGRIT_ID_VERSION;
+  revocationRef: string;
+  subjectId: string;
+  partnerId: string;
+  clientId: string;
+  pairwiseSubjectAlias: string;
+  revokedGrantId?: string;
+  revokedAt: string;
+  reason: 'user-disconnect' | 'partner-suspended' | 'scope-reduced' | 'security-risk';
+  merchantDeletionRefs: string[];
+  walletEffects: string[];
+  nextAction: 'notify-merchant-and-invalidate-refs';
+  privacy: {
+    rawAddressRevealedDuringRevocation: false;
+    merchantCanContinuePullingAddress: false;
+  };
 };
 
 const DEFAULT_TIME = '2026-06-20T00:00:00.000Z';
@@ -334,6 +495,7 @@ const FORBIDDEN_ACCOUNT_KEYS = [
   'phone',
 ] as const;
 const FORBIDDEN_PARTNER_KEYS = ['rawWebhookSecret', 'rawApiKey'] as const;
+const FORBIDDEN_SESSION_KEYS = ['providerIdToken', 'providerAccessToken', 'providerRefreshToken', 'rawProviderProfile'] as const;
 const PRIVATE_VALUE_RE = /([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}|\+\d[\d ().-]{7,}\d|\b\d{2,4}[-().\s]\d{2,4}[-().\s]\d{2,6}\b|\bA(?:GID|OID)[-_][A-Z0-9]{6,}\b|\b-?\d{1,2}\.\d{4,}[ \t]*,[ \t]*-?\d{1,3}\.\d{4,})/i;
 
 const SENSITIVE_SCOPES = new Set<VeygritIdScope>([
@@ -402,7 +564,14 @@ function normalizeProvider(value: unknown): VeygritIdAuthProvider | undefined {
 
 function normalizeProviders(value: unknown): VeygritIdAuthProvider[] {
   const providers = unique(asArray<unknown>(value).map(normalizeProvider).filter(Boolean) as VeygritIdAuthProvider[]);
-  return providers.length ? providers : ['email'];
+  return providers.length ? providers : ['google'];
+}
+
+function unsupportedAccountCreationProviders(value: unknown): string[] {
+  return unique(asArray<unknown>(value)
+    .map(item => clean(item).toLowerCase().replace(/[_\s]+/g, '-'))
+    .filter(Boolean)
+    .filter(item => !VEYGRIT_ID_AUTH_PROVIDERS.includes(item as VeygritIdAuthProvider)));
 }
 
 function normalizeScope(value: unknown): VeygritIdScope | undefined {
@@ -524,6 +693,12 @@ export function buildVeygritIdAccount(input: VeygritIdAccountInput = {}): Veygri
   }
   if (hasForbiddenValue(input)) errors.push('veygrit-id-account-private-input-rejected');
   const loginProviders = normalizeProviders(input.loginProviders);
+  errors.push(...unsupportedAccountCreationProviders(input.loginProviders)
+    .map(provider => `unsupported-account-creation-provider:${provider}`));
+  const requestedPrimaryProvider = clean(input.primaryProvider).toLowerCase().replace(/[_\s]+/g, '-');
+  if (requestedPrimaryProvider && !normalizeProvider(requestedPrimaryProvider)) {
+    errors.push(`unsupported-primary-account-creation-provider:${requestedPrimaryProvider}`);
+  }
   const primaryProvider = normalizeProvider(input.primaryProvider) ?? loginProviders[0];
   const subjectId = idFrom('VGUSER', input.subjectId, stableJson({
     displayAlias: input.displayAlias,
@@ -819,21 +994,415 @@ export function buildVeygritIdConsentGrant(input: {
   };
 }
 
+function normalizeStepUpMethods(value: unknown): VeygritIdSession['stepUpMethods'] {
+  const methods = unique(asArray<unknown>(value)
+    .map(item => clean(item).toLowerCase().replace(/[_\s]+/g, '-'))
+    .filter((item): item is VeygritIdSession['stepUpMethods'][number] => (
+      item === 'passkey' || item === 'mfa' || item === 'device-bound'
+    )));
+  return methods;
+}
+
+export function buildVeygritIdSession(input: VeygritIdSessionInput): VeygritIdSession {
+  const createdAt = validIsoOrDefault(input.createdAt);
+  const authenticatedAt = validIsoOrDefault(input.authenticatedAt, createdAt);
+  const expiresAt = validIsoOrDefault(input.expiresAt, new Date(Date.parse(authenticatedAt) + 24 * 60 * 60 * 1000).toISOString());
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const provider = normalizeProvider(input.provider) ?? input.account.primaryProvider;
+
+  for (const key of FORBIDDEN_SESSION_KEYS) {
+    if (clean(input[key])) errors.push(`${key}-not-allowed-in-veygrit-id-session`);
+  }
+  if (!input.account.loginProviders.includes(provider)) errors.push('provider-not-linked-to-account');
+  if (input.account.errors.length > 0) errors.push('account-has-blocking-errors');
+  if (!clean(input.providerSubject, 240)) errors.push('provider-subject-required');
+  if (hasForbiddenValue({
+    providerSubject: input.providerSubject,
+    deviceBindingRef: input.deviceBindingRef,
+  })) {
+    errors.push('veygrit-id-session-private-input-rejected');
+  }
+
+  const stepUpAt = validIsoOrUndefined(input.stepUpAt);
+  const stepUpMethods = normalizeStepUpMethods(input.stepUpMethods);
+  if (stepUpAt && stepUpMethods.length === 0) warnings.push('step-up-time-present-without-method');
+
+  const status: VeygritIdSession['status'] = Date.parse(expiresAt) <= Date.parse(authenticatedAt)
+    ? 'expired'
+    : errors.length > 0
+      ? 'blocked'
+      : 'active';
+  const sessionFreshSource = stepUpAt ?? authenticatedAt;
+
+  return {
+    modelVersion: VEYGRIT_ID_VERSION,
+    sessionRef: compactHash({
+      subjectId: input.account.subjectId,
+      provider,
+      providerSubjectHash: sha256Hex(clean(input.providerSubject, 240)),
+      authenticatedAt,
+    }, 'vey_session'),
+    status,
+    subjectId: input.account.subjectId,
+    provider,
+    providerSubjectHash: sha256Hex(clean(input.providerSubject, 240)),
+    walletSessionRef: compactHash({ subjectId: input.account.subjectId, authenticatedAt }, 'wallet_session'),
+    ...(clean(input.deviceBindingRef, 120) ? { deviceBindingRef: clean(input.deviceBindingRef, 120) } : {}),
+    assurance: input.account.assurance,
+    createdAt,
+    authenticatedAt,
+    expiresAt,
+    sessionFreshUntil: new Date(Date.parse(sessionFreshSource) + 5 * 60 * 1000).toISOString(),
+    ...(stepUpAt ? { stepUpAt } : {}),
+    stepUpMethods,
+    errors: unique(errors),
+    warnings: unique(warnings),
+    privacy: {
+      storesProviderIdToken: false,
+      storesProviderAccessToken: false,
+      storesProviderRefreshToken: false,
+      storesRawProviderProfile: false,
+      providerSubjectStoredAsHash: true,
+    },
+  };
+}
+
+export function buildVeygritIdPairwiseSubjectAlias(input: {
+  account: VeygritIdAccount;
+  partner: VeygritIdPartnerApplication;
+  origin?: unknown;
+}): VeygritIdPairwiseSubjectAlias {
+  const origin = normalizedDomain(input.origin) || input.partner.verifiedDomains[0] || input.partner.domains[0] || 'unverified.example';
+  const clientId = input.partner.clientId ?? compactHash({ partnerId: input.partner.partnerId }, 'client');
+
+  return {
+    modelVersion: VEYGRIT_ID_VERSION,
+    pairwiseSubjectAlias: compactHash({
+      subjectId: input.account.subjectId,
+      partnerId: input.partner.partnerId,
+      clientId,
+      origin,
+    }, 'pairwise_subject'),
+    subjectId: input.account.subjectId,
+    partnerId: input.partner.partnerId,
+    clientId,
+    origin,
+    stableFor: 'partner-client-origin',
+    merchantVisible: true,
+    privacy: {
+      globalSubjectIdExposedToMerchant: false,
+      rawEmailExposedToMerchant: false,
+      rawPhoneExposedToMerchant: false,
+    },
+  };
+}
+
+export function issueVeygritIdAuthorizationCode(input: {
+  session: VeygritIdSession;
+  grant: VeygritIdConsentGrant;
+  account: VeygritIdAccount;
+  partner: VeygritIdPartnerApplication;
+  request: VeygritIdAuthorizationRequest;
+  pkceChallenge?: unknown;
+  now?: unknown;
+}): VeygritIdAuthorizationCode {
+  const now = validIsoOrDefault(input.now, input.request.createdAt);
+  const errors: string[] = [];
+  const warnings: string[] = [...input.grant.warnings];
+  const pairwise = buildVeygritIdPairwiseSubjectAlias({
+    account: input.account,
+    partner: input.partner,
+    origin: input.request.origin,
+  });
+  const pkceChallenge = clean(input.pkceChallenge, 180);
+
+  if (input.session.status !== 'active') errors.push('session-not-active');
+  if (input.session.subjectId !== input.account.subjectId) errors.push('session-subject-mismatch');
+  if (input.grant.status !== 'ready-to-fill') errors.push('grant-not-ready');
+  if (input.grant.subjectId !== input.account.subjectId) errors.push('grant-subject-mismatch');
+  if (input.grant.clientId !== input.request.clientId) errors.push('grant-client-mismatch');
+  if (!pkceChallenge) errors.push('pkce-challenge-required');
+  if (Date.parse(input.request.expiresAt) <= Date.parse(now)) errors.push('authorization-request-expired');
+
+  const expiresAt = new Date(Math.min(
+    Date.parse(input.grant.expiresAt),
+    Date.parse(now) + 5 * 60 * 1000,
+  )).toISOString();
+  const status: VeygritIdAuthorizationCode['status'] = errors.includes('authorization-request-expired')
+    ? 'expired'
+    : errors.length > 0
+      ? 'blocked'
+      : 'issued';
+  const authorizationCodeRef = compactHash({
+    grantId: input.grant.grantId,
+    sessionRef: input.session.sessionRef,
+    pairwiseSubjectAlias: pairwise.pairwiseSubjectAlias,
+    now,
+  }, 'vey_auth_code');
+
+  return {
+    modelVersion: VEYGRIT_ID_VERSION,
+    status,
+    nextAction: status === 'issued'
+      ? 'exchange-code'
+      : status === 'expired'
+        ? 'refresh-request'
+        : errors.some(error => /session/.test(error))
+          ? 'repair-session'
+          : errors.some(error => /grant/.test(error))
+            ? 'repair-grant'
+            : 'deny',
+    ...(status === 'issued' ? { authorizationCodeRef } : {}),
+    ...(status === 'issued' ? { codeHash: sha256Hex(authorizationCodeRef) } : {}),
+    pairwiseSubjectAlias: pairwise.pairwiseSubjectAlias,
+    walletSessionRef: input.session.walletSessionRef,
+    grantId: input.grant.grantId,
+    clientId: input.request.clientId,
+    redirectUri: input.request.redirectUri,
+    stateHash: input.request.stateHash,
+    nonceHash: sha256Hex(input.request.nonce),
+    pkceChallengeHash: sha256Hex(pkceChallenge),
+    approvedScopes: input.grant.approvedScopes,
+    claimKinds: input.grant.claimKinds,
+    ...(input.grant.selectedAddressId ? { selectedAddressId: input.grant.selectedAddressId } : {}),
+    issuedAt: now,
+    expiresAt,
+    errors: unique(errors),
+    warnings: unique(warnings),
+    privacy: {
+      rawAuthorizationCodeLogged: false,
+      rawAddressIncluded: false,
+      providerTokenIncluded: false,
+    },
+  };
+}
+
+export function exchangeVeygritIdAuthorizationCode(input: {
+  authorizationCode: VeygritIdAuthorizationCode;
+  clientId?: unknown;
+  redirectUri?: unknown;
+  pkceChallenge?: unknown;
+  authTime?: unknown;
+  now?: unknown;
+}): VeygritIdTokenExchange {
+  const now = validIsoOrDefault(input.now, input.authorizationCode.issuedAt);
+  const errors: string[] = [];
+  const pkceChallenge = clean(input.pkceChallenge, 180);
+  const clientId = clean(input.clientId, 120);
+  const redirectUri = normalizedHttpsUrl(input.redirectUri);
+
+  if (input.authorizationCode.status !== 'issued') errors.push('authorization-code-not-issued');
+  if (!input.authorizationCode.authorizationCodeRef) errors.push('authorization-code-ref-missing');
+  if (clientId !== input.authorizationCode.clientId) errors.push('client-id-mismatch');
+  if (redirectUri !== input.authorizationCode.redirectUri) errors.push('redirect-uri-mismatch');
+  if (!pkceChallenge || sha256Hex(pkceChallenge) !== input.authorizationCode.pkceChallengeHash) errors.push('pkce-challenge-mismatch');
+  if (Date.parse(input.authorizationCode.expiresAt) <= Date.parse(now)) errors.push('authorization-code-expired');
+
+  const status: VeygritIdTokenExchange['status'] = errors.includes('authorization-code-expired')
+    ? 'expired'
+    : errors.length > 0
+      ? 'blocked'
+      : 'issued';
+  const authTime = validIsoOrDefault(input.authTime, input.authorizationCode.issuedAt);
+  const accessTokenRef = compactHash({
+    codeHash: input.authorizationCode.codeHash,
+    clientId: input.authorizationCode.clientId,
+    now,
+    kind: 'access',
+  }, 'vey_access_token');
+  const idTokenRef = compactHash({
+    codeHash: input.authorizationCode.codeHash,
+    pairwiseSubjectAlias: input.authorizationCode.pairwiseSubjectAlias,
+    nonceHash: input.authorizationCode.nonceHash,
+    kind: 'id',
+  }, 'vey_id_token');
+  const addressCredentialRef = input.authorizationCode.claimKinds.some(kind => kind.includes('address') || kind === 'hotel-delivery')
+    ? compactHash({
+      grantId: input.authorizationCode.grantId,
+      selectedAddressId: input.authorizationCode.selectedAddressId,
+      claimKinds: input.authorizationCode.claimKinds,
+    }, 'address_credential')
+    : undefined;
+
+  return {
+    modelVersion: VEYGRIT_ID_VERSION,
+    status,
+    tokenType: 'bearer-ref',
+    ...(status === 'issued' ? { accessTokenRef } : {}),
+    ...(status === 'issued' ? { idTokenRef } : {}),
+    ...(status === 'issued' && addressCredentialRef ? { addressCredentialRef } : {}),
+    walletSessionRef: input.authorizationCode.walletSessionRef,
+    pairwiseSubjectAlias: input.authorizationCode.pairwiseSubjectAlias,
+    expiresInSeconds: status === 'issued'
+      ? Math.max(1, Math.min(600, Math.floor((Date.parse(input.authorizationCode.expiresAt) - Date.parse(now)) / 1000)))
+      : 0,
+    claims: {
+      iss: 'https://id.veygrit.example',
+      aud: input.authorizationCode.clientId,
+      sub: input.authorizationCode.pairwiseSubjectAlias,
+      nonceHash: input.authorizationCode.nonceHash,
+      authTime,
+      scopeRefs: input.authorizationCode.approvedScopes,
+      claimKinds: input.authorizationCode.claimKinds,
+    },
+    errors: unique(errors),
+    warnings: [...input.authorizationCode.warnings],
+    privacy: {
+      rawAccessTokenLogged: false,
+      rawIdTokenLogged: false,
+      rawAddressIncluded: false,
+      refreshTokenIssued: false,
+    },
+  };
+}
+
+export function buildVeygritIdGuestCheckoutHandoff(input: {
+  tokenExchange: VeygritIdTokenExchange;
+  grant: VeygritIdConsentGrant;
+  partner: VeygritIdPartnerApplication;
+  orderRef?: unknown;
+}): VeygritIdGuestCheckoutHandoff {
+  const errors: string[] = [];
+  const warnings: string[] = [...input.tokenExchange.warnings, ...input.grant.warnings];
+  const orderRef = clean(input.orderRef, 120);
+
+  if (input.tokenExchange.status !== 'issued') errors.push('token-exchange-not-issued');
+  if (input.grant.status !== 'ready-to-fill') errors.push('grant-not-ready-for-guest-checkout');
+  if (input.partner.status !== 'approved') errors.push('partner-not-approved');
+  if (input.tokenExchange.claims.aud !== input.partner.clientId) errors.push('token-audience-client-mismatch');
+  if (input.grant.clientId !== input.partner.clientId) errors.push('grant-client-mismatch');
+  if (!input.tokenExchange.addressCredentialRef) errors.push('address-credential-ref-required');
+  if (!input.grant.approvedScopes.some(scope => scope === 'address.shipping' || scope === 'address.billing' || scope === 'hotel.delivery' || scope === 'temporary.address')) {
+    errors.push('address-scope-required-for-guest-checkout');
+  }
+  if (hasForbiddenValue({ orderRef })) errors.push('guest-checkout-order-ref-private-material-not-allowed');
+  if (input.partner.siteCategory !== 'ec') warnings.push('guest-checkout-partner-is-not-ec-category');
+
+  const status: VeygritIdGuestCheckoutHandoff['status'] = errors.length > 0 ? 'blocked' : 'ready';
+  const nextAction: VeygritIdGuestCheckoutHandoff['nextAction'] = status === 'ready'
+    ? 'create-guest-order'
+    : errors.some(error => /token/.test(error))
+      ? 'repair-token-exchange'
+      : errors.some(error => /grant|address/.test(error))
+        ? 'request-address-consent'
+        : 'deny';
+  const walletConsentRef = compactHash({
+    grantId: input.grant.grantId,
+    clientId: input.partner.clientId,
+    partnerId: input.partner.partnerId,
+  }, 'wallet_consent');
+  const guestCheckoutAlias = compactHash({
+    pairwiseSubjectAlias: input.tokenExchange.pairwiseSubjectAlias,
+    walletConsentRef,
+    orderRefHash: orderRef ? sha256Hex(orderRef) : undefined,
+  }, 'vey_guest_checkout');
+  const carrierHandoffRef = input.tokenExchange.addressCredentialRef
+    ? compactHash({
+      guestCheckoutAlias,
+      addressCredentialRef: input.tokenExchange.addressCredentialRef,
+      partnerId: input.partner.partnerId,
+    }, 'carrier_handoff')
+    : undefined;
+
+  return {
+    modelVersion: VEYGRIT_ID_VERSION,
+    mode: 'ec-guest-checkout',
+    status,
+    nextAction,
+    partnerId: input.partner.partnerId,
+    clientId: input.partner.clientId ?? input.grant.clientId,
+    pairwiseSubjectAlias: input.tokenExchange.pairwiseSubjectAlias,
+    guestCheckoutAlias,
+    walletSessionRef: input.tokenExchange.walletSessionRef,
+    walletConsentRef,
+    ...(status === 'ready' && input.tokenExchange.addressCredentialRef ? { addressCredentialRef: input.tokenExchange.addressCredentialRef } : {}),
+    ...(status === 'ready' && carrierHandoffRef ? { carrierHandoffRef } : {}),
+    scopeRefs: input.tokenExchange.claims.scopeRefs,
+    claimKinds: input.tokenExchange.claims.claimKinds,
+    merchantAccountCreationRequired: false,
+    ecPasswordRequired: false,
+    walletLoginRequired: true,
+    ttlSeconds: status === 'ready' ? Math.max(1, Math.min(600, input.tokenExchange.expiresInSeconds)) : 0,
+    errors: unique(errors),
+    warnings: unique(warnings),
+    privacy: {
+      rawAddressSharedWithMerchant: false,
+      rawPhoneSharedWithMerchant: false,
+      globalSubjectIdExposedToMerchant: false,
+      merchantCanCreateAccountSilently: false,
+      carrierCredentialsSharedWithMerchant: false,
+      oneTimeUse: true,
+    },
+  };
+}
+
+export function revokeVeygritIdConnection(input: {
+  account: VeygritIdAccount;
+  partner: VeygritIdPartnerApplication;
+  grant?: VeygritIdConsentGrant;
+  reason?: VeygritIdConnectionRevocation['reason'];
+  now?: unknown;
+}): VeygritIdConnectionRevocation {
+  const revokedAt = validIsoOrDefault(input.now);
+  const pairwise = buildVeygritIdPairwiseSubjectAlias({ account: input.account, partner: input.partner });
+
+  return {
+    modelVersion: VEYGRIT_ID_VERSION,
+    revocationRef: compactHash({
+      subjectId: input.account.subjectId,
+      partnerId: input.partner.partnerId,
+      grantId: input.grant?.grantId,
+      revokedAt,
+    }, 'vey_revocation'),
+    subjectId: input.account.subjectId,
+    partnerId: input.partner.partnerId,
+    clientId: pairwise.clientId,
+    pairwiseSubjectAlias: pairwise.pairwiseSubjectAlias,
+    ...(input.grant?.grantId ? { revokedGrantId: input.grant.grantId } : {}),
+    revokedAt,
+    reason: input.reason ?? 'user-disconnect',
+    merchantDeletionRefs: [
+      'pairwiseSubjectAlias',
+      'walletConsentRef',
+      'addressCredentialRef',
+      'carrierHandoffRef',
+    ],
+    walletEffects: [
+      'invalidate-active-consents-for-partner',
+      'stop-address-autofill-for-client',
+      'reject-stale-carrier-handoff-refs',
+      'record-user-visible-revocation-receipt',
+    ],
+    nextAction: 'notify-merchant-and-invalidate-refs',
+    privacy: {
+      rawAddressRevealedDuringRevocation: false,
+      merchantCanContinuePullingAddress: false,
+    },
+  };
+}
+
 export function buildVeygritIdIntegrationPlan(): VeygritIdIntegrationPlan {
   return {
     modelVersion: VEYGRIT_ID_VERSION,
     packageName: '@veygrit/id',
     buttonLabel: 'Veygritで住所入力',
+    accountCreationProviders: ['google', 'apple'],
     components: [
       '<VeygritSignIn />',
       '<VeygritAddressButton />',
+      '<VeygritGuestCheckoutButton />',
       '<VeygritConsentDialog />',
       '<VeygritConnectedSites />',
+      '<VeygritConnectionRevocation />',
     ],
     backendEndpoints: [
       'GET /.well-known/veygrit-client.json',
       'POST /veygrit/oauth/callback',
+      'POST /veygrit/oauth/token',
       'POST /veygrit/address-fill/exchange',
+      'POST /veygrit/guest-checkout/handoff',
+      'POST /veygrit/connections/revoke',
       'POST /veygrit/webhooks',
     ],
     requiredPartnerGates: [
@@ -847,14 +1416,19 @@ export function buildVeygritIdIntegrationPlan(): VeygritIdIntegrationPlan {
     ],
     recommendedFlow: [
       'Partner applies and receives reviewed client_id',
-      'Site renders Veygrit address-fill button',
-      'User signs in with Google, Apple, email, or passkey',
+      'Site renders Vey ID address-fill button',
+      'User creates or opens a Vey ID account with Google or Apple only',
+      'Vey ID creates a wallet session and pairwise subject alias for that EC client',
       'Veygrit shows requested scopes and selected address/profile',
       'Sensitive scopes require fresh reauthentication',
+      'Veygrit issues authorizationCodeRef and exchanges it with PKCE for token refs',
       'Veygrit posts sealed claims to registered redirect URI',
+      'For EC guest checkout, merchant creates an order from guestCheckoutAlias and addressCredentialRef without creating an EC account',
       'User can revoke, export, or delete the connection in Veygrit Portal',
     ],
     notes: [
+      'Do not offer email/password, phone-only, or passkey-only account creation.',
+      'Guest checkout means no EC account/password is required; Veygrit wallet login and consent still happen.',
       'Do not allow unreviewed personal sites to embed the button.',
       'Do not log plaintext address, phone, passport name, or travel profile claims.',
       'Use OAuth/OIDC state and nonce concepts for request integrity.',

@@ -20,6 +20,45 @@ test('Address Portal exposes consent, scope, revoke, deletion, and export contro
   assert.match(source, /narrowAddressPortalConnectionScopes/);
 });
 
+test('Address Portal now serves as Wallet My Page with action inbox and quick actions', () => {
+  assert.match(source, /myPage: 'My Page'/);
+  assert.match(source, /myPage: 'マイページ'/);
+  assert.match(source, /myPageSubtitle/);
+  assert.match(source, /actionInbox/);
+  assert.match(source, /walletHealth/);
+  assert.match(source, /quickActions/);
+  assert.match(source, /pendingApprovals/);
+  assert.match(source, /credentialAlerts/);
+  assert.match(source, /credentialStatus/);
+  assert.match(source, /securityReview/);
+  assert.match(source, /openSettings/);
+  assert.match(source, /window\.location\.href = '\/settings'/);
+  assert.match(source, /<Settings className="h-4 w-4" \/>/);
+  assert.match(source, /reviewPermissions/);
+  assert.match(source, /myPageHealthItems/);
+  assert.match(source, /quickActions\.map/);
+  assert.match(source, /setHighRiskMode\(true\)/);
+  assert.doesNotMatch(source, /addOrVerifyAddress/);
+  assert.doesNotMatch(source, /showQrPass/);
+  assert.doesNotMatch(source, /<h1[^>]*>Address Portal<\/h1>/);
+});
+
+test('Address Portal supports the Friends side-menu deep link without raw recipient data', () => {
+  assert.match(source, /apc-friend-gift-alias/);
+  assert.match(source, /Friend Gift Alias/);
+  assert.match(source, /gift alias/);
+  assert.match(source, /window\.location\.hash !== '#friends'/);
+  assert.match(source, /setQuery\('recipient'\)/);
+  assert.match(source, /friendsSectionRef/);
+  assert.match(source, /friendConnections/);
+  assert.match(source, /id="friends"/);
+  assert.match(source, /scrollIntoView\(\{ block: 'start' \}\)/);
+  assert.match(source, /participantType === 'shopping-agent'/);
+  assert.match(source, /friendsSectionBody/);
+  assert.match(source, /HeartHandshake className="h-5 w-5"/);
+  assert.match(source, /Friends opened with recipient-safe refs only/);
+});
+
 test('Address Portal persists safe local refs without adding raw address fields', () => {
   assert.match(source, /PORTAL_CONNECTIONS_STORAGE_KEY/);
   assert.match(source, /readStoredConnections/);

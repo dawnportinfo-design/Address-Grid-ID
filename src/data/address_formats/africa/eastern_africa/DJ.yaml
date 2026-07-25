@@ -51,7 +51,7 @@ postalCode:
   format: NNNNN
   regex: ^\d{5}$
   api: null
-  source: Postal metadata from AGID East Africa regional table; open OSS source not configured
+  source: Djibouti Ministry of Communication, Posts and Telecommunications / La Poste de Djibouti official postal service information
 addressRules:
   languages:
     - code: fr
@@ -82,6 +82,7 @@ addressRules:
     required: false
     usage: used
   openSourceIds:
+    - mcpt-djibouti-poste
     - rcmrd-geoportal
     - hot-osm-east-southern-africa
     - osm-nominatim
@@ -111,6 +112,7 @@ addressRules:
     - gbif-occurrence
     - rcmrd-gmes-africa-geoportal
 openSourceIds:
+  - mcpt-djibouti-poste
   - rcmrd-geoportal
   - hot-osm-east-southern-africa
   - osm-nominatim

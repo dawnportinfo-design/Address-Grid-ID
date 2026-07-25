@@ -847,8 +847,8 @@ test('Western Europe address tabs use country-specific native-to-English routes 
     },
   });
 
-  assert.equal(switzerland.city, 'Zurich');
-  assert.equal(switzerland.street, 'Street');
+  assert.equal(switzerland.city, 'Zürich');
+  assert.equal(switzerland.street, 'Straße');
   assert.equal(switzerland.postcode, '8001');
 });
 
@@ -915,8 +915,8 @@ test('Southern Europe address tabs use country-specific native-to-English routes
     },
   });
 
-  assert.equal(italy.city, 'Rome');
-  assert.equal(italy.street, 'Street');
+  assert.equal(italy.city, 'Roma');
+  assert.equal(italy.street, 'Via');
   assert.equal(italy.postcode, '00118');
 });
 
@@ -1185,7 +1185,7 @@ test('West Africa address tabs use country-specific native-to-English routes bef
 
   assert.equal(coteDivoire.state, 'Lagunes');
   assert.equal(coteDivoire.city, 'Abidjan');
-  assert.equal(coteDivoire.street, 'Street');
+  assert.equal(coteDivoire.street, 'Rue');
   assert.equal(coteDivoire.postcode, '00225');
 });
 
@@ -1255,7 +1255,7 @@ test('Central Africa address tabs use country-specific native-to-English routes 
 
   assert.equal(congo.state, 'Kinshasa');
   assert.equal(congo.city, 'Kinshasa');
-  assert.equal(congo.street, 'Municipality');
+  assert.equal(congo.street, 'Commune');
   assert.equal(congo.postcode, '243');
 });
 
@@ -1277,11 +1277,11 @@ test('Central Africa multilingual native tabs use English pivot when topology di
     },
   });
 
-  assert.equal(chadArabic.city, 'ar:NDjamena');
-  assert.equal(chadArabic.street, 'ar:Street');
+  assert.equal(chadArabic.city, 'ar:N’Djamena');
+  assert.equal(chadArabic.street, 'ar:Rue');
   assert.deepEqual(calls, [
-    'en->ar:NDjamena',
-    'en->ar:Street',
+    'en->ar:N’Djamena',
+    'en->ar:Rue',
   ]);
 });
 
@@ -1348,10 +1348,10 @@ test('Southern Africa multilingual native tabs use English pivot when topology d
   });
 
   assert.equal(comorosArabic.city, 'ar:Moroni');
-  assert.equal(comorosArabic.street, 'ar:Street');
+  assert.equal(comorosArabic.street, 'ar:Rue');
   assert.deepEqual(calls, [
     'en->ar:Moroni',
-    'en->ar:Street',
+    'en->ar:Rue',
   ]);
 });
 
@@ -1460,8 +1460,8 @@ test('Americas address tabs use regional Spanish-to-English routes before machin
     },
   });
 
-  assert.equal(mexico.city, 'Mexico City');
-  assert.equal(mexico.street, 'Street Mayor');
+  assert.equal(mexico.city, 'Ciudad de México');
+  assert.equal(mexico.street, 'Calle Mayor');
   assert.equal(mexico.postcode, '01000');
 });
 
@@ -1483,11 +1483,11 @@ test('Americas multilingual native tabs use English pivot when language topology
     },
   });
 
-  assert.equal(paraguayGuarani.city, 'gn:Asuncion');
-  assert.equal(paraguayGuarani.street, 'gn:Street');
+  assert.equal(paraguayGuarani.city, 'gn:Asunción');
+  assert.equal(paraguayGuarani.street, 'gn:Calle');
   assert.deepEqual(calls, [
-    'en->gn:Asuncion',
-    'en->gn:Street',
+    'en->gn:Asunción',
+    'en->gn:Calle',
   ]);
 });
 

@@ -1,10 +1,42 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import {
   buildVeyWorkspace,
   validateVeyWorkspace,
 } from './veyWorkspace';
+import { createVeyTradeGatewayIntentStore } from './veyTrading';
+
+const TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_PATH = 'docs/specs/fixtures/vey-trade-gateway-idempotency-v0.1.json';
+
+type TradeGatewayIdempotencyFixtureVector = {
+  vectorId: string;
+  ok: boolean;
+  decision: string;
+  tradeGatewayIntentRef?: string;
+  safeRefs?: {
+    deliveryGatewayShipmentRef?: string;
+    playlistCommerceIntentRef?: string;
+    orderAlias?: string;
+  };
+  errors?: string[];
+  localOnly?: boolean;
+  productionTraffic?: boolean;
+  privateMaterialExposed?: boolean;
+};
+
+type TradeGatewayIdempotencyFixture = {
+  fixtureId: string;
+  boundaryGateId: string;
+  privacy: {
+    localOnly: boolean;
+    productionTraffic: boolean;
+    containsRawAddress: boolean;
+    privateMaterialExposed: boolean;
+  };
+  vectors: TradeGatewayIdempotencyFixtureVector[];
+};
 
 test('VeyWorkspace unifies orders, inventory, delivery, invoices, and redacted team notifications', () => {
   const workspace = buildVeyWorkspace({
@@ -135,6 +167,214 @@ test('VeyWorkspace tracks overdue receivables and shipment exceptions without ex
   assert.equal(workspace.invoices[0].status, 'overdue');
   assert.equal(workspace.notifications.some(notification => notification.eventType === 'shipment-exception'), true);
   assert.equal(workspace.notifications.some(notification => notification.eventType === 'invoice-overdue'), true);
+  assert.equal(workspace.privacy.rawAddressStored, false);
+  assert.equal(validateVeyWorkspace(workspace).ok, true);
+});
+
+test('VeyWorkspace builds B2B operations plan for cost, delay, returns, regional quality, Trade Gateway, and Playlist Commerce', () => {
+  const workspace = buildVeyWorkspace({
+    generatedAt: '2026-06-20T12:00:00.000Z',
+    organizationAlias: 'b2b-ops-control',
+    auditLogEnabled: true,
+    backupEncrypted: true,
+    lastBackupAt: '2026-06-20T06:00:00.000Z',
+    gdprExportEnabled: true,
+    deletionWorkflowEnabled: true,
+    collaborationChannels: [
+      { provider: 'slack', channelAlias: 'delivery-quality', status: 'connected', scopes: ['shipments:read', 'reports:read'] },
+    ],
+    shipments: [
+      {
+        shipmentId: 'SHP-TYO-1',
+        orderId: 'ORD-TYO-1',
+        carrierAlias: 'dhl',
+        status: 'delivered',
+        expectedDeliveredAt: '2026-06-20T09:00:00.000Z',
+        deliveredAt: '2026-06-20T08:40:00.000Z',
+        cost: 1200,
+        currency: 'JPY',
+        regionId: 'JP-TYO',
+        deliveryGatewayShipmentRef: 'hexaship_ship_tyo_1',
+        tradeGatewayIntentRef: 'trade_intent_tyo_1',
+        playlistCommerceIntentRef: 'playlist_intent_tyo_1',
+      },
+      {
+        shipmentId: 'SHP-TYO-2',
+        orderId: 'ORD-TYO-2',
+        carrierAlias: 'ups',
+        status: 'exception',
+        expectedDeliveredAt: '2026-06-20T09:00:00.000Z',
+        deliveredAt: '2026-06-20T12:30:00.000Z',
+        returnedAt: '2026-06-21T10:00:00.000Z',
+        returnReasonAlias: 'return-damaged-box',
+        cost: 1800,
+        currency: 'JPY',
+        regionId: 'JP-TYO',
+        deliveryGatewayShipmentRef: 'hexaship_ship_tyo_2',
+      },
+      {
+        shipmentId: 'SHP-KIX-1',
+        orderId: 'ORD-KIX-1',
+        carrierAlias: 'dhl',
+        status: 'delivered',
+        expectedDeliveredAt: '2026-06-20T18:00:00.000Z',
+        deliveredAt: '2026-06-20T17:30:00.000Z',
+        cost: 900,
+        currency: 'JPY',
+        regionId: 'JP-KIX',
+      },
+    ],
+  });
+
+  assert.equal(workspace.operationsPlan.planningKind, 'b2b-operations-cost-delay-return-regional-quality');
+  assert.equal(workspace.kpis.totalShippingCost, 3900);
+  assert.equal(workspace.kpis.averageShippingCost, 1300);
+  assert.equal(workspace.kpis.delayedShipments, 1);
+  assert.equal(workspace.kpis.returnShipments, 1);
+  assert.equal(workspace.operationsPlan.delay.delayedShipmentRefs.includes('SHP-TYO-2'), true);
+  assert.equal(workspace.operationsPlan.returns.returnShipmentRefs.includes('SHP-TYO-2'), true);
+  assert.equal(workspace.operationsPlan.regionalQuality[0].regionId, 'JP-TYO');
+  assert.equal(workspace.operationsPlan.regionalQuality[0].status, 'attention');
+  assert.deepEqual(workspace.operationsPlan.ecosystemConnections.tradeGatewayIntentRefs, ['trade_intent_tyo_1']);
+  assert.deepEqual(workspace.operationsPlan.ecosystemConnections.playlistCommerceIntentRefs, ['playlist_intent_tyo_1']);
+  assert.equal(workspace.recommendations.some(item => item.type === 'regional-quality-review'), true);
+  assert.equal(workspace.operationsPlan.privacy.usesRawAddress, false);
+  assert.equal(workspace.operationsPlan.privacy.usesRecipientContact, false);
+  assert.equal(validateVeyWorkspace(workspace).ok, true);
+});
+
+test('VeyWorkspace accepts Trade Gateway intent refs emitted by the local idempotency fixture', () => {
+  const tradeGateway = createVeyTradeGatewayIntentStore();
+  const tradeIntent = tradeGateway.create({
+    idempotencyKey: 'trade-gateway-workspace-xref-001',
+    operatorWorkspaceRef: 'workspace_ref_ops_tyo_xref_001',
+    deliveryGatewayShipmentRef: 'delivery_gateway_shipment_ref_tyo_xref_001',
+    playlistCommerceIntentRef: 'playlist_intent_ref_tyo_xref_001',
+    side: 'sell',
+    assetKind: 'physical-goods',
+    marketMode: 'catalog',
+    listingAlias: 'LIST-WORKSPACE-XREF-001',
+    orderAlias: 'ORD-WORKSPACE-XREF-001',
+    originCountry: 'JP',
+    destinationCountry: 'JP',
+    quantity: 8,
+    unit: 'case',
+    unitPrice: 30,
+    currency: 'USD',
+    evidence: [
+      { type: 'listing', status: 'passed', evidenceRef: 'listing_ev_workspace_xref', signed: true },
+      { type: 'market-data', status: 'passed', evidenceRef: 'market_ev_workspace_xref', signed: true },
+      { type: 'counterparty-kyc', status: 'passed', evidenceRef: 'kyc_ev_workspace_xref', signed: true },
+      { type: 'sanctions-screen', status: 'passed', evidenceRef: 'sanctions_ev_workspace_xref', signed: true },
+      { type: 'title-of-goods', status: 'passed', evidenceRef: 'title_ev_workspace_xref', signed: true },
+    ],
+  });
+
+  assert.equal(tradeIntent.ok, true);
+  assert.equal(tradeIntent.decision, 'created');
+  assert.match(tradeIntent.tradeGatewayIntentRef ?? '', /^trade_gateway_intent_[A-F0-9]{24}$/);
+  assert.equal(tradeIntent.safeRefs?.deliveryGatewayShipmentRef, 'delivery_gateway_shipment_ref_tyo_xref_001');
+  assert.equal(tradeIntent.safeRefs?.playlistCommerceIntentRef, 'playlist_intent_ref_tyo_xref_001');
+
+  const workspace = buildVeyWorkspace({
+    generatedAt: '2026-06-20T12:00:00.000Z',
+    organizationAlias: 'workspace-trade-xref',
+    auditLogEnabled: true,
+    backupEncrypted: true,
+    lastBackupAt: '2026-06-20T06:00:00.000Z',
+    gdprExportEnabled: true,
+    deletionWorkflowEnabled: true,
+    shipments: [
+      {
+        shipmentId: 'SHP-WORKSPACE-XREF-1',
+        orderId: 'ORD-WORKSPACE-XREF-001',
+        carrierAlias: 'dhl',
+        status: 'scheduled',
+        cost: 48,
+        currency: 'USD',
+        regionId: 'JP-TYO',
+        deliveryGatewayShipmentRef: tradeIntent.safeRefs?.deliveryGatewayShipmentRef,
+        tradeGatewayIntentRef: tradeIntent.tradeGatewayIntentRef,
+        playlistCommerceIntentRef: tradeIntent.safeRefs?.playlistCommerceIntentRef,
+      },
+    ],
+  });
+
+  assert.deepEqual(workspace.operationsPlan.ecosystemConnections.deliveryGatewayShipmentRefs, ['delivery_gateway_shipment_ref_tyo_xref_001']);
+  assert.deepEqual(workspace.operationsPlan.ecosystemConnections.tradeGatewayIntentRefs, [tradeIntent.tradeGatewayIntentRef]);
+  assert.deepEqual(workspace.operationsPlan.ecosystemConnections.playlistCommerceIntentRefs, ['playlist_intent_ref_tyo_xref_001']);
+  assert.equal(workspace.shipments[0].tradeGatewayIntentRef, tradeIntent.tradeGatewayIntentRef);
+  assert.equal(workspace.operationsPlan.privacy.visibleFields.includes('tradeGatewayIntentRef'), true);
+  assert.equal(workspace.operationsPlan.privacy.usesRawAddress, false);
+  assert.equal(workspace.operationsPlan.privacy.usesRecipientContact, false);
+  assert.equal(validateVeyWorkspace(workspace).ok, true);
+});
+
+test('VeyWorkspace consumes checked-in Trade Gateway idempotency fixture refs', () => {
+  const fixture = JSON.parse(readFileSync(TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_PATH, 'utf8')) as TradeGatewayIdempotencyFixture;
+  const createdVector = fixture.vectors.find(vector => vector.vectorId === 'trade_gateway_intent_created_positive');
+
+  assert.ok(createdVector);
+  assert.equal(fixture.fixtureId, 'vey-trade-gateway-idempotency-v0.1');
+  assert.equal(fixture.boundaryGateId, 'trade-gateway-local-idempotent-intent');
+  assert.equal(fixture.privacy.localOnly, true);
+  assert.equal(fixture.privacy.productionTraffic, false);
+  assert.equal(fixture.privacy.containsRawAddress, false);
+  assert.equal(fixture.privacy.privateMaterialExposed, false);
+  assert.equal(createdVector.ok, true);
+  assert.equal(createdVector.decision, 'created');
+  assert.equal(createdVector.localOnly, true);
+  assert.equal(createdVector.productionTraffic, false);
+  assert.equal(createdVector.privateMaterialExposed, false);
+  assert.deepEqual(createdVector.errors, []);
+  assert.doesNotMatch(
+    JSON.stringify(createdVector.safeRefs ?? {}),
+    /rawAddress|rawAgid|rawAoid|recipientName|phone|email|privateKey|proofSecret|credential|contractBody|customsDocumentBody/i,
+  );
+
+  const tradeGatewayIntentRef = createdVector.tradeGatewayIntentRef ?? '';
+  const deliveryGatewayShipmentRef = createdVector.safeRefs?.deliveryGatewayShipmentRef ?? '';
+  const playlistCommerceIntentRef = createdVector.safeRefs?.playlistCommerceIntentRef ?? '';
+  const orderAlias = createdVector.safeRefs?.orderAlias ?? '';
+
+  assert.match(tradeGatewayIntentRef, /^trade_gateway_intent_[A-F0-9]{24}$/);
+  assert.match(deliveryGatewayShipmentRef, /^delivery_gateway_shipment_ref_/);
+  assert.match(playlistCommerceIntentRef, /^playlist_intent_ref_/);
+  assert.match(orderAlias, /^ORD-/);
+
+  const workspace = buildVeyWorkspace({
+    generatedAt: '2026-06-20T12:00:00.000Z',
+    organizationAlias: 'workspace-fixture-consumer',
+    auditLogEnabled: true,
+    backupEncrypted: true,
+    lastBackupAt: '2026-06-20T06:00:00.000Z',
+    gdprExportEnabled: true,
+    deletionWorkflowEnabled: true,
+    shipments: [
+      {
+        shipmentId: 'SHP-FIXTURE-CREATED-1',
+        orderId: orderAlias,
+        carrierAlias: 'dhl',
+        status: 'scheduled',
+        cost: 42,
+        currency: 'USD',
+        regionId: 'JP-TYO',
+        deliveryGatewayShipmentRef,
+        tradeGatewayIntentRef,
+        playlistCommerceIntentRef,
+      },
+    ],
+  });
+
+  assert.deepEqual(workspace.operationsPlan.ecosystemConnections.deliveryGatewayShipmentRefs, [deliveryGatewayShipmentRef]);
+  assert.deepEqual(workspace.operationsPlan.ecosystemConnections.tradeGatewayIntentRefs, [tradeGatewayIntentRef]);
+  assert.deepEqual(workspace.operationsPlan.ecosystemConnections.playlistCommerceIntentRefs, [playlistCommerceIntentRef]);
+  assert.equal(workspace.shipments[0].tradeGatewayIntentRef, tradeGatewayIntentRef);
+  assert.equal(workspace.shipments[0].deliveryGatewayShipmentRef, deliveryGatewayShipmentRef);
+  assert.equal(workspace.shipments[0].playlistCommerceIntentRef, playlistCommerceIntentRef);
+  assert.equal(workspace.operationsPlan.privacy.visibleFields.includes('tradeGatewayIntentRef'), true);
+  assert.equal(workspace.operationsPlan.privacy.usesRawAddress, false);
+  assert.equal(workspace.operationsPlan.privacy.usesRecipientContact, false);
   assert.equal(workspace.privacy.rawAddressStored, false);
   assert.equal(validateVeyWorkspace(workspace).ok, true);
 });

@@ -6,6 +6,7 @@ native:
     {{recipient}}
     {{street}}
     {{city}}
+    {{postcode}}
     Nauru
   ordering: small-to-big
   fields:
@@ -22,6 +23,11 @@ native:
     - key: city
       label: District
       placeholder: Yaren
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: NRU68
       required: true
       type: text
 english:

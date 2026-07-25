@@ -43,6 +43,24 @@ test('keeps geo-only targets out of mandatory postal dataset loading', () => {
   assert.ok(plan.warnings.some(warning => warning.includes('geo or non-postal')));
 });
 
+test('does not load legal framework metadata as a postal lookup source', () => {
+  const plan = buildAddressDataLoadPlan({
+    countryCode: 'GT',
+    targetCountries: ['GT'],
+    postalMode: 'format-and-lookup',
+    lookupRequired: true,
+    hasPostalCode: true,
+  });
+
+  const sourceIds = [
+    ...plan.blocking,
+    ...plan.background,
+    ...plan.onDemand,
+    ...plan.disabled,
+  ].map(source => source.id);
+  assert.ok(!sourceIds.includes('correos-guatemala-postal-legal-framework'));
+});
+
 test('summarizes load plans for API-safe diagnostics', () => {
   const summary = summarizeAddressDataLoadPlan(buildAddressDataLoadPlan({
     countryCode: 'DE',

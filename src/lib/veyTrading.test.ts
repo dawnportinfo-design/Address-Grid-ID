@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   buildVeyTradingIntent,
+  createVeyTradeGatewayIntentStore,
   validateVeyTradingIntent,
 } from './veyTrading';
 import { VEY_FINANCE_VERSION } from './veyFinance';
@@ -50,6 +51,66 @@ test('VeyTrading prepares physical goods trade and links to Finance for cross-bo
   assert.equal(validateVeyTradingIntent(intent).ok, true);
 });
 
+test('Trade Gateway intent store replays same idempotency body and rejects conflicts', () => {
+  const store = createVeyTradeGatewayIntentStore();
+  const request = {
+    idempotencyKey: 'trade-gateway-intent-key-001',
+    operatorWorkspaceRef: 'workspace_ref_ops_tyo_001',
+    deliveryGatewayShipmentRef: 'delivery_gateway_shipment_ref_tyo_001',
+    playlistCommerceIntentRef: 'playlist_intent_ref_tyo_001',
+    side: 'buy',
+    assetKind: 'physical-goods',
+    marketMode: 'catalog',
+    listingAlias: 'LIST-IDEMP-001',
+    orderAlias: 'ORD-IDEMP-001',
+    originCountry: 'JP',
+    destinationCountry: 'FR',
+    quantity: 12,
+    unit: 'case',
+    unitPrice: 25,
+    currency: 'EUR',
+    hsCode: '6403',
+    deliveryRequired: true,
+    financeIntentRef: 'VF-TRADE-IDEMP-001',
+    financeIntentVersion: VEY_FINANCE_VERSION,
+    evidence: [
+      ...BASE_SPOT_EVIDENCE,
+      { type: 'export-control', status: 'passed', evidenceRef: 'export_ev_idemp_001', signed: true },
+      { type: 'finance-intent', status: 'passed', evidenceRef: 'VF-TRADE-IDEMP-001', signed: true },
+    ],
+  } as const;
+
+  const created = store.create(request);
+  const replayed = store.create({ ...request, requestedAt: '2026-06-21T00:00:00.000Z' });
+  const conflict = store.create({ ...request, quantity: 13 });
+
+  assert.equal(created.ok, true);
+  assert.equal(created.decision, 'created');
+  assert.equal(created.replayed, false);
+  assert.equal(created.attemptCount, 1);
+  assert.equal(created.intent?.status, 'ready-to-contract');
+  assert.match(created.tradeGatewayIntentRef ?? '', /^trade_gateway_intent_[A-F0-9]{24}$/);
+  assert.equal(created.localOnly, true);
+  assert.equal(created.productionTraffic, false);
+  assert.equal(created.privacy.rawAddressStored, false);
+  assert.equal(created.safeRefs?.deliveryGatewayShipmentRef, 'delivery_gateway_shipment_ref_tyo_001');
+
+  assert.equal(replayed.ok, true);
+  assert.equal(replayed.decision, 'replayed');
+  assert.equal(replayed.replayed, true);
+  assert.equal(replayed.attemptCount, 2);
+  assert.equal(replayed.tradeGatewayIntentRef, created.tradeGatewayIntentRef);
+  assert.equal(replayed.bodyFingerprintRef, created.bodyFingerprintRef);
+
+  assert.equal(conflict.ok, false);
+  assert.equal(conflict.status, 409);
+  assert.equal(conflict.decision, 'conflict');
+  assert.equal(conflict.tradeGatewayIntentRef, created.tradeGatewayIntentRef);
+  assert.ok(conflict.errors.includes('idempotency-key-body-mismatch'));
+  assert.match(conflict.conflictRef ?? '', /^trade_gateway_conflict_[A-F0-9]{24}$/);
+  assert.equal(store.size, 1);
+});
+
 test('VeyTrading blocks local execution of futures and derivatives without licensed venue', () => {
   const intent = buildVeyTradingIntent({
     assetKind: 'futures-contract',
@@ -69,6 +130,36 @@ test('VeyTrading blocks local execution of futures and derivatives without licen
   assert.ok(intent.errors.includes('futures-or-derivatives-execution-not-allowed-in-local-mode'));
   assert.ok(intent.requiredControls.includes('licensed-futures-or-derivatives-venue'));
   assert.equal(validateVeyTradingIntent(intent).ok, false);
+});
+
+test('Trade Gateway intent store refuses private material before caching', () => {
+  const store = createVeyTradeGatewayIntentStore();
+  const rejected = store.create({
+    idempotencyKey: 'trade-gateway-intent-key-002',
+    assetKind: 'physical-goods',
+    marketMode: 'catalog',
+    listingAlias: 'PRIVATE-TEST',
+    quantity: 1,
+    unitPrice: 10,
+    currency: 'USD',
+    rawAddress: 'blocked',
+    privateKey: 'blocked',
+    evidence: [
+      { type: 'listing', status: 'passed', rawAoid: 'blocked' },
+    ],
+  });
+
+  assert.equal(rejected.ok, false);
+  assert.equal(rejected.status, 400);
+  assert.equal(rejected.decision, 'rejected');
+  assert.equal(rejected.attemptCount, 0);
+  assert.ok(rejected.errors.includes('rawAddress-not-allowed-in-trade-gateway-intent'));
+  assert.ok(rejected.errors.includes('privateKey-not-allowed-in-trade-gateway-intent'));
+  assert.ok(rejected.errors.includes('evidence.0.rawAoid-not-allowed-in-trade-gateway-intent'));
+  assert.equal(rejected.intent, undefined);
+  assert.equal(rejected.localOnly, true);
+  assert.equal(rejected.productionTraffic, false);
+  assert.equal(store.size, 0);
 });
 
 test('VeyTrading can model futures as simulation but still requires review', () => {

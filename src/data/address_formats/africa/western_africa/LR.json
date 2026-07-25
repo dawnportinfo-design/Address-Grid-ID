@@ -74,7 +74,7 @@
     "format": "NNNN",
     "regex": "^\\d{4}$",
     "api": null,
-    "source": "Postal metadata from AGID regional table; no free OSS source configured"
+    "source": "Liberia Ministry of Posts and Telecommunications official postal service information"
   },
   "addressRules": {
     "languages": [
@@ -115,6 +115,7 @@
     ]
   },
   "openSourceIds": [
+    "mopt-liberia-postal-services",
     "hot-osm-west-africa",
     "osm-nominatim",
     "osm-overpass",

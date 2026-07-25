@@ -15,6 +15,7 @@ import {
 import {
   classifyPostalSourceTrust,
   getPreferredPostalSourceIdsForCountry,
+  isPostalReferenceDataSource,
   type PostalSourceTrustTier,
 } from './officialPostalSourceCatalog';
 import {
@@ -32,6 +33,28 @@ import {
   type AddressStandardLibraryResolution,
   type AddressStandardLibraryResolutionInput,
 } from './addressStandardLibraryResolver';
+import {
+  buildAfricaGeographicValidationPlan,
+  type AfricaGeographicValidationPlan,
+} from './africaGeographicValidationPlan';
+import {
+  buildAsiaGeographicValidationPlan,
+  type AsiaGeographicValidationPlan,
+} from './asiaGeographicValidationPlan';
+import {
+  buildOceaniaGeographicValidationPlan,
+  type OceaniaGeographicValidationPlan,
+} from './oceaniaGeographicValidationPlan';
+import {
+  buildEuropeGeographicValidationPlan,
+  type EuropeGeographicValidationPlan,
+} from './europeGeographicValidationPlan';
+import {
+  buildAmericasGeographicValidationPlan,
+  type AmericasGeographicValidationPlan,
+} from './americasGeographicValidationPlan';
+import type { PostalSourceValidationReadinessEvidence } from './postalSourceReadinessAdapter';
+import type { CountryGeographicMetadataReadinessEvidence } from './countryGeographicMetadataEvaluationIndex';
 
 export const ADDRESS_VERIFICATION_ENGINE_VERSION = 'address-verification-engine-v1';
 
@@ -127,6 +150,8 @@ export type PostalEvidenceCandidate = {
   confidence?: number;
 };
 
+export type PostalEvidenceSourceReadiness = 'not-provided' | 'eligible' | 'blocked';
+
 export type AddressVerificationEngineInput = {
   countryCode?: string;
   targetCountries?: string[];
@@ -137,6 +162,8 @@ export type AddressVerificationEngineInput = {
   format?: AddressVerificationFormatLike | null;
   countryPolicies?: Record<string, AddressVerificationTargetCountryPolicy>;
   postalEvidence?: PostalEvidenceCandidate[];
+  postalSourceReadiness?: PostalSourceValidationReadinessEvidence[];
+  geographicMetadataReadiness?: CountryGeographicMetadataReadinessEvidence[];
   referenceRecords?: OpenAddressesRecord[];
   sources?: string[];
   allowFallbackCountryFromAddress?: boolean;
@@ -164,6 +191,13 @@ export type AddressVerificationAuditStep = {
   step:
     | 'target-country'
     | 'data-load-plan'
+    | 'africa-geography'
+    | 'asia-geography'
+    | 'oceania-geography'
+    | 'europe-geography'
+    | 'americas-geography'
+    | 'regional-geography'
+    | 'synthetic-geographic-metadata'
     | 'standard-library-resolution'
     | 'postal-format'
     | 'postal-evidence'
@@ -179,6 +213,7 @@ export type AddressVerificationEvidenceSummary = {
   postalStrength: PostalEvidenceStrength;
   postalSourceTrust: PostalSourceTrustTier;
   postalSourceCatalogMatches: string[];
+  sourceValidationReadiness: PostalEvidenceSourceReadiness;
   lookupSatisfied: boolean;
   addressReference: AddressReferenceEvidence;
   strongPostalEvidence?: PostalEvidenceCandidate;
@@ -223,6 +258,39 @@ export type AddressVerificationQualitySummary = {
   upgradeActions: string[];
 };
 
+export type GeographicValidationRegion =
+  | 'africa'
+  | 'asia'
+  | 'oceania'
+  | 'europe'
+  | 'americas';
+
+export type GeographicRegionScopeStatus =
+  | 'not-covered'
+  | 'unambiguous'
+  | 'ambiguous';
+
+export type GeographicRegionPlanMatch = {
+  region: GeographicValidationRegion;
+  countryCode: string;
+  planVersion: string;
+  metadataSourcePathCount: number;
+};
+
+export type AddressVerificationGeographicRegionScope = {
+  status: GeographicRegionScopeStatus;
+  matches: GeographicRegionPlanMatch[];
+  nonClaims: string[];
+};
+
+export type AddressVerificationGeographicMetadataReadiness = {
+  countryCode: string;
+  sources: CountryGeographicMetadataReadinessEvidence[];
+  syntheticAdministrativeEvaluationEligible: boolean;
+  deliveryClaimsEnabled: false;
+  nonClaims: string[];
+};
+
 export type AddressVerificationEngineResult = {
   engineVersion: string;
   status: AddressVerificationStatus;
@@ -254,6 +322,13 @@ export type AddressVerificationEngineResult = {
   canonicalAddress: CanonicalAddressParts;
   dataLoading: AddressDataLoadPlan;
   standardLibrary: AddressStandardLibraryResolution;
+  geographicRegionScope: AddressVerificationGeographicRegionScope;
+  geographicMetadataReadiness: AddressVerificationGeographicMetadataReadiness;
+  africaGeography?: AfricaGeographicValidationPlan;
+  asiaGeography?: AsiaGeographicValidationPlan;
+  oceaniaGeography?: OceaniaGeographicValidationPlan;
+  europeGeography?: EuropeGeographicValidationPlan;
+  americasGeography?: AmericasGeographicValidationPlan;
   systemConnection: AddressSystemConnectionPlan;
   validation: AddressValidationResult;
   warnings: string[];
@@ -294,6 +369,7 @@ const WEAK_POSTAL_EVIDENCE_PATTERNS = [
 ];
 
 const VALIDATION_POSTAL_USAGES = ['required', 'recommended', 'used', 'partial', 'optional'] as const;
+const METADATA_SOURCE_ID_PATTERN = /^[a-z0-9][a-z0-9._-]{0,127}$/;
 
 export const DEFAULT_ADDRESS_VERIFICATION_TARGET_POLICIES: Record<string, AddressVerificationTargetCountryPolicy> = {
   JP: {
@@ -849,6 +925,7 @@ function postalEvidenceStrength(
   evidence: PostalEvidenceCandidate | null,
   format: AddressVerificationFormatLike | null | undefined,
   policy: AddressVerificationTargetCountryPolicy | null,
+  sourceValidationReadiness: PostalEvidenceSourceReadiness,
 ): PostalEvidenceStrength {
   if (!evidence) return 'none';
   const source = clean(evidence.source);
@@ -857,11 +934,10 @@ function postalEvidenceStrength(
     countryCode: evidence.countryCode || policy?.countryCode || format?.countryCode,
     source,
     url: evidence.url,
-    sourceIds: unique([
-      evidence.sourceId,
-      ...source.split(/[,\s/]+/g),
-    ]),
+    sourceIds: unique([evidence.sourceId]),
   });
+  if (catalog.matches.length && !catalog.matches.some(isPostalReferenceDataSource)) return 'none';
+  if (sourceValidationReadiness === 'blocked') return 'weak';
   if (catalog.strength === 'strong') return 'strong';
   if (sourceMatches([source], WEAK_POSTAL_EVIDENCE_PATTERNS)) return 'weak';
   if (sourceMatches([source], STRONG_POSTAL_EVIDENCE_PATTERNS)) return 'strong';
@@ -894,6 +970,75 @@ function postalEvidenceStrength(
   return 'weak';
 }
 
+function sourceValidationReadinessFor(
+  evidence: PostalEvidenceCandidate | null,
+  readiness: PostalSourceValidationReadinessEvidence[] | undefined,
+): PostalEvidenceSourceReadiness {
+  const sourceId = normalizeTextKey(evidence?.sourceId);
+  if (!sourceId) return 'not-provided';
+
+  const record = (readiness || []).find(candidate => normalizeTextKey(candidate.sourceId) === sourceId);
+  if (!record) return 'not-provided';
+  return record.officialReferenceValidationEligible && record.deliveryClaimsEnabled === false
+    ? 'eligible'
+    : 'blocked';
+}
+
+function geographicMetadataReadinessFor(
+  countryCode: string,
+  readiness: CountryGeographicMetadataReadinessEvidence[] | undefined,
+): AddressVerificationGeographicMetadataReadiness {
+  const evidenceBySourceId = new Map<string, {
+    approvedAdministrativeKeyCount: number;
+    sourceOrigin: CountryGeographicMetadataReadinessEvidence['sourceOrigin'];
+  } | null>();
+  for (const candidate of readiness || []) {
+    const candidateCountry = normalizeCountryCode(candidate.countryCode);
+    const sourceId = clean(candidate.sourceId).toLowerCase();
+    const count = Number(candidate.approvedAdministrativeKeyCount);
+    if (
+      candidateCountry !== countryCode
+      || !METADATA_SOURCE_ID_PATTERN.test(sourceId)
+      || !Number.isSafeInteger(count)
+      || count < 1
+      || candidate.syntheticAdministrativeEvaluationEligible !== true
+      || candidate.deliveryClaimsEnabled !== false
+      || !['official-publication', 'maintained-open-source', 'open-source-composite'].includes(candidate.sourceOrigin)
+    ) {
+      continue;
+    }
+    evidenceBySourceId.set(sourceId, evidenceBySourceId.has(sourceId)
+      ? null
+      : {
+          approvedAdministrativeKeyCount: count,
+          sourceOrigin: candidate.sourceOrigin,
+        });
+  }
+
+  const sources = [...evidenceBySourceId.entries()]
+    .filter((entry): entry is [string, NonNullable<typeof entry[1]>] => entry[1] !== null)
+    .map(([sourceId, evidence]) => ({
+      countryCode,
+      sourceId,
+      sourceOrigin: evidence.sourceOrigin,
+      approvedAdministrativeKeyCount: evidence.approvedAdministrativeKeyCount,
+      syntheticAdministrativeEvaluationEligible: true as const,
+      deliveryClaimsEnabled: false as const,
+    }))
+    .sort((left, right) => left.sourceId.localeCompare(right.sourceId));
+
+  return {
+    countryCode,
+    sources,
+    syntheticAdministrativeEvaluationEligible: sources.length > 0,
+    deliveryClaimsEnabled: false,
+    nonClaims: [
+      'Synthetic administrative metadata does not establish postal lookup, address validity, coordinates, delivery, or delivery-point reachability.',
+      'Duplicate, malformed, foreign-country, or delivery-enabled metadata evidence is excluded.',
+    ],
+  };
+}
+
 function findMatchedPostalEvidence(
   evidence: PostalEvidenceCandidate[] | undefined,
   address: CanonicalAddressParts,
@@ -904,6 +1049,36 @@ function findMatchedPostalEvidence(
 
 function unique(values: Array<string | null | undefined>) {
   return Array.from(new Set(values.map(clean).filter(Boolean)));
+}
+
+type RegionalGeographicPlan = {
+  countryCode: string;
+  planVersion: string;
+  sourcePlans: readonly unknown[];
+};
+
+function buildGeographicRegionScope(
+  plans: Array<{ region: GeographicValidationRegion; plan: RegionalGeographicPlan | null }>,
+): AddressVerificationGeographicRegionScope {
+  const matches = plans.flatMap(({ region, plan }) => plan ? [{
+    region,
+    countryCode: plan.countryCode,
+    planVersion: plan.planVersion,
+    metadataSourcePathCount: plan.sourcePlans.length,
+  }] : []);
+  const status: GeographicRegionScopeStatus = matches.length === 0
+    ? 'not-covered'
+    : matches.length === 1
+      ? 'unambiguous'
+      : 'ambiguous';
+
+  return {
+    status,
+    matches,
+    nonClaims: status === 'ambiguous'
+      ? ['Multiple regional plan labels match this code; the engine does not select a jurisdiction, boundary, postal authority, or delivery interpretation.']
+      : [],
+  };
 }
 
 function scoreForStatus(status: AddressVerificationStatus, validationScore: number, evidenceConfidence: number) {
@@ -959,6 +1134,7 @@ function buildQualitySummary(options: {
   postalSourceTrust: PostalSourceTrustTier;
   postalSourceMatches: ReturnType<typeof classifyPostalSourceTrust>['matches'];
   postalStrength: PostalEvidenceStrength;
+  sourceValidationReadiness: PostalEvidenceSourceReadiness;
   referenceMatch: AddressReferenceMatch | null;
   formatValid: boolean | null;
   lookupRequired: boolean;
@@ -967,8 +1143,13 @@ function buildQualitySummary(options: {
   validation: AddressValidationResult;
 }): AddressVerificationQualitySummary {
   let depth: AddressVerificationDepth = options.mode === 'geo-only' ? 'geo-only' : 'format';
-  for (const match of options.postalSourceMatches) {
-    depth = strongerDepth(depth, depthFromPostalCatalogDepth(match.depth));
+  if (options.sourceValidationReadiness !== 'blocked') {
+    for (const match of options.postalSourceMatches.filter(isPostalReferenceDataSource)) {
+      depth = strongerDepth(depth, depthFromPostalCatalogDepth(match.depth));
+    }
+    if (options.postalStrength !== 'none') {
+      depth = strongerDepth(depth, 'postal-code');
+    }
   }
   if (options.referenceMatch) {
     const record = options.referenceMatch.record;
@@ -976,13 +1157,11 @@ function buildQualitySummary(options: {
     else if (record.street) depth = strongerDepth(depth, 'street');
     else if (record.city || record.postcode) depth = strongerDepth(depth, 'locality');
   }
-  if (options.postalStrength !== 'none') {
-    depth = strongerDepth(depth, 'postal-code');
-  }
-
-  const evidenceGrade = options.postalStrength === 'none' && !options.referenceMatch
+  const evidenceGrade = options.sourceValidationReadiness === 'blocked' && !options.referenceMatch
     ? options.formatValid === true ? 'format-only' : 'none'
-    : evidenceGradeFromTrust(options.postalSourceTrust, options.referenceMatch);
+    : options.postalStrength === 'none' && !options.referenceMatch
+      ? options.formatValid === true ? 'format-only' : 'none'
+      : evidenceGradeFromTrust(options.postalSourceTrust, options.referenceMatch);
   const paidApiParityClaimed = (
     options.status === 'verified' &&
     evidenceGrade === 'authoritative' &&
@@ -994,7 +1173,9 @@ function buildQualitySummary(options: {
       : options.status === 'verified'
         ? 'strong-open-verification'
         : options.status === 'partial'
-          ? options.formatValid === true && options.postalStrength === 'none' && !options.referenceMatch
+          ? options.formatValid === true
+            && (options.postalStrength === 'none' || options.sourceValidationReadiness === 'blocked')
+            && !options.referenceMatch
             ? 'format-only'
             : 'partial-open-verification'
           : 'manual-review-required';
@@ -1006,7 +1187,9 @@ function buildQualitySummary(options: {
     options.lookupRequired && !options.lookupSatisfied
       ? 'Postal-code lookup or address-reference evidence is still required for strong verification.'
       : null,
-    options.postalStrength === 'weak'
+    options.sourceValidationReadiness === 'blocked'
+      ? 'Postal source readiness metadata blocks this evidence from official-reference validation until rights, version, coverage, correction, quality, and review gates pass.'
+      : options.postalStrength === 'weak'
       ? 'Community postal evidence is useful for candidate generation but not enough for paid-grade deliverability.'
       : null,
     options.validation.missingRequiredFields.length
@@ -1021,7 +1204,9 @@ function buildQualitySummary(options: {
     options.policy?.countryCode ? null : 'load-country-address-format-or-policy',
     options.lookupRequired && !options.lookupSatisfied ? 'add-credential-free-official-postal-source-or-open-address-reference' : null,
     DEPTH_ORDER[depth] < DEPTH_ORDER.house ? 'add-street-house-building-reference-data' : null,
-    options.postalStrength === 'weak' ? 'cross-check-community-postal-data-against-official-or-open-address-reference' : null,
+    options.sourceValidationReadiness === 'blocked'
+      ? 'resolve-postal-source-readiness-gates'
+      : options.postalStrength === 'weak' ? 'cross-check-community-postal-data-against-official-or-open-address-reference' : null,
     options.validation.missingRequiredFields.length ? 'collect-required-address-fields' : null,
   ]);
 
@@ -1136,12 +1321,18 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
     countryCode: matchedEvidence?.countryCode || resolvedCountry,
     source: matchedEvidence?.source,
     url: matchedEvidence?.url,
-    sourceIds: unique([
-      matchedEvidence?.sourceId,
-      ...(matchedEvidence?.source ? matchedEvidence.source.split(/[,\s/]+/g) : []),
-    ]),
+    sourceIds: unique([matchedEvidence?.sourceId]),
   });
-  const postalStrength = postalEvidenceStrength(matchedEvidence, format, policy);
+  const sourceValidationReadiness = sourceValidationReadinessFor(
+    matchedEvidence,
+    input.postalSourceReadiness,
+  );
+  const postalStrength = postalEvidenceStrength(
+    matchedEvidence,
+    format,
+    policy,
+    sourceValidationReadiness,
+  );
   const strongPostalEvidenceMatched = postalStrength === 'strong';
   const weakPostalEvidenceMatched = postalStrength === 'weak';
   const lookupRequired = mode === 'format-and-lookup' && required;
@@ -1155,6 +1346,32 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
     lookupRequired,
     hasPostalCode: Boolean(postcode),
   });
+  const geographicMetadataReadiness = geographicMetadataReadinessFor(
+    resolvedCountry,
+    input.geographicMetadataReadiness,
+  );
+  const africaGeography = buildAfricaGeographicValidationPlan(resolvedCountry, {
+    countrySourceReadiness: geographicMetadataReadiness.sources,
+  });
+  const asiaGeography = buildAsiaGeographicValidationPlan(resolvedCountry, {
+    countrySourceReadiness: geographicMetadataReadiness.sources,
+  });
+  const oceaniaGeography = buildOceaniaGeographicValidationPlan(resolvedCountry, {
+    countrySourceReadiness: geographicMetadataReadiness.sources,
+  });
+  const europeGeography = buildEuropeGeographicValidationPlan(resolvedCountry, {
+    countrySourceReadiness: geographicMetadataReadiness.sources,
+  });
+  const americasGeography = buildAmericasGeographicValidationPlan(resolvedCountry, {
+    countrySourceReadiness: geographicMetadataReadiness.sources,
+  });
+  const geographicRegionScope = buildGeographicRegionScope([
+    { region: 'africa', plan: africaGeography },
+    { region: 'asia', plan: asiaGeography },
+    { region: 'oceania', plan: oceaniaGeography },
+    { region: 'europe', plan: europeGeography },
+    { region: 'americas', plan: americasGeography },
+  ]);
   const standardLibrary = buildAddressStandardLibraryResolution({
     ...input.dataLoad,
     ...input.standardLibrary,
@@ -1238,6 +1455,7 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
     postalSourceTrust: postalSourceClassification.tier,
     postalSourceMatches: postalSourceClassification.matches,
     postalStrength,
+    sourceValidationReadiness,
     referenceMatch,
     formatValid,
     lookupRequired,
@@ -1253,7 +1471,29 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
     supported ? null : `No address verification policy or format is available for ${resolvedCountry || '(unknown country)'}.`,
     required && !postcode ? 'Postal code is required for this target country.' : null,
     formatValid === false ? 'Postal code does not match the selected target country pattern.' : null,
-    lookupRequired && weakPostalEvidenceMatched ? 'Postal-code candidate came from a weak source; strong postal or address-reference evidence is required for verified status.' : null,
+    africaGeography && lookupRequired && !lookupSatisfied
+      ? 'African administrative and locality metadata is source-gated and does not replace strong postal lookup evidence.'
+      : null,
+    asiaGeography && lookupRequired && !lookupSatisfied
+      ? 'Asian administrative, locality, and script-aware metadata is source-gated and does not replace strong postal lookup evidence.'
+      : null,
+    oceaniaGeography && lookupRequired && !lookupSatisfied
+      ? 'Oceania administrative, locality, and island metadata is source-gated and does not replace strong postal lookup evidence.'
+      : null,
+    europeGeography && lookupRequired && !lookupSatisfied
+      ? 'European administrative, locality, multilingual, and territory-scope metadata is source-gated and does not replace strong postal lookup evidence.'
+      : null,
+    americasGeography && lookupRequired && !lookupSatisfied
+      ? 'Americas administrative, locality, multilingual, and island-scope metadata is source-gated and does not replace strong postal lookup evidence.'
+      : null,
+    geographicRegionScope.status === 'ambiguous'
+      ? `Country or territory code ${resolvedCountry} matches multiple regional geographic plans (${geographicRegionScope.matches.map(match => match.region).join(', ')}); this does not select a postal authority or delivery interpretation.`
+      : null,
+    sourceValidationReadiness === 'blocked'
+      ? 'Postal source readiness blocks this evidence from official-reference validation; it remains candidate-only.'
+      : lookupRequired && weakPostalEvidenceMatched
+        ? 'Postal-code candidate came from a weak source; strong postal or address-reference evidence is required for verified status.'
+        : null,
     lookupRequired && !lookupSatisfied && !weakPostalEvidenceMatched ? 'Postal-code format is valid, but source lookup evidence is still required for strong verification.' : null,
     referenceRecordsProvided && !referenceMatch ? 'Address reference records were supplied, but none matched strongly enough.' : null,
   ]);
@@ -1271,6 +1511,15 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
   });
   const mergedNextActions = unique([
     ...nextActions,
+    ...(sourceValidationReadiness === 'blocked' ? ['resolve-postal-source-readiness-gates'] : []),
+    ...(africaGeography && status !== 'verified' ? africaGeography.nextActions : []),
+    ...(asiaGeography && status !== 'verified' ? asiaGeography.nextActions : []),
+    ...(oceaniaGeography && status !== 'verified' ? oceaniaGeography.nextActions : []),
+    ...(europeGeography && status !== 'verified' ? europeGeography.nextActions : []),
+    ...(americasGeography && status !== 'verified' ? americasGeography.nextActions : []),
+    ...(geographicRegionScope.status === 'ambiguous'
+      ? ['select-geographic-region-scope-for-ambiguous-country-code']
+      : []),
     ...standardLibrary.nextActions,
   ]);
   const sources = unique([
@@ -1298,6 +1547,48 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
       message: `Planned ${dataLoading.blocking.length} blocking, ${dataLoading.onDemand.length} on-demand, ${dataLoading.background.length} background, and ${dataLoading.disabled.length} disabled address-data source(s).`,
       source: dataLoading.planVersion,
     },
+    ...(africaGeography ? [{
+      step: 'africa-geography' as const,
+      status: 'warning' as const,
+      message: `Africa geographic plan exposes ${africaGeography.sourcePlans.length} metadata-only source path(s) and ${africaGeography.sourceComposition.components.length} composition component(s); administrative and locality checks remain source-gated.`,
+      source: africaGeography.planVersion,
+    }] : []),
+    ...(asiaGeography ? [{
+      step: 'asia-geography' as const,
+      status: 'warning' as const,
+      message: `Asia geographic plan exposes ${asiaGeography.sourcePlans.length} metadata-only source path(s) and ${asiaGeography.sourceComposition.components.length} composition component(s); administrative, locality, and script-aware checks remain source-gated.`,
+      source: asiaGeography.planVersion,
+    }] : []),
+    ...(oceaniaGeography ? [{
+      step: 'oceania-geography' as const,
+      status: 'warning' as const,
+      message: `Oceania geographic plan exposes ${oceaniaGeography.sourcePlans.length} metadata-only source path(s) and ${oceaniaGeography.sourceComposition.components.length} composition component(s); administrative, locality, and island checks remain source-gated.`,
+      source: oceaniaGeography.planVersion,
+    }] : []),
+    ...(europeGeography ? [{
+      step: 'europe-geography' as const,
+      status: 'warning' as const,
+      message: `Europe geographic plan exposes ${europeGeography.sourcePlans.length} metadata-only source path(s) and ${europeGeography.sourceComposition.components.length} composition component(s); administrative, locality, multilingual, and territory-scope checks remain source-gated.`,
+      source: europeGeography.planVersion,
+    }] : []),
+    ...(americasGeography ? [{
+      step: 'americas-geography' as const,
+      status: 'warning' as const,
+      message: `Americas geographic plan exposes ${americasGeography.sourcePlans.length} metadata-only source path(s) and ${americasGeography.sourceComposition.components.length} composition component(s); administrative, locality, multilingual, and island-scope checks remain source-gated.`,
+      source: americasGeography.planVersion,
+    }] : []),
+    ...(geographicRegionScope.status === 'ambiguous' ? [{
+      step: 'regional-geography' as const,
+      status: 'warning' as const,
+      message: `Country or territory code ${resolvedCountry} has ${geographicRegionScope.matches.length} regional geographic plan matches; no regional label selects postal authority or delivery interpretation.`,
+      source: geographicRegionScope.matches.map(match => match.planVersion).join(', '),
+    }] : []),
+    ...(geographicMetadataReadiness.sources.length ? [{
+      step: 'synthetic-geographic-metadata' as const,
+      status: 'warning' as const,
+      message: `Approved synthetic administrative metadata is available from ${geographicMetadataReadiness.sources.length} country-scoped source(s); it does not satisfy postal lookup or delivery evidence.`,
+      source: geographicMetadataReadiness.sources.map(source => source.sourceId).join(', '),
+    }] : []),
     {
       step: 'standard-library-resolution',
       status: standardLibrary.requiresNetworkForStrongVerification ? 'warning' : 'ok',
@@ -1321,7 +1612,9 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
         ? 'Postal lookup evidence is not required by this policy.'
         : strongPostalEvidenceMatched
           ? `Strong postal evidence matched from ${matchedEvidence?.source}.`
-          : weakPostalEvidenceMatched
+          : sourceValidationReadiness === 'blocked'
+            ? `Postal evidence from ${matchedEvidence?.source} is blocked by source-readiness gates; candidate use only.`
+            : weakPostalEvidenceMatched
             ? `Weak postal evidence matched from ${matchedEvidence?.source}; strong evidence or address reference is still required.`
             : 'Strong postal lookup evidence is needed for postal-level verification.',
       source: matchedEvidence?.source,
@@ -1386,18 +1679,26 @@ export function verifyAddressCandidate(input: AddressVerificationEngineInput): A
     },
     evidence: {
       postalStrength,
-    lookupSatisfied,
-    addressReference,
-    postalSourceTrust: postalSourceClassification.tier,
-    postalSourceCatalogMatches: postalSourceClassification.matches.map(match => match.id),
-    strongPostalEvidence: strongPostalEvidenceMatched ? matchedEvidence || undefined : undefined,
-    weakPostalEvidence: weakPostalEvidenceMatched ? matchedEvidence || undefined : undefined,
+      postalSourceTrust: postalSourceClassification.tier,
+      postalSourceCatalogMatches: postalSourceClassification.matches.map(match => match.id),
+      sourceValidationReadiness,
+      lookupSatisfied,
+      addressReference,
+      strongPostalEvidence: strongPostalEvidenceMatched ? matchedEvidence || undefined : undefined,
+      weakPostalEvidence: weakPostalEvidenceMatched ? matchedEvidence || undefined : undefined,
       referenceMatch: referenceMatch || undefined,
     },
     quality,
     canonicalAddress,
     dataLoading,
     standardLibrary,
+    geographicRegionScope,
+    geographicMetadataReadiness,
+    africaGeography: africaGeography || undefined,
+    asiaGeography: asiaGeography || undefined,
+    oceaniaGeography: oceaniaGeography || undefined,
+    europeGeography: europeGeography || undefined,
+    americasGeography: americasGeography || undefined,
     systemConnection,
     validation,
     warnings,

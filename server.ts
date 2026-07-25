@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { GoogleGenAI } from "@google/genai";
 import { execFile as execFileCallback } from 'child_process';
 import express from 'express';
@@ -21,10 +22,27 @@ buildOvertureBuildingNameDuckDbSql,
 buildingNameCandidateFromOvertureFeature,
 } from './src/lib/overtureMaps';
 import { registerCoreApiRoutes } from './src/server/routes/coreRoutes';
+import { registerCarrierWaybillAddressRoutes } from './src/server/routes/carrierWaybillAddressRoutes';
+import { registerDhlCarrierRoutes } from './src/server/routes/dhlCarrierRoutes';
 import { registerExternalProxyRoutes } from './src/server/routes/externalProxyRoutes';
+import { registerSkipshipSandboxRoutes } from './src/server/routes/skipshipSandboxRoutes';
+import { registerTradeGatewayRoutes } from './src/server/routes/tradeGatewayRoutes';
+import { registerUpsCarrierRoutes } from './src/server/routes/upsCarrierRoutes';
+import { registerVeygritShipGuestRoutes } from './src/server/routes/veygritShipGuestRoutes';
+import { registerVeygritIdRoutes } from './src/server/routes/veygritIdRoutes';
+import { createGuestAccessServiceFromEnv } from './src/server/auth/veygritShipGuestAccess';
+import { createVeygritIdRuntimeFromEnv } from './src/server/auth/veygritIdRuntime';
+import { createMultiCloudVeygritIdSecretResolverFromEnv } from './src/server/auth/multiCloudVeygritIdSecretResolver';
+import { createVeygritSocialCallbackVerifierFromEnv } from './src/server/auth/veygritSocialProviderBroker';
 import { validateOverpassProxyQuery } from './src/server/proxySecurity';
 import { parseDevServerPort, resolveViteHmrConfig } from './src/server/devServerConfig';
 import { initPostalCodeDB } from './src/services/PostalCodeDB';
+import {
+  createVeygritShipRequestMiddleware,
+  registerVeygritShipMetricsRoute,
+  VeygritShipMetrics,
+  VeygritShipStructuredLogger,
+} from './src/server/observability/veygritShipObservability';
 const execFile = promisify(execFileCallback);
 
 function installPrivacySafeConsole() {
@@ -80,6 +98,10 @@ async function startServer() {
 
   // Trust proxy for rate limiting in Cloud Run environment (Setting to 1 for security)
   app.set('trust proxy', 1);
+
+  const veygritShipMetrics = new VeygritShipMetrics();
+  const veygritShipLogger = new VeygritShipStructuredLogger();
+  app.use(createVeygritShipRequestMiddleware(veygritShipLogger, veygritShipMetrics));
 
   // Extra Security Headers / Compatibility Headers
   app.use((req, res, next) => {
@@ -397,7 +419,27 @@ async function startServer() {
     qualityStats,
     continentQuality,
   });
+  registerCarrierWaybillAddressRoutes(app);
+  registerDhlCarrierRoutes(app, { metrics: veygritShipMetrics });
+  registerUpsCarrierRoutes(app, { metrics: veygritShipMetrics });
+  registerVeygritShipMetricsRoute(app, veygritShipMetrics);
   registerExternalProxyRoutes(app, { publicCachedGetFetch });
+  let guestAccessPromise: ReturnType<typeof createGuestAccessServiceFromEnv> | undefined;
+  const guestAccess = () => {
+    guestAccessPromise ??= createGuestAccessServiceFromEnv();
+    return guestAccessPromise;
+  };
+  registerVeygritShipGuestRoutes(app, guestAccess);
+  registerSkipshipSandboxRoutes(app, { guestAccess, metrics: veygritShipMetrics });
+  registerTradeGatewayRoutes(app);
+  let veygritIdRuntime: Awaited<ReturnType<typeof createVeygritIdRuntimeFromEnv>>;
+  const veygritIdSecrets = createMultiCloudVeygritIdSecretResolverFromEnv();
+  try {
+    veygritIdRuntime = await createVeygritIdRuntimeFromEnv(veygritIdSecrets);
+  } catch (error) {
+    console.error('[Veygrit ID] Runtime initialization failed; identity endpoints remain unavailable.', error);
+  }
+  registerVeygritIdRoutes(app, { service: veygritIdRuntime?.service, verifySocialCallback: createVeygritSocialCallbackVerifierFromEnv(veygritIdSecrets), secureCookies: process.env.NODE_ENV === 'production' });
 
   // --- Nominatim Geocoding Mirrors ---
   const NOMINATIM_MIRRORS = [

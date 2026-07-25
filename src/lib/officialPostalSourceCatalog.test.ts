@@ -9,7 +9,7 @@ import {
 } from './officialPostalSourceCatalog';
 
 test('registers official and open postal sources for the priority rollout countries', () => {
-  for (const countryCode of ['JP', 'US', 'GB', 'BR', 'SG', 'FR', 'NL', 'AU', 'HK', 'AQ']) {
+  for (const countryCode of ['JP', 'US', 'GB', 'BR', 'SG', 'FR', 'NL', 'AU', 'HK', 'AQ', 'DE', 'FI', 'PT', 'JE', 'IM', 'GI']) {
     const sources = getOfficialPostalSourcesForCountry(countryCode);
     assert.ok(sources.length > 0, `${countryCode} should have at least one registered source`);
     assert.ok(getPreferredPostalSourceIdsForCountry(countryCode).length > 0, `${countryCode} should expose preferred source ids`);
@@ -17,7 +17,7 @@ test('registers official and open postal sources for the priority rollout countr
 });
 
 test('prefers country-specific official sources before the UPU global fallback', () => {
-  const countrySpecificCountries = ['AO', 'DZ', 'EG', 'GH', 'KE', 'MA', 'TN', 'TZ', 'RW', 'ZM', 'MG', 'MU', 'BW', 'AT', 'CH', 'LI', 'NL'];
+  const countrySpecificCountries = ['AO', 'DJ', 'DZ', 'EG', 'ET', 'GH', 'KE', 'LR', 'MA', 'MW', 'MZ', 'NA', 'NG', 'SC', 'SO', 'SS', 'TN', 'TZ', 'UG', 'RW', 'ZM', 'ZW', 'MG', 'MU', 'BW', 'AT', 'CH', 'DE', 'FI', 'LI', 'NL', 'PT', 'JE', 'IM', 'GI'];
 
   for (const countryCode of countrySpecificCountries) {
     const sources = getOfficialPostalSourcesForCountry(countryCode);
@@ -31,7 +31,39 @@ test('prefers country-specific official sources before the UPU global fallback',
     );
   }
 
-  assert.equal(getOfficialPostalSourcesForCountry('DE')[0]?.id, 'upu-universal-postcode-database');
+  assert.equal(getOfficialPostalSourcesForCountry('DE')[0]?.id, 'deutsche-post-plz-server');
+  assert.equal(getOfficialPostalSourcesForCountry('FI')[0]?.id, 'posti-finland-postal-code-services');
+  assert.equal(getOfficialPostalSourcesForCountry('JE')[0]?.id, 'jersey-post-address-finder');
+  assert.equal(getOfficialPostalSourcesForCountry('IM')[0]?.id, 'isle-of-man-post-office-postcode-finder');
+});
+
+test('keeps Guatemala legal framework evidence separate from postal-reference data', () => {
+  const source = getOfficialPostalSourcesForCountry('GT')
+    .find(candidate => candidate.id === 'correos-guatemala-postal-legal-framework');
+
+  assert.equal(source?.authority, 'postal-operator');
+  assert.equal(source?.trustTier, 'official');
+  assert.equal(source?.availability, 'web-search');
+  assert.equal(source?.depth, 'legal-framework');
+  assert.equal(source?.sourceRole, 'legal-framework-only');
+  assert.equal(source?.validationReadiness, 'metadata-only');
+  assert.equal(source?.requiresCredential, false);
+  assert.ok(source?.notes.some(note => /not a current postcode-to-locality dataset/i.test(note)));
+  assert.ok(source?.notes.some(note => /delivery-point validity/i.test(note)));
+});
+
+test('does not promote legal framework metadata into postal validation evidence', () => {
+  const classification = classifyPostalSourceTrust({
+    countryCode: 'GT',
+    source: 'Correos de Guatemala postal legal framework',
+  });
+  const preferredSourceIds = getPreferredPostalSourceIdsForCountry('GT');
+
+  assert.equal(classification.tier, 'weak');
+  assert.equal(classification.strength, 'weak');
+  assert.match(classification.reason, /legal framework/i);
+  assert.ok(classification.matches.some(source => source.id === 'correos-guatemala-postal-legal-framework'));
+  assert.ok(!preferredSourceIds.includes('correos-guatemala-postal-legal-framework'));
 });
 
 test('keeps the UPU source as an explicit official global fallback', () => {

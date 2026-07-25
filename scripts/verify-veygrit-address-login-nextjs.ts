@@ -6,12 +6,20 @@ const node = process.execPath;
 
 const commands: Array<{ label: string; args: string[] }> = [
   {
+    label: 'address-login-test-helper-boundary',
+    args: [join(root, 'node_modules/tsx/dist/cli.mjs'), 'scripts/verify-veygrit-address-login-test-helpers.ts'],
+  },
+  {
     label: 'nextjs-sdk-tests',
     args: [join(root, 'node_modules/tsx/dist/cli.mjs'), '--test', 'sdk/veygrit-address-login-nextjs/test/sdk.test.ts'],
   },
   {
     label: 'nextjs-sdk-typecheck',
     args: [join(root, 'node_modules/typescript/bin/tsc'), '--noEmit', '-p', 'sdk/veygrit-address-login-nextjs/tsconfig.json'],
+  },
+  {
+    label: 'nextjs-sdk-package-safety',
+    args: [join(root, 'node_modules/tsx/dist/cli.mjs'), 'scripts/verify-veygrit-address-login-nextjs-package.ts'],
   },
 ];
 

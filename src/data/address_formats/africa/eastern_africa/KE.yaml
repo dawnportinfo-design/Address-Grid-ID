@@ -78,7 +78,7 @@ postalCode:
   format: NNNNN
   regex: ^\d{5}$
   api: null
-  source: Postal metadata from AGID East Africa regional table; open OSS source not configured
+  source: Postal Corporation of Kenya post offices / Posta Kenya
 addressRules:
   languages:
     - code: en
@@ -109,6 +109,7 @@ addressRules:
     required: true
     usage: required
   openSourceIds:
+    - posta-kenya
     - rcmrd-geoportal
     - kenya-open-data
     - hot-osm-east-southern-africa
@@ -139,6 +140,7 @@ addressRules:
     - gbif-occurrence
     - rcmrd-gmes-africa-geoportal
 openSourceIds:
+  - posta-kenya
   - rcmrd-geoportal
   - kenya-open-data
   - hot-osm-east-southern-africa

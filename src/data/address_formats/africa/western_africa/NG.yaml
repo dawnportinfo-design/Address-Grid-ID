@@ -68,8 +68,8 @@ english:
 postalCode:
   format: NNNNNN
   regex: ^\d{6}$
-  api: null
-  source: Postal metadata from AGID regional table; no free OSS source configured
+  api: https://nipost.gov.ng/postcode-finder/
+  source: Nigerian Postal Service Postcode Finder
 addressRules:
   languages:
     - code: en

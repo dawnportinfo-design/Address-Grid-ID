@@ -39,6 +39,16 @@ const requiredFiles: RequiredFile[] = [
     mustContain: [/Project Roles/i, /Security And Privacy Veto/i, /Repository Split Policy/i],
   },
   {
+    path: 'docs/repository-owner-routing.md',
+    mustContain: [
+      /dawnportinfo-design/,
+      /veygrit-sys/,
+      /veygrit-commercial-products/,
+      /does not claim production readiness/i,
+      /raw address/i,
+    ],
+  },
+  {
     path: 'ROADMAP.md',
     mustContain: [/Phase 0/i, /Specification And SDK/i, /Country Packs/i],
   },

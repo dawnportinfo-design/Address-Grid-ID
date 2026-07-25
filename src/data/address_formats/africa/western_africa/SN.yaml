@@ -74,8 +74,8 @@ international:
 postalCode:
   format: NNNNN
   regex: ^\d{5}$
-  api: null
-  source: Postal metadata from AGID regional table; no free OSS source configured
+  api: https://www.laposte.sn/code-postal-senegal/
+  source: La Poste Senegal code postal
 addressRules:
   languages:
     - code: fr
@@ -107,6 +107,7 @@ addressRules:
     - code: fr
       name: French
   openSourceIds:
+    - la-poste-senegal-codes
     - hot-osm-west-africa
     - osm-nominatim
     - osm-overpass
@@ -135,6 +136,7 @@ addressRules:
     - gbif-occurrence
     - rcmrd-gmes-africa-geoportal
 openSourceIds:
+  - la-poste-senegal-codes
   - hot-osm-west-africa
   - osm-nominatim
   - osm-overpass

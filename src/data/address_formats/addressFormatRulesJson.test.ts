@@ -585,7 +585,7 @@ test('Western Europe address JSON files expose addressRules metadata and open po
   assert.equal(loadRules('NL').postalCode?.label, '4 digits plus 2 letters required');
   assert.equal(loadRules('GB').postalCode?.label, 'UK outward/inward postcode required');
   assert.equal(loadFormat('FR').postalCode?.api, 'https://www.data.gouv.fr/datasets/api-codes-postaux');
-  assert.equal(loadFormat('DE').postalCode?.api, 'https://www.openplzapi.org/en/');
+  assert.equal(loadFormat('DE').postalCode?.api, 'https://www.postdirekt.de/plzserver/');
   assert.equal(loadFormat('GB').postalCode?.api, 'https://postcodes.io/');
 });
 
@@ -620,7 +620,7 @@ test('Nordic and Baltic address JSON files expose addressRules metadata and post
   assert.equal(loadFormat('NO').postalCode?.api, 'https://data.norge.no/nb');
   assert.equal(loadFormat('DK').postalCode?.api, 'https://api.dataforsyningen.dk/postnumre');
   assert.equal(loadFormat('DK').postalCode?.source, 'Dataforsyningen DAWA postnumre API / Danish Address Register');
-  assert.equal(loadFormat('FI').postalCode?.api, 'https://avoindata.suomi.fi/data/fi/dataset/?collection_type=Open+Data&vocab_keywords_fi=postinumerot');
+  assert.equal(loadFormat('FI').postalCode?.api, 'https://www.posti.fi/en/for-businesses/customer-support/postal-code-services');
 });
 
 test('Nordic and Baltic metadata exposes national geospatial and open-data sources', () => {
@@ -628,7 +628,7 @@ test('Nordic and Baltic metadata exposes national geospatial and open-data sourc
     SE: ['lantmateriet-sweden', 'trafikverket-sweden', 'scb-sweden-geodata'],
     NO: ['kartverket-norway', 'geonorge-norway', 'brreg-address-register'],
     DK: ['dataforsyningen-denmark', 'danish-address-register-dar', 'geodanmark'],
-    FI: ['nls-finland', 'maanmittauslaitos-open-data', 'dvv-finland-address-data'],
+    FI: ['posti-finland-postal-code-services', 'nls-finland', 'maanmittauslaitos-open-data', 'dvv-finland-address-data'],
     LV: ['lgia-latvia', 'vzd-latvia-address-register', 'data-gov-lv-geodata'],
     EE: ['maaamet-estonia', 'estonia-address-data-system', 'xgis-estonia'],
     LT: ['geoportal-lt', 'registru-centras-address-register', 'open-data-lithuania'],
@@ -804,6 +804,7 @@ test('All European country, overseas territory, and autonomous-region JSON files
   }
 
   assert.ok(loadFormat('FR').openSourceIds?.includes('data-gouv-fr-postcodes'));
+  assert.ok(loadFormat('DE').openSourceIds?.includes('deutsche-post-plz-server'));
   assert.ok(loadFormat('DE').openSourceIds?.includes('openplzapi'));
   assert.ok(loadFormat('GB').openSourceIds?.includes('postcodes-io'));
   assert.ok(loadFormat('CZ').openSourceIds?.includes('ceska-posta-psc'));
@@ -998,6 +999,30 @@ test('West Africa address JSON files expose addressRules metadata', () => {
   assert.equal(loadRules('NG').postalCode?.label, '6 digits required');
   assert.equal(loadRules('GM').postalCode?.label, '3 digits used');
   assert.equal(loadRules('CI').postalCode?.label, '5 digits used');
+  assert.equal(loadFormat('GH').postalCode?.api, 'https://www.ghanapostgps.com/');
+  assert.equal(loadFormat('BJ').postalCode?.api, 'https://laposte.bj/nos-agences/');
+  assert.equal(loadFormat('BF').postalCode?.api, 'https://codespostaux.laposte.bf/');
+  assert.equal(loadFormat('GM').postalCode?.api, 'https://gambiapost.gm/');
+  assert.equal(loadFormat('CI').postalCode?.api, 'https://www.laposte.ci/');
+  assert.equal(loadFormat('CV').postalCode?.api, 'https://correios.cv/faq');
+  assert.equal(loadFormat('GN').postalCode?.api, 'https://www.laposte.gn/');
+  assert.equal(loadFormat('LR').postalCode?.source, 'Liberia Ministry of Posts and Telecommunications official postal service information');
+  assert.equal(loadFormat('ML').postalCode?.api, 'https://laposte.ml/');
+  assert.equal(loadFormat('NE').postalCode?.api, 'https://nigerposte.ne/');
+  assert.equal(loadFormat('NG').postalCode?.api, 'https://nipost.gov.ng/postcode-finder/');
+  assert.ok(loadFormat('LR').openSourceIds?.includes('mopt-liberia-postal-services'));
+  assert.ok(loadRules('LR').openSourceIds?.includes('mopt-liberia-postal-services'));
+  assert.equal(loadFormat('SL').postalCode?.api, 'https://salpost.gov.sl/');
+  assert.equal(loadFormat('SN').postalCode?.api, 'https://www.laposte.sn/code-postal-senegal/');
+  assert.equal(loadFormat('TG').postalCode?.api, 'https://www.laposte.tg/bureaux-poste');
+  assert.equal(loadFormat('KM').postalCode?.api, 'https://www.snpsf.com/poste');
+  assert.equal(loadFormat('ET').postalCode?.api, 'https://ethio.post/branches/');
+  assert.equal(loadFormat('MW').postalCode?.api, 'https://macra.mw/post-codes/');
+  assert.equal(loadFormat('MZ').postalCode?.api, 'https://www.correios.co.mz/?cod=11&pagina=codigo');
+  assert.equal(loadFormat('NA').postalCode?.api, 'https://www.nampost.com.na/postal/postal-codes');
+  assert.equal(loadFormat('SC').postalCode?.api, 'https://www.seychelles-post.com/poboxdirectory.php');
+  assert.equal(loadFormat('UG').postalCode?.api, 'https://ugapost.co.ug/our-services/physical-address/');
+  assert.equal(loadFormat('ZW').postalCode?.api, 'https://www.zimpost.co.zw/');
   assert.deepEqual(loadRules('ML').regionalHierarchy, ['region', 'circle']);
   assert.deepEqual(loadRules('CV').regionalHierarchy, ['island', 'municipality', 'parish']);
 });
@@ -1141,9 +1166,23 @@ test('All African country JSON files expose registered postal API or open-source
   assert.ok(loadFormat('ZA').openSourceIds?.includes('sapo-postcodes'));
   assert.ok(loadFormat('ZA').openSourceIds?.includes('postafind-za'));
   assert.ok(loadFormat('ZA').openSourceIds?.includes('ngi-south-africa'));
+  assert.ok(loadFormat('GH').openSourceIds?.includes('ghanapostgps'));
+  assert.ok(loadFormat('DJ').openSourceIds?.includes('mcpt-djibouti-poste'));
+  assert.ok(loadFormat('KE').openSourceIds?.includes('posta-kenya'));
+  assert.ok(loadFormat('KM').openSourceIds?.includes('snpsf-comores-poste'));
   assert.ok(loadFormat('KE').openSourceIds?.includes('geonames-postal'));
   assert.ok(loadFormat('KE').openSourceIds?.includes('rcmrd-geoportal'));
   assert.ok(loadFormat('NG').openSourceIds?.includes('nipost-postcode'));
+  assert.ok(loadFormat('ET').openSourceIds?.includes('ethiopost-branches'));
+  assert.ok(loadFormat('MW').openSourceIds?.includes('malawi-postcodes-macra'));
+  assert.ok(loadFormat('MZ').openSourceIds?.includes('correios-mocambique-codigos-postais'));
+  assert.ok(loadFormat('NA').openSourceIds?.includes('nampost-postal-codes'));
+  assert.ok(loadFormat('SC').openSourceIds?.includes('seychelles-post-po-box-directory'));
+  assert.ok(loadFormat('SO').openSourceIds?.includes('somalia-moct-posta'));
+  assert.ok(loadFormat('SS').openSourceIds?.includes('south-sudan-nca-postal-sector'));
+  assert.ok(loadFormat('UG').openSourceIds?.includes('posta-uganda-physical-address'));
+  assert.ok(loadFormat('ZM').openSourceIds?.includes('zampost'));
+  assert.ok(loadFormat('ZW').openSourceIds?.includes('zimpost'));
 });
 
 test('Americas country JSON files expose addressRules, Spanish delivery metadata, and open sources', () => {

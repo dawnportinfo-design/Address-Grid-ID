@@ -50,8 +50,8 @@ english:
 postalCode:
   format: NNNN
   regex: ^\d{4}$
-  api: null
-  source: Postal metadata from AGID East Africa regional table; open OSS source not configured
+  api: https://www.seychelles-post.com/poboxdirectory.php
+  source: Seychelles Post P.O. Box directory
 addressRules:
   languages:
     - code: en
@@ -91,6 +91,7 @@ addressRules:
     - code: crs
       name: Seychellois Creole
   openSourceIds:
+    - seychelles-post-po-box-directory
     - osm-nominatim
     - osm-overpass
     - openaddresses
@@ -118,6 +119,7 @@ addressRules:
     - gbif-occurrence
     - rcmrd-gmes-africa-geoportal
 openSourceIds:
+  - seychelles-post-po-box-directory
   - osm-nominatim
   - osm-overpass
   - openaddresses

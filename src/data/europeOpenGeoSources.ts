@@ -55,6 +55,7 @@ export type EuropeOpenGeoSourceId =
   | 'jrc-esdac-soils'
   | 'zippopotam'
   | 'data-gouv-fr-postcodes'
+  | 'deutsche-post-plz-server'
   | 'openplzapi'
   | 'opendatasoft-nl-postcodes'
   | 'odwb-be-postcodes'
@@ -75,6 +76,7 @@ export type EuropeOpenGeoSourceId =
   | 'dataforsyningen-denmark'
   | 'danish-address-register-dar'
   | 'geodanmark'
+  | 'posti-finland-postal-code-services'
   | 'avoindata-fi-postcodes'
   | 'nls-finland'
   | 'maanmittauslaitos-open-data'
@@ -693,6 +695,15 @@ export const EUROPE_OPEN_GEO_SOURCES: Record<EuropeOpenGeoSourceId, EuropeOpenGe
     usage: 'primary',
     notes: 'French official open-data postal-code API and dataset.',
   },
+  'deutsche-post-plz-server': {
+    id: 'deutsche-post-plz-server',
+    name: 'Deutsche Post / Postdirekt Postcode Search',
+    url: 'https://www.postdirekt.de/plzserver/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'primary',
+    notes: 'Official Deutsche Post interactive postcode and locality search via Postdirekt.',
+  },
   openplzapi: {
     id: 'openplzapi',
     name: 'OpenPLZ API',
@@ -874,6 +885,15 @@ export const EUROPE_OPEN_GEO_SOURCES: Record<EuropeOpenGeoSourceId, EuropeOpenGe
     coverage: 'country',
     usage: 'reference',
     notes: 'Danish topographic and geospatial reference data for map and administrative validation.',
+  },
+  'posti-finland-postal-code-services': {
+    id: 'posti-finland-postal-code-services',
+    name: 'Posti Finland Postal Code Services',
+    url: 'https://www.posti.fi/en/for-businesses/customer-support/postal-code-services',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'primary',
+    notes: 'Official Posti postal-code and basic-address files, updated daily or weekly for current Finnish address data.',
   },
   'avoindata-fi-postcodes': {
     id: 'avoindata-fi-postcodes',
@@ -1873,11 +1893,11 @@ export const EUROPE_OPEN_GEO_SOURCES: Record<EuropeOpenGeoSourceId, EuropeOpenGe
   'ctt-portugal': {
     id: 'ctt-portugal',
     name: 'CTT Portugal Postal Code Search',
-    url: 'https://www.ctt.pt/feapl_2/app/open/tools.jspx?tool=1',
+    url: 'https://www.ctt.pt/feapl_2/app/open/postalCodeSearch/postalCodeSearch.jspx?lang=def',
     kind: 'postal-code',
     coverage: 'country',
     usage: 'primary',
-    notes: 'Portugal postal-code finder covering mainland, Azores, and Madeira.',
+    notes: 'CTT postal-code finder covering mainland Portugal, the Azores, and Madeira.',
   },
   'guernsey-post': {
     id: 'guernsey-post',
@@ -1900,11 +1920,11 @@ export const EUROPE_OPEN_GEO_SOURCES: Record<EuropeOpenGeoSourceId, EuropeOpenGe
   'jersey-post': {
     id: 'jersey-post',
     name: 'Jersey Post',
-    url: 'https://www.jerseypost.com/',
+    url: 'https://www.jerseypost.com/tools/address-finder/',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
-    notes: 'Jersey postcode and delivery reference.',
+    notes: 'Jersey Post official address and postcode finder.',
   },
   'jersey-gov-open-data': {
     id: 'jersey-gov-open-data',
@@ -1918,11 +1938,11 @@ export const EUROPE_OPEN_GEO_SOURCES: Record<EuropeOpenGeoSourceId, EuropeOpenGe
   'isle-of-man-post': {
     id: 'isle-of-man-post',
     name: 'Isle of Man Post Office',
-    url: 'https://www.iompost.com/',
+    url: 'https://www.iompost.com/tools-forms/postcode-finder/',
     kind: 'postal-code',
     coverage: 'territory',
     usage: 'reference',
-    notes: 'Isle of Man postcode and delivery reference.',
+    notes: 'Isle of Man Post Office official postcode finder.',
   },
   'isle-of-man-gov-data': {
     id: 'isle-of-man-gov-data',
@@ -2060,7 +2080,7 @@ const BASE_OPEN_SOURCE_IDS: EuropeOpenGeoSourceId[] = [
 
 const COUNTRY_SOURCE_IDS: Partial<Record<EuropeCountryOrTerritoryCode, EuropeOpenGeoSourceId[]>> = {
   FR: ['data-gouv-fr-postcodes'],
-  DE: ['openplzapi'],
+  DE: ['deutsche-post-plz-server', 'openplzapi'],
   NL: ['opendatasoft-nl-postcodes'],
   BE: ['odwb-be-postcodes'],
   CH: ['openplzapi'],
@@ -2071,7 +2091,7 @@ const COUNTRY_SOURCE_IDS: Partial<Record<EuropeCountryOrTerritoryCode, EuropeOpe
   SE: ['civictechsweden-posmkod', 'lantmateriet-sweden', 'trafikverket-sweden', 'scb-sweden-geodata'],
   NO: ['data-norge', 'kartverket-norway', 'geonorge-norway', 'brreg-address-register'],
   DK: ['postcode-eu', 'dataforsyningen-denmark', 'danish-address-register-dar', 'geodanmark'],
-  FI: ['avoindata-fi-postcodes', 'nls-finland', 'maanmittauslaitos-open-data', 'dvv-finland-address-data'],
+  FI: ['posti-finland-postal-code-services', 'avoindata-fi-postcodes', 'nls-finland', 'maanmittauslaitos-open-data', 'dvv-finland-address-data'],
   LV: ['kartes-lv-postal-codes', 'lgia-latvia', 'vzd-latvia-address-register', 'data-gov-lv-geodata'],
   EE: ['kartes-lv-postal-codes', 'maaamet-estonia', 'estonia-address-data-system', 'xgis-estonia'],
   LT: ['kartes-lv-postal-codes', 'geoportal-lt', 'registru-centras-address-register', 'open-data-lithuania'],

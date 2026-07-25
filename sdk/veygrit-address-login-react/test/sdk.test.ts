@@ -18,6 +18,7 @@ import {
   buildFriendDeliveryRequestUrl,
   createAddressLoginRequest,
   createGuestCheckoutHandoffHttpTransport,
+  createMerchantVisibleRedactionDisplayModel,
   createVeyIdAuthorizeRequest,
   createVeyIdConnectionRevocationPayload,
   createVeyIdGuestCheckoutHandoffPayload,
@@ -32,16 +33,57 @@ import {
   useFriendDelivery,
   type AddressLoginAuthorizeRequest,
   type AddressLoginButtonProps,
+  type VeyIdMerchantVisibleRedactionAffordance,
 } from '../src/index';
+import { MerchantVisibleRedactionCard } from '../examples/merchant-visible-redaction/MerchantVisibleRedactionCard';
+import {
+  assertHostedCallbackNormalizedParamsAreRedacted,
+  expectedCallbackErrorPattern,
+  loadHostedCallbackValidationVectors,
+} from '../../veygrit-address-login-test-helpers/hostedCallbackValidationVectors';
+import { createVeyIdCoreMerchantVisibleRedactionAdapterFixture } from '../../veygrit-address-login-test-helpers/merchantVisibleRedactionFixtures';
 
 function readPackageFile(path: string): string {
   const candidates = [
     join('sdk/veygrit-address-login-react', path),
+    path,
     join('..', path),
   ];
   const filePath = candidates.find(candidate => existsSync(candidate));
   assert.ok(filePath, `${path} is required`);
   return readFileSync(filePath, 'utf8');
+}
+
+function createMerchantVisibleRedactionAffordanceFixture(): VeyIdMerchantVisibleRedactionAffordance {
+  return {
+    boundaryGateId: 'merchant-visible-redaction',
+    displayFields: [
+      'pairwiseSubjectAlias',
+      'guestCheckoutAlias',
+      'walletConsentRef',
+      'addressCredentialRef',
+      'carrierHandoffRef',
+    ],
+    displayRefs: [
+      'pairwise_synthetic_001',
+      'guest_checkout_alias_synthetic_001',
+      'consent_synthetic_001',
+      'addr_cred_synthetic_001',
+      'carrier_handoff_synthetic_001',
+    ],
+    blockedMaterial: [
+      'rawAddress',
+      'recipientPhone',
+      'providerAccessToken',
+      'privateKey',
+      'proofWitness',
+    ],
+    requiredNextAction: 'create-guest-order-from-refs',
+    nonClaims: [
+      'Merchant-visible refs are not raw address disclosure.',
+      'Guest checkout display does not expose provider tokens.',
+    ],
+  };
 }
 
 test('Veygrit React SDK exports provider, button, hook, and URL builder', () => {
@@ -61,6 +103,7 @@ test('Veygrit React SDK exports provider, button, hook, and URL builder', () => 
   assert.equal(typeof createVeyIdTokenRequestPayload, 'function');
   assert.equal(typeof createVeyIdConnectionRevocationPayload, 'function');
   assert.equal(typeof createVeyIdGuestCheckoutHandoffPayload, 'function');
+  assert.equal(typeof createMerchantVisibleRedactionDisplayModel, 'function');
   assert.equal(typeof createFriendDeliveryRequestPayload, 'function');
   assert.equal(typeof createFriendDeliveryApprovalPayload, 'function');
   assert.equal(typeof createFriendDeliveryController, 'function');
@@ -68,6 +111,30 @@ test('Veygrit React SDK exports provider, button, hook, and URL builder', () => 
   assert.equal(typeof buildFriendDeliveryApprovalUrl, 'function');
   assert.equal(typeof parseAddressLoginCallback, 'function');
   assert.equal(typeof parseVeyIdCallback, 'function');
+});
+
+test('React SDK package metadata resolves to built ESM and types entrypoints', () => {
+  const packageJson = JSON.parse(readPackageFile('package.json')) as {
+    main: string;
+    types: string;
+    exports: {
+      '.': {
+        types: string;
+        import: string;
+      };
+    };
+    files: string[];
+  };
+
+  assert.equal(packageJson.main, './dist/src/index.js');
+  assert.equal(packageJson.types, './dist/src/index.d.ts');
+  assert.deepEqual(packageJson.exports, {
+    '.': {
+      types: './dist/src/index.d.ts',
+      import: './dist/src/index.js',
+    },
+  });
+  assert.deepEqual(packageJson.files, ['dist', 'examples', 'README.md']);
 });
 
 test('AddressLoginButton can be created as a Clerk-like drop-in component', () => {
@@ -133,7 +200,7 @@ test('GuestCheckoutButton can be rendered as a wallet-address checkout control',
             carrierCredentialsSharedWithMerchant: false,
             oneTimeUse: true,
           },
-        }),
+        } as const),
         onGuestCheckoutBlocked: result => {
           assert.equal(result.status, 'blocked');
         },
@@ -144,6 +211,102 @@ test('GuestCheckoutButton can be rendered as a wallet-address checkout control',
   assert.match(markup, /data-veygrit-guest-checkout="button"/);
   assert.match(markup, /data-veygrit-status="idle"/);
   assert.match(markup, /Use wallet address/);
+});
+
+test('merchant-visible redaction helper builds ref-only display model without blocked material names', () => {
+  const affordance = createMerchantVisibleRedactionAffordanceFixture();
+  const model = createMerchantVisibleRedactionDisplayModel(affordance, {
+    pairwiseSubjectAlias: 'pairwise_synthetic_001',
+    guestCheckoutAlias: 'guest_checkout_alias_synthetic_001',
+    walletConsentRef: 'consent_synthetic_001',
+    addressCredentialRef: 'addr_cred_synthetic_001',
+    carrierHandoffRef: 'carrier_handoff_synthetic_001',
+  });
+
+  assert.equal(model.boundaryGateId, 'merchant-visible-redaction');
+  assert.equal(model.requiredNextAction, 'create-guest-order-from-refs');
+  assert.equal(model.visibleRefCount, 5);
+  assert.equal(model.blockedClassCount, 5);
+  assert.equal(model.nonClaimCount, 2);
+  assert.equal(model.consentBound, true);
+  assert.deepEqual(model.rows.map(row => row.status), [
+    'visible_ref',
+    'visible_ref',
+    'visible_ref',
+    'visible_ref',
+    'visible_ref',
+  ]);
+  assert.doesNotMatch(
+    JSON.stringify(model),
+    /rawAddress|recipientPhone|providerAccessToken|privateKey|proofWitness|raw.?address|recipient|phone|provider.?access.?token|witness|private.?key|proof.?secret/i,
+  );
+});
+
+test('Vey ID Core fixture display contract feeds SDK helper without React rendering', () => {
+  const {
+    boundaryGate,
+    displayContract: contract,
+    affordance,
+    refs,
+    displayRefs,
+  } = createVeyIdCoreMerchantVisibleRedactionAdapterFixture();
+
+  assert.equal(contract.sdkPackage, '@veygrit/address-login-react');
+  assert.equal(contract.sdkHelper, 'createMerchantVisibleRedactionDisplayModel');
+  assert.equal(
+    contract.example,
+    'sdk/veygrit-address-login-react/examples/merchant-visible-redaction/MerchantVisibleRedactionCard.tsx',
+  );
+  assert.equal(contract.boundaryGateId, boundaryGate.id);
+  assert.deepEqual(contract.displayFields, boundaryGate.safeEvidenceRefs);
+  assert.equal(contract.blockedClassCount, boundaryGate.requiredBlockedMaterial.length);
+  assert.equal(contract.nonClaimCount, boundaryGate.nonClaims.length);
+  assert.equal(contract.renderedMaterialPolicy.copyBlockedMaterialNames, false);
+  assert.equal(contract.renderedMaterialPolicy.copyNonClaimText, false);
+  assert.equal(contract.renderedMaterialPolicy.showCountsOnly, true);
+
+  const model = createMerchantVisibleRedactionDisplayModel(affordance, refs);
+
+  assert.equal(model.boundaryGateId, contract.boundaryGateId);
+  assert.equal(model.requiredNextAction, contract.requiredNextAction);
+  assert.equal(model.visibleRefCount, contract.displayFields.length);
+  assert.equal(model.blockedClassCount, contract.blockedClassCount);
+  assert.equal(model.nonClaimCount, contract.nonClaimCount);
+  assert.equal(model.consentBound, true);
+  assert.deepEqual(model.rows.map(row => row.field), contract.displayFields);
+  assert.deepEqual(model.rows.map(row => row.ref), displayRefs);
+  assert.doesNotMatch(
+    JSON.stringify(model),
+    /rawAddress|recipientName|recipientPhone|privateDeliveryNotes|proofWitness|proofSecret|privateKey|raw.?address|recipient|phone|witness|proof.?secret|private.?key/i,
+  );
+});
+
+test('merchant-visible redaction example renders refs without blocked material names', () => {
+  const markup = renderToStaticMarkup(
+    React.createElement(MerchantVisibleRedactionCard, {
+      affordance: createMerchantVisibleRedactionAffordanceFixture(),
+      refs: {
+        pairwiseSubjectAlias: 'pairwise_synthetic_001',
+        guestCheckoutAlias: 'guest_checkout_alias_synthetic_001',
+        walletConsentRef: 'consent_synthetic_001',
+        addressCredentialRef: 'addr_cred_synthetic_001',
+        carrierHandoffRef: 'carrier_handoff_synthetic_001',
+      },
+    }),
+  );
+
+  assert.match(markup, /data-veygrit-merchant-visible-redaction="card"/);
+  assert.match(markup, /Merchant-visible redaction/);
+  assert.match(markup, /merchant-visible-redaction/);
+  assert.match(markup, /create-guest-order-from-refs/);
+  assert.match(markup, /guest_checkout_alias_synthetic_001/);
+  assert.match(markup, /5 visible refs/);
+  assert.match(markup, /5 blocked classes/);
+  assert.match(markup, /consent-bound/);
+  assert.doesNotMatch(
+    markup,
+    /rawAddress|recipientPhone|providerAccessToken|privateKey|proofWitness|raw.?address|recipient|phone|provider.?access.?token|witness|private.?key|proof.?secret/i,
+  );
 });
 
 test('guest checkout HTTP transport posts only to same-origin merchant endpoint', async () => {
@@ -637,6 +800,19 @@ test('checkout Friend Delivery example is package-visible and server-routed', ()
   assert.doesNotMatch(example, /serverAccessToken|VEYGRIT_SERVER_ACCESS_TOKEN|raw.?address|witness|private.?key|proof.?secret/i);
 });
 
+test('React SDK README documents package publication-safety verification', () => {
+  const readme = readPackageFile('README.md');
+
+  assert.match(readme, /npm run verify:veygrit-address-login-test-helpers/);
+  assert.match(readme, /shared test-helper boundary/);
+  assert.match(readme, /npm run verify:veygrit-address-login-react/);
+  assert.match(readme, /npm run verify:veygrit-address-login-react-package/);
+  assert.match(readme, /npm run verify:veygrit-address-login-packages/);
+  assert.match(readme, /npm pack/);
+  assert.match(readme, /files allowlist/);
+  assert.match(readme, /not a publishing,\s+hosted-service, or production readiness claim/);
+});
+
 test('checkout Guest Checkout example is package-visible and server-routed', () => {
   const example = readPackageFile('examples/checkout-guest-checkout/CheckoutGuestCheckout.tsx');
   const packageJson = JSON.parse(readPackageFile('package.json')) as { files: string[] };
@@ -651,6 +827,22 @@ test('checkout Guest Checkout example is package-visible and server-routed', () 
   assert.doesNotMatch(
     example,
     /serverAccessToken|VEYGRIT_SERVER_ACCESS_TOKEN|raw.?address|recipient|phone|witness|private.?key|proof.?secret|carrier.?api.?key/i,
+  );
+});
+
+test('merchant-visible redaction example is package-visible and ref-only', () => {
+  const example = readPackageFile('examples/merchant-visible-redaction/MerchantVisibleRedactionCard.tsx');
+  const packageJson = JSON.parse(readPackageFile('package.json')) as { files: string[] };
+
+  assert.ok(packageJson.files.includes('examples'));
+  assert.match(example, /createMerchantVisibleRedactionDisplayModel/);
+  assert.match(example, /data-veygrit-merchant-visible-redaction/);
+  assert.match(example, /visible refs/);
+  assert.match(example, /blocked classes/);
+  assert.match(example, /consent-bound/);
+  assert.doesNotMatch(
+    example,
+    /serverAccessToken|VEYGRIT_SERVER_ACCESS_TOKEN|raw.?address|recipient|phone|witness|private.?key|proof.?secret|carrier.?api.?key|provider.?access.?token/i,
   );
 });
 
@@ -697,4 +889,31 @@ test('callback parser rejects state mismatch and raw recipient or address parame
     () => parseAddressLoginCallback('?code=code_test&state=state_test&recipient=blocked'),
     /Unsafe Address Login callback parameter/,
   );
+});
+
+test('hosted callback validation vectors expose redacted normalized params only', () => {
+  assertHostedCallbackNormalizedParamsAreRedacted();
+});
+
+test('callback parser conforms to hosted callback validation vectors', () => {
+  for (const vector of loadHostedCallbackValidationVectors()) {
+    const parse = () => parseAddressLoginCallback(new URLSearchParams(vector.input), vector.options);
+
+    if (vector.expectedResult === 'rejected') {
+      assert.throws(parse, expectedCallbackErrorPattern(vector), vector.id);
+      continue;
+    }
+
+    const callback = parse();
+    const expected = vector.expectedNormalizedParams;
+    assert.ok(expected, `${vector.id} should declare normalized callback params`);
+    assert.equal(callback.status, 'authorized', vector.id);
+    assert.equal(callback.code, expected.code, vector.id);
+    assert.equal(callback.state, expected.state, vector.id);
+    assert.equal(callback.issuer, expected.iss, vector.id);
+    assert.equal(callback.sessionRef, expected.session_ref, vector.id);
+    assert.equal(callback.credentialRef, expected.credential_ref, vector.id);
+    assert.equal(callback.proofRef, expected.proof_bundle_ref, vector.id);
+    assert.equal(callback.handoffRef, expected.carrier_handoff_ref, vector.id);
+  }
 });

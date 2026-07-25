@@ -168,6 +168,32 @@ Skipshipは、配送会社API、ラベル、追跡、料金、集荷へ接続す
 
 このノート自体は研究準備であり、実装は `src/lib/addressResearchSystematization.ts` と `src/lib/addressResearchSystematization.test.ts` が担う。
 
+## レポジトリ分割プレビュー
+
+ローカルの実行可能 registry では、研究repoを次の2つに分けて扱う。
+
+| repository | 役割 | 最初の検証 |
+| --- | --- | --- |
+| `address-research` | 住所情報学全体の定義、10分野registry、bridge、publication track、非主張を管理する | `npm run verify:address-research-systematization` |
+| `address-morphism-theory` | 住所写像理論の形式定義、loss certificate、合成安全性、AddressQL互換性を専門に管理する | `npm run verify:address-morphism-v2-compatibility` |
+
+どちらも現時点では local scaffold only とする。remote GitHub repository の作成、削除、push、PR作成は、このregistryからは許可しない。現在のCodexタスク内で明示的に依頼された場合だけ、別のGit操作として扱う。
+
+また、どちらのrepoにも raw address、recipient、witness、private key、proof secret、production credential を入れない。`address-morphism-theory` は、写像互換性を配送可能性、本人性、KYC保証として主張しない。
+
+最小 repository template は、次のファイルを持つ local scaffold として扱う。
+
+| file | 目的 |
+| --- | --- |
+| `README.md` | repoの目的、canonical domains、verification、non-claims、remote action boundaryを説明する |
+| `package.json` | local verification scriptsのみを持つ最小manifest |
+| `docs/repository-boundary.md` | 研究claim、product claim、identity claim、delivery claimを分ける |
+| `docs/non-claims.md` | publication safetyとgrant/OSS review用の非主張ledger |
+| `src/repositoryRegistry.ts` | domain、artifact、verification command、creation boundaryを機械可読にする |
+| `tests/repository-boundary.test.ts` | remote action禁止、blocked material禁止、非主張、verify script名を検証する |
+
+この repository template は `src/lib/addressResearchSystematization.ts` の `buildAddressResearchRepositoryTemplates()` が生成前仕様として返し、`validateAddressResearchRepositoryTemplates()` が検証する。ここでもremote GitHub操作は発生しない。
+
 ## 次に厚くするべき箇所
 
 P0は、住所データモデル、住所検証理論、住所分散データベース理論である。

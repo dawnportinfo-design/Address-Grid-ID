@@ -36,6 +36,15 @@ import {
   type VeyIdTokenRequestPayload,
 } from '../src/server';
 import { createGuestCheckoutHandoffHttpTransport } from '../../veygrit-address-login-react/src/index';
+import {
+  assertHostedCallbackNormalizedParamsAreRedacted,
+  expectedCallbackErrorPattern,
+  loadHostedCallbackValidationVectors,
+} from '../../veygrit-address-login-test-helpers/hostedCallbackValidationVectors';
+import {
+  createVeyIdCoreMerchantVisibleRedactionAdapterFixture,
+  loadHostedAddressLoginMerchantVisibleRedactionDisplayContract,
+} from '../../veygrit-address-login-test-helpers/merchantVisibleRedactionFixtures';
 
 type HostedWebhookVector = {
   id: string;
@@ -92,12 +101,57 @@ function hostedWebhookTimestampHeader(vector: HostedWebhookVector) {
 function readPackageFile(path: string): string {
   const candidates = [
     join('sdk/veygrit-address-login-nextjs', path),
+    path,
     join('..', path),
   ];
   const filePath = candidates.find(candidate => existsSync(candidate));
   assert.ok(filePath, `${path} is required`);
   return readFileSync(filePath, 'utf8');
 }
+
+test('Next.js SDK package metadata resolves to built ESM and server entrypoints', () => {
+  const packageJson = JSON.parse(readPackageFile('package.json')) as {
+    main: string;
+    types: string;
+    exports: {
+      '.': { types: string; import: string };
+      './server': { types: string; import: string };
+    };
+    files: string[];
+  };
+
+  assert.equal(packageJson.main, './dist/src/index.js');
+  assert.equal(packageJson.types, './dist/src/index.d.ts');
+  assert.deepEqual(packageJson.exports, {
+    '.': { types: './dist/src/index.d.ts', import: './dist/src/index.js' },
+    './server': { types: './dist/src/server.d.ts', import: './dist/src/server.js' },
+  });
+  assert.deepEqual(packageJson.files, ['dist', 'examples', 'README.md']);
+});
+
+test('merchant-visible redaction fixture helper is reusable without React rendering', () => {
+  const coreAdapter = createVeyIdCoreMerchantVisibleRedactionAdapterFixture();
+  const hostedContract = loadHostedAddressLoginMerchantVisibleRedactionDisplayContract();
+
+  assert.equal(coreAdapter.displayContract.sdkPackage, '@veygrit/address-login-react');
+  assert.equal(hostedContract.sdkHelper, coreAdapter.displayContract.sdkHelper);
+  assert.deepEqual(hostedContract.displayFields, coreAdapter.displayContract.displayFields);
+  assert.equal(hostedContract.boundaryGateId, coreAdapter.displayContract.boundaryGateId);
+  assert.equal(hostedContract.requiredNextAction, coreAdapter.displayContract.requiredNextAction);
+  assert.equal(hostedContract.blockedClassCount, coreAdapter.displayContract.blockedClassCount);
+  assert.equal(hostedContract.nonClaimCount, coreAdapter.displayContract.nonClaimCount);
+  assert.equal(hostedContract.renderedMaterialPolicy.copyBlockedMaterialNames, false);
+  assert.equal(hostedContract.renderedMaterialPolicy.copyNonClaimText, false);
+  assert.equal(hostedContract.renderedMaterialPolicy.showCountsOnly, true);
+  assert.deepEqual(
+    Object.keys(hostedContract.displayRefsByField).sort(),
+    Object.keys(coreAdapter.refs).sort(),
+  );
+  assert.doesNotMatch(
+    JSON.stringify([hostedContract.displayRefsByField, coreAdapter.refs]),
+    /rawAddress|addressLine|recipient|phone|email|witness|proofSecret|privateKey|providerAccessToken|carrierApiKey|productionCredential/i,
+  );
+});
 
 test('verifyAddressLoginCallback accepts a redacted callback result', async () => {
   const result = await verifyAddressLoginCallback(
@@ -182,6 +236,32 @@ test('parseAddressLoginCallback rejects unsafe query material before code exchan
       }),
     /issuer is not allowed/,
   );
+});
+
+test('hosted callback validation vectors expose redacted normalized params only', () => {
+  assertHostedCallbackNormalizedParamsAreRedacted();
+});
+
+test('parseAddressLoginCallback conforms to hosted callback validation vectors', () => {
+  for (const vector of loadHostedCallbackValidationVectors()) {
+    const parse = () => parseAddressLoginCallback(new URLSearchParams(vector.input), vector.options);
+
+    if (vector.expectedResult === 'rejected') {
+      assert.throws(parse, expectedCallbackErrorPattern(vector), vector.id);
+      continue;
+    }
+
+    const payload = parse();
+    const expected = vector.expectedNormalizedParams;
+    assert.ok(expected, `${vector.id} should declare normalized callback params`);
+    assert.equal(payload.code, expected.code, vector.id);
+    assert.equal(payload.state, expected.state, vector.id);
+    assert.equal(payload.issuer, expected.iss, vector.id);
+    assert.equal(payload.sessionRef, expected.session_ref, vector.id);
+    assert.equal(payload.credentialRef, expected.credential_ref, vector.id);
+    assert.equal(payload.proofBundleRef, expected.proof_bundle_ref, vector.id);
+    assert.equal(payload.encryptedAddressForCarrierRef, expected.carrier_handoff_ref, vector.id);
+  }
 });
 
 test('requireAddressClaims rejects missing claims without exposing address material', () => {
@@ -605,6 +685,20 @@ test('Vey ID App Router examples keep token exchange and revocation server-side'
   assert.match(readme, /createGuestCheckoutOrderRefs/);
   assert.match(readme, /does not require an EC account or password/);
   assert.doesNotMatch(tokenRoute + guestCheckoutRoute + revokeRoute, /raw.?address|address.?line|recipient|witness|private.?key|proof.?secret|provider.?id.?token|provider.?access.?token|provider.?refresh.?token|raw.?provider.?profile/i);
+});
+
+test('Next.js SDK README documents package publication-safety verification', () => {
+  const readme = readPackageFile('README.md');
+
+  assert.match(readme, /npm run verify:veygrit-address-login-test-helpers/);
+  assert.match(readme, /shared test-helper boundary/);
+  assert.match(readme, /npm run verify:veygrit-address-login-nextjs/);
+  assert.match(readme, /npm run verify:veygrit-address-login-nextjs-package/);
+  assert.match(readme, /npm run verify:veygrit-address-login-packages/);
+  assert.match(readme, /npm pack/);
+  assert.match(readme, /files allowlist/);
+  assert.match(readme, /server entrypoint/);
+  assert.match(readme, /not a publishing,\s+hosted-service, or production readiness claim/);
 });
 
 test('Vey ID guest checkout App Router route executes with mocked hosted transport', async () => {

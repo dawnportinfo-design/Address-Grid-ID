@@ -47,8 +47,8 @@
   "postalCode": {
     "format": "NNNNN",
     "regex": "^\\d{5}$",
-    "api": null,
-    "source": "Postal metadata from AGID regional table; no free OSS source configured"
+    "api": "https://www.ghanapostgps.com/",
+    "source": "GhanaPostGPS National Digital Address System"
   },
   "addressRules": {
     "languages": [
@@ -85,6 +85,7 @@
     ]
   },
   "openSourceIds": [
+    "ghanapostgps",
     "hot-osm-west-africa",
     "osm-nominatim",
     "osm-overpass",

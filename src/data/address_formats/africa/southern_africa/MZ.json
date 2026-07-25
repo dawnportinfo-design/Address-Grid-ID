@@ -97,8 +97,8 @@
   "postalCode": {
     "format": "NNNN",
     "regex": "^\\d{4}$",
-    "api": null,
-    "source": "Postal metadata from AGID East Africa regional table; open OSS source not configured"
+    "api": "https://www.correios.co.mz/?cod=11&pagina=codigo",
+    "source": "Correios de Mocambique codigos postais"
   },
   "addressRules": {
     "languages": [
@@ -142,6 +142,7 @@
     ]
   },
   "openSourceIds": [
+    "correios-mocambique-codigos-postais",
     "rcmrd-geoportal",
     "hot-osm-east-southern-africa",
     "osm-nominatim",

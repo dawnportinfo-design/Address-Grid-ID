@@ -31,7 +31,11 @@ test('Open Source hero keeps first-use navigation in the header and three hero c
   assert.match(source, /AGID-SO-00123/);
   assert.match(source, /TO-ISL-004/);
   assert.match(source, /label: 'Register Address'/);
-  assert.match(source, /label: 'Address Portal'/);
+  assert.match(source, /label: 'My Page'/);
+  assert.match(source, /label: 'マイページ'/);
+  assert.match(source, /credentials, permissions, consent, security status, and safe exports/);
+  assert.doesNotMatch(source, /label: 'Address Portal'/);
+  assert.doesNotMatch(source, /label: '住所ポータル'/);
   assert.match(source, /label: 'POS & Field Ops'/);
   assert.match(source, /Scan destination QR, decide, hand off/);
   assert.match(source, /heroMenuLinks\.map/);
@@ -120,7 +124,11 @@ test('Open Source hero switches English and Japanese copy across the page', () =
   assert.match(source, /hero\.primaryActions\[action\.key\]/);
   assert.match(source, /hero\.resources\[link\.key\]/);
   assert.match(source, /hero\.build\.workstreams\[item\.key\]/);
+  assert.match(source, /xl:grid-cols-4/);
   assert.match(source, /hero\.footer\.links\[link\.key\]/);
+  assert.doesNotMatch(source, /playlistCommerce/);
+  assert.doesNotMatch(source, /Playlist Commerce/);
+  assert.doesNotMatch(source, /プレイリストコマース/);
 });
 
 test('Open Source download setup covers PC, VS Code, and command-line setup without extra badges', () => {
@@ -173,6 +181,9 @@ test('Open Source footer groups the full product map by job intent', () => {
   assert.match(source, /key: 'locker', href: '\/locker'/);
   assert.match(source, /key: 'drone', href: '\/ops'/);
   assert.match(source, /key: 'dashboard', href: '\/dashboard'/);
+  assert.doesNotMatch(source, /key: 'playlistCommerce', href: '\/playlist-commerce'/);
+  assert.doesNotMatch(source, /playlistCommerce: 'Playlist Commerce'/);
+  assert.doesNotMatch(source, /playlistCommerce: 'プレイリストコマース'/);
   assert.match(source, /key: 'developer', href: '\/developer'/);
   assert.match(source, /key: 'sdk', href: '\/developer#sdk'/);
   assert.match(source, /key: 'github', href: GITHUB_REPO_URL/);

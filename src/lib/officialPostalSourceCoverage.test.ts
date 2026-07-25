@@ -71,14 +71,29 @@ test('separates global official fallback from country-specific official source g
   assert.ok(summary.globalOfficialFallbackCountryCodes.length > 0);
   assert.ok(summary.countrySpecificOfficialMissingCountryCodes.length > 0);
   assert.ok(summary.countrySpecificOfficialMissingCountryCodesByContinent.africa.length > 0);
-  assert.ok(summary.countrySpecificOfficialMissingCountryCodesByContinent.europe.includes('DE'));
+  assert.ok(!summary.countrySpecificOfficialMissingCountryCodesByContinent.europe.includes('DE'));
+  assert.ok(!summary.countrySpecificOfficialMissingCountryCodesByContinent.europe.includes('FI'));
+  assert.ok(!summary.countrySpecificOfficialMissingCountryCodesByContinent.europe.includes('JE'));
+  assert.ok(!summary.countrySpecificOfficialMissingCountryCodesByContinent.europe.includes('IM'));
 
-  assert.equal(byCode.get('DE')?.status, 'official');
-  assert.equal(byCode.get('DE')?.usesGlobalOfficialFallback, true);
-  assert.equal(byCode.get('DE')?.countrySpecificOfficialSourceMissing, true);
-  assert.ok(byCode.get('DE')?.evidence.some(source => source.id === 'catalog:upu-universal-postcode-database'));
+  assert.equal(byCode.get('DE')?.status, 'authoritative');
+  assert.equal(byCode.get('DE')?.usesGlobalOfficialFallback, false);
+  assert.equal(byCode.get('DE')?.countrySpecificOfficialSourceMissing, false);
+  assert.ok(byCode.get('DE')?.evidence.some(source => source.id === 'catalog:deutsche-post-plz-server'));
+  assert.equal(byCode.get('FI')?.status, 'authoritative');
+  assert.equal(byCode.get('FI')?.usesGlobalOfficialFallback, false);
+  assert.equal(byCode.get('FI')?.countrySpecificOfficialSourceMissing, false);
+  assert.ok(byCode.get('FI')?.evidence.some(source => source.id === 'catalog:posti-finland-postal-code-services'));
+  assert.equal(byCode.get('JE')?.status, 'authoritative');
+  assert.equal(byCode.get('JE')?.usesGlobalOfficialFallback, false);
+  assert.equal(byCode.get('JE')?.countrySpecificOfficialSourceMissing, false);
+  assert.ok(byCode.get('JE')?.evidence.some(source => source.id === 'catalog:jersey-post-address-finder'));
+  assert.equal(byCode.get('IM')?.status, 'authoritative');
+  assert.equal(byCode.get('IM')?.usesGlobalOfficialFallback, false);
+  assert.equal(byCode.get('IM')?.countrySpecificOfficialSourceMissing, false);
+  assert.ok(byCode.get('IM')?.evidence.some(source => source.id === 'catalog:isle-of-man-post-office-postcode-finder'));
 
-  for (const countryCode of ['AT', 'KE', 'LY', 'MA', 'MR', 'SD', 'TN']) {
+  for (const countryCode of ['AT', 'BF', 'BJ', 'CI', 'CV', 'DE', 'DJ', 'ET', 'FI', 'GH', 'GM', 'GN', 'IM', 'JE', 'KE', 'KM', 'LR', 'LY', 'MA', 'MR', 'MW', 'MZ', 'NA', 'NG', 'SC', 'SD', 'SN', 'SO', 'SS', 'TG', 'TN', 'UG', 'ZM', 'ZW']) {
     assert.equal(byCode.get(countryCode)?.countrySpecificOfficialEvidence, true, `${countryCode} should have country-specific official evidence`);
     assert.equal(byCode.get(countryCode)?.countrySpecificOfficialSourceMissing, false, `${countryCode} should not remain country-specific missing`);
     assert.equal(byCode.get(countryCode)?.usesGlobalOfficialFallback, false, `${countryCode} should not depend on the global fallback`);
@@ -89,6 +104,21 @@ test('separates global official fallback from country-specific official source g
       .filter(entry => entry.countrySpecificOfficialSourceMissing)
       .every(entry => entry.recommendation.includes('global official postal fallback')),
   );
+});
+
+test('does not count metadata-only Guatemala evidence as country-specific validation evidence', () => {
+  const entries = collectOfficialPostalSourceCoverage(loadAddressFormats());
+  const guatemala = entries.find(entry => entry.countryCode === 'GT');
+
+  assert.ok(guatemala);
+  assert.equal(guatemala.countrySpecificOfficialEvidence, false);
+  assert.equal(guatemala.countrySpecificOfficialSourceMissing, true);
+  assert.equal(guatemala.usesGlobalOfficialFallback, true);
+  assert.ok(guatemala.evidence.some(source => (
+    source.id === 'catalog:correos-guatemala-postal-legal-framework' &&
+    source.sourceRole === 'legal-framework-only' &&
+    source.validationReadiness === 'metadata-only'
+  )));
 });
 
 test('derives continents from relative address-format paths', () => {

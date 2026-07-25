@@ -230,6 +230,34 @@ export async function approveFromWebhook() {
 
 The helper requires an explicit `transport` function so tests and local mocks never send production traffic by accident. Payload builders reject suspicious raw address, recipient, witness, private-key, or proof-secret material before transport is called.
 
+## Package Publication Gate
+
+Before publishing or splitting this package into a dedicated repository, run:
+
+```bash
+npm run verify:veygrit-address-login-test-helpers
+npm run verify:veygrit-address-login-nextjs
+npm run verify:veygrit-address-login-nextjs-package
+npm run verify:veygrit-address-login-packages
+```
+
+Verification order:
+
+1. Run the shared test-helper boundary gate for callback vectors and merchant-visible
+   redaction fixtures.
+2. Run the package-specific gate for local build, tests, examples, and public API.
+3. Run the package publication-safety gate for the built root and server entrypoint,
+   `npm pack` dry-run contents, README non-claims, examples, and files allowlist.
+4. Run the cross-package traceability preflight to confirm the manifest, README
+   gates, commit candidates, and secret-pattern checks still agree.
+5. Treat a pass as local OSS-prep evidence only; it is not a publishing,
+   hosted-service, or production readiness claim.
+
+The cross-package publication map is `../veygrit-address-login-packages.manifest.json`.
+It records this package's runtime, examples, public surfaces, verify command, and
+privacy controls. The manifest is local OSS-prep evidence and does not claim
+production readiness.
+
 ## Safety Boundary
 
 - Merchant callbacks must contain aliases, public claims, proof references, and carrier handoff references only.

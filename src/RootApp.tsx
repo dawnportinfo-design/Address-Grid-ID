@@ -31,6 +31,18 @@ const AddressDashboardScreen = React.lazy(() => import('./components/AddressDash
 const DeveloperConsoleScreen = React.lazy(() => import('./components/DeveloperConsoleScreen').then(module => ({
   default: module.DeveloperConsoleScreen,
 })));
+const AddressLoginExperienceScreen = React.lazy(() => import('./components/AddressLoginExperienceScreen').then(module => ({
+  default: module.AddressLoginExperienceScreen,
+})));
+const MerchantConsoleScreen = React.lazy(() => import('./components/MerchantConsoleScreen').then(module => ({
+  default: module.MerchantConsoleScreen,
+})));
+const PlaylistCommerceWidgetScreen = React.lazy(() => import('./components/PlaylistCommerceWidgetScreen').then(module => ({
+  default: module.PlaylistCommerceWidgetScreen,
+})));
+const VeygritAppScreen = React.lazy(() => import('./components/VeygritAppScreen').then(module => ({
+  default: module.VeygritAppScreen,
+})));
 const AddressElementPlaygroundScreen = React.lazy(() => import('./components/AddressElementPlaygroundScreen').then(module => ({
   default: module.AddressElementPlaygroundScreen,
 })));
@@ -99,6 +111,22 @@ function isDeveloperRoute() {
   return window.location.pathname === '/developer' || window.location.hash === '#/developer';
 }
 
+function isAddressLoginRoute() {
+  return window.location.pathname === '/address-login' || window.location.hash === '#/address-login';
+}
+
+function isMerchantConsoleRoute() {
+  return window.location.pathname === '/merchant-console' || window.location.hash === '#/merchant-console';
+}
+
+function isPlaylistCommerceRoute() {
+  return window.location.pathname === '/playlist-commerce' || window.location.hash === '#/playlist-commerce';
+}
+
+function isVeygritRoute() {
+  return window.location.pathname === '/veygrit' || window.location.hash === '#/veygrit';
+}
+
 function isAddressElementRoute() {
   return window.location.pathname === '/element' || window.location.hash === '#/element';
 }
@@ -140,6 +168,10 @@ type RouteSnapshot = {
   portal: boolean;
   dashboard: boolean;
   developer: boolean;
+  addressLogin: boolean;
+  merchantConsole: boolean;
+  playlistCommerce: boolean;
+  veygrit: boolean;
   element: boolean;
   evidence: boolean;
   research: boolean;
@@ -160,6 +192,10 @@ function readRouteSnapshot(): RouteSnapshot {
     portal: isPortalRoute(),
     dashboard: isDashboardRoute(),
     developer: isDeveloperRoute(),
+    addressLogin: isAddressLoginRoute(),
+    merchantConsole: isMerchantConsoleRoute(),
+    playlistCommerce: isPlaylistCommerceRoute(),
+    veygrit: isVeygritRoute(),
     element: isAddressElementRoute(),
     evidence: isEvidenceRoute(),
     research: isResearchRoute(),
@@ -180,6 +216,10 @@ function routeDesignKey(route: RouteSnapshot): AgidDesignRouteKey {
   if (route.portal) return 'portal';
   if (route.dashboard) return 'dashboard';
   if (route.developer) return 'developer';
+  if (route.addressLogin) return 'address-login';
+  if (route.merchantConsole) return 'merchant-console';
+  if (route.playlistCommerce) return 'playlist-commerce';
+  if (route.veygrit) return 'veygrit';
   if (route.element) return 'element';
   if (route.evidence) return 'evidence';
   if (route.research) return 'research';
@@ -193,7 +233,10 @@ function routeDesignKey(route: RouteSnapshot): AgidDesignRouteKey {
 
 function routeSurface(route: RouteSnapshot): FieldActionSurface {
   const routeKey = routeDesignKey(route);
-  return routeKey === 'open-source' ? 'map' : routeKey;
+  if (routeKey === 'open-source') return 'map';
+  if (routeKey === 'veygrit') return 'portal';
+  if (routeKey === 'address-login' || routeKey === 'merchant-console' || routeKey === 'playlist-commerce') return 'developer';
+  return routeKey;
 }
 
 function shouldShowFieldActionBar(route: RouteSnapshot) {
@@ -238,21 +281,29 @@ export default function RootApp() {
                       ? <AddressDashboardScreen />
                       : route.developer
                         ? <DeveloperConsoleScreen />
-                        : route.element
-                          ? <AddressElementPlaygroundScreen />
-                          : route.evidence
-                            ? <EvidenceVaultScreen />
-                            : route.research
-                              ? <ResearchDesignHubScreen />
-                              : route.postalZones
-                                ? <PostalZoneDesignerScreen />
-                                : route.machine
-                                  ? <MachineCommsScreen />
-                                  : route.locker
-                                    ? <OpenLockerPudoSimulatorScreen />
-                                    : route.ops
-                                      ? <DroneLockerOpsScreen />
-                                      : <App />}
+                        : route.addressLogin
+                          ? <AddressLoginExperienceScreen />
+                          : route.merchantConsole
+                            ? <MerchantConsoleScreen />
+                            : route.playlistCommerce
+                              ? <PlaylistCommerceWidgetScreen />
+                              : route.veygrit
+                                ? <VeygritAppScreen />
+                                : route.element
+                                  ? <AddressElementPlaygroundScreen />
+                                  : route.evidence
+                                    ? <EvidenceVaultScreen />
+                                    : route.research
+                                      ? <ResearchDesignHubScreen />
+                                      : route.postalZones
+                                        ? <PostalZoneDesignerScreen />
+                                        : route.machine
+                                          ? <MachineCommsScreen />
+                                          : route.locker
+                                            ? <OpenLockerPudoSimulatorScreen />
+                                            : route.ops
+                                              ? <DroneLockerOpsScreen />
+                                              : <App />}
       </React.Suspense>
     </>
   );

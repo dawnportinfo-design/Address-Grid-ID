@@ -95,8 +95,8 @@
   "postalCode": {
     "format": "NNNNN",
     "regex": "^\\d{5}$",
-    "api": null,
-    "source": "Postal metadata from AGID regional table; no free OSS source configured"
+    "api": "https://www.laposte.sn/code-postal-senegal/",
+    "source": "La Poste Senegal code postal"
   },
   "addressRules": {
     "languages": [
@@ -140,6 +140,7 @@
     ]
   },
   "openSourceIds": [
+    "la-poste-senegal-codes",
     "hot-osm-west-africa",
     "osm-nominatim",
     "osm-overpass",

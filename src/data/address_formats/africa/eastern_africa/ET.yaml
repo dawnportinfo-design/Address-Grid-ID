@@ -59,8 +59,8 @@ english:
 postalCode:
   format: NNNN
   regex: ^\d{4}$
-  api: null
-  source: Postal metadata from AGID East Africa regional table; open OSS source not configured
+  api: https://ethio.post/branches/
+  source: Ethiopost branch locator
 addressRules:
   languages:
     - code: en
@@ -92,6 +92,7 @@ addressRules:
     required: false
     usage: used
   openSourceIds:
+    - ethiopost-branches
     - rcmrd-geoportal
     - hot-osm-east-southern-africa
     - osm-nominatim
@@ -121,6 +122,7 @@ addressRules:
     - gbif-occurrence
     - rcmrd-gmes-africa-geoportal
 openSourceIds:
+  - ethiopost-branches
   - rcmrd-geoportal
   - hot-osm-east-southern-africa
   - osm-nominatim

@@ -101,8 +101,8 @@
   "postalCode": {
     "format": "NNNN",
     "regex": "^\\d{4}$",
-    "api": null,
-    "source": "Postal metadata from AGID regional table; no free OSS source configured"
+    "api": "https://nigerposte.ne/",
+    "source": "Official Niger Poste postal operator portal"
   },
   "addressRules": {
     "languages": [
@@ -144,6 +144,7 @@
     ]
   },
   "openSourceIds": [
+    "niger-poste",
     "hot-osm-west-africa",
     "osm-nominatim",
     "osm-overpass",

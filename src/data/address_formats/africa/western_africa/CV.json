@@ -73,8 +73,8 @@
   "postalCode": {
     "format": "NNNN",
     "regex": "^\\d{4}$",
-    "api": null,
-    "source": "Postal metadata from AGID regional table; no free OSS source configured"
+    "api": "https://correios.cv/faq",
+    "source": "Correios de Cabo Verde official postcode guidance"
   },
   "addressRules": {
     "languages": [
@@ -119,6 +119,7 @@
     ]
   },
   "openSourceIds": [
+    "correios-cabo-verde",
     "hot-osm-west-africa",
     "osm-nominatim",
     "osm-overpass",

@@ -5,7 +5,7 @@ native:
   addressFormat: |-
     {{recipient}}
     {{street}}
-    {{city}}
+    {{city}} {{postcode}}
     Kiribati
   ordering: small-to-big
   fields:
@@ -22,6 +22,11 @@ native:
     - key: city
       label: City/Town
       placeholder: Tarawa
+      required: true
+      type: text
+    - key: postcode
+      label: Postcode
+      placeholder: KI0000
       required: true
       type: text
 english:

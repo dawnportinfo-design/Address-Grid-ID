@@ -3,7 +3,7 @@
   "name": "Nauru",
   "native": {
     "name": "Nauru",
-    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\nNauru",
+    "addressFormat": "{{recipient}}\n{{street}}\n{{city}}\n{{postcode}}\nNauru",
     "ordering": "small-to-big",
     "fields": [
       {
@@ -24,6 +24,13 @@
         "key": "city",
         "label": "District",
         "placeholder": "Yaren",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "key": "postcode",
+        "label": "Postcode",
+        "placeholder": "NRU68",
         "required": true,
         "type": "text"
       }

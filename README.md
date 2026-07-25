@@ -32,10 +32,27 @@ AGID is designed so the standard stands apart from the web application. The app 
 | [`docs/privacy-human-rights-positioning.md`](docs/privacy-human-rights-positioning.md) | Front-door privacy and human-rights positioning: Ethereum optional, local-first, and no raw address by default. | Public stance |
 | [`docs/programming-language-selection-policy-ja.md`](docs/programming-language-selection-policy-ja.md) | Project-wide language selection and refactor policy for TypeScript, Rust, SQL, Solidity, Circom, Lean, Python, and generated SDKs. | Engineering governance |
 | [`LICENSE_POLICY.md`](LICENSE_POLICY.md) | Recommended license split for SDKs, specs, ZK circuits, local resolver, POS, servers, papers, and commercial extensions. | Public release policy |
+| [`docs/repository-owner-routing.md`](docs/repository-owner-routing.md) | GitHub owner routing: public research and OSS under `dawnportinfo-design`, commercial product and hosted operations under `veygrit-sys`. | Repository ownership policy |
 | [`DATA_LICENSES.md`](DATA_LICENSES.md) | Top-level data-license index for geography, postal, map, trade, carrier, and external evidence layers. | Required for source packs |
 | [`docs/data-licenses.md`](docs/data-licenses.md) | Detailed data-license policy for open-source, government, OSM, postal, and geographic evidence layers. | Required for source packs |
 
 The independent standard view is documented in [AGID Standard and Conformance](docs/agid-standard.md). A language SDK is not release-ready until its parity tests pass against `sdk/agid-spec/test-vectors.json`. A public release should publish checksums or detached signatures for the spec, vectors, OpenAPI artifact, SDK packages, and public data packs. External postal, map, address, and geographic datasets keep their own licenses and attribution requirements; AGID must not relabel third-party data as AGID-owned data.
+
+## Address Morphism Theory v2
+
+Address Morphism Theory v2 is the verified theory layer for treating addresses as computable references rather than only strings. It preserves the previous broad chapter set in a tighter 12-chapter structure, and every main chapter has a matching executable TypeScript model and test.
+
+- Start here: [AMT v2 Summary](docs/address-morphism-theory-v2/SUMMARY.md).
+- Chapter/model registry: [Formal Model Registry](docs/address-morphism-theory-v2/formal-model-registry.md).
+- Preservation map from the earlier chapter plan: [Compatibility Map](docs/address-morphism-theory-v2/compatibility-map.md).
+
+Verify the AMT v2 document/model contract with:
+
+```bash
+npm run verify:address-morphism-v2-compatibility
+```
+
+Publication-safety boundary: AMT v2 does not claim global address completeness, raw-address fixture coverage, or that ZK/commercial APIs can repair bad address resolution. It defines the reference, evidence, abstention, privacy, governance, and benchmark boundaries that other AGID packages must respect.
 
 ## CLI Quick Start
 

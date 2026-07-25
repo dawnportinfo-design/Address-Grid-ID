@@ -2,6 +2,19 @@ import { sha256Hex } from './sha256';
 import { VEY_FINANCE_VERSION } from './veyFinance';
 
 export const VEY_TRADING_VERSION = 'agid-vey-trading-market-execution-v1';
+export const VEY_TRADE_GATEWAY_IDEMPOTENCY_VERSION = 'agid-vey-trade-gateway-idempotency-v1';
+export const VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_SCHEMA_REF = '../schemas/vey-trade-gateway-idempotency-v0.1.schema.json';
+export const VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_ID = 'vey-trade-gateway-idempotency-v0.1';
+export const VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_STATUS = 'synthetic-local-fixture';
+export const VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_BUILDER = 'buildVeyTradeGatewayIdempotencyFixture';
+export const VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_VERIFIER = 'npm run verify:vey-trade-gateway-idempotency-fixture-schema';
+export const VEY_TRADE_GATEWAY_IDEMPOTENCY_BOUNDARY_GATE = 'trade-gateway-local-idempotent-intent';
+export const VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_VECTOR_IDS = [
+  'trade_gateway_intent_created_positive',
+  'trade_gateway_intent_replayed_positive',
+  'trade_gateway_intent_conflict_negative',
+  'trade_gateway_intent_private_material_negative',
+] as const;
 
 export const VEY_TRADING_STATUSES = [
   'requires-listing',
@@ -248,6 +261,92 @@ export type VeyTradingIntent = {
   privacy: VeyTradingPrivacy;
 };
 
+export type VeyTradeGatewayIntentRequest = VeyTradingInput & {
+  idempotencyKey?: unknown;
+  operatorWorkspaceRef?: unknown;
+  deliveryGatewayShipmentRef?: unknown;
+  playlistCommerceIntentRef?: unknown;
+  requestedAt?: unknown;
+};
+
+export type VeyTradeGatewaySafeRefs = {
+  tradingIntentId: string;
+  operatorWorkspaceRef?: string;
+  deliveryGatewayShipmentRef?: string;
+  playlistCommerceIntentRef?: string;
+  financeIntentRef?: string;
+  listingAlias?: string;
+  orderAlias?: string;
+};
+
+export type VeyTradeGatewayIntentIdempotencyDecision = 'created' | 'replayed' | 'conflict' | 'rejected';
+export type VeyTradeGatewayIdempotencyFixtureVectorId = typeof VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_VECTOR_IDS[number];
+
+export type VeyTradeGatewayIntentIdempotencyResult = {
+  version: typeof VEY_TRADE_GATEWAY_IDEMPOTENCY_VERSION;
+  ok: boolean;
+  status: 201 | 400 | 409;
+  decision: VeyTradeGatewayIntentIdempotencyDecision;
+  replayed: boolean;
+  attemptCount: number;
+  idempotencyKey?: string;
+  tradeGatewayIntentRef?: string;
+  bodyFingerprintRef?: string;
+  conflictRef?: string;
+  safeRefs?: VeyTradeGatewaySafeRefs;
+  intent?: VeyTradingIntent;
+  errors: string[];
+  warnings: string[];
+  privacy: VeyTradingPrivacy;
+  localOnly: true;
+  productionTraffic: false;
+  nonClaims: string[];
+};
+
+export type VeyTradeGatewayIdempotencyFixtureVector = {
+  vectorId: VeyTradeGatewayIdempotencyFixtureVectorId;
+  ok: boolean;
+  decision: VeyTradeGatewayIntentIdempotencyDecision;
+  httpStatus: 201 | 400 | 409;
+  replayed: boolean;
+  attemptCount: number;
+  tradeGatewayIntentRef?: string;
+  bodyFingerprintRef?: string;
+  conflictRef?: string;
+  safeRefs?: VeyTradeGatewaySafeRefs;
+  errors: string[];
+  warnings: string[];
+  localOnly: true;
+  productionTraffic: false;
+  privateMaterialExposed: false;
+  forbiddenValueMarkersFound: [];
+  nonClaims: string[];
+};
+
+export type VeyTradeGatewayIdempotencyFixture = {
+  $schema: typeof VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_SCHEMA_REF;
+  fixtureId: typeof VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_ID;
+  status: typeof VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_STATUS;
+  source: {
+    builder: typeof VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_BUILDER;
+    verifier: typeof VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_VERIFIER;
+  };
+  boundaryGateId: typeof VEY_TRADE_GATEWAY_IDEMPOTENCY_BOUNDARY_GATE;
+  privacy: {
+    localOnly: true;
+    productionTraffic: false;
+    containsRawAddress: false;
+    privateMaterialExposed: false;
+  };
+  vectors: VeyTradeGatewayIdempotencyFixtureVector[];
+  forbiddenValueMarkers: string[];
+  localOnly: true;
+  productionTraffic: false;
+  privateMaterialExposed: false;
+  nonClaims: string[];
+  validationErrors: [];
+};
+
 const DEFAULT_CREATED_AT = '2026-06-20T00:00:00.000Z';
 const FORBIDDEN_INPUT_KEYS = [
   'rawAddress',
@@ -267,6 +366,39 @@ const FORBIDDEN_INPUT_KEYS = [
 ] as const;
 const PRIVATE_ID_VALUE_RE = /\bA(?:GID|OID)[-_][A-Z0-9]{6,}\b/;
 const PRIVATE_CONTACT_OR_COORD_VALUE_RE = /([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}|\+?\d[\d ().-]{7,}\d|\b-?\d{1,2}\.\d{4,}[ \t]*,[ \t]*-?\d{1,3}\.\d{4,})/i;
+const PUBLIC_TIMESTAMP_KEYS = ['createdAt', 'updatedAt', 'requestedAt', 'observedAt'] as const;
+export const VEY_TRADE_GATEWAY_IDEMPOTENCY_FORBIDDEN_VALUE_MARKERS = [
+  'rawAddressValue',
+  'rawAgidValue',
+  'rawAoidValue',
+  'recipientNameValue',
+  'counterpartyNameValue',
+  'phoneValue',
+  'emailValue',
+  'privateKeyValue',
+  'seedPhraseValue',
+  'walletPrivateKeyValue',
+  'bankAccountValue',
+  'cardPanValue',
+  'contractBodyValue',
+  'customsDocumentBodyValue',
+  'raw_address_value',
+  'raw_agid_value',
+  'raw_aoid_value',
+  'recipient_name_value',
+  'counterparty_name_value',
+  'private_key_value',
+  'wallet_private_key_value',
+  'bank_account_value',
+  'card_pan_value',
+  'contract_body_value',
+  'customs_document_body_value',
+] as const;
+const TRADE_GATEWAY_IDEMPOTENCY_NON_CLAIMS = [
+  'local-only-idempotency-fixture-not-a-production-trading-venue',
+  'does-not-execute-payments-settle-funds-clear-customs-or-provide-legal-or-financial-advice',
+  'does-not-verify-identity-truth-or-sanctions-outcomes-beyond-caller-supplied-evidence-refs',
+];
 
 function clean(value: unknown, maxLength = 180) {
   const text = String(value ?? '').normalize('NFKC').trim();
@@ -394,6 +526,34 @@ function hasForbiddenValue(value: unknown): boolean {
     (FORBIDDEN_INPUT_KEYS as readonly string[]).includes(key)
     || hasForbiddenValue(child)
   ));
+}
+
+function collectForbiddenInputPaths(value: unknown, path: string[] = []): string[] {
+  if (value === null || value === undefined) return [];
+  if (typeof value === 'string') {
+    const key = path[path.length - 1];
+    if ((PUBLIC_TIMESTAMP_KEYS as readonly string[]).includes(key) && !Number.isNaN(Date.parse(value))) {
+      return [];
+    }
+    return PRIVATE_ID_VALUE_RE.test(value) || PRIVATE_CONTACT_OR_COORD_VALUE_RE.test(value)
+      ? [path.join('.') || 'value']
+      : [];
+  }
+  if (typeof value !== 'object') return [];
+  if (Array.isArray(value)) {
+    return value.flatMap((child, index) => collectForbiddenInputPaths(child, [...path, String(index)]));
+  }
+
+  const paths: string[] = [];
+  for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+    const nextPath = [...path, key];
+    if ((FORBIDDEN_INPUT_KEYS as readonly string[]).includes(key)) {
+      paths.push(nextPath.join('.'));
+      continue;
+    }
+    paths.push(...collectForbiddenInputPaths(child, nextPath));
+  }
+  return paths;
 }
 
 function normalizeEvidence(input: readonly VeyTradingEvidenceInput[] | undefined, now: string) {
@@ -591,6 +751,305 @@ function buildIntentId(input: VeyTradingInput, createdAt: string) {
     quantity: input.quantity,
     unitPrice: input.unitPrice,
   })).slice(0, 24).toUpperCase()}`;
+}
+
+function normalizeIdempotencyKey(value: unknown) {
+  const text = clean(value, 120);
+  return /^[A-Za-z0-9._:-]{8,120}$/.test(text) ? text : '';
+}
+
+function tradeGatewayBodyFingerprint(request: VeyTradeGatewayIntentRequest) {
+  const { idempotencyKey: _idempotencyKey, requestedAt: _requestedAt, ...body } = request as Record<string, unknown>;
+  return sha256Hex(stableJson({
+    modelVersion: VEY_TRADING_VERSION,
+    body,
+  }));
+}
+
+function buildTradeGatewayIntentRef(input: {
+  idempotencyKey: string;
+  intent: VeyTradingIntent;
+}) {
+  return compactHash({
+    idempotencyKey: input.idempotencyKey,
+    intentId: input.intent.id,
+    modelVersion: input.intent.modelVersion,
+  }, 'trade_gateway_intent');
+}
+
+function safeRef(value: unknown, maxLength = 120) {
+  const text = clean(value, maxLength);
+  if (!text) return undefined;
+  return PRIVATE_ID_VALUE_RE.test(text) || PRIVATE_CONTACT_OR_COORD_VALUE_RE.test(text) ? undefined : text;
+}
+
+function tradeGatewaySafeRefs(
+  request: VeyTradeGatewayIntentRequest,
+  intent: VeyTradingIntent,
+): VeyTradeGatewaySafeRefs {
+  return {
+    tradingIntentId: intent.id,
+    ...(safeRef(request.operatorWorkspaceRef) ? { operatorWorkspaceRef: safeRef(request.operatorWorkspaceRef) } : {}),
+    ...(safeRef(request.deliveryGatewayShipmentRef) ? { deliveryGatewayShipmentRef: safeRef(request.deliveryGatewayShipmentRef) } : {}),
+    ...(safeRef(request.playlistCommerceIntentRef) ? { playlistCommerceIntentRef: safeRef(request.playlistCommerceIntentRef) } : {}),
+    ...(safeRef(intent.financeLink.financeIntentRef) ? { financeIntentRef: safeRef(intent.financeLink.financeIntentRef) } : {}),
+    ...(safeRef(intent.listingAlias) ? { listingAlias: safeRef(intent.listingAlias) } : {}),
+    ...(safeRef(intent.orderAlias) ? { orderAlias: safeRef(intent.orderAlias) } : {}),
+  };
+}
+
+function rejectedTradeGatewayIntent(input: {
+  status: 400 | 409;
+  decision: 'conflict' | 'rejected';
+  idempotencyKey?: string;
+  attemptCount: number;
+  tradeGatewayIntentRef?: string;
+  bodyFingerprintRef?: string;
+  conflictRef?: string;
+  errors: string[];
+  warnings?: string[];
+}): VeyTradeGatewayIntentIdempotencyResult {
+  return {
+    version: VEY_TRADE_GATEWAY_IDEMPOTENCY_VERSION,
+    ok: false,
+    status: input.status,
+    decision: input.decision,
+    replayed: false,
+    attemptCount: input.attemptCount,
+    ...(input.idempotencyKey ? { idempotencyKey: input.idempotencyKey } : {}),
+    ...(input.tradeGatewayIntentRef ? { tradeGatewayIntentRef: input.tradeGatewayIntentRef } : {}),
+    ...(input.bodyFingerprintRef ? { bodyFingerprintRef: input.bodyFingerprintRef } : {}),
+    ...(input.conflictRef ? { conflictRef: input.conflictRef } : {}),
+    errors: Array.from(new Set(input.errors)),
+    warnings: Array.from(new Set(input.warnings ?? [])),
+    privacy: privacy(),
+    localOnly: true,
+    productionTraffic: false,
+    nonClaims: TRADE_GATEWAY_IDEMPOTENCY_NON_CLAIMS,
+  };
+}
+
+type StoredTradeGatewayIntent = {
+  bodyFingerprint: string;
+  bodyFingerprintRef: string;
+  tradeGatewayIntentRef: string;
+  safeRefs: VeyTradeGatewaySafeRefs;
+  intent: VeyTradingIntent;
+  attemptCount: number;
+};
+
+export function createVeyTradeGatewayIntentStore() {
+  const cache = new Map<string, StoredTradeGatewayIntent>();
+
+  return {
+    get size() {
+      return cache.size;
+    },
+    create(request: VeyTradeGatewayIntentRequest = {}): VeyTradeGatewayIntentIdempotencyResult {
+      const idempotencyKey = normalizeIdempotencyKey(request.idempotencyKey);
+      const forbiddenPaths = collectForbiddenInputPaths(request);
+      const earlyErrors = [
+        ...(idempotencyKey ? [] : ['idempotency-key-required']),
+        ...forbiddenPaths.map((path) => `${path}-not-allowed-in-trade-gateway-intent`),
+      ];
+
+      if (earlyErrors.length > 0) {
+        return rejectedTradeGatewayIntent({
+          status: 400,
+          decision: 'rejected',
+          idempotencyKey,
+          attemptCount: 0,
+          errors: earlyErrors,
+        });
+      }
+
+      const bodyFingerprint = tradeGatewayBodyFingerprint(request);
+      const bodyFingerprintRef = compactHash({ bodyFingerprint }, 'trade_gateway_body');
+      const cached = cache.get(idempotencyKey);
+      if (cached && cached.bodyFingerprint !== bodyFingerprint) {
+        cached.attemptCount += 1;
+        return rejectedTradeGatewayIntent({
+          status: 409,
+          decision: 'conflict',
+          idempotencyKey,
+          attemptCount: cached.attemptCount,
+          tradeGatewayIntentRef: cached.tradeGatewayIntentRef,
+          bodyFingerprintRef: cached.bodyFingerprintRef,
+          conflictRef: compactHash({
+            idempotencyKey,
+            previousBodyFingerprint: cached.bodyFingerprint,
+            attemptedBodyFingerprint: bodyFingerprint,
+          }, 'trade_gateway_conflict'),
+          errors: ['idempotency-key-body-mismatch'],
+        });
+      }
+      if (cached) {
+        cached.attemptCount += 1;
+        return {
+          version: VEY_TRADE_GATEWAY_IDEMPOTENCY_VERSION,
+          ok: true,
+          status: 201,
+          decision: 'replayed',
+          replayed: true,
+          attemptCount: cached.attemptCount,
+          idempotencyKey,
+          tradeGatewayIntentRef: cached.tradeGatewayIntentRef,
+          bodyFingerprintRef: cached.bodyFingerprintRef,
+          safeRefs: cached.safeRefs,
+          intent: cached.intent,
+          errors: [],
+          warnings: cached.intent.warnings,
+          privacy: cached.intent.privacy,
+          localOnly: true,
+          productionTraffic: false,
+          nonClaims: TRADE_GATEWAY_IDEMPOTENCY_NON_CLAIMS,
+        };
+      }
+
+      const intent = buildVeyTradingIntent(request);
+      const validation = validateVeyTradingIntent(intent);
+      if (!validation.ok) {
+        return rejectedTradeGatewayIntent({
+          status: 400,
+          decision: 'rejected',
+          idempotencyKey,
+          attemptCount: 0,
+          bodyFingerprintRef,
+          errors: validation.errors.length > 0 ? validation.errors : intent.errors,
+          warnings: [...intent.warnings, ...validation.warnings],
+        });
+      }
+
+      const record: StoredTradeGatewayIntent = {
+        bodyFingerprint,
+        bodyFingerprintRef,
+        tradeGatewayIntentRef: buildTradeGatewayIntentRef({ idempotencyKey, intent }),
+        safeRefs: tradeGatewaySafeRefs(request, intent),
+        intent,
+        attemptCount: 1,
+      };
+      cache.set(idempotencyKey, record);
+
+      return {
+        version: VEY_TRADE_GATEWAY_IDEMPOTENCY_VERSION,
+        ok: true,
+        status: 201,
+        decision: 'created',
+        replayed: false,
+        attemptCount: record.attemptCount,
+        idempotencyKey,
+        tradeGatewayIntentRef: record.tradeGatewayIntentRef,
+        bodyFingerprintRef: record.bodyFingerprintRef,
+        safeRefs: record.safeRefs,
+        intent,
+        errors: [],
+        warnings: intent.warnings,
+        privacy: intent.privacy,
+        localOnly: true,
+        productionTraffic: false,
+        nonClaims: TRADE_GATEWAY_IDEMPOTENCY_NON_CLAIMS,
+      };
+    },
+  };
+}
+
+function tradeGatewayFixtureVector(
+  vectorId: VeyTradeGatewayIdempotencyFixtureVectorId,
+  result: VeyTradeGatewayIntentIdempotencyResult,
+): VeyTradeGatewayIdempotencyFixtureVector {
+  return {
+    vectorId,
+    ok: result.ok,
+    decision: result.decision,
+    httpStatus: result.status,
+    replayed: result.replayed,
+    attemptCount: result.attemptCount,
+    ...(result.tradeGatewayIntentRef ? { tradeGatewayIntentRef: result.tradeGatewayIntentRef } : {}),
+    ...(result.bodyFingerprintRef ? { bodyFingerprintRef: result.bodyFingerprintRef } : {}),
+    ...(result.conflictRef ? { conflictRef: result.conflictRef } : {}),
+    ...(result.safeRefs ? { safeRefs: result.safeRefs } : {}),
+    errors: result.errors,
+    warnings: result.warnings,
+    localOnly: true,
+    productionTraffic: false,
+    privateMaterialExposed: false,
+    forbiddenValueMarkersFound: [],
+    nonClaims: result.nonClaims,
+  };
+}
+
+export function buildVeyTradeGatewayIdempotencyFixture(): VeyTradeGatewayIdempotencyFixture {
+  const store = createVeyTradeGatewayIntentStore();
+  const request = {
+    idempotencyKey: 'trade-gateway-fixture-key-001',
+    operatorWorkspaceRef: 'workspace_ref_ops_tyo_fixture_001',
+    deliveryGatewayShipmentRef: 'delivery_gateway_shipment_ref_tyo_fixture_001',
+    playlistCommerceIntentRef: 'playlist_intent_ref_tyo_fixture_001',
+    side: 'sell',
+    assetKind: 'physical-goods',
+    marketMode: 'catalog',
+    listingAlias: 'LIST-FIXTURE-001',
+    orderAlias: 'ORD-FIXTURE-001',
+    originCountry: 'JP',
+    destinationCountry: 'JP',
+    quantity: 8,
+    unit: 'case',
+    unitPrice: 30,
+    currency: 'USD',
+    evidence: [
+      { type: 'listing', status: 'passed', evidenceRef: 'listing_ev_trade_gateway_fixture', signed: true },
+      { type: 'market-data', status: 'passed', evidenceRef: 'market_ev_trade_gateway_fixture', signed: true },
+      { type: 'counterparty-kyc', status: 'passed', evidenceRef: 'kyc_ev_trade_gateway_fixture', signed: true },
+      { type: 'sanctions-screen', status: 'passed', evidenceRef: 'sanctions_ev_trade_gateway_fixture', signed: true },
+      { type: 'title-of-goods', status: 'passed', evidenceRef: 'title_ev_trade_gateway_fixture', signed: true },
+    ],
+  } as const;
+  const created = store.create(request);
+  const replayed = store.create({ ...request, requestedAt: '2026-06-21T00:00:00.000Z' });
+  const conflict = store.create({ ...request, quantity: 9 });
+  const rejected = store.create({
+    idempotencyKey: 'trade-gateway-fixture-key-002',
+    assetKind: 'physical-goods',
+    marketMode: 'catalog',
+    listingAlias: 'LIST-FIXTURE-PRIVATE-MATERIAL-NEGATIVE',
+    quantity: 1,
+    unitPrice: 10,
+    currency: 'USD',
+    rawAddress: 'blocked',
+    privateKey: 'blocked',
+    evidence: [
+      { type: 'listing', status: 'passed', rawAoid: 'blocked' },
+    ],
+  });
+
+  return {
+    $schema: VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_SCHEMA_REF,
+    fixtureId: VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_ID,
+    status: VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_STATUS,
+    source: {
+      builder: VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_BUILDER,
+      verifier: VEY_TRADE_GATEWAY_IDEMPOTENCY_FIXTURE_VERIFIER,
+    },
+    boundaryGateId: VEY_TRADE_GATEWAY_IDEMPOTENCY_BOUNDARY_GATE,
+    privacy: {
+      localOnly: true,
+      productionTraffic: false,
+      containsRawAddress: false,
+      privateMaterialExposed: false,
+    },
+    vectors: [
+      tradeGatewayFixtureVector('trade_gateway_intent_created_positive', created),
+      tradeGatewayFixtureVector('trade_gateway_intent_replayed_positive', replayed),
+      tradeGatewayFixtureVector('trade_gateway_intent_conflict_negative', conflict),
+      tradeGatewayFixtureVector('trade_gateway_intent_private_material_negative', rejected),
+    ],
+    forbiddenValueMarkers: [...VEY_TRADE_GATEWAY_IDEMPOTENCY_FORBIDDEN_VALUE_MARKERS],
+    localOnly: true,
+    productionTraffic: false,
+    privateMaterialExposed: false,
+    nonClaims: TRADE_GATEWAY_IDEMPOTENCY_NON_CLAIMS,
+    validationErrors: [],
+  };
 }
 
 export function buildVeyTradingIntent(input: VeyTradingInput = {}): VeyTradingIntent {

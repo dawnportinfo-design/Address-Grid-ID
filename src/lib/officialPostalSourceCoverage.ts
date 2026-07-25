@@ -98,6 +98,8 @@ export type PostalSourceEvidence = {
   trustStrength: 'strong' | 'weak';
   authority?: OfficialPostalSourceProfile['authority'];
   availability?: OfficialPostalSourceProfile['availability'];
+  sourceRole?: OfficialPostalSourceProfile['sourceRole'];
+  validationReadiness?: OfficialPostalSourceProfile['validationReadiness'];
   appliesGlobally?: boolean;
   requiresCredential?: boolean;
   reason: string;
@@ -336,9 +338,13 @@ function makeCatalogEvidence(countryCode: string): PostalSourceEvidence[] {
       trustStrength: 'strong',
       authority: source.authority,
       availability: source.availability,
+      sourceRole: source.sourceRole ?? 'postal-reference-data',
+      validationReadiness: source.validationReadiness ?? 'reference-eligible',
       appliesGlobally: source.countryCodes.includes('*'),
       requiresCredential: source.requiresCredential,
-      reason: `${source.label} is registered in the official postal source catalog (${source.availability}).`,
+      reason: source.sourceRole === 'legal-framework-only'
+        ? `${source.label} is recorded as an official legal framework, not a postal-reference dataset.`
+        : `${source.label} is registered in the official postal source catalog (${source.availability}; ${source.validationReadiness ?? 'reference-eligible'}).`,
     }));
 }
 
@@ -346,8 +352,13 @@ function isOfficialPostalTrustTier(tier: PostalSourceTrustTier) {
   return OFFICIAL_TRUST_TIERS.has(tier);
 }
 
+function isValidationReferenceEligible(source: PostalSourceEvidence) {
+  return source.validationReadiness !== 'metadata-only';
+}
+
 function hasStrongCountrySpecificOfficialEvidence(evidence: PostalSourceEvidence[]) {
   return evidence.some(source => (
+    isValidationReferenceEligible(source) &&
     source.trustStrength === 'strong' &&
     !source.appliesGlobally &&
     isOfficialPostalTrustTier(source.trustTier)
@@ -356,6 +367,7 @@ function hasStrongCountrySpecificOfficialEvidence(evidence: PostalSourceEvidence
 
 function hasStrongGlobalOfficialFallback(evidence: PostalSourceEvidence[]) {
   return evidence.some(source => (
+    isValidationReferenceEligible(source) &&
     source.trustStrength === 'strong' &&
     Boolean(source.appliesGlobally) &&
     isOfficialPostalTrustTier(source.trustTier)
@@ -369,7 +381,7 @@ function statusFromEvidence(
   noNormalPostalCode: boolean,
 ): PostalSourceCoverageStatus {
   if (noNormalPostalCode && !postalCodeRequired) return 'no-normal-postcode';
-  const best = evidence[0];
+  const best = evidence.find(isValidationReferenceEligible);
   if (!best) return postalCodeRequired || hasPostalCodeMetadata ? 'needs-official-source' : 'no-normal-postcode';
 
   if ((postalCodeRequired || hasPostalCodeMetadata) && (
@@ -423,7 +435,7 @@ export function collectOfficialPostalSourceCoverage(
     ].sort(compareEvidence);
     const noNormalPostalCode = noNormalPostcode(format);
     const status = statusFromEvidence(evidence, hasPostalCodeMetadata, postalCodeRequired, noNormalPostalCode);
-    const bestTrustTier = evidence[0]?.trustTier ?? 'weak';
+    const bestTrustTier = evidence.find(isValidationReferenceEligible)?.trustTier ?? 'weak';
     const missingOfficialSource = status === 'needs-official-source';
     const needsPostalSource = postalCodeRequired || hasPostalCodeMetadata;
     const countrySpecificOfficialEvidence = hasStrongCountrySpecificOfficialEvidence(evidence);

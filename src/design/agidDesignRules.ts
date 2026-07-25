@@ -8,6 +8,10 @@ export type AgidDesignRouteKey =
   | 'settings'
   | 'portal'
   | 'developer'
+  | 'address-login'
+  | 'merchant-console'
+  | 'playlist-commerce'
+  | 'veygrit'
   | 'element'
   | 'evidence'
   | 'research'
@@ -97,6 +101,10 @@ export const AGID_ROUTE_ACTION_BAR_POLICY: Record<AgidDesignRouteKey, AgidAction
   settings: 'field-workflow',
   portal: 'compact-current-location',
   developer: 'hidden',
+  'address-login': 'hidden',
+  'merchant-console': 'hidden',
+  'playlist-commerce': 'hidden',
+  veygrit: 'hidden',
   element: 'field-workflow',
   evidence: 'field-workflow',
   research: 'hidden',

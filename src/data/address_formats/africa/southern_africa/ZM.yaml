@@ -60,7 +60,7 @@ postalCode:
   format: NNNNN
   regex: ^\d{5}$
   api: null
-  source: Postal metadata from AGID East Africa regional table; open OSS source not configured
+  source: Zambia Postal Services Corporation / ZAMPOST
 addressRules:
   languages:
     - code: en
@@ -92,6 +92,7 @@ addressRules:
     - code: en
       name: English
   openSourceIds:
+    - zampost
     - rcmrd-geoportal
     - hot-osm-east-southern-africa
     - osm-nominatim
@@ -121,6 +122,7 @@ addressRules:
     - gbif-occurrence
     - rcmrd-gmes-africa-geoportal
 openSourceIds:
+  - zampost
   - rcmrd-geoportal
   - hot-osm-east-southern-africa
   - osm-nominatim

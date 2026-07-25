@@ -121,8 +121,8 @@
   "postalCode": {
     "format": "NNNNN",
     "regex": "^\\d{5}$",
-    "api": "https://www.openplzapi.org/en/",
-    "source": "OpenPLZ API"
+    "api": "https://www.postdirekt.de/plzserver/",
+    "source": "Deutsche Post / Postdirekt postcode search"
   },
   "addressRules": {
     "languages": [
@@ -157,6 +157,7 @@
     }
   },
   "openSourceIds": [
+    "deutsche-post-plz-server",
     "openplzapi",
     "osm-nominatim",
     "osm-overpass",

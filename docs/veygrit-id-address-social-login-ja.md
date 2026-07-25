@@ -4,7 +4,7 @@
 
 Veygrit ID は、単なるソーシャルログインではない。
 
-Google、Apple、メール、将来のLINE/WeChat/Microsoft/Kakaoログインを入口にしながら、ユーザーが Veygrit 住所帳に保存した自分の住所、旅行用氏名、連絡先、会社情報を、審査済み法人サイトへ同意付きで入力代行するための共通ID基盤である。
+Google / Apple のみをアカウント作成入口にしながら、ユーザーが Veygrit 住所帳に保存した自分の住所、旅行用氏名、連絡先、会社情報を、審査済み法人サイトへ同意付きで入力代行するための共通ID基盤である。
 
 ```text
 普通のソーシャルログイン:
@@ -32,13 +32,69 @@ OpenID Connect は OAuth 2.0 の上にある認証レイヤーであり、ID Tok
 
 Googleログインでは、OAuthクライアント、redirect URI、consent screen、state、nonce、ID token validation が重要になる。Veygrit ID でも、同じく `state` と `nonce` を必須にし、登録済みredirect URI以外へclaimを送らない。
 
+## 本格IDコア
+
+Veygrit ID の中核は、次の順序で動く。
+
+```text
+Google / Apple sign-in
+  -> Vey ID session
+  -> pairwiseSubjectAlias
+  -> consent grant
+  -> authorizationCodeRef
+  -> accessTokenRef / idTokenRef / addressCredentialRef
+  -> wallet-side revocation
+```
+
+ECに返すIDは、全ユーザー共通の `subjectId` ではなく、partner client と origin ごとに分かれる `pairwiseSubjectAlias` にする。これにより、あるECでのユーザー識別子が別ECへ横流しされても横断追跡しにくい。
+
+Vey ID session は Google / Apple の provider subject を hash として保持し、`providerIdToken`、`providerAccessToken`、`providerRefreshToken`、`rawProviderProfile` は保存しない。ECへ返す token も raw bearer token ではなく、実装上は短期参照として `accessTokenRef` と `idTokenRef` を扱う。
+
+住所入力代行は `addressCredentialRef` と `walletConsentRef` で表す。ECが見るのは次だけにする。
+
+- `pairwiseSubjectAlias`
+- `walletSessionRef`
+- `authorizationCodeRef`
+- `accessTokenRef`
+- `idTokenRef`
+- `addressCredentialRef`
+- `walletConsentRef`
+
+ECに渡さないもの:
+
+- 生住所
+- Google / Apple token
+- provider raw profile
+- 受取人電話番号
+- private key
+- proof secret
+
+解除はウォレット側を主にする。ユーザーが連携解除すると、Veygrit は `pairwiseSubjectAlias`、`walletConsentRef`、`addressCredentialRef`、`carrierHandoffRef` の失効通知を出し、ECは保存済み参照を削除する。
+
+## ECゲストチェックアウト
+
+EC側では、必ずしも会員登録やECパスワード作成を要求しない。
+
+ゲスト購入では、ユーザーは Veygrit 側で Google / Apple ログインと住所同意を行い、EC側には短期の `guestCheckoutAlias`、`walletConsentRef`、`addressCredentialRef`、`carrierHandoffRef` だけを渡す。
+
+```text
+EC guest checkout:
+  EC account creation: optional / not required
+  EC password: not required
+  Veygrit wallet login: required
+  Veygrit consent: required
+  merchant-visible data: refs only
+```
+
+この方式により、ECは「ログインさせる」導線と「会員登録なしで買える」導線を分けられる。Playlist Commerce はストア発見・管理の入口、Veygrit ID の guest checkout handoff は購入時の住所入力代行であり、役割を混ぜない。
+
 ## サービス定義
 
 Veygrit ID は次の三つを統合する。
 
 ```text
 1. Auth Provider
-   Google / Apple / Email / Passkey / LINE / WeChat / Microsoft / Kakao
+   Google / Apple only
 
 2. Personal Address Book
    自分の住所、旅行用氏名、会社情報、言語、国・地域
@@ -264,8 +320,7 @@ Address Portal:
 ```text
 Google login
 Apple login
-Email login
-Passkey / MFA
+Passkey / MFA for step-up only
 Veygrit住所帳
 自分の住所のみ保存
 航空券用氏名commitment

@@ -59,8 +59,8 @@
   "postalCode": {
     "format": "NNNN",
     "regex": "^\\d{4}$",
-    "api": null,
-    "source": "Postal metadata from AGID East Africa regional table; open OSS source not configured"
+    "api": "https://www.seychelles-post.com/poboxdirectory.php",
+    "source": "Seychelles Post P.O. Box directory"
   },
   "addressRules": {
     "languages": [
@@ -120,6 +120,7 @@
     ]
   },
   "openSourceIds": [
+    "seychelles-post-po-box-directory",
     "osm-nominatim",
     "osm-overpass",
     "openaddresses",

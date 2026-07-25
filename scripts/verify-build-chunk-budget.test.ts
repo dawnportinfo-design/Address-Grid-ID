@@ -6,6 +6,7 @@ const source = readFileSync(new URL('./verify-build-chunk-budget.ts', import.met
 const releaseAssetsSource = readFileSync(new URL('./verify-release-build-assets.ts', import.meta.url), 'utf8');
 const ossLaunchSource = readFileSync(new URL('./verify-oss-launch.ts', import.meta.url), 'utf8');
 const improvementLoopDocs = readFileSync(new URL('../docs/continuous-improvement-loop.md', import.meta.url), 'utf8');
+const commercialBoundaryChangeSet = readFileSync(new URL('../docs/commercial-boundary-change-set.md', import.meta.url), 'utf8');
 const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
 const packageJson = readFileSync(new URL('../package.json', import.meta.url), 'utf8');
 
@@ -42,6 +43,17 @@ test('release build assets command fixes build, asset budget, and pwa order', ()
 test('oss launch includes release build asset gates', () => {
   assert.match(ossLaunchSource, /label: 'verify:release-build-assets'/);
   assert.match(ossLaunchSource, /scripts\/verify-release-build-assets\.ts/);
+});
+
+test('oss launch includes repository owner routing boundary gate', () => {
+  assert.match(ossLaunchSource, /label: 'verify:repository-owner-routing'/);
+  assert.match(ossLaunchSource, /src\/lib\/repositoryOwnerRouting\.test\.ts/);
+  assert.match(ossLaunchSource, /label: 'verify:commercial-boundary-review'/);
+  assert.match(ossLaunchSource, /scripts\/verify-commercial-boundary-review\.ts/);
+  assert.match(commercialBoundaryChangeSet, /npm run verify:oss-launch/);
+  assert.match(commercialBoundaryChangeSet, /npm run verify:repository-owner-routing/);
+  assert.match(commercialBoundaryChangeSet, /npm run verify:commercial-boundary-review/);
+  assert.match(commercialBoundaryChangeSet, /full release gate also includes the routing check/i);
 });
 
 test('oss launch includes Veygrit Address Login package publication gate', () => {

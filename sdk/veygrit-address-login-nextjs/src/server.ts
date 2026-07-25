@@ -323,6 +323,9 @@ export function parseAddressLoginCallback(
   };
 
   assertExpectedStateAndIssuer(payload, options);
+  if (!payload.error && !payload.code) {
+    throw new Error('Address Login callback is missing authorization code.');
+  }
   return payload;
 }
 

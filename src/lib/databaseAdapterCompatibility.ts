@@ -107,6 +107,7 @@ const MANUAL_DATABASE_ADAPTER_COMPATIBILITY: DatabaseAdapterCompatibilityRecord[
       'db/agid-registry.sqlite.sql',
       'db/spatial-address-index.sqlite.sql',
       'db/address-offline-sync-crdt.sqlite.sql',
+      'db/postal-source-evidence-registry.sqlite.sql',
     ],
     privacyControls: runtimeLedgerPrivacyControls,
     nextSteps: ['Enable WAL and scheduled backups for production-like local deployments.'],
@@ -129,6 +130,7 @@ const MANUAL_DATABASE_ADAPTER_COMPATIBILITY: DatabaseAdapterCompatibilityRecord[
       'db/agid-registry.postgres.sql',
       'db/spatial-address-index.postgres.sql',
       'db/address-offline-sync-crdt.postgres.sql',
+      'db/postal-source-evidence-registry.postgres.sql',
     ],
     privacyControls: runtimeLedgerPrivacyControls,
     nextSteps: ['Add provider-specific SSL and migration orchestration for managed Postgres environments.'],
@@ -151,6 +153,7 @@ const MANUAL_DATABASE_ADAPTER_COMPATIBILITY: DatabaseAdapterCompatibilityRecord[
       'db/agid-registry.postgres.sql',
       'db/spatial-address-index.postgres.sql',
       'db/address-offline-sync-crdt.postgres.sql',
+      'db/postal-source-evidence-registry.postgres.sql',
     ],
     privacyControls: runtimeLedgerPrivacyControls,
     nextSteps: ['Map NEON_DATABASE_URL into the Postgres ledger adapter and measure cold-start p95/p99.'],
@@ -173,6 +176,7 @@ const MANUAL_DATABASE_ADAPTER_COMPATIBILITY: DatabaseAdapterCompatibilityRecord[
       'db/agid-registry.postgres.sql',
       'db/spatial-address-index.postgres.sql',
       'db/address-offline-sync-crdt.postgres.sql',
+      'db/postal-source-evidence-registry.postgres.sql',
     ],
     privacyControls: [...runtimeLedgerPrivacyControls, 'row-level-security-denies-private-aoid-fields'],
     nextSteps: ['Add Supabase migration notes and denied plaintext AOID RLS fixtures.'],
@@ -533,6 +537,7 @@ function generatedSchemaRefs(status: DatabaseAdapterStatus): string[] {
       'db/agid-registry.postgres.sql',
       'db/spatial-address-index.postgres.sql',
       'db/address-offline-sync-crdt.postgres.sql',
+      'db/postal-source-evidence-registry.postgres.sql',
     ];
   }
   return [];

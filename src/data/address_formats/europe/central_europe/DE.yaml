@@ -93,8 +93,8 @@ international:
 postalCode:
   format: NNNNN
   regex: ^\d{5}$
-  api: https://www.openplzapi.org/en/
-  source: OpenPLZ API
+  api: https://www.postdirekt.de/plzserver/
+  source: Deutsche Post / Postdirekt postcode search
 addressRules:
   languages:
     - code: de
@@ -120,6 +120,7 @@ addressRules:
     required: true
     usage: required
   openSourceIds:
+    - deutsche-post-plz-server
     - openplzapi
     - osm-nominatim
     - osm-overpass
@@ -136,6 +137,7 @@ addressRules:
     - eea-eunis-habitats
     - jrc-esdac-soils
 openSourceIds:
+  - deutsche-post-plz-server
   - openplzapi
   - osm-nominatim
   - osm-overpass

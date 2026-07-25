@@ -40,3 +40,7 @@ sdk/**/build/
 reports/address-morphism-theory-review/
 reports/agid-ethereum-address-proof-boundary/
 reports/zk-address-predicates/
+
+# Private commercial product snapshots live in separate repositories under
+# veygrit-sys. Do not stage them into the public AGID workspace by accident.
+commercial/

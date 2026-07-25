@@ -2,6 +2,7 @@ import {
   classifyPostalSourceTrust,
   getOfficialPostalSourcesForCountry,
   isStrongPostalTrustTier,
+  isPostalReferenceDataSource,
   type OfficialPostalSourceProfile,
   type PostalSourceAvailability,
   type PostalSourceDepth,
@@ -320,6 +321,7 @@ export function buildAddressDataLoadPlan(options: AddressDataLoadPlanOptions = {
   const catalogSources = countryCode
     ? getOfficialPostalSourcesForCountry(countryCode)
       .filter(source => includeGlobalFallbacks || !source.countryCodes.includes('*'))
+      .filter(isPostalReferenceDataSource)
     : [];
   for (const source of catalogSources) {
     addSource(buckets, seen, profileToSource(source, options, priority++));

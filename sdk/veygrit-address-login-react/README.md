@@ -155,6 +155,49 @@ returns that blocked result so UI can show repair/retry state without exposing
 raw failure details.
 `GuestCheckoutButton` exposes `onGuestCheckoutBlocked()` for that UI path.
 
+## Merchant-Visible Redaction Display
+
+When your checkout receives the Vey ID demo EC
+`merchantVisibleRedactionAffordance`, use
+`createMerchantVisibleRedactionDisplayModel()` before rendering it. The helper
+accepts the approved field refs separately, validates that every displayed ref
+is listed by the affordance, and returns counts for blocked classes and
+non-claims instead of copying blocked material names into the UI.
+
+```tsx
+import {
+  createMerchantVisibleRedactionDisplayModel,
+  type VeyIdMerchantVisibleRedactionAffordance,
+} from "@veygrit/address-login-react";
+
+export function MerchantRedactionSummary({
+  affordance,
+}: {
+  affordance: VeyIdMerchantVisibleRedactionAffordance;
+}) {
+  const display = createMerchantVisibleRedactionDisplayModel(affordance, {
+    pairwiseSubjectAlias: "pairwise_synthetic_001",
+    guestCheckoutAlias: "guest_checkout_alias_synthetic_001",
+    walletConsentRef: "consent_synthetic_001",
+    addressCredentialRef: "addr_cred_synthetic_001",
+    carrierHandoffRef: "carrier_handoff_synthetic_001",
+  });
+
+  return (
+    <section>
+      <strong>{display.boundaryGateId}</strong>
+      {display.rows.map(row => (
+        <p key={row.field}>{row.ref ?? "pending_wallet_consent"}</p>
+      ))}
+      <small>{display.blockedClassCount} blocked classes</small>
+    </section>
+  );
+}
+```
+
+The package-visible example lives at
+`examples/merchant-visible-redaction/MerchantVisibleRedactionCard.tsx`.
+
 ## Callback Handling
 
 ```tsx
@@ -226,6 +269,34 @@ const friendDelivery = useFriendDelivery({
 ```
 
 The hook tracks `idle`, `requesting`, `notified`, `approving`, `approved`, and `error` states. The SDK does not ship production secrets; your server or hosted session layer must attach authorization.
+
+## Package Publication Gate
+
+Before publishing or splitting this package into a dedicated repository, run:
+
+```bash
+npm run verify:veygrit-address-login-test-helpers
+npm run verify:veygrit-address-login-react
+npm run verify:veygrit-address-login-react-package
+npm run verify:veygrit-address-login-packages
+```
+
+Verification order:
+
+1. Run the shared test-helper boundary gate for callback vectors and merchant-visible
+   redaction fixtures.
+2. Run the package-specific gate for local build, tests, examples, and public API.
+3. Run the package publication-safety gate for built entrypoints, npm pack
+   contents, README non-claims, examples, and files allowlist.
+4. Run the cross-package traceability preflight to confirm the manifest, README
+   gates, commit candidates, and secret-pattern checks still agree.
+5. Treat a pass as local OSS-prep evidence only; it is not a publishing,
+   hosted-service, or production readiness claim.
+
+The cross-package publication map is `../veygrit-address-login-packages.manifest.json`.
+It records this package's runtime, examples, public surfaces, verify command, and
+privacy controls. The manifest is local OSS-prep evidence and does not claim
+production readiness.
 
 ## Safety Boundary
 

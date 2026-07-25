@@ -78,8 +78,8 @@
   "postalCode": {
     "format": "NNNNN",
     "regex": "^\\d{5}$",
-    "api": null,
-    "source": "Postal metadata from AGID regional table; no free OSS source configured"
+    "api": "https://www.laposte.ci/",
+    "source": "La Poste de Cote d'Ivoire official portal"
   },
   "addressRules": {
     "languages": [
@@ -121,6 +121,7 @@
     ]
   },
   "openSourceIds": [
+    "la-poste-cote-divoire",
     "hot-osm-west-africa",
     "osm-nominatim",
     "osm-overpass",

@@ -1,0 +1,291 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+import {
+  POSTAL_VALIDATION_NEGATIVE_CLAIMS_FIXTURE,
+  POSTAL_VALIDATION_NEGATIVE_CLAIMS_SCHEMA,
+} from './addressQlPostalValidationParity';
+
+export const ADDRESSQL_OSS_READINESS_VERSION = 'addressql-oss-readiness-v0.1';
+
+export type AddressQlRepositoryManifest = {
+  schema_version: string;
+  owner: string;
+  repository: string;
+  visibility: string;
+  status: string;
+  description: string;
+  license_policy: {
+    code: string;
+    papers_and_specs: string;
+    data: string;
+  };
+  topics: string[];
+  public_packages: Array<{
+    name: string;
+    path: string;
+    readiness: string;
+    verification: string;
+  }>;
+  required_documents: string[];
+  release_gates: string[];
+  verification_commands: string[];
+  non_claims: string[];
+};
+
+export type AddressQlOssReadinessReport = {
+  version: typeof ADDRESSQL_OSS_READINESS_VERSION;
+  target: 'dawnportinfo-design/addressql';
+  ready: boolean;
+  score: number;
+  errors: string[];
+  warnings: string[];
+  verifiedPaths: string[];
+  verificationCommands: string[];
+};
+
+const MANIFEST_PATH = 'docs/addressql/repository-manifest.json';
+
+const REQUIRED_PUBLIC_DOCS = [
+  'docs/addressql/README.md',
+  'docs/addressql/specification-v0.1.md',
+  'docs/addressql/function-registry-v0.1.md',
+  'docs/addressql/technical-stack.md',
+  'docs/addressql/research-plan.md',
+  'docs/addressql/open-source-release-readiness.md',
+  'docs/addressql/repository-manifest.json',
+  'docs/addressql/global-country-preload-v0.7.md',
+  'docs/addressql/zk-proof-hooks-v0.6.md',
+  'docs/addressql/calcite-v0.5.md',
+  'docs/addressql/repository-files/README.md',
+  'docs/addressql/repository-files/LICENSE',
+  'docs/addressql/repository-files/LICENSES-DATA.md',
+  'docs/addressql/repository-files/CONTRIBUTING.md',
+  'docs/addressql/repository-files/SECURITY.md',
+  'docs/addressql/repository-files/CODE_OF_CONDUCT.md',
+  POSTAL_VALIDATION_NEGATIVE_CLAIMS_FIXTURE,
+  POSTAL_VALIDATION_NEGATIVE_CLAIMS_SCHEMA,
+];
+
+const REQUIRED_PUBLIC_ARTIFACTS = [
+  'extensions/addressql-postgres/README.md',
+  'extensions/addressql-postgres/sql/addressql--0.1.0.sql',
+  'extensions/addressql-postgres/fixtures/synthetic_addressql_seed.sql',
+  'extensions/addressql-duckdb/README.md',
+  'extensions/addressql-duckdb/sql/addressql_duckdb_v0_3.sql',
+  'native/addressql-core/Cargo.toml',
+  'native/addressql-core/src/lib.rs',
+  'sdk/addressql-js-ts/package.json',
+  'sdk/addressql-js-ts/src/index.ts',
+  'sdk/addressql-py/pyproject.toml',
+  'sdk/addressql-py/addressql/__init__.py',
+  'sdk/addressql-rs/Cargo.toml',
+  'sdk/addressql-rs/src/lib.rs',
+  'integrations/addressql-calcite/README.md',
+  'scripts/verify-addressql-postal-negative-claims.ts',
+  'scripts/export-addressql-oss-repository.ts',
+  'src/lib/addressQlGlobalCountryPreload.ts',
+  'src/lib/addressQlZkProofHooks.ts',
+  'src/lib/addressQlOssReadiness.ts',
+];
+
+const REQUIRED_PACKAGE_SCRIPTS = [
+  'verify:addressql',
+  'verify:addressql-oss',
+  'verify:addressql-postgres',
+  'verify:addressql-duckdb',
+  'verify:addressql-duckdb:cli',
+  'verify:addressql-postal-negative-claims',
+  'verify:addressql-sdk',
+  'verify:addressql-global-preload',
+  'verify:addressql-zk',
+  'verify:addressql-calcite',
+  'verify:addressql-export',
+  'export:addressql-repository',
+];
+
+const DISALLOWED_PUBLIC_FIXTURE_PATTERNS = [
+  /東京都千代田区千代田1-1/i,
+  /1 Market St/i,
+  /raw recipient/i,
+  /private key material/i,
+  /proof secret material/i,
+];
+
+const FIXTURE_PATHS = [
+  'extensions/addressql-postgres/fixtures/synthetic_addressql_seed.sql',
+  'extensions/addressql-duckdb/fixtures/synthetic_addresses.csv',
+  'extensions/addressql-duckdb/fixtures/synthetic_country_profiles.csv',
+  'extensions/addressql-duckdb/fixtures/synthetic_postal_areas.csv',
+  'native/addressql-core/src/fixtures.rs',
+  'sdk/addressql-js-ts/test/sdk.test.ts',
+  'sdk/addressql-py/tests/test_sdk.py',
+  'sdk/addressql-rs/tests/sdk.rs',
+];
+
+function readText(root: string, relativePath: string): string {
+  return readFileSync(join(root, relativePath), 'utf8');
+}
+
+function readJson<T>(root: string, relativePath: string): T {
+  return JSON.parse(readText(root, relativePath)) as T;
+}
+
+function addOnce(items: string[], item: string) {
+  if (!items.includes(item)) items.push(item);
+}
+
+function pathExists(root: string, relativePath: string): boolean {
+  return existsSync(join(root, relativePath));
+}
+
+export function loadAddressQlRepositoryManifest(root = process.cwd()): AddressQlRepositoryManifest {
+  return readJson<AddressQlRepositoryManifest>(root, MANIFEST_PATH);
+}
+
+export function buildAddressQlOssReadinessReport(root = process.cwd()): AddressQlOssReadinessReport {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const verifiedPaths: string[] = [];
+
+  let manifest: AddressQlRepositoryManifest | null = null;
+  try {
+    manifest = loadAddressQlRepositoryManifest(root);
+  } catch (error) {
+    addOnce(errors, `manifest-unreadable:${(error as Error).message}`);
+  }
+
+  const requiredPaths = [
+    ...REQUIRED_PUBLIC_DOCS,
+    ...REQUIRED_PUBLIC_ARTIFACTS,
+  ];
+
+  for (const relativePath of requiredPaths) {
+    if (!pathExists(root, relativePath)) addOnce(errors, `missing-path:${relativePath}`);
+    else verifiedPaths.push(relativePath);
+  }
+
+  if (manifest) {
+    if (manifest.owner !== 'dawnportinfo-design') addOnce(errors, 'manifest-owner-must-be-dawnportinfo-design');
+    if (manifest.repository !== 'addressql') addOnce(errors, 'manifest-repository-must-be-addressql');
+    if (manifest.visibility !== 'public') addOnce(errors, 'manifest-visibility-must-be-public');
+    if (manifest.license_policy.code !== 'Apache-2.0') addOnce(errors, 'manifest-code-license-must-be-apache-2.0');
+    if (manifest.license_policy.papers_and_specs !== 'CC-BY-4.0') addOnce(errors, 'manifest-spec-license-must-be-cc-by-4.0');
+    if (manifest.public_packages.length < 8) addOnce(errors, 'manifest-needs-public-package-map');
+
+    for (const publicPackage of manifest.public_packages) {
+      if (!publicPackage.name.trim()) addOnce(errors, 'manifest-public-package-missing-name');
+      if (!publicPackage.path.trim()) addOnce(errors, `manifest-public-package-missing-path:${publicPackage.name}`);
+      if (!publicPackage.readiness.trim()) addOnce(errors, `manifest-public-package-missing-readiness:${publicPackage.name}`);
+      if (!publicPackage.verification.trim()) addOnce(errors, `manifest-public-package-missing-verification:${publicPackage.name}`);
+      if (publicPackage.path.trim()) {
+        if (!pathExists(root, publicPackage.path)) addOnce(errors, `manifest-public-package-path-missing:${publicPackage.name}:${publicPackage.path}`);
+        else verifiedPaths.push(publicPackage.path);
+      }
+    }
+
+    for (const required of REQUIRED_PUBLIC_DOCS) {
+      if (!manifest.required_documents.includes(required)) addOnce(errors, `manifest-missing-required-doc:${required}`);
+    }
+    for (const requiredCommand of REQUIRED_PACKAGE_SCRIPTS.map(script => `npm run ${script}`)) {
+      if (!manifest.verification_commands.includes(requiredCommand)) addOnce(errors, `manifest-missing-command:${requiredCommand}`);
+    }
+    for (const phrase of ['not a new database engine', 'not proof of residence', 'not audited circuit']) {
+      if (!manifest.non_claims.join(' ').toLowerCase().includes(phrase)) addOnce(errors, `manifest-missing-non-claim:${phrase}`);
+    }
+  }
+
+  const readme = pathExists(root, 'docs/addressql/README.md') ? readText(root, 'docs/addressql/README.md') : '';
+  for (const phrase of ['Quick Start', 'dawnportinfo-design/addressql', 'Apache-2.0', 'CC-BY-4.0', 'verify:addressql-oss']) {
+    if (!readme.includes(phrase)) addOnce(errors, `readme-missing:${phrase}`);
+  }
+
+  const readinessDoc = pathExists(root, 'docs/addressql/open-source-release-readiness.md')
+    ? readText(root, 'docs/addressql/open-source-release-readiness.md')
+    : '';
+  for (const phrase of [
+    'Required GitHub Files',
+    'Manifest-Owned Spec Assets',
+    'docs/specs/fixtures/',
+    'docs/specs/schemas/',
+    'verify:addressql-export',
+    'Non-Negotiable Release Gates',
+    'Remaining Before Remote Push',
+    'repository-files',
+  ]) {
+    if (!readinessDoc.includes(phrase)) addOnce(errors, `readiness-doc-missing:${phrase}`);
+  }
+
+  const license = pathExists(root, 'docs/addressql/repository-files/LICENSE') ? readText(root, 'docs/addressql/repository-files/LICENSE') : '';
+  if (!license.includes('Apache License')) addOnce(errors, 'repository-license-missing-apache-license');
+  if (!license.includes('CC-BY-4.0')) addOnce(errors, 'repository-license-missing-split-license-note');
+
+  const dataLicense = pathExists(root, 'docs/addressql/repository-files/LICENSES-DATA.md') ? readText(root, 'docs/addressql/repository-files/LICENSES-DATA.md') : '';
+  if (!dataLicense.includes('synthetic fixtures only')) addOnce(errors, 'data-license-missing-synthetic-fixture-rule');
+  if (!dataLicense.includes('CC-BY-4.0')) addOnce(errors, 'data-license-missing-doc-license');
+
+  const contributing = pathExists(root, 'docs/addressql/repository-files/CONTRIBUTING.md') ? readText(root, 'docs/addressql/repository-files/CONTRIBUTING.md') : '';
+  if (!contributing.includes('Do not contribute raw private address')) addOnce(errors, 'contributing-missing-raw-address-rule');
+
+  const security = pathExists(root, 'docs/addressql/repository-files/SECURITY.md') ? readText(root, 'docs/addressql/repository-files/SECURITY.md') : '';
+  if (!security.includes('Do not commit raw private address material')) addOnce(errors, 'security-missing-raw-address-rule');
+  if (!security.includes('audited ZK circuits')) addOnce(errors, 'security-missing-zk-non-claim');
+
+  const packageJson = pathExists(root, 'package.json') ? readJson<{ scripts?: Record<string, string> }>(root, 'package.json') : { scripts: {} };
+  const scripts = packageJson.scripts ?? {};
+  for (const script of REQUIRED_PACKAGE_SCRIPTS) {
+    if (!scripts[script]) addOnce(errors, `package-script-missing:${script}`);
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlOssReadiness.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-oss-readiness-test');
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlGlobalCountryPreload.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-global-country-preload-test');
+  }
+
+  for (const relativePath of FIXTURE_PATHS) {
+    if (!pathExists(root, relativePath)) {
+      addOnce(warnings, `fixture-path-not-found:${relativePath}`);
+      continue;
+    }
+    const text = readText(root, relativePath);
+    if (!/synthetic/i.test(text)) addOnce(errors, `fixture-missing-synthetic-marker:${relativePath}`);
+    for (const pattern of DISALLOWED_PUBLIC_FIXTURE_PATTERNS) {
+      if (pattern.test(text)) addOnce(errors, `fixture-contains-disallowed-public-pattern:${relativePath}:${pattern}`);
+    }
+  }
+
+  const zkDoc = pathExists(root, 'docs/addressql/zk-proof-hooks-v0.6.md') ? readText(root, 'docs/addressql/zk-proof-hooks-v0.6.md') : '';
+  if (!/does not add real ZK circuits/i.test(zkDoc)) addOnce(errors, 'zk-doc-must-defer-real-circuits');
+
+  const calciteDoc = pathExists(root, 'docs/addressql/calcite-v0.5.md') ? readText(root, 'docs/addressql/calcite-v0.5.md') : '';
+  if (!/Do not add Maven, Gradle, or Calcite runtime dependency/i.test(calciteDoc)) {
+    addOnce(errors, 'calcite-doc-must-defer-runtime-dependency');
+  }
+
+  const globalPreloadDoc = pathExists(root, 'docs/addressql/global-country-preload-v0.7.md')
+    ? readText(root, 'docs/addressql/global-country-preload-v0.7.md')
+    : '';
+  for (const phrase of ['not proof of global address completeness', 'POSTAL_EQUIVALENT', 'Do not invent an official postal code']) {
+    if (!globalPreloadDoc.includes(phrase)) addOnce(errors, `global-preload-doc-missing:${phrase}`);
+  }
+
+  const scoreBase = requiredPaths.length + REQUIRED_PACKAGE_SCRIPTS.length + 8;
+  const penalty = errors.length * 3 + warnings.length;
+  const score = Math.max(0, Math.min(100, Math.round(((scoreBase - penalty) / scoreBase) * 100)));
+
+  return {
+    version: ADDRESSQL_OSS_READINESS_VERSION,
+    target: 'dawnportinfo-design/addressql',
+    ready: errors.length === 0,
+    score,
+    errors,
+    warnings,
+    verifiedPaths,
+    verificationCommands: REQUIRED_PACKAGE_SCRIPTS.map(script => `npm run ${script}`),
+  };
+}
+
+export function validateAddressQlOssReadiness(root = process.cwd()): string[] {
+  return buildAddressQlOssReadinessReport(root).errors;
+}

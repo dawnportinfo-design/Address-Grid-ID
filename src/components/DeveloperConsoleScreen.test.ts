@@ -4,6 +4,8 @@ import { dirname, join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import { getVeygritShipReleaseGateStatus } from '../lib/veygritShipReleaseGateStatus';
+
 const here = dirname(fileURLToPath(import.meta.url));
 const source = readFileSync(join(here, 'DeveloperConsoleScreen.tsx'), 'utf8');
 const css = readFileSync(join(here, '..', 'index.css'), 'utf8');
@@ -59,6 +61,26 @@ test('Developer Console launch tab renders Launch Center template, no-raw-addres
   assert.match(source, /preAuditChecks/);
   assert.match(source, /externalAuditReady/);
   assert.match(source, /deadLetterQueueReady/);
+});
+
+test('Developer Console launch tab surfaces Veygrit Ship public-safe release gate status', () => {
+  const status = getVeygritShipReleaseGateStatus();
+
+  assert.equal(status.gateCount, 13);
+  assert.equal(status.exposure, 'public-safe-no-identifiers');
+  assert.equal(status.remoteActionsAuthorized, false);
+  assert.equal(status.productionTraffic, false);
+  assert.match(source, /getVeygritShipReleaseGateStatus/);
+  assert.match(source, /VEYGRIT_SHIP_RELEASE_GATE_STATUS/);
+  assert.match(source, /VeygritShipReleaseGateStatusPanel/);
+  assert.match(source, /data-veygrit-ship-release-gate-status/);
+  assert.match(source, /Veygrit Ship release gates/);
+  assert.match(source, /Public-safe local status/);
+  assert.match(source, /status\.gates\.slice\(0, 6\)/);
+  assert.match(source, /status\.nonClaims\.map/);
+  assert.match(source, /remoteActionsAuthorized/);
+  assert.match(source, /productionTraffic/);
+  assert.doesNotMatch(source, /tenantId|requestId|addressId|recipientId|credentialSecretRef|credentialVersionRef|secretRef|versionRef/);
 });
 
 test('Developer Console launch tab maps threat templates to no-raw-address surface policies', () => {
@@ -127,6 +149,22 @@ test('Developer Console presents a release-level API workbench instead of a pass
   assert.match(source, /Production/);
 });
 
+test('Developer Console surfaces the Veygrit Address Login callback contract', () => {
+  assert.match(source, /VEYGRIT_ADDRESS_LOGIN_CALLBACK_CONTRACT_VERSION/);
+  assert.match(source, /VEYGRIT_ADDRESS_LOGIN_CANONICAL_CALLBACK_PARAMS/);
+  assert.match(source, /VEYGRIT_ADDRESS_LOGIN_CALLBACK_PARAM_ALIASES/);
+  assert.match(source, /VEYGRIT_ADDRESS_LOGIN_FORBIDDEN_CALLBACK_PARAM_EXAMPLES/);
+  assert.match(source, /VEYGRIT_ADDRESS_LOGIN_CALLBACK_NON_CLAIMS/);
+  assert.match(source, /ADDRESS_LOGIN_CALLBACK_ALIAS_ROWS/);
+  assert.match(source, /ADDRESS_LOGIN_CALLBACK_CONTRACT_SUMMARY/);
+  assert.match(source, /Address Login callback contract/);
+  assert.match(source, /canonicalParams/);
+  assert.match(source, /compatibilityAliases/);
+  assert.match(source, /forbiddenCallbackParams/);
+  assert.match(source, /nonClaims/);
+  assert.match(source, /callback handling stays compatible/);
+});
+
 test('Developer Console has a modern developer command center across all tabs', () => {
   assert.match(source, /DeveloperCommandCenter/);
   assert.match(source, /data-developer-command-center/);
@@ -159,6 +197,17 @@ test('Developer Console is oriented like a usable developer admin dashboard', ()
   assert.match(source, /Support & resources/);
   assert.match(source, /grid gap-5 lg:grid-cols-\[250px_minmax\(0,1fr\)\]/);
   assert.match(source, /lg:hidden" aria-label="Developer Console"/);
+});
+
+test('Developer Console links to the commercial Playlist Commerce developer demo surface', () => {
+  assert.match(source, /Playlist Commerce/);
+  assert.match(source, /Commercial\/private demo \/ not OSS/);
+  assert.match(source, /\/playlist-commerce/);
+  assert.match(source, /Vey Ecosystem/);
+  assert.match(source, /Wallet \+ Delivery Gateway \+ Carrier API Stripe/);
+  assert.match(source, /\/merchant-console/);
+  assert.match(source, /window\.location\.href = card\.href/);
+  assert.match(source, /href\?: string/);
 });
 
 test('Developer Console API keys tab behaves like a secure key management screen', () => {

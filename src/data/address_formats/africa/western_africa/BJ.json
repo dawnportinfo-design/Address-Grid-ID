@@ -59,8 +59,8 @@
   "postalCode": {
     "format": "NNNN",
     "regex": "^\\d{4}$",
-    "api": null,
-    "source": "Postal metadata from AGID regional table; no free OSS source configured"
+    "api": "https://laposte.bj/nos-agences/",
+    "source": "La Poste du Benin agency directory"
   },
   "addressRules": {
     "languages": [
@@ -103,6 +103,7 @@
     ]
   },
   "openSourceIds": [
+    "la-poste-benin",
     "hot-osm-west-africa",
     "osm-nominatim",
     "osm-overpass",

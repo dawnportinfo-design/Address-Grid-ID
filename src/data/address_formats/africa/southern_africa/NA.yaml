@@ -61,8 +61,8 @@ english:
 postalCode:
   format: NNNNN
   regex: ^\d{5}$
-  api: null
-  source: Postal metadata from AGID Southern Africa and Indian Ocean regional table; open OSS source not configured
+  api: https://www.nampost.com.na/postal/postal-codes
+  source: NamPost postal codes
 addressRules:
   languages:
     - code: en
@@ -94,6 +94,7 @@ addressRules:
     required: false
     usage: used
   openSourceIds:
+    - nampost-postal-codes
     - rcmrd-geoportal
     - hot-osm-east-southern-africa
     - osm-nominatim

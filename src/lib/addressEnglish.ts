@@ -1,5 +1,5 @@
 import type { CanonicalAddress } from './addressRendering';
-import { normalizeMainlandChineseAddressPart } from './chineseAddressUtils';
+import { normalizeChineseRegionalAddressPart } from './chineseAddressUtils';
 import { normalizeIndianAddressPart } from './indiaAddressEnglish';
 import { normalizeSouthAfricanAddressPart } from './southAfricaAddressEnglish';
 import { deaccent,transliterate } from './transliteration';
@@ -1176,9 +1176,10 @@ export function normalizeEnglishAddressPart(value: unknown, countryCode = '') {
     const hepburnPlaceName = normalizeJapanesePlaceNameToHepburn(original);
     if (hepburnPlaceName) return hepburnPlaceName;
   }
-  if (code === 'CN') {
-    const pinyinPlaceName = normalizeMainlandChineseAddressPart(original);
-    if (pinyinPlaceName) return pinyinPlaceName;
+  if (['CN', 'TW', 'HK', 'MO', 'SG'].includes(code) && /[\u3400-\u9fff]/.test(original)) {
+    const regionalPlaceName = normalizeChineseRegionalAddressPart(original, code);
+    if (regionalPlaceName) return regionalPlaceName;
+    return '';
   }
   if (code === 'KR' || code === 'KP') {
     const revisedRomanization = normalizeKoreanPlaceNameToRevisedRomanization(original);
@@ -1237,18 +1238,19 @@ export function normalizeEnglishAddressBuildingName(value: unknown, countryCode 
   const exact = BUILDING_NAME_EXONYMS[original] || COMMON_ENGLISH_EXONYMS[original];
   if (exact) return exact;
 
-  if (code === 'JP' || /[\u3040-\u30ff\u3400-\u9fff]/.test(original)) {
-    const japaneseBuilding = tokenizeKnownTerms(original, JAPANESE_BUILDING_TERMS);
-    if (japaneseBuilding) return japaneseBuilding;
-  }
-
-  if ((code === 'CN' || code === 'TW' || code === 'HK' || code === 'MO') && /[\u3400-\u9fff]/.test(original)) {
-    const chineseBuilding = normalizeMainlandChineseAddressPart(original)
+  if (['CN', 'TW', 'HK', 'MO', 'SG'].includes(code) && /[\u3400-\u9fff]/.test(original)) {
+    const chineseBuilding = normalizeChineseRegionalAddressPart(original, code)
       .replace(/\bDasha\b/g, 'Building')
       .replace(/\bDalou\b/g, 'Building')
       .replace(/\bZhongxin\b/g, 'Zhongxin')
       .trim();
     if (chineseBuilding) return chineseBuilding;
+    return '';
+  }
+
+  if (code === 'JP' && /[\u3040-\u30ff\u3400-\u9fff]/.test(original)) {
+    const japaneseBuilding = tokenizeKnownTerms(original, JAPANESE_BUILDING_TERMS);
+    if (japaneseBuilding) return japaneseBuilding;
   }
 
   if ((code === 'KR' || code === 'KP') && /[\uac00-\ud7af]/.test(original)) {

@@ -16,6 +16,7 @@ import {
   LockKeyhole,
   RotateCcw,
   Search,
+  Settings,
   ShieldAlert,
   ShieldCheck,
   ShoppingCart,
@@ -23,6 +24,7 @@ import {
   Store,
   Trash2,
   Truck,
+  UserRound,
   XCircle,
 } from 'lucide-react';
 import React from 'react';
@@ -164,7 +166,22 @@ type PortalCopyKey =
   | 'openInspector'
   | 'portalOverview'
   | 'activePermissions'
-  | 'riskModeLabel';
+  | 'riskModeLabel'
+  | 'myPage'
+  | 'myPageSubtitle'
+  | 'actionInbox'
+  | 'walletHealth'
+  | 'quickActions'
+  | 'pendingApprovals'
+  | 'credentialAlerts'
+  | 'credentialStatus'
+  | 'securityReview'
+  | 'reviewPermissions'
+  | 'safeExportAction'
+  | 'openSettings'
+  | 'friendsSection'
+  | 'friendsSectionBody'
+  | 'recipientSafeRefs';
 
 type PortalFilter = 'all' | 'active' | 'review' | 'revoked';
 type PortalProfessionRole = 'carrierOps' | 'frontDeskPos' | 'municipalAid' | 'securityLegal' | 'developerOps';
@@ -311,6 +328,21 @@ const PORTAL_COPY: Record<'en' | 'ja', Record<PortalCopyKey, string>> = {
     portalOverview: 'Portal overview',
     activePermissions: 'Active permissions',
     riskModeLabel: 'Risk mode',
+    myPage: 'My Page',
+    myPageSubtitle: 'Your wallet profile for credentials, permissions, consent, security status, and safe exports.',
+    actionInbox: 'Action inbox',
+    walletHealth: 'Wallet health',
+    quickActions: 'Quick actions',
+    pendingApprovals: 'Pending approvals',
+    credentialAlerts: 'Credential alerts',
+    credentialStatus: 'Credential status',
+    securityReview: 'Security review',
+    reviewPermissions: 'Review permissions',
+    safeExportAction: 'Safe export',
+    openSettings: 'Open settings',
+    friendsSection: 'Friends',
+    friendsSectionBody: 'Recipient-safe aliases for family, friends, and gift delivery. No recipient name or raw address is displayed.',
+    recipientSafeRefs: 'Recipient-safe refs',
   },
   ja: {
     returnToMap: 'AGIDマップへ戻る',
@@ -428,6 +460,21 @@ const PORTAL_COPY: Record<'en' | 'ja', Record<PortalCopyKey, string>> = {
     portalOverview: 'Portal概要',
     activePermissions: '有効な許可',
     riskModeLabel: 'リスクモード',
+    myPage: 'マイページ',
+    myPageSubtitle: 'Credential、許可、同意、安全状態、安全exportを管理するWalletプロフィール。',
+    actionInbox: '対応ボックス',
+    walletHealth: 'Wallet状態',
+    quickActions: 'クイック操作',
+    pendingApprovals: '承認待ち',
+    credentialAlerts: 'Credential通知',
+    credentialStatus: 'Credential状態',
+    securityReview: 'セキュリティ確認',
+    reviewPermissions: '許可を確認',
+    safeExportAction: '安全export',
+    openSettings: '設定を開く',
+    friendsSection: '友達',
+    friendsSectionBody: '家族、友達、ギフト配送向けの受取人安全alias。受取人名や実住所は表示しません。',
+    recipientSafeRefs: '受取人安全参照',
   },
 };
 
@@ -460,6 +507,19 @@ const SEED_CONNECTIONS: AddressPortalConnectionInput[] = [
     lastVerifiedAt: '2026-06-17T00:04:00.000Z',
     lastAccessedAt: '2026-06-17T00:14:00.000Z',
     dataCategories: ['delivery eligibility', 'recipient proof', 'return label'],
+  },
+  {
+    connectionId: 'apc-friend-gift-alias',
+    participantName: 'Friend Gift Alias',
+    participantType: 'shopping-agent',
+    purpose: 'gift',
+    issuerId: 'issuer-friend-alias',
+    credentialRef: { type: 'commitment', ref: 'friend-alias-cmt-001', fingerprint: 'friend-alias-fp-001' },
+    scopes: ['recipient:verify', 'region:coarse'],
+    revocationState: 'active',
+    lastVerifiedAt: '2026-06-17T00:08:00.000Z',
+    lastAccessedAt: '2026-06-17T00:18:00.000Z',
+    dataCategories: ['recipient proof', 'coarse region only', 'gift alias'],
   },
   {
     connectionId: 'apc-field-aid',
@@ -788,6 +848,26 @@ export const AddressPortalScreen: React.FC = () => {
     [snapshot.connections, highRiskMode],
   );
   const t = React.useCallback((key: PortalCopyKey) => translate(appLanguage, key), [appLanguage]);
+  const friendsSectionRef = React.useRef<HTMLElement | null>(null);
+  const friendConnections = React.useMemo(
+    () => snapshot.connections.filter(connection =>
+      connection.participantType === 'shopping-agent'
+      || connection.purpose === 'gift'
+      || connection.dataCategories.some(category => category.toLowerCase().includes('gift alias')),
+    ),
+    [snapshot.connections],
+  );
+
+  React.useEffect(() => {
+    if (window.location.hash !== '#friends') return;
+    setFilter('all');
+    setQuery('recipient');
+    if (friendConnections[0]) setSelectedConnectionId(friendConnections[0].connectionId);
+    window.requestAnimationFrame(() => {
+      friendsSectionRef.current?.scrollIntoView({ block: 'start' });
+    });
+    setAuditLog(prev => ['Friends opened with recipient-safe refs only.', ...prev]);
+  }, [friendConnections]);
 
   React.useEffect(() => {
     document.documentElement.lang = appLanguage;
@@ -953,6 +1033,46 @@ export const AddressPortalScreen: React.FC = () => {
     { id: 'revoked', label: t('revokedOrExpired'), count: snapshot.counts.revokedOrExpired },
   ];
 
+  const myPageHealthItems = [
+    { label: t('activePermissions'), value: snapshot.counts.active, tone: 'text-emerald-700' },
+    { label: t('pendingApprovals'), value: snapshot.counts.needsReview, tone: 'text-amber-700' },
+    { label: t('credentialAlerts'), value: snapshot.connections.filter(connection => connection.item.status === 'requires_credential').length, tone: 'text-blue-700' },
+  ];
+
+  const quickActions = [
+    {
+      label: t('credentialStatus'),
+      icon: FileCheck2,
+      action: () => {
+        setFilter('all');
+        setQuery('credential');
+        setAuditLog(prev => [`${t('credentialStatus')}: ${t('safeRefs')}.`, ...prev]);
+      },
+    },
+    {
+      label: t('reviewPermissions'),
+      icon: ShieldCheck,
+      action: () => {
+        setFilter('review');
+        setQuery('');
+        setAuditLog(prev => [`${t('reviewPermissions')}: ${snapshot.counts.needsReview}.`, ...prev]);
+      },
+    },
+    {
+      label: t('securityReview'),
+      icon: LockKeyhole,
+      action: () => {
+        setHighRiskMode(true);
+        setAuditLog(prev => [`${t('securityReview')}: ${t('highRiskMode')}.`, ...prev]);
+      },
+    },
+    {
+      label: t('safeExportAction'),
+      icon: Download,
+      action: exportSafeList,
+    },
+  ];
+
   return (
     <div className="agid-viewport-shell flex flex-col bg-[#eef3f8] text-slate-950">
       <header className="z-20 shrink-0 border-b border-slate-200/80 bg-white/95 px-3 py-3 shadow-sm shadow-slate-200/70 backdrop-blur sm:px-4 md:px-6">
@@ -971,18 +1091,30 @@ export const AddressPortalScreen: React.FC = () => {
             </div>
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="truncate text-xl font-black text-slate-950 md:text-2xl">Address Portal</h1>
+                <h1 className="truncate text-xl font-black text-slate-950 md:text-2xl">{t('myPage')}</h1>
                 <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-emerald-700">
                   {t('safeRefs')}
                 </span>
               </div>
               <p className="mt-0.5 line-clamp-1 text-xs font-bold text-slate-500">
-                {t('subtitle')}
+                {t('myPageSubtitle')}
               </p>
             </div>
           </div>
 
           <div className="flex max-w-full flex-nowrap items-center gap-2 overflow-x-auto pb-1 lg:justify-end lg:overflow-visible lg:pb-0">
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href = '/settings';
+              }}
+              aria-label={t('openSettings')}
+              title={t('openSettings')}
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 transition-all hover:bg-slate-950 hover:text-white active:scale-95"
+            >
+              <Settings className="h-4 w-4" />
+              <span className="sr-only">{t('openSettings')}</span>
+            </button>
             <label className="flex h-11 shrink-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-black text-slate-600">
               <span className="hidden uppercase tracking-widest sm:inline">{t('language')}</span>
               <select
@@ -1047,6 +1179,90 @@ export const AddressPortalScreen: React.FC = () => {
 
       <main className="mx-auto grid min-h-0 w-full max-w-[1480px] flex-1 gap-4 overflow-y-auto px-3 py-3 sm:px-4 sm:py-4 md:px-6 lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)_390px] xl:overflow-hidden xl:py-5 2xl:grid-cols-[320px_minmax(0,1fr)_400px]">
         <aside className="min-h-0 space-y-4 xl:overflow-y-auto xl:pr-1">
+          <section className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-blue-600">{t('actionInbox')}</p>
+                <h2 className="mt-1 text-lg font-black text-slate-950">{t('myPage')}</h2>
+                <p className="mt-1 text-xs font-bold leading-5 text-slate-500">{t('myPageSubtitle')}</p>
+              </div>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white">
+                <UserRound className="h-5 w-5" />
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              {myPageHealthItems.map(item => (
+                <div key={item.label} className="min-w-0 rounded-xl bg-slate-50 px-3 py-3">
+                  <p className="truncate text-[9px] font-black uppercase tracking-wider text-slate-400">{item.label}</p>
+                  <p className={cn('mt-2 text-2xl font-black', item.tone)}>{item.value}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">{t('quickActions')}</p>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                {quickActions.map(item => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.label}
+                      type="button"
+                      onClick={item.action}
+                      className="flex min-h-[46px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-left text-xs font-black text-slate-800 transition-all hover:border-blue-200 hover:bg-blue-50"
+                    >
+                      <Icon className="h-4 w-4 shrink-0 text-blue-600" />
+                      <span className="min-w-0 truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+
+          <section
+            id="friends"
+            ref={friendsSectionRef}
+            className="rounded-2xl border border-blue-100 bg-white p-4 shadow-sm"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-blue-600">{t('recipientSafeRefs')}</p>
+                <h2 className="mt-1 text-lg font-black text-slate-950">{t('friendsSection')}</h2>
+                <p className="mt-1 text-xs font-bold leading-5 text-slate-500">{t('friendsSectionBody')}</p>
+              </div>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                <HeartHandshake className="h-5 w-5" />
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-2">
+              {friendConnections.map(connection => (
+                <button
+                  key={connection.connectionId}
+                  type="button"
+                  onClick={() => {
+                    setFilter('all');
+                    setQuery('recipient');
+                    setSelectedConnectionId(connection.connectionId);
+                  }}
+                  className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-left transition-all hover:border-blue-200 hover:bg-blue-50"
+                >
+                  <span className="min-w-0">
+                    <span className="block truncate text-xs font-black text-slate-900">{connection.participantName}</span>
+                    <span className="mt-0.5 block truncate text-[10px] font-bold text-slate-500">
+                      {connection.purpose} / {connection.item.scopes.join(', ')}
+                    </span>
+                  </span>
+                  <span className={cn('shrink-0 rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-wider', statusTone(connection.item.status))}>
+                    {connection.item.status.replace(/_/g, ' ')}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </section>
+
           <div className={cn(
             'overflow-hidden rounded-2xl border p-0 shadow-xl shadow-slate-200/70',
             highRiskMode
@@ -1068,7 +1284,7 @@ export const AddressPortalScreen: React.FC = () => {
                   <p className={cn(
                     'text-[10px] font-black uppercase tracking-widest',
                     highRiskMode ? 'text-rose-700' : 'text-blue-200',
-                  )}>{t('commandCenter')}</p>
+                  )}>{t('actionInbox')}</p>
                   <h2 className={cn(
                     'mt-1 text-xl font-black leading-tight',
                     highRiskMode ? 'text-rose-950' : 'text-white',

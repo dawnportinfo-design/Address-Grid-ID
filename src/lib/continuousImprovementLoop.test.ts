@@ -291,6 +291,36 @@ test('high compatibility risk changes are skipped until design review', () => {
   ]);
 });
 
+test('commercial-private product signals are excluded from the OSS improvement loop', () => {
+  const plan = createContinuousImprovementLoopPlan();
+  const decision = decideImprovementCycle(plan, [
+    {
+      id: 'playlist-commerce-commercial-roadmap',
+      area: 'features',
+      severity: 'critical',
+      confidence: 1,
+      title: 'Expand Playlist Commerce checkout and marketplace features',
+      source: 'commercial-product-roadmap',
+      licenseProfile: 'commercial-private',
+    },
+    {
+      id: 'address-login-oss-fixture',
+      area: 'privacy',
+      severity: 'medium',
+      confidence: 0.8,
+      title: 'Add a redacted Address Login fixture',
+      source: 'oss-address-login',
+      licenseProfile: 'oss',
+    },
+  ]);
+
+  assert.equal(decision.status, 'continue');
+  assert.deepEqual(decision.selectedSignals.map(signal => signal.id), ['address-login-oss-fixture']);
+  assert.deepEqual(decision.skippedSignals, [
+    { id: 'playlist-commerce-commercial-roadmap', reason: 'commercial-private-signal-excluded-from-oss-loop' },
+  ]);
+});
+
 test('gate runner reports approval-required skips separately from failed gates', () => {
   const source = readFileSync(new URL('../../scripts/continuous-improvement-loop.ts', import.meta.url), 'utf8');
 

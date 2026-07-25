@@ -64,7 +64,7 @@ export type AddressLoginProviderConfig = {
 };
 
 export type VeygritProviderProps = AddressLoginProviderConfig & {
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 export type AddressLoginStartOptions = {
@@ -271,6 +271,45 @@ export type VeyIdGuestCheckoutHandoffResult =
   | VeyIdGuestCheckoutHandoffReadyResult
   | VeyIdGuestCheckoutHandoffBlockedResult;
 
+export type VeyIdMerchantVisibleRedactionDisplayField =
+  | 'pairwiseSubjectAlias'
+  | 'guestCheckoutAlias'
+  | 'walletConsentRef'
+  | 'addressCredentialRef'
+  | 'carrierHandoffRef';
+
+export type VeyIdMerchantVisibleRedactionRequiredNextAction =
+  | 'create-guest-order-from-refs'
+  | 'request-address-wallet-consent';
+
+export type VeyIdMerchantVisibleRedactionAffordance = {
+  boundaryGateId: 'merchant-visible-redaction';
+  displayFields: readonly VeyIdMerchantVisibleRedactionDisplayField[];
+  displayRefs: readonly string[];
+  blockedMaterial?: readonly string[];
+  requiredNextAction: VeyIdMerchantVisibleRedactionRequiredNextAction;
+  nonClaims?: readonly string[];
+};
+
+export type VeyIdMerchantVisibleRedactionRefs = Partial<Record<VeyIdMerchantVisibleRedactionDisplayField, string>>;
+
+export type VeyIdMerchantVisibleRedactionDisplayRow = {
+  field: VeyIdMerchantVisibleRedactionDisplayField;
+  label: string;
+  ref: string | null;
+  status: 'visible_ref' | 'pending_wallet_consent';
+};
+
+export type VeyIdMerchantVisibleRedactionDisplayModel = {
+  boundaryGateId: 'merchant-visible-redaction';
+  requiredNextAction: VeyIdMerchantVisibleRedactionRequiredNextAction;
+  rows: VeyIdMerchantVisibleRedactionDisplayRow[];
+  visibleRefCount: number;
+  blockedClassCount: number;
+  nonClaimCount: number;
+  consentBound: true;
+};
+
 export type GuestCheckoutHandoffTransportRequest<TPayload> = {
   url: string;
   payload: TPayload;
@@ -441,6 +480,18 @@ const DEFAULT_FRIEND_DELIVERY_CLAIMS: AddressLoginClaim[] = [
   'freshness',
   'carrier_decryptable_address',
 ];
+const MERCHANT_VISIBLE_REDACTION_FIELD_LABELS: Record<VeyIdMerchantVisibleRedactionDisplayField, string> = {
+  pairwiseSubjectAlias: 'Pairwise identity',
+  guestCheckoutAlias: 'Guest checkout',
+  walletConsentRef: 'Wallet consent',
+  addressCredentialRef: 'Address credential',
+  carrierHandoffRef: 'Carrier handoff',
+};
+const MERCHANT_VISIBLE_REDACTION_FIELDS = new Set<VeyIdMerchantVisibleRedactionDisplayField>(
+  Object.keys(MERCHANT_VISIBLE_REDACTION_FIELD_LABELS) as VeyIdMerchantVisibleRedactionDisplayField[],
+);
+const UNSAFE_MERCHANT_VISIBLE_REF_VALUE =
+  /raw.?address|address.?line|recipient|phone|email|witness|private.?key|proof.?secret|provider.?id.?token|provider.?access.?token|provider.?refresh.?token|raw.?provider.?profile|carrier.?api.?key|production.?credential/i;
 
 const VeygritContext = createContext<AddressLoginProviderConfig | null>(null);
 
@@ -746,6 +797,59 @@ export function createGuestCheckoutHandoffHttpTransport({
       throw new Error('Guest checkout handoff failed.');
     }
     return result;
+  };
+}
+
+export function createMerchantVisibleRedactionDisplayModel(
+  affordance: VeyIdMerchantVisibleRedactionAffordance,
+  refs: VeyIdMerchantVisibleRedactionRefs = {},
+): VeyIdMerchantVisibleRedactionDisplayModel {
+  if (affordance.boundaryGateId !== 'merchant-visible-redaction') {
+    throw new Error('Merchant-visible redaction display requires the merchant-visible-redaction boundary gate.');
+  }
+
+  for (const field of affordance.displayFields) {
+    if (!MERCHANT_VISIBLE_REDACTION_FIELDS.has(field)) {
+      throw new Error(`Unknown merchant-visible redaction display field: ${field}`);
+    }
+  }
+
+  for (const field of Object.keys(refs) as VeyIdMerchantVisibleRedactionDisplayField[]) {
+    if (!MERCHANT_VISIBLE_REDACTION_FIELDS.has(field)) {
+      throw new Error(`Unknown merchant-visible redaction ref field: ${field}`);
+    }
+  }
+
+  for (const ref of affordance.displayRefs) {
+    assertSafeMerchantVisibleRef(ref);
+  }
+
+  const displayRefSet = new Set(affordance.displayRefs);
+  const rows = affordance.displayFields.map(field => {
+    const ref = refs[field] ?? null;
+    if (ref) {
+      assertSafeMerchantVisibleRef(ref);
+    }
+    if (ref && !displayRefSet.has(ref)) {
+      throw new Error(`Merchant-visible redaction ref is not approved for display: ${field}`);
+    }
+
+    return {
+      field,
+      label: MERCHANT_VISIBLE_REDACTION_FIELD_LABELS[field],
+      ref,
+      status: ref ? 'visible_ref' : 'pending_wallet_consent',
+    } satisfies VeyIdMerchantVisibleRedactionDisplayRow;
+  });
+
+  return {
+    boundaryGateId: 'merchant-visible-redaction',
+    requiredNextAction: affordance.requiredNextAction,
+    rows,
+    visibleRefCount: rows.filter(row => row.status === 'visible_ref').length,
+    blockedClassCount: affordance.blockedMaterial?.length ?? 0,
+    nonClaimCount: affordance.nonClaims?.length ?? 0,
+    consentBound: true,
   };
 }
 
@@ -1228,6 +1332,12 @@ function assertNoUnsafePublicValues(request: Record<string, unknown>): void {
     } else if (value && typeof value === 'object') {
       stack.push(...Object.values(value as Record<string, unknown>));
     }
+  }
+}
+
+function assertSafeMerchantVisibleRef(ref: string): void {
+  if (UNSAFE_MERCHANT_VISIBLE_REF_VALUE.test(ref)) {
+    throw new Error('Unsafe merchant-visible redaction ref value.');
   }
 }
 

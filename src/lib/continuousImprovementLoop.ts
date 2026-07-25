@@ -26,6 +26,7 @@ export type ImprovementSignal = {
   confidence: number;
   title: string;
   source: string;
+  licenseProfile?: 'oss' | 'commercial-private';
   compatibilityRisk?: CompatibilityRisk;
   requiresProductionTraffic?: boolean;
   requiresExternalNetwork?: boolean;
@@ -471,6 +472,7 @@ export function createImprovementDeepDivePlan(
 }
 
 function skipReason(signal: ImprovementSignal, plan: ContinuousImprovementLoopPlan) {
+  if (signal.licenseProfile === 'commercial-private') return 'commercial-private-signal-excluded-from-oss-loop';
   if (signal.containsPrivateAddressMaterial) return 'private-address-material-is-forbidden';
   if (signal.compatibilityRisk === 'high') return 'high-compatibility-risk-needs-design-review';
   if (signal.requiresProductionTraffic && !plan.allowed.productionTraffic) return 'production-traffic-needs-explicit-ack';

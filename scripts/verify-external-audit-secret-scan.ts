@@ -45,6 +45,7 @@ const SECRET_PATTERNS: SecretPattern[] = [
   {
     code: 'private-key-block',
     pattern: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |)?PRIVATE KEY-----/,
+    allowContext: /(detectUnsafeMaterial|fixture|synthetic|example)/i,
   },
   {
     code: 'aws-access-key-id',
@@ -68,8 +69,23 @@ const SECRET_PATTERNS: SecretPattern[] = [
   },
   {
     code: 'generic-assignment-secret',
-    pattern: /\b(?:SECRET|TOKEN|API_KEY|PRIVATE_KEY|WEBHOOK_SECRET)\s*=\s*["']?[A-Za-z0-9_./+=-]{24,}/gi,
+    pattern: /\b(?:SECRET|TOKEN|API_KEY|PRIVATE_KEY|WEBHOOK_SECRET)\s*=\s*["'][A-Za-z0-9_./+=-]{24,}["']/gi,
     allowContext: /(example|placeholder|dummy|test|REDACTED|process\.env)/i,
+  },
+  {
+    code: 'carrier-client-secret',
+    pattern: /\b(?:UPS|DHL)_[A-Z0-9_]*(?:SECRET|PASSWORD|TOKEN|API_KEY)\s*[:=]\s*["'][^"'\r\n]{12,}["']/gi,
+    allowContext: /(example|placeholder|dummy|test|REDACTED|process\.env)/i,
+  },
+  {
+    code: 'authorization-literal',
+    pattern: /\bauthorization\s*[:=]\s*["']Bearer\s+[A-Za-z0-9._~+\/-]{20,}["']/gi,
+    allowContext: /(example|placeholder|dummy|test|REDACTED|mock|pk_test|synthetic)/i,
+  },
+  {
+    code: 'signed-storage-url',
+    pattern: /https?:\/\/[^\s"']+[?&](?:X-Amz-Signature|X-Goog-Signature|sig)=[A-Za-z0-9%_-]{16,}/gi,
+    allowContext: /(example|placeholder|dummy|test|REDACTED)/i,
   },
 ];
 

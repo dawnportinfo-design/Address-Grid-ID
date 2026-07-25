@@ -29,13 +29,37 @@ export type AfricaOpenGeoSourceId =
   | 'rcmrd-gmes-africa-geoportal'
   | 'rcmrd-geoportal'
   | 'kenya-open-data'
+  | 'posta-kenya'
+  | 'ethiopost-branches'
+  | 'mcpt-djibouti-poste'
+  | 'snpsf-comores-poste'
+  | 'somalia-moct-posta'
+  | 'south-sudan-nca-postal-sector'
+  | 'malawi-postcodes-macra'
+  | 'posta-uganda-physical-address'
+  | 'nampost-postal-codes'
+  | 'seychelles-post-po-box-directory'
+  | 'ghanapostgps'
   | 'nipost-postcode'
+  | 'la-poste-cote-divoire'
+  | 'correios-cabo-verde'
+  | 'la-poste-benin'
+  | 'la-poste-burkina'
+  | 'gambia-post-services'
+  | 'guinee-poste'
+  | 'mopt-liberia-postal-services'
+  | 'la-poste-senegal-codes'
+  | 'societe-postes-togo'
+  | 'la-poste-mali'
+  | 'niger-poste'
+  | 'salpost-sierra-leone'
   | 'algerie-poste'
   | 'libya-post-services'
   | 'poste-maroc-codepostal'
   | 'mauripost'
   | 'la-poste-tunisienne-codes'
   | 'sudapost'
+  | 'correios-mocambique-codigos-postais'
   | 'ngi-south-africa'
   | 'datahub-postal'
   | 'egy-list'
@@ -45,7 +69,9 @@ export type AfricaOpenGeoSourceId =
   | 'saint-helena-postal'
   | 'ascension-post-office'
   | 'tristan-post-office'
-  | 'biot-gov';
+  | 'biot-gov'
+  | 'zampost'
+  | 'zimpost';
 
 export interface AfricaOpenGeoSource {
   id: AfricaOpenGeoSourceId;
@@ -361,6 +387,105 @@ export const AFRICA_OPEN_GEO_SOURCES: Record<AfricaOpenGeoSourceId, AfricaOpenGe
     usage: 'validation',
     notes: 'Kenya open-data reference for counties, administrative datasets, and public geospatial context where available.',
   },
+  'posta-kenya': {
+    id: 'posta-kenya',
+    name: 'Postal Corporation of Kenya post offices',
+    url: 'https://posta.co.ke/post-offices/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Postal Corporation of Kenya office locator and postal-service directory used as current postcode and post-office evidence.',
+  },
+  'ethiopost-branches': {
+    id: 'ethiopost-branches',
+    name: 'Ethiopost branch locator',
+    url: 'https://ethio.post/branches/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Ethiopost branch locator and postal-service directory used as current operator evidence while a dedicated public postcode search remains limited.',
+  },
+  'mcpt-djibouti-poste': {
+    id: 'mcpt-djibouti-poste',
+    name: 'Djibouti MCPT La Poste de Djibouti page',
+    url: 'https://communication.gouv.dj/structures-sous-tutelle/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Djibouti Ministry of Communication, Posts and Telecommunications page identifying La Poste de Djibouti as the national postal service and linking the operator site.',
+  },
+  'snpsf-comores-poste': {
+    id: 'snpsf-comores-poste',
+    name: 'SNPSF Comoros postal services',
+    url: 'https://www.snpsf.com/poste',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official SNPSF postal-services portal covering Comoros postal products, tracking, EMS, mandates, postal guides, and customer contact channels.',
+  },
+  'somalia-moct-posta': {
+    id: 'somalia-moct-posta',
+    name: 'Somalia MOCT Postal Service',
+    url: 'https://moct.gov.so/en/posta/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Somalia Ministry of Communications and Technology postal-service department page; use with current MOCT postal-exchange updates as the primary official postal reference while public postcode tooling remains limited.',
+  },
+  'south-sudan-nca-postal-sector': {
+    id: 'south-sudan-nca-postal-sector',
+    name: 'South Sudan NCA postal-sector oversight',
+    url: 'https://www.nca.gov.ss/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official South Sudan National Communication Authority site stating the agency regulates the postal and courier sectors; use as current country-specific official postal evidence while direct public postal-operator tooling remains limited.',
+  },
+  'malawi-postcodes-macra': {
+    id: 'malawi-postcodes-macra',
+    name: 'MACRA Malawi post codes',
+    url: 'https://macra.mw/post-codes/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'primary',
+    notes: 'Official Malawi Communications Regulatory Authority postcode table covering national region, district, town, and traditional authority codes.',
+  },
+  'posta-uganda-physical-address': {
+    id: 'posta-uganda-physical-address',
+    name: 'Posta Uganda physical address service',
+    url: 'https://ugapost.co.ug/our-services/physical-address/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Posta Uganda physical-address and postal-address application guidance used as current postal-network evidence while postcode tooling remains service-led.',
+  },
+  'nampost-postal-codes': {
+    id: 'nampost-postal-codes',
+    name: 'NamPost postal codes',
+    url: 'https://www.nampost.com.na/postal/postal-codes',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'primary',
+    notes: 'Official NamPost postal-code directory with public postcode listings grouped by political region.',
+  },
+  'seychelles-post-po-box-directory': {
+    id: 'seychelles-post-po-box-directory',
+    name: 'Seychelles Post P.O. Box directory',
+    url: 'https://www.seychelles-post.com/poboxdirectory.php',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Seychelles Postal Services directory search and postal-service reference for P.O. Box routing and operator contact details.',
+  },
+  ghanapostgps: {
+    id: 'ghanapostgps',
+    name: 'GhanaPostGPS National Digital Address System',
+    url: 'https://www.ghanapostgps.com/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'primary',
+    notes: 'Official Ghana Post digital addressing system with postcode-area and unique digital address lookup for Ghanaian delivery and location validation.',
+  },
   'nipost-postcode': {
     id: 'nipost-postcode',
     name: 'Nigerian Postal Service Postcode Finder',
@@ -369,6 +494,114 @@ export const AFRICA_OPEN_GEO_SOURCES: Record<AfricaOpenGeoSourceId, AfricaOpenGe
     coverage: 'country',
     usage: 'primary',
     notes: 'NIPOST postcode finder and national addressing reference for Nigerian state, city, street, and postcode validation.',
+  },
+  'la-poste-cote-divoire': {
+    id: 'la-poste-cote-divoire',
+    name: "La Poste de Cote d'Ivoire",
+    url: 'https://www.laposte.ci/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: "Official La Poste de Cote d'Ivoire portal with postal directory and post-office services; use as current postal-network evidence while direct public postcode lookup remains limited.",
+  },
+  'correios-cabo-verde': {
+    id: 'correios-cabo-verde',
+    name: 'Correios de Cabo Verde postcode reference',
+    url: 'https://correios.cv/faq',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'primary',
+    notes: 'Official Correios de Cabo Verde postcode reference and customer guidance, including public postcode examples and postcode-search instructions.',
+  },
+  'la-poste-benin': {
+    id: 'la-poste-benin',
+    name: 'La Poste du Benin agency directory',
+    url: 'https://laposte.bj/nos-agences/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official La Poste du Benin agency and service directory used as current postal-operator evidence while public postcode tooling remains limited.',
+  },
+  'la-poste-burkina': {
+    id: 'la-poste-burkina',
+    name: 'La Poste Burkina Faso postcode search',
+    url: 'https://codespostaux.laposte.bf/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'primary',
+    notes: 'Official La Poste Burkina Faso postcode search for locality and five-digit postal-code confirmation.',
+  },
+  'gambia-post-services': {
+    id: 'gambia-post-services',
+    name: 'Gambia Postal Services Corporation',
+    url: 'https://gambiapost.gm/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official GAMPOST operator portal used as current postal-network evidence while direct public postcode search remains limited.',
+  },
+  'mopt-liberia-postal-services': {
+    id: 'mopt-liberia-postal-services',
+    name: 'Liberia Ministry of Posts and Telecommunications',
+    url: 'https://mopt.gov.lr/about-us/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Liberia postal authority page describing the ministry mandate to provide postal services nationwide and linking current postal-service resources.',
+  },
+  'guinee-poste': {
+    id: 'guinee-poste',
+    name: 'La Poste Guineenne',
+    url: 'https://www.laposte.gn/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Guinea postal-operator portal used as current postal-network evidence while direct public postcode lookup remains limited.',
+  },
+  'la-poste-senegal-codes': {
+    id: 'la-poste-senegal-codes',
+    name: 'La Poste Senegal postcode directory',
+    url: 'https://www.laposte.sn/code-postal-senegal/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'primary',
+    notes: 'Official La Poste Senegal postcode directory and office locator for five-digit postal-code and delivery-office validation.',
+  },
+  'societe-postes-togo': {
+    id: 'societe-postes-togo',
+    name: 'Societe des Postes du Togo office network',
+    url: 'https://www.laposte.tg/bureaux-poste',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Togo postal-operator office network and service portal used as current postal-reference evidence while direct postcode search remains limited.',
+  },
+  'la-poste-mali': {
+    id: 'la-poste-mali',
+    name: 'La Poste du Mali official portal',
+    url: 'https://laposte.ml/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Mali postal operator portal used as current postal-network evidence while direct public postcode lookup remains limited.',
+  },
+  'niger-poste': {
+    id: 'niger-poste',
+    name: 'Niger Poste official portal',
+    url: 'https://nigerposte.ne/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Niger Poste portal with product pages for agencies, postal boxes, and code-postal services; use as current postal-reference evidence.',
+  },
+  'salpost-sierra-leone': {
+    id: 'salpost-sierra-leone',
+    name: 'SALPOST Sierra Leone',
+    url: 'https://salpost.gov.sl/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Sierra Leone Postal Services portal used as current postal-network evidence while direct public postcode lookup remains limited.',
   },
   'algerie-poste': {
     id: 'algerie-poste',
@@ -423,6 +656,15 @@ export const AFRICA_OPEN_GEO_SOURCES: Record<AfricaOpenGeoSourceId, AfricaOpenGe
     coverage: 'country',
     usage: 'reference',
     notes: 'Official Sudan Post site with operator, service, and network information used as current postal-reference evidence.',
+  },
+  'correios-mocambique-codigos-postais': {
+    id: 'correios-mocambique-codigos-postais',
+    name: 'Correios de Mocambique codigos postais',
+    url: 'https://www.correios.co.mz/?cod=11&pagina=codigo',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Correios de Mocambique postal-code directory and customer guidance for postcode and locality validation.',
   },
   'ngi-south-africa': {
     id: 'ngi-south-africa',
@@ -514,6 +756,24 @@ export const AFRICA_OPEN_GEO_SOURCES: Record<AfricaOpenGeoSourceId, AfricaOpenGe
     coverage: 'territory',
     usage: 'reference',
     notes: 'Territory reference for Diego Garcia, BIOT place names, and restricted delivery handling.',
+  },
+  zampost: {
+    id: 'zampost',
+    name: 'Zambia Postal Services Corporation',
+    url: 'https://www.zampost.com.zm/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official ZAMPOST operator portal and branch/service locator used as current postcode and postal-network evidence for Zambia.',
+  },
+  zimpost: {
+    id: 'zimpost',
+    name: 'Zimbabwe Posts official portal',
+    url: 'https://www.zimpost.co.zw/',
+    kind: 'postal-code',
+    coverage: 'country',
+    usage: 'reference',
+    notes: 'Official Zimbabwe postal operator portal used as current postal-network evidence while public postcode search remains limited.',
   },
 };
 
@@ -615,34 +875,37 @@ const COUNTRY_POSTAL_SOURCE_IDS: Partial<Record<AfricaCountryCode, AfricaOpenGeo
   NG: ['nipost-postcode', 'hot-osm-west-africa'],
   SD: ['sudapost'],
   TN: ['la-poste-tunisienne-codes'],
-  GH: ['hot-osm-west-africa'],
-  CI: ['hot-osm-west-africa'],
-  SN: ['hot-osm-west-africa'],
-  BF: ['hot-osm-west-africa'],
-  ML: ['hot-osm-west-africa'],
-  NE: ['hot-osm-west-africa'],
-  TG: ['hot-osm-west-africa'],
-  BJ: ['hot-osm-west-africa'],
-  LR: ['hot-osm-west-africa'],
-  SL: ['hot-osm-west-africa'],
-  GM: ['hot-osm-west-africa'],
-  GN: ['hot-osm-west-africa'],
+  GH: ['ghanapostgps', 'hot-osm-west-africa'],
+  CI: ['la-poste-cote-divoire', 'hot-osm-west-africa'],
+  BF: ['la-poste-burkina', 'hot-osm-west-africa'],
+  GN: ['guinee-poste', 'hot-osm-west-africa'],
+  ML: ['la-poste-mali', 'hot-osm-west-africa'],
+  NE: ['niger-poste', 'hot-osm-west-africa'],
+  SN: ['la-poste-senegal-codes', 'hot-osm-west-africa'],
+  TG: ['societe-postes-togo', 'hot-osm-west-africa'],
+  BJ: ['la-poste-benin', 'hot-osm-west-africa'],
+  LR: ['mopt-liberia-postal-services', 'hot-osm-west-africa'],
+  SL: ['salpost-sierra-leone', 'hot-osm-west-africa'],
+  GM: ['gambia-post-services', 'hot-osm-west-africa'],
   GW: ['hot-osm-west-africa'],
-  CV: ['hot-osm-west-africa'],
-  KE: ['rcmrd-geoportal', 'kenya-open-data', 'hot-osm-east-southern-africa'],
+  CV: ['correios-cabo-verde', 'hot-osm-west-africa'],
+  KM: ['snpsf-comores-poste', 'rcmrd-gmes-africa-geoportal', 'hot-osm-east-southern-africa'],
+  KE: ['posta-kenya', 'rcmrd-geoportal', 'kenya-open-data', 'hot-osm-east-southern-africa'],
   TZ: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
-  UG: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  UG: ['posta-uganda-physical-address', 'rcmrd-geoportal', 'hot-osm-east-southern-africa'],
   RW: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
-  SS: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
-  ET: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
-  DJ: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
-  MZ: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
-  MW: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
-  ZM: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
-  ZW: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  SO: ['somalia-moct-posta', 'rcmrd-gmes-africa-geoportal'],
+  SS: ['south-sudan-nca-postal-sector', 'rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  ET: ['ethiopost-branches', 'rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  DJ: ['mcpt-djibouti-poste', 'rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  MZ: ['correios-mocambique-codigos-postais', 'rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  MW: ['malawi-postcodes-macra', 'rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  ZM: ['zampost', 'rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  ZW: ['zimpost', 'rcmrd-geoportal', 'hot-osm-east-southern-africa'],
   BW: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
-  NA: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  NA: ['nampost-postal-codes', 'rcmrd-geoportal', 'hot-osm-east-southern-africa'],
   LS: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
+  SC: ['seychelles-post-po-box-directory', 'rcmrd-gmes-africa-geoportal'],
   SZ: ['rcmrd-geoportal', 'hot-osm-east-southern-africa'],
   ZA: ['sapo-postcodes', 'postafind-za', 'ngi-south-africa', 'hot-osm-east-southern-africa'],
 };

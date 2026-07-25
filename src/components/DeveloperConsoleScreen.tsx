@@ -75,6 +75,14 @@ import {
   type NoRawAddressSurfacePolicy,
 } from '../lib/noRawAddressComplianceKit';
 import { cn } from '../lib/utils';
+import {
+  VEYGRIT_ADDRESS_LOGIN_CALLBACK_CONTRACT_VERSION,
+  VEYGRIT_ADDRESS_LOGIN_CALLBACK_NON_CLAIMS,
+  VEYGRIT_ADDRESS_LOGIN_CALLBACK_PARAM_ALIASES,
+  VEYGRIT_ADDRESS_LOGIN_CANONICAL_CALLBACK_PARAMS,
+  VEYGRIT_ADDRESS_LOGIN_FORBIDDEN_CALLBACK_PARAM_EXAMPLES,
+} from '../lib/veygritAddressLoginCallbackContract';
+import { getVeygritShipReleaseGateStatus } from '../lib/veygritShipReleaseGateStatus';
 
 type DeveloperTab = 'overview' | 'tutorial' | 'features' | 'keys' | 'webhooks' | 'sdk' | 'openapi' | 'vectors' | 'launch' | 'community' | 'geo';
 
@@ -266,7 +274,12 @@ type DeveloperCopyKey =
   | 'prScope'
   | 'sourceFiles'
   | 'compatibilityGates'
-  | 'risk';
+  | 'risk'
+  | 'callbackContract'
+  | 'canonicalParams'
+  | 'compatibilityAliases'
+  | 'forbiddenCallbackParams'
+  | 'nonClaims';
 
 const COPY: Record<'en' | 'ja', Record<DeveloperCopyKey, string>> = {
   en: {
@@ -458,6 +471,11 @@ const COPY: Record<'en' | 'ja', Record<DeveloperCopyKey, string>> = {
     sourceFiles: 'Source files',
     compatibilityGates: 'Compatibility gates',
     risk: 'Risk',
+    callbackContract: 'Address Login callback contract',
+    canonicalParams: 'Canonical params',
+    compatibilityAliases: 'Compatibility aliases',
+    forbiddenCallbackParams: 'Forbidden callback params',
+    nonClaims: 'Non-claims',
   },
   ja: {
     returnToMap: '地図へ戻る',
@@ -648,8 +666,24 @@ const COPY: Record<'en' | 'ja', Record<DeveloperCopyKey, string>> = {
     sourceFiles: '対象ファイル',
     compatibilityGates: '互換ゲート',
     risk: 'リスク',
+    callbackContract: 'Address Login callback contract',
+    canonicalParams: '正規パラメータ',
+    compatibilityAliases: '互換エイリアス',
+    forbiddenCallbackParams: '禁止callback params',
+    nonClaims: '非主張',
   },
 };
+
+const ADDRESS_LOGIN_CALLBACK_ALIAS_ROWS = Object.entries(VEYGRIT_ADDRESS_LOGIN_CALLBACK_PARAM_ALIASES)
+  .map(([field, aliases]) => `${field}: ${aliases.join(', ')}`);
+
+const ADDRESS_LOGIN_CALLBACK_CONTRACT_SUMMARY = [
+  VEYGRIT_ADDRESS_LOGIN_CALLBACK_CONTRACT_VERSION,
+  'SDK callback parsing accepts canonical params plus documented legacy aliases.',
+  'Forbidden callback params are rejected before merchant code receives a result.',
+] as const;
+
+const VEYGRIT_SHIP_RELEASE_GATE_STATUS = getVeygritShipReleaseGateStatus();
 
 const THREAT_TEMPLATE_SURFACE_MAP: Record<AddressPrivacyThreatTemplateId, NoRawAddressComplianceSurfaceId> = {
   'address-element-registration': 'address-registration-element',
@@ -1352,9 +1386,17 @@ function DeveloperCommandCenter({
       icon: ShieldAlert,
     },
   ];
-  const workflowCards = [
+  const workflowCards: Array<{
+    label: string;
+    detail: string;
+    tab: DeveloperTab;
+    icon: typeof Play;
+    href?: string;
+  }> = [
     { label: t.openWorkbench, detail: model.openApi.highlightedPaths[0] ?? '/openapi.json', tab: 'openapi' as DeveloperTab, icon: Play },
     { label: t.viewSdk, detail: primarySdk?.install ?? 'npm install @agid/sdk', tab: 'sdk' as DeveloperTab, icon: Code2 },
+    { label: 'Playlist Commerce', detail: 'Commercial/private demo / not OSS', tab: 'sdk' as DeveloperTab, icon: Boxes, href: '/playlist-commerce' },
+    { label: 'Vey Ecosystem', detail: 'Wallet + Delivery Gateway + Carrier API Stripe', tab: 'sdk' as DeveloperTab, icon: ServerCog, href: '/merchant-console' },
     { label: t.runConformance, detail: conformanceCommand, tab: 'vectors' as DeveloperTab, icon: ListChecks },
     { label: t.deployReview, detail: launchCenter.nextActions[0] ?? t.auditReady, tab: 'launch' as DeveloperTab, icon: ClipboardCheck },
   ];
@@ -1465,7 +1507,13 @@ function DeveloperCommandCenter({
                 <button
                   key={card.label}
                   type="button"
-                  onClick={() => onTabSelect(card.tab)}
+                  onClick={() => {
+                    if (card.href) {
+                      window.location.href = card.href;
+                      return;
+                    }
+                    onTabSelect(card.tab);
+                  }}
                   className="group flex min-h-[76px] items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left transition hover:border-blue-300 hover:shadow-sm"
                 >
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-700 group-hover:bg-blue-50 group-hover:text-blue-700">
@@ -2908,6 +2956,37 @@ export function DeveloperConsoleScreen() {
                     </div>
                   </article>
                   <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="h-5 w-5 text-emerald-600" />
+                          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-700">{t.callbackContract}</p>
+                        </div>
+                        <h2 className="mt-2 font-mono text-lg font-black text-slate-950">{VEYGRIT_ADDRESS_LOGIN_CALLBACK_CONTRACT_VERSION}</h2>
+                        <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-slate-600">
+                          Merchants receive only session, credential, proof bundle, and carrier handoff references. The Console mirrors the React, Next.js, Hosted API, OpenAPI, and test-vector contract so callback handling stays compatible without exposing address material.
+                        </p>
+                      </div>
+                      <ReferenceStatusPill status="ready" />
+                    </div>
+
+                    <div className="mt-5 grid gap-4 lg:grid-cols-2">
+                      <ListPanel title={t.canonicalParams} values={[...VEYGRIT_ADDRESS_LOGIN_CANONICAL_CALLBACK_PARAMS]} />
+                      <ListPanel title={t.compatibilityAliases} values={ADDRESS_LOGIN_CALLBACK_ALIAS_ROWS} />
+                      <ListPanel title={t.forbiddenCallbackParams} values={[...VEYGRIT_ADDRESS_LOGIN_FORBIDDEN_CALLBACK_PARAM_EXAMPLES]} />
+                      <ListPanel title={t.nonClaims} values={[...VEYGRIT_ADDRESS_LOGIN_CALLBACK_NON_CLAIMS]} />
+                    </div>
+
+                    <div className="mt-4 grid gap-2 rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+                      {ADDRESS_LOGIN_CALLBACK_CONTRACT_SUMMARY.map(item => (
+                        <div key={item} className="flex items-start gap-2 text-sm font-bold leading-6 text-emerald-800">
+                          <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-600" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                  <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                     <div className="flex items-center gap-2">
                       <ShieldAlert className="h-5 w-5 text-rose-600" />
                       <p className="text-[11px] font-black uppercase tracking-[0.2em] text-rose-600">{t.errorCatalog}</p>
@@ -3318,6 +3397,8 @@ function LaunchCenterPanel({
         </article>
       </section>
 
+      <VeygritShipReleaseGateStatusPanel />
+
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -3389,6 +3470,74 @@ function LaunchCenterPanel({
         </div>
       </section>
     </div>
+  );
+}
+
+function VeygritShipReleaseGateStatusPanel() {
+  const status = VEYGRIT_SHIP_RELEASE_GATE_STATUS;
+  const previewGates = status.gates.slice(0, 6);
+
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-veygrit-ship-release-gate-status>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <ServerCog className="h-5 w-5 text-slate-700" />
+            <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">Veygrit Ship release gates</p>
+          </div>
+          <h3 className="mt-2 text-lg font-black text-slate-950">Public-safe local status</h3>
+          <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-slate-600">
+            {status.source} / {status.exposure}
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <span className="inline-flex min-h-7 items-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 text-[11px] font-black uppercase tracking-[0.12em] text-emerald-700">
+            {status.gateCount} gates
+          </span>
+          <span className="inline-flex min-h-7 items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 text-[11px] font-black uppercase tracking-[0.12em] text-slate-600">
+            remote actions {status.remoteActionsAuthorized ? 'on' : 'off'}
+          </span>
+          <span className="inline-flex min-h-7 items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 text-[11px] font-black uppercase tracking-[0.12em] text-slate-600">
+            production traffic {status.productionTraffic ? 'on' : 'off'}
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)]">
+        <div className="overflow-x-auto rounded-xl border border-slate-200">
+          <table className="w-full min-w-[620px] text-left text-sm">
+            <thead className="bg-slate-50 text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">
+              <tr>
+                <th className="px-3 py-2">Gate</th>
+                <th className="px-3 py-2">Command</th>
+                <th className="px-3 py-2">Boundary</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {previewGates.map(gate => (
+                <tr key={gate.gate}>
+                  <td className="px-3 py-3 font-mono text-[11px] font-black text-slate-800">{gate.gate}</td>
+                  <td className="px-3 py-3 font-mono text-[11px] font-bold text-blue-700">{gate.command}</td>
+                  <td className="px-3 py-3 text-xs font-semibold leading-5 text-slate-600">{gate.boundary}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Non-claims</p>
+          <div className="mt-3 grid gap-2">
+            {status.nonClaims.map(nonClaim => (
+              <div key={nonClaim} className="flex items-start gap-2 rounded-lg bg-white p-3 text-xs font-bold leading-5 text-slate-700 shadow-sm">
+                <EyeOff className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                <span>{nonClaim}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 

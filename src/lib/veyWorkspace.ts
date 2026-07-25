@@ -87,10 +87,17 @@ export type VeyWorkspaceShipmentInput = {
   trackingAlias?: unknown;
   status?: unknown;
   scheduledAt?: unknown;
+  expectedDeliveredAt?: unknown;
   deliveredAt?: unknown;
+  returnedAt?: unknown;
   cost?: unknown;
   currency?: unknown;
+  regionId?: unknown;
   deliveryCommitment?: unknown;
+  deliveryGatewayShipmentRef?: unknown;
+  tradeGatewayIntentRef?: unknown;
+  playlistCommerceIntentRef?: unknown;
+  returnReasonAlias?: unknown;
   rawAddress?: unknown;
   recipientName?: unknown;
   phone?: unknown;
@@ -243,11 +250,61 @@ export type VeyWorkspaceShipment = {
   trackingAlias?: string;
   status: VeyWorkspaceShipmentStatus;
   scheduledAt?: string;
+  expectedDeliveredAt?: string;
   deliveredAt?: string;
+  returnedAt?: string;
   cost: number;
   currency: string;
+  regionId: string;
   deliveryCommitment?: string;
+  deliveryGatewayShipmentRef?: string;
+  tradeGatewayIntentRef?: string;
+  playlistCommerceIntentRef?: string;
+  returnReasonAlias?: string;
   warnings: string[];
+};
+
+export type VeyWorkspaceRegionalDeliveryQuality = {
+  regionId: string;
+  shipments: number;
+  exceptions: number;
+  delayed: number;
+  returns: number;
+  totalShippingCost: number;
+  averageShippingCost: number;
+  onTimeRate: number;
+  returnRate: number;
+  qualityScore: number;
+  status: 'healthy' | 'watch' | 'attention';
+};
+
+export type VeyWorkspaceOperationsPlan = {
+  planningKind: 'b2b-operations-cost-delay-return-regional-quality';
+  cost: {
+    totalShippingCost: number;
+    averageShippingCost: number;
+    highestCostShipmentRef?: string;
+  };
+  delay: {
+    delayedShipments: number;
+    delayedShipmentRefs: string[];
+  };
+  returns: {
+    returnShipments: number;
+    returnShipmentRefs: string[];
+  };
+  regionalQuality: VeyWorkspaceRegionalDeliveryQuality[];
+  ecosystemConnections: {
+    deliveryGatewayShipmentRefs: string[];
+    tradeGatewayIntentRefs: string[];
+    playlistCommerceIntentRefs: string[];
+  };
+  recommendedActions: string[];
+  privacy: {
+    usesRawAddress: false;
+    usesRecipientContact: false;
+    visibleFields: string[];
+  };
 };
 
 export type VeyWorkspaceInvoice = {
@@ -302,7 +359,7 @@ export type VeyWorkspaceNotification = {
 };
 
 export type VeyWorkspaceRecommendation = {
-  type: 'reorder' | 'warehouse-transfer' | 'invoice-follow-up' | 'shipping-review' | 'backup-review';
+  type: 'reorder' | 'warehouse-transfer' | 'invoice-follow-up' | 'shipping-review' | 'regional-quality-review' | 'backup-review';
   priority: 'low' | 'medium' | 'high';
   summary: string;
   relatedRef: string;
@@ -352,6 +409,7 @@ export type VeyWorkspaceHub = {
   collaborationChannels: VeyWorkspaceCollaborationChannel[];
   tasks: VeyWorkspaceTask[];
   workflows: VeyWorkspaceWorkflow[];
+  operationsPlan: VeyWorkspaceOperationsPlan;
   notifications: VeyWorkspaceNotification[];
   recommendations: VeyWorkspaceRecommendation[];
   security: VeyWorkspaceSecurity;
@@ -362,6 +420,11 @@ export type VeyWorkspaceHub = {
     inventoryValue: number;
     lowStockItems: number;
     shipmentExceptions: number;
+    totalShippingCost: number;
+    averageShippingCost: number;
+    delayedShipments: number;
+    returnShipments: number;
+    regionalQualityAttention: number;
     receivablesBalance: number;
     overdueInvoices: number;
     activeTasks: number;
@@ -441,6 +504,11 @@ function normalizeCurrency(value: unknown) {
 function normalizeCountry(value: unknown) {
   const text = clean(value, 8).toUpperCase();
   return /^[A-Z]{2,3}$/.test(text) ? text : '';
+}
+
+function normalizeRegionId(value: unknown) {
+  const text = clean(value, 80).toUpperCase().replace(/\s+/g, '-');
+  return /^[A-Z0-9][A-Z0-9_.:-]{1,79}$/.test(text) ? text : 'REGION-UNKNOWN';
 }
 
 function idFrom(prefix: string, value: unknown, seed: string) {
@@ -629,6 +697,11 @@ function normalizeShipments(input: unknown): VeyWorkspaceShipment[] {
     const warnings: string[] = [];
     if (!carrierAlias) warnings.push('carrier-alias-missing');
     const cost = money(item.cost);
+    const deliveredAt = validIsoOrUndefined(item.deliveredAt);
+    const expectedDeliveredAt = validIsoOrUndefined(item.expectedDeliveredAt);
+    const returnedAt = validIsoOrUndefined(item.returnedAt);
+    if (expectedDeliveredAt && deliveredAt && Date.parse(deliveredAt) > Date.parse(expectedDeliveredAt)) warnings.push('shipment-delayed');
+    if (returnedAt) warnings.push('shipment-returned');
     return {
       shipmentId,
       orderId: idFrom('ORD', item.orderId, `${shipmentId}:order`),
@@ -636,13 +709,117 @@ function normalizeShipments(input: unknown): VeyWorkspaceShipment[] {
       ...(clean(item.trackingAlias, 100) ? { trackingAlias: clean(item.trackingAlias, 100) } : {}),
       status: normalizeShipmentStatus(item.status),
       ...(validIsoOrUndefined(item.scheduledAt) ? { scheduledAt: validIsoOrUndefined(item.scheduledAt) } : {}),
-      ...(validIsoOrUndefined(item.deliveredAt) ? { deliveredAt: validIsoOrUndefined(item.deliveredAt) } : {}),
+      ...(expectedDeliveredAt ? { expectedDeliveredAt } : {}),
+      ...(deliveredAt ? { deliveredAt } : {}),
+      ...(returnedAt ? { returnedAt } : {}),
       cost: Number.isFinite(cost) ? cost : 0,
       currency: normalizeCurrency(item.currency),
+      regionId: normalizeRegionId(item.regionId),
       ...(clean(item.deliveryCommitment, 160) ? { deliveryCommitment: clean(item.deliveryCommitment, 160) } : {}),
+      ...(clean(item.deliveryGatewayShipmentRef, 120) ? { deliveryGatewayShipmentRef: clean(item.deliveryGatewayShipmentRef, 120) } : {}),
+      ...(clean(item.tradeGatewayIntentRef, 120) ? { tradeGatewayIntentRef: clean(item.tradeGatewayIntentRef, 120) } : {}),
+      ...(clean(item.playlistCommerceIntentRef, 120) ? { playlistCommerceIntentRef: clean(item.playlistCommerceIntentRef, 120) } : {}),
+      ...(clean(item.returnReasonAlias, 100) ? { returnReasonAlias: clean(item.returnReasonAlias, 100) } : {}),
       warnings,
     };
   });
+}
+
+function uniqueStrings(values: Array<string | undefined>) {
+  return Array.from(new Set(values.filter((value): value is string => Boolean(value))));
+}
+
+function isDelayedShipment(shipment: VeyWorkspaceShipment) {
+  return Boolean(
+    shipment.warnings.includes('shipment-delayed')
+    || (shipment.expectedDeliveredAt && shipment.deliveredAt && Date.parse(shipment.deliveredAt) > Date.parse(shipment.expectedDeliveredAt)),
+  );
+}
+
+function isReturnedShipment(shipment: VeyWorkspaceShipment) {
+  return Boolean(shipment.returnedAt || shipment.returnReasonAlias);
+}
+
+function buildOperationsPlan(shipments: readonly VeyWorkspaceShipment[]): VeyWorkspaceOperationsPlan {
+  const totalShippingCost = Math.round(shipments.reduce((sum, shipment) => sum + shipment.cost, 0) * 100) / 100;
+  const averageShippingCost = shipments.length ? Math.round((totalShippingCost / shipments.length) * 100) / 100 : 0;
+  const highestCostShipment = shipments.reduce<VeyWorkspaceShipment | undefined>((highest, shipment) => (
+    !highest || shipment.cost > highest.cost ? shipment : highest
+  ), undefined);
+  const delayedShipmentRefs = shipments.filter(isDelayedShipment).map(shipment => shipment.shipmentId);
+  const returnShipmentRefs = shipments.filter(isReturnedShipment).map(shipment => shipment.shipmentId);
+  const regions = uniqueStrings(shipments.map(shipment => shipment.regionId));
+  const regionalQuality = regions.map((regionId) => {
+    const regionalShipments = shipments.filter(shipment => shipment.regionId === regionId);
+    const exceptions = regionalShipments.filter(shipment => shipment.status === 'exception' || shipment.status === 'blocked').length;
+    const delayed = regionalShipments.filter(isDelayedShipment).length;
+    const returns = regionalShipments.filter(isReturnedShipment).length;
+    const totalCost = Math.round(regionalShipments.reduce((sum, shipment) => sum + shipment.cost, 0) * 100) / 100;
+    const onTimeRate = regionalShipments.length ? Math.round(((regionalShipments.length - delayed) / regionalShipments.length) * 1000) / 1000 : 0;
+    const returnRate = regionalShipments.length ? Math.round((returns / regionalShipments.length) * 1000) / 1000 : 0;
+    const qualityPenalty = (exceptions * 25 + delayed * 15 + returns * 20) / Math.max(1, regionalShipments.length);
+    const qualityScore = Math.max(0, Math.round(100 - qualityPenalty));
+    const compoundIssue = (exceptions > 0 && returns > 0) || (delayed > 0 && returns > 0);
+    return {
+      regionId,
+      shipments: regionalShipments.length,
+      exceptions,
+      delayed,
+      returns,
+      totalShippingCost: totalCost,
+      averageShippingCost: regionalShipments.length ? Math.round((totalCost / regionalShipments.length) * 100) / 100 : 0,
+      onTimeRate,
+      returnRate,
+      qualityScore,
+      status: qualityScore >= 80 && exceptions === 0 && !compoundIssue ? 'healthy' as const : qualityScore >= 60 && !compoundIssue ? 'watch' as const : 'attention' as const,
+    };
+  }).sort((a, b) => a.qualityScore - b.qualityScore || b.shipments - a.shipments);
+  const recommendedActions: string[] = [];
+  if (averageShippingCost > 0) recommendedActions.push('review-carrier-cost-benchmark-by-region');
+  if (delayedShipmentRefs.length) recommendedActions.push('recalibrate-delivery-promise-and-carrier-allocation');
+  if (returnShipmentRefs.length) recommendedActions.push('inspect-return-reasons-and-merchant-policy');
+  if (regionalQuality.some(region => region.status === 'attention')) recommendedActions.push('open-regional-quality-improvement-workstream');
+  if (!recommendedActions.length) recommendedActions.push('continue-monitoring-b2b-operations-baseline');
+
+  return {
+    planningKind: 'b2b-operations-cost-delay-return-regional-quality',
+    cost: {
+      totalShippingCost,
+      averageShippingCost,
+      ...(highestCostShipment ? { highestCostShipmentRef: highestCostShipment.shipmentId } : {}),
+    },
+    delay: {
+      delayedShipments: delayedShipmentRefs.length,
+      delayedShipmentRefs,
+    },
+    returns: {
+      returnShipments: returnShipmentRefs.length,
+      returnShipmentRefs,
+    },
+    regionalQuality,
+    ecosystemConnections: {
+      deliveryGatewayShipmentRefs: uniqueStrings(shipments.map(shipment => shipment.deliveryGatewayShipmentRef)),
+      tradeGatewayIntentRefs: uniqueStrings(shipments.map(shipment => shipment.tradeGatewayIntentRef)),
+      playlistCommerceIntentRefs: uniqueStrings(shipments.map(shipment => shipment.playlistCommerceIntentRef)),
+    },
+    recommendedActions,
+    privacy: {
+      usesRawAddress: false,
+      usesRecipientContact: false,
+      visibleFields: [
+        'shipmentId',
+        'orderId',
+        'carrierAlias',
+        'status',
+        'cost',
+        'currency',
+        'regionId',
+        'deliveryGatewayShipmentRef',
+        'tradeGatewayIntentRef',
+        'playlistCommerceIntentRef',
+      ],
+    },
+  };
 }
 
 function normalizeInvoices(input: unknown, generatedAt: string): VeyWorkspaceInvoice[] {
@@ -800,6 +977,7 @@ function buildRecommendations(input: {
   shipments: readonly VeyWorkspaceShipment[];
   invoices: readonly VeyWorkspaceInvoice[];
   locations: readonly VeyWorkspaceLocation[];
+  operationsPlan: VeyWorkspaceOperationsPlan;
   backupStale: boolean;
 }): VeyWorkspaceRecommendation[] {
   const recommendations: VeyWorkspaceRecommendation[] = [];
@@ -832,6 +1010,14 @@ function buildRecommendations(input: {
       priority: 'high',
       summary: `Review carrier handoff for ${shipment.shipmentId}`,
       relatedRef: shipment.shipmentId,
+    });
+  });
+  input.operationsPlan.regionalQuality.filter(region => region.status === 'attention').forEach(region => {
+    recommendations.push({
+      type: 'regional-quality-review',
+      priority: 'high',
+      summary: `Review delivery cost, delay, return, and exception posture for ${region.regionId}`,
+      relatedRef: region.regionId,
     });
   });
   input.invoices.filter(invoice => invoice.status === 'overdue').forEach(invoice => {
@@ -911,11 +1097,13 @@ export function buildVeyWorkspace(input: VeyWorkspaceInput = {}): VeyWorkspaceHu
     invoices,
     backupStale,
   });
+  const operationsPlan = buildOperationsPlan(shipments);
   const recommendations = buildRecommendations({
     inventory,
     shipments,
     invoices,
     locations,
+    operationsPlan,
     backupStale,
   });
   const blockedOrders = orders.filter(order => order.status === 'blocked').length;
@@ -943,6 +1131,7 @@ export function buildVeyWorkspace(input: VeyWorkspaceInput = {}): VeyWorkspaceHu
     collaborationChannels,
     tasks,
     workflows,
+    operationsPlan,
     notifications,
     recommendations,
     security: {
@@ -962,6 +1151,11 @@ export function buildVeyWorkspace(input: VeyWorkspaceInput = {}): VeyWorkspaceHu
       inventoryValue: Math.round(inventory.reduce((sum, item) => sum + item.inventoryValue, 0) * 100) / 100,
       lowStockItems,
       shipmentExceptions,
+      totalShippingCost: operationsPlan.cost.totalShippingCost,
+      averageShippingCost: operationsPlan.cost.averageShippingCost,
+      delayedShipments: operationsPlan.delay.delayedShipments,
+      returnShipments: operationsPlan.returns.returnShipments,
+      regionalQualityAttention: operationsPlan.regionalQuality.filter(region => region.status === 'attention').length,
       receivablesBalance: Math.round(invoices.reduce((sum, invoice) => sum + invoice.balance, 0) * 100) / 100,
       overdueInvoices,
       activeTasks: tasks.filter(task => task.status !== 'done').length,
@@ -984,6 +1178,8 @@ export function validateVeyWorkspace(workspace: VeyWorkspaceHub) {
   if (workspace.privacy.rawInvoiceBodyStored !== false) errors.push('vey-workspace-raw-invoice-body-stored');
   if (workspace.privacy.privateKeyStored !== false) errors.push('vey-workspace-private-key-stored');
   if (workspace.privacy.collaborationPayloadsRedacted !== true) errors.push('vey-workspace-unredacted-collaboration-payloads');
+  if (workspace.operationsPlan.privacy.usesRawAddress !== false) errors.push('vey-workspace-operations-uses-raw-address');
+  if (workspace.operationsPlan.privacy.usesRecipientContact !== false) errors.push('vey-workspace-operations-uses-recipient-contact');
   if (workspace.notifications.some(notification => notification.redacted !== true)) errors.push('vey-workspace-notification-not-redacted');
   if (!workspace.security.auditLogEnabled) warnings.push('vey-workspace-audit-log-disabled');
   if (!workspace.security.backupEncrypted) warnings.push('vey-workspace-backup-not-encrypted');
@@ -993,7 +1189,19 @@ export function validateVeyWorkspace(workspace: VeyWorkspaceHub) {
     workspace.organizationAlias,
     ...workspace.locations.flatMap(location => [location.locationId, location.label]),
     ...workspace.orders.flatMap(order => [order.orderId, order.orderAlias, order.addressCommitment, order.supplierAlias, order.partnerAlias]),
-    ...workspace.shipments.flatMap(shipment => [shipment.shipmentId, shipment.trackingAlias, shipment.deliveryCommitment]),
+    ...workspace.shipments.flatMap(shipment => [
+      shipment.shipmentId,
+      shipment.trackingAlias,
+      shipment.deliveryCommitment,
+      shipment.deliveryGatewayShipmentRef,
+      shipment.tradeGatewayIntentRef,
+      shipment.playlistCommerceIntentRef,
+      shipment.regionId,
+    ]),
+    ...workspace.operationsPlan.regionalQuality.map(region => region.regionId),
+    ...workspace.operationsPlan.ecosystemConnections.deliveryGatewayShipmentRefs,
+    ...workspace.operationsPlan.ecosystemConnections.tradeGatewayIntentRefs,
+    ...workspace.operationsPlan.ecosystemConnections.playlistCommerceIntentRefs,
     ...workspace.invoices.flatMap(invoice => [invoice.invoiceId, invoice.financeIntentRef]),
     ...workspace.notifications.flatMap(notification => [notification.summary, notification.relatedRef]),
     ...workspace.errors,

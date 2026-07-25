@@ -43,7 +43,7 @@ const heroCopy = {
     },
     menu: {
       map: 'Map',
-      portal: 'Portal',
+      portal: 'My Page',
       posField: 'POS & Field',
       research: 'Research',
       developers: 'Developers',
@@ -80,8 +80,8 @@ const heroCopy = {
         text: 'Create a private address QR, alias, receipt, and country-format record without exposing raw address by default.',
       },
       portal: {
-        label: 'Address Portal',
-        text: 'Manage address consent, scope, revocation, and receipts from a privacy-first portal.',
+        label: 'My Page',
+        text: 'Manage credentials, permissions, consent, security status, and safe exports without exposing raw address data.',
       },
       ops: {
         label: 'POS & Field Ops',
@@ -235,7 +235,7 @@ const heroCopy = {
         settings: 'Settings & Help',
       },
       links: {
-        portal: 'Portal',
+        portal: 'My Page',
         pos: 'POS',
         hotel: 'Hotel',
         opera: 'OPERA',
@@ -266,7 +266,7 @@ const heroCopy = {
     },
     menu: {
       map: '地図',
-      portal: 'ポータル',
+      portal: 'マイページ',
       posField: 'POS・現場',
       research: '研究',
       developers: '開発',
@@ -303,8 +303,8 @@ const heroCopy = {
         text: '生の住所を標準で出さずに、非公開住所QR、別名、受領証、国別フォーマットの記録を作ります。',
       },
       portal: {
-        label: '住所ポータル',
-        text: '住所の同意、範囲、失効、受領証をプライバシー優先で管理します。',
+        label: 'マイページ',
+        text: 'Credential、許可、同意、安全状態、安全exportを、生の住所を出さずに管理します。',
       },
       ops: {
         label: 'POS・現場運用',
@@ -458,7 +458,7 @@ const heroCopy = {
         settings: '設定とヘルプ',
       },
       links: {
-        portal: 'ポータル',
+        portal: 'マイページ',
         pos: 'POS',
         hotel: 'ホテル',
         opera: 'OPERA',

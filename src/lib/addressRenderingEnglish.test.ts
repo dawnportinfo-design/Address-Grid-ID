@@ -182,7 +182,7 @@ test('keeps European street and postcode order in English rendering', () => {
     postcode: '10115',
   });
 
-  assert.equal(rendered, 'Main Street 12\n10115 Berlin\nGERMANY');
+  assert.equal(rendered, 'Hauptstraße 12\n10115 Berlin\nGERMANY');
 });
 
 test('renders a safer partial AGID area when no street address is available', () => {
@@ -212,9 +212,9 @@ test('keeps Mali native and international English tabs distinct for sparse rural
     district: 'Cercle de Tessalit',
   });
 
-  assert.equal(AddressRenderer.render('fr', canonical), 'Cercle de Tessalit, Kidal');
-  assert.equal(AddressRenderer.render('en', canonical), 'Tessalit Cercle, Kidal\nMALI');
-  assert.equal(AddressRenderer.renderInternationalShippingEnglish(canonical), 'TESSALIT CERCLE, KIDAL\nMALI');
+  assert.equal(AddressRenderer.render('fr', canonical), 'Cercle de Tessalit\nKidal');
+  assert.equal(AddressRenderer.render('en', canonical), 'Cercle de Tessalit\nKidal\nMALI');
+  assert.equal(AddressRenderer.renderInternationalShippingEnglish(canonical), 'CERCLE DE TESSALIT\nKIDAL\nMALI');
 });
 
 test('canonical AGID address display uses postal and open-source evidence when available', () => {
@@ -254,7 +254,7 @@ test('renders map feature names when no building name is present', () => {
   });
 
   assert.equal(canonical.poi, 'Parc des Buttes-Chaumont');
-  assert.equal(AddressRenderer.render('fr', canonical), 'Parc des Buttes-Chaumont, Paris');
+  assert.equal(AddressRenderer.render('fr', canonical), 'Parc des Buttes-Chaumont\nParis');
 });
 
 test('renders natural and heritage feature fields when no building name is present', () => {

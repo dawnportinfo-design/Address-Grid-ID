@@ -10,6 +10,14 @@ const checks = [
     args: ['scripts/verify-open-source-repository-readiness.ts'],
   },
   {
+    label: 'verify:repository-owner-routing',
+    args: ['--test', 'src/lib/repositoryOwnerRouting.test.ts'],
+  },
+  {
+    label: 'verify:commercial-boundary-review',
+    args: ['scripts/verify-commercial-boundary-review.ts'],
+  },
+  {
     label: 'verify:veygrit-address-login-packages',
     args: ['scripts/verify-veygrit-address-login-packages.ts'],
   },
