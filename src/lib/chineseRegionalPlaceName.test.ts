@@ -32,6 +32,7 @@ import {
   suggestChineseRegionalPlaceNameCandidates,
   verifyChinesePlaceNameCorrectionEndpointEvidence,
   verifyChinesePlaceNameCorrectionEndpointSignature,
+  verifyChinesePlaceNameCorrectionEndpointSignatureSet,
   verifyChinesePlaceNameIndependentReview,
   verifyEd25519DetachedSignature,
   verifyChineseRegionalPlaceNameQualityEvidence,
@@ -1477,13 +1478,14 @@ function publicReviewRegistry(
 
 function publicCorrectionMonitorRegistry(
   status: 'trusted' | 'revoked' = 'trusted',
+  monitorId = 'independent-correction-monitor',
 ): ChinesePlaceNameCorrectionMonitorKeyRegistry {
   return {
     version: CHINESE_PLACE_NAME_CORRECTION_MONITOR_KEY_REGISTRY_VERSION,
     keys: [
       {
         keyId: 'correction-monitor-rfc-vector-key',
-        monitorId: 'independent-correction-monitor',
+        monitorId,
         algorithm: 'Ed25519',
         purpose: 'correction-endpoint-observation',
         publicKeyBase64Url: hexToBase64Url(RFC_8032_EMPTY_MESSAGE_PUBLIC_KEY),
@@ -1582,6 +1584,85 @@ test('blocks revoked correction monitor keys before signature verification', asy
   assert.equal(result.trustValid, false);
   assert.equal(result.signatureValid, false);
   assert.ok(result.issues.some(issue => issue.includes('key is revoked')));
+});
+
+test('blocks independent quality review when endpoint signatures are missing', async () => {
+  const reports = passingSyntheticQualityReports();
+  const qualityEvidence = buildChineseRegionalPlaceNameQualityEvidence({
+    reportId: 'greater-china-correction-signature-set-missing',
+    fixtureVersion: reports.holdoutPack.fixtureVersion,
+    evaluatedAt: '2026-07-25T14:46:00.000Z',
+    evaluatorId: 'agid-local-evaluator-v1',
+    ...reports,
+  });
+  const result = await verifyChinesePlaceNameCorrectionEndpointSignatureSet({
+    qualityEvidence,
+    signatures: [],
+    registry: publicCorrectionMonitorRegistry(
+      'trusted',
+      'synthetic-correction-monitor',
+    ),
+    evaluatedRecords: CHINESE_REGIONAL_PLACE_NAME_RECORDS,
+    holdoutPack: reports.holdoutPack,
+    asOf: '2026-07-26T00:00:00.000Z',
+  });
+
+  assert.equal(result.status, 'rejected');
+  assert.equal(result.qualityEvidenceValid, true);
+  assert.equal(result.expectedEndpointCount, 5);
+  assert.equal(result.verifiedEndpointCount, 0);
+  assert.equal(result.allEndpointsIndependentlyObserved, false);
+  assert.equal(result.eligibleForIndependentQualityReview, false);
+  assert.equal(result.deliveryClaimsEnabled, false);
+  assert.equal(
+    result.endpointSummaries.filter(summary =>
+      summary.issues.includes('independent monitor signature is missing')).length,
+    5,
+  );
+});
+
+test('rejects a reused public test signature within the endpoint signature set', async () => {
+  const reports = passingSyntheticQualityReports();
+  const qualityEvidence = buildChineseRegionalPlaceNameQualityEvidence({
+    reportId: 'greater-china-correction-signature-set-invalid',
+    fixtureVersion: reports.holdoutPack.fixtureVersion,
+    evaluatedAt: '2026-07-25T14:46:00.000Z',
+    evaluatorId: 'agid-local-evaluator-v1',
+    ...reports,
+  });
+  const endpointEvidence = qualityEvidence.correctionEndpointEvidence[0];
+  const result = await verifyChinesePlaceNameCorrectionEndpointSignatureSet({
+    qualityEvidence,
+    signatures: [
+      {
+        correctionUrl: endpointEvidence.correctionUrl,
+        evidenceDigest: endpointEvidence.evidenceDigest,
+        signature: {
+          algorithm: 'Ed25519',
+          keyId: 'correction-monitor-rfc-vector-key',
+          signedAt: '2026-07-25T15:00:00.000Z',
+          signatureBase64Url: hexToBase64Url(RFC_8032_EMPTY_MESSAGE_SIGNATURE),
+        },
+      },
+    ],
+    registry: publicCorrectionMonitorRegistry(
+      'trusted',
+      'synthetic-correction-monitor',
+    ),
+    evaluatedRecords: CHINESE_REGIONAL_PLACE_NAME_RECORDS,
+    holdoutPack: reports.holdoutPack,
+    asOf: '2026-07-26T00:00:00.000Z',
+  });
+
+  assert.equal(result.status, 'rejected');
+  assert.equal(result.verifiedEndpointCount, 0);
+  assert.equal(result.allEndpointsIndependentlyObserved, false);
+  assert.ok(result.issues.some(issue =>
+    issue.includes('cryptographic verification failed')));
+  assert.equal(
+    result.endpointSummaries.filter(summary => summary.status === 'rejected').length,
+    5,
+  );
 });
 
 test('blocks external signature when synthetic policies are below the production floor', async () => {

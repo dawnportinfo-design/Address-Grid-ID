@@ -96,6 +96,29 @@ export type ChinesePlaceNameCorrectionEndpointSignatureVerification = {
   monitorId?: string;
 };
 
+export type ChinesePlaceNameCorrectionEndpointSignatureBinding = {
+  correctionUrl: string;
+  evidenceDigest: string;
+  signature: ChinesePlaceNameCorrectionEndpointSignature;
+};
+
+export type ChinesePlaceNameCorrectionEndpointSignatureSetVerification = {
+  status: 'verified' | 'rejected';
+  qualityEvidenceValid: boolean;
+  expectedEndpointCount: number;
+  verifiedEndpointCount: number;
+  allEndpointsIndependentlyObserved: boolean;
+  eligibleForIndependentQualityReview: boolean;
+  issues: readonly string[];
+  endpointSummaries: readonly {
+    correctionUrl: string;
+    status: 'verified' | 'rejected';
+    monitorId?: string;
+    issues: readonly string[];
+  }[];
+  deliveryClaimsEnabled: false;
+};
+
 export type ChinesePlaceNameSearchAlias = {
   value: string;
   readingTradition: string;
@@ -2467,6 +2490,138 @@ export async function verifyChinesePlaceNameCorrectionEndpointSignature(input: {
     signatureValid,
     issues: uniqueIssues,
     monitorId: key?.monitorId,
+  };
+}
+
+export async function verifyChinesePlaceNameCorrectionEndpointSignatureSet(input: {
+  qualityEvidence: ChineseRegionalPlaceNameQualityEvidence;
+  signatures: readonly ChinesePlaceNameCorrectionEndpointSignatureBinding[];
+  registry: ChinesePlaceNameCorrectionMonitorKeyRegistry;
+  evaluatedRecords: readonly ChineseRegionalPlaceNameRecord[];
+  holdoutPack: ChineseRegionalPlaceNameHoldoutPack;
+  asOf: string;
+}): Promise<ChinesePlaceNameCorrectionEndpointSignatureSetVerification> {
+  const issues = findForbiddenKeys({
+    signatures: input.signatures,
+    registry: input.registry,
+  });
+  const qualityVerification = verifyChineseRegionalPlaceNameQualityEvidence(
+    input.qualityEvidence,
+    {
+      evaluatedRecords: input.evaluatedRecords,
+      holdoutPack: input.holdoutPack,
+      asOf: input.asOf,
+    },
+  );
+  issues.push(...qualityVerification.issues.map(issue => `qualityEvidence.${issue}`));
+  if (!qualityVerification.eligibleForExternalSignature) {
+    issues.push('qualityEvidence: not eligible for external signature');
+  }
+
+  const sourceByCorrectionUrl = new Map(
+    input.qualityEvidence.evaluatedRecordSet.sources.map(source => [
+      source.correctionUrl,
+      source,
+    ]),
+  );
+  const evidenceByCorrectionUrl = new Map(
+    input.qualityEvidence.correctionEndpointEvidence.map(evidence => [
+      evidence.correctionUrl,
+      evidence,
+    ]),
+  );
+  const bindingByCorrectionUrl = new Map<
+    string,
+    ChinesePlaceNameCorrectionEndpointSignatureBinding
+  >();
+  for (const [index, binding] of input.signatures.entries()) {
+    const path = `signatures[${index}]`;
+    if (bindingByCorrectionUrl.has(binding.correctionUrl)) {
+      issues.push(`${path}: duplicate correction URL signature`);
+      continue;
+    }
+    if (!sourceByCorrectionUrl.has(binding.correctionUrl)) {
+      issues.push(`${path}: correction URL is not used by the evaluated sources`);
+      continue;
+    }
+    bindingByCorrectionUrl.set(binding.correctionUrl, binding);
+  }
+
+  const endpointSummaries = [];
+  for (const [correctionUrl, source] of sourceByCorrectionUrl.entries()) {
+    const evidence = evidenceByCorrectionUrl.get(correctionUrl);
+    const binding = bindingByCorrectionUrl.get(correctionUrl);
+    if (!evidence) {
+      const endpointIssues = ['quality evidence is missing endpoint evidence'];
+      issues.push(`correctionSignatures.${correctionUrl}: ${endpointIssues[0]}`);
+      endpointSummaries.push({
+        correctionUrl,
+        status: 'rejected' as const,
+        issues: endpointIssues,
+      });
+      continue;
+    }
+    if (!binding) {
+      const endpointIssues = ['independent monitor signature is missing'];
+      issues.push(`correctionSignatures.${correctionUrl}: ${endpointIssues[0]}`);
+      endpointSummaries.push({
+        correctionUrl,
+        status: 'rejected' as const,
+        issues: endpointIssues,
+      });
+      continue;
+    }
+    if (binding.evidenceDigest !== evidence.evidenceDigest) {
+      const endpointIssues = ['signature binding evidence digest does not match'];
+      issues.push(`correctionSignatures.${correctionUrl}: ${endpointIssues[0]}`);
+      endpointSummaries.push({
+        correctionUrl,
+        status: 'rejected' as const,
+        issues: endpointIssues,
+      });
+      continue;
+    }
+
+    const verification = await verifyChinesePlaceNameCorrectionEndpointSignature({
+      source,
+      evidence,
+      signature: binding.signature,
+      registry: input.registry,
+      asOf: input.asOf,
+    });
+    issues.push(...verification.issues.map(issue =>
+      `correctionSignatures.${correctionUrl}.${issue}`));
+    endpointSummaries.push({
+      correctionUrl,
+      status: verification.status,
+      monitorId: verification.monitorId,
+      issues: verification.issues,
+    });
+  }
+
+  const verifiedEndpointCount = endpointSummaries.filter(
+    summary => summary.status === 'verified',
+  ).length;
+  const allEndpointsIndependentlyObserved = (
+    endpointSummaries.length > 0
+    && verifiedEndpointCount === endpointSummaries.length
+  );
+  const uniqueIssues = [...new Set(issues)].sort();
+  const eligibleForIndependentQualityReview = (
+    qualityVerification.eligibleForExternalSignature
+    && allEndpointsIndependentlyObserved
+    && uniqueIssues.length === 0
+  );
+  return {
+    status: eligibleForIndependentQualityReview ? 'verified' : 'rejected',
+    qualityEvidenceValid: qualityVerification.valid,
+    expectedEndpointCount: endpointSummaries.length,
+    verifiedEndpointCount,
+    allEndpointsIndependentlyObserved,
+    eligibleForIndependentQualityReview,
+    issues: uniqueIssues,
+    endpointSummaries,
+    deliveryClaimsEnabled: false,
   };
 }
 
