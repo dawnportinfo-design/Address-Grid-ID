@@ -15,6 +15,7 @@ For the address translation theory behind the native and international-English a
 - **Address registration**: full-screen address registration flow with country/region selection, address-language tabs, postal-code fields, QR generation, and registered-address persistence.
 - **Multilingual address rendering**: native-language and international-English address display with country-specific ordering, romanization, and multilingual-country support.
 - **Postal and open-source evidence**: postal-code metadata, source classification, confidence display, and fallback behavior for countries with weak or unavailable postal APIs.
+- **International trade readiness**: open-source/open-data source selection for UN/LOCODE, DCSA OpenAPI, HS/HTS references, Incoterms code checks, and customs document hints.
 - **Building and place names**: OpenStreetMap/OpenFreeMap/Overture-ready building-name lookup and ranking paths for stronger address labels.
 - **Sea, natural, and special geography**: support paths for sea names, mountains, waterfronts, natural features, territories, autonomous regions, and disputed regions.
 - **GIS validation**: optional open-source validation path using generated GeoJSON, GDAL when available, and QGIS review projects.
@@ -66,6 +67,7 @@ AGID uses open-source data as evidence layers:
 - Geometry and analysis: Turf, OpenLayers, generated GeoJSON, optional GDAL/QGIS/PostGIS review paths.
 - Geocoding and place labels: OSM/Nominatim-style data, Photon-compatible search, Overpass, OpenFreeMap/Overture-ready building name candidates.
 - Postal/address rules: local address-format metadata, libaddressinput/OpenCage-style formatting concepts, official postal APIs when available, and open postal datasets where quality is sufficient.
+- Trade and shipping interoperability: UNECE UN/LOCODE for transport nodes, DCSA OpenAPI standards for container-shipping workflows, WCO HS references for six-digit commodity classification, and USITC HTS open data for U.S. tariff-line lookup.
 - Language data: CLDR-based language/country display data, native scripts, and country-specific international-English rendering rules.
 
 The app should treat each source as evidence with a source label, confidence, warnings, and fallback behavior.
