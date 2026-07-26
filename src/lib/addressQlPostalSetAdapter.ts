@@ -23,13 +23,17 @@ const COUNTRY_CODE = /^[A-Z]{2}$/;
 const MAX_POSTAL_CODE_LENGTH = 32;
 const MAX_POSTAL_CODE_COUNT = 2_000_000;
 
-function normalizePostalCode(value: string) {
-  return value
+function normalizePostalCode(value: string, countryCode?: string) {
+  const normalized = value
     .normalize('NFKC')
     .trim()
     .toUpperCase()
     .replace(/[‐‑‒–—―]/g, '-')
     .replace(/\s+/g, ' ');
+  if (countryCode === 'JP' && /^\d{3}-?\d{4}$/.test(normalized)) {
+    return normalized.replace('-', '');
+  }
+  return normalized;
 }
 
 export function createAddressQlPostalSetAdapter(
@@ -48,7 +52,7 @@ export function createAddressQlPostalSetAdapter(
 
   const postalCodes = new Set<string>();
   for (const value of options.postalCodes) {
-    const normalized = normalizePostalCode(value);
+    const normalized = normalizePostalCode(value, countryCode);
     if (!normalized || normalized.length > MAX_POSTAL_CODE_LENGTH) {
       throw new Error('postal set adapter contains an invalid postcode value');
     }
@@ -63,7 +67,7 @@ export function createAddressQlPostalSetAdapter(
     purposes: [options.purpose],
     evidence: options.evidence,
     evaluate(input) {
-      const normalized = normalizePostalCode(input.postalCode);
+      const normalized = normalizePostalCode(input.postalCode, countryCode);
       if (!normalized) {
         return {
           status: 'unknown',

@@ -1,12 +1,18 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
   ADDRESSQL_PRACTICAL_API_LIMITS,
   buildAddressQlApiErrorResponse,
   createAddressQlPracticalApi,
+  type AddressQlPracticalApiOptions,
   type AddressQlPracticalApiResponse,
 } from '../src/lib/addressQlPracticalApi';
+import {
+  loadAddressQlRuntimeConfig,
+  type LoadedAddressQlRuntimeConfig,
+} from '../src/lib/addressQlRuntimeConfig';
 
 function writeResponse(
   response: ServerResponse,
@@ -23,8 +29,11 @@ function headerMap(request: IncomingMessage): Record<string, string | undefined>
   );
 }
 
-export function createAddressQlHttpServer(root = process.cwd()) {
-  const api = createAddressQlPracticalApi(root);
+export function createAddressQlHttpServer(
+  root = process.cwd(),
+  options: AddressQlPracticalApiOptions = {},
+) {
+  const api = createAddressQlPracticalApi(root, options);
   const server = createServer((request, response) => {
     const method = String(request.method || 'GET').toUpperCase();
     const path = request.url || '/';
@@ -143,15 +152,57 @@ function parsePort(value: string | undefined): number {
   return Number.isInteger(port) && port >= 0 && port <= 65535 ? port : 8787;
 }
 
+function enabledFlag(value: string | undefined) {
+  return value === '1' || value?.toLowerCase() === 'true';
+}
+
+export function loadAddressQlRuntimeEnvironment(
+  environment: NodeJS.ProcessEnv = process.env,
+  cwd = process.cwd(),
+): LoadedAddressQlRuntimeConfig | null {
+  const configPath = environment.ADDRESSQL_RUNTIME_CONFIG;
+  if (!configPath) return null;
+  return loadAddressQlRuntimeConfig({
+    configPath: resolvePath(cwd, configPath),
+    ...(environment.ADDRESSQL_TRUST_STORE
+      ? {
+        trustStorePath: resolvePath(
+          cwd,
+          environment.ADDRESSQL_TRUST_STORE,
+        ),
+      }
+      : {}),
+    allowConformanceAdapters: enabledFlag(
+      environment.ADDRESSQL_ALLOW_CONFORMANCE,
+    ),
+  });
+}
+
+function resolvePath(cwd: string, path: string) {
+  return resolve(cwd, path);
+}
+
 export function runAddressQlHttpServer() {
   const host = process.env.ADDRESSQL_API_HOST || '127.0.0.1';
   const port = parsePort(process.env.ADDRESSQL_API_PORT);
-  const server = createAddressQlHttpServer();
+  const loadedRuntime = loadAddressQlRuntimeEnvironment();
+  const server = createAddressQlHttpServer(process.cwd(), loadedRuntime
+    ? {
+      runtimeAdapters: loadedRuntime.runtimeAdapters,
+      ...loadedRuntime.registryOptions,
+    }
+    : {});
   server.listen(port, host, () => {
     const address = server.address();
     const selectedPort = typeof address === 'object' && address ? address.port : port;
     console.log(`AddressQL practical API listening on http://${host}:${selectedPort}`);
     console.log('Request bodies are processed ephemerally and are not logged by this adapter.');
+    if (loadedRuntime) {
+      console.log(
+        `Loaded ${loadedRuntime.diagnostics.adapterCount} verified runtime adapter(s)`
+        + ` for ${loadedRuntime.diagnostics.countryCodes.join(', ')}.`,
+      );
+    }
   });
   return server;
 }

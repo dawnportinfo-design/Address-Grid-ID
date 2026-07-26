@@ -8,7 +8,7 @@
   "license_policy": {
     "code": "Apache-2.0",
     "papers_and_specs": "CC-BY-4.0",
-    "data": "source-specific; synthetic fixtures only in public tests"
+    "data": "source-specific; synthetic fixtures only in public tests; optional postcode-only runtime sync stays untracked"
   },
   "topics": [
     "address-validation",
@@ -83,6 +83,18 @@
       "verification": "npm run verify:addressql-api"
     },
     {
+      "name": "addressql-runtime-config",
+      "path": "src/lib/addressQlRuntimeConfig.ts",
+      "readiness": "signed-local-config-ready",
+      "verification": "npm run verify:addressql-runtime-config"
+    },
+    {
+      "name": "addressql-public-postal-source-intake",
+      "path": "src/lib/addressQlPublicPostalData.ts",
+      "readiness": "jp-official-plus-oss-conformance-ready",
+      "verification": "npm run verify:addressql-api"
+    },
+    {
       "name": "addressql-duckdb",
       "path": "extensions/addressql-duckdb",
       "readiness": "scaffold-ready",
@@ -131,6 +143,7 @@
     "docs/addressql/country-data-promotion-v0.1.md",
     "docs/addressql/multilingual-quality-v0.1.md",
     "docs/addressql/practical-api-v1.md",
+    "docs/addressql/sources/jp-public-postal-sources-v1.json",
     "docs/addressql/zk-proof-hooks-v0.6.md",
     "docs/addressql/calcite-v0.5.md",
     "docs/addressql/repository-files/README.md",
@@ -142,6 +155,10 @@
     "docs/addressql/repository-files/CODE_OF_CONDUCT.md",
     "docs/addressql/repository-manifest.json",
     "docs/specs/openapi/addressql-practical-api-v1.openapi.json",
+    "docs/specs/fixtures/addressql-runtime-config-conformance-v1.json",
+    "docs/specs/fixtures/addressql-runtime-config-conformance-v1.postcodes.txt",
+    "docs/specs/schemas/addressql-runtime-config-v1.schema.json",
+    "docs/specs/schemas/addressql-trust-store-v1.schema.json",
     "docs/specs/fixtures/addressql-postal-validation-negative-claims-v0.1.json",
     "docs/specs/schemas/addressql-postal-validation-negative-claims-v0.1.schema.json"
   ],
@@ -155,6 +172,7 @@
     "AMT compatibility is an adapter boundary, not an AMT paper chapter.",
     "Third-party source/data licenses remain separate from code licensing.",
     "Practical API responses must not reflect submitted postal codes or accept raw address and recipient fields.",
+    "Public-source sync may create conformance adapters, but only an independently supplied Ed25519 public key and valid signature may activate approved evidence.",
     "Cross-language place-name transformation remains disabled until country-specific source, holdout, signature, and runtime evidence is approved."
   ],
   "verification_commands": [
@@ -170,6 +188,9 @@
     "npm run verify:addressql-country-data-promotion",
     "npm run verify:addressql-multilingual-quality",
     "npm run verify:addressql-api",
+    "npm run verify:addressql-runtime-config",
+    "npm run sync:addressql-public-postal-data",
+    "npm run register:addressql-trusted-public-key",
     "npm run verify:addressql-zk",
     "npm run verify:addressql-calcite",
     "npm run verify:addressql-export",

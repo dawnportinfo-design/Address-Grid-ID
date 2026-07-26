@@ -222,6 +222,7 @@ export function buildAddressQlAGradeReadinessReport(root = process.cwd()): Addre
     'verify:addressql-duckdb:cli',
     'verify:addressql-sdk',
     'verify:addressql-global-preload',
+    'verify:addressql-runtime-config',
     'verify:addressql-zk',
     'verify:addressql-calcite',
     'verify:addressql-oss',
@@ -328,6 +329,7 @@ export function buildAddressQlAGradeReadinessReport(root = process.cwd()): Addre
       [
         'verify:addressql aggregates the A-grade readiness test',
         'cargo and DuckDB CLI commands are declared as explicit hard gates',
+        'signed runtime data configuration has a deterministic verification command',
         'AddressQL export has a write-free check mode',
         'A-grade readiness has a public documentation contract',
       ],
@@ -349,6 +351,7 @@ export function buildAddressQlAGradeReadinessReport(root = process.cwd()): Addre
     recommendedCommands: [
       'npm run verify:addressql',
       'npm run verify:addressql-a-grade',
+      'npm run verify:addressql-runtime-config',
       'npm run verify:addressql-export',
       'npm run verify:addressql-core:cargo',
       'npm run verify:addressql-duckdb:cli -- --require-cli',

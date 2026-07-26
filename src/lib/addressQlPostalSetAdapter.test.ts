@@ -80,3 +80,27 @@ test('partial postal sets never turn absence into a negative claim', () => {
     purpose: 'existence',
   })?.liveEligible, false);
 });
+
+test('JP postal sets treat ASCII and full-width hyphen forms as one code', () => {
+  const adapter = createAddressQlPostalSetAdapter({
+    id: 'jp-postal-normalization',
+    version: 'fixture-v1',
+    mode: 'conformance',
+    countryCode: 'JP',
+    purpose: 'existence',
+    coverage: 'partial',
+    postalCodes: ['1000001'],
+    evidence: evidence(),
+  });
+
+  assert.equal(adapter.evaluate({
+    countryCode: 'JP',
+    postalCode: '100-0001',
+    purpose: 'existence',
+  }).status, 'pass');
+  assert.equal(adapter.evaluate({
+    countryCode: 'JP',
+    postalCode: '１００－０００１',
+    purpose: 'existence',
+  }).status, 'pass');
+});

@@ -103,6 +103,90 @@ for misses, preventing incomplete open data from becoming false rejection
 evidence. Capability, promotion, and health endpoints use the same live
 adapter gate as validation requests.
 
+## Local Runtime Configuration
+
+The HTTP server can load postcode-only datasets without code changes:
+
+```powershell
+$env:ADDRESSQL_RUNTIME_CONFIG="C:\addressql-data\runtime-config.json"
+$env:ADDRESSQL_TRUST_STORE="C:\addressql-data\trust-store.json"
+npm run serve:addressql-api
+```
+
+The runtime config and trust-store schemas are:
+
+```text
+docs/specs/schemas/addressql-runtime-config-v1.schema.json
+docs/specs/schemas/addressql-trust-store-v1.schema.json
+```
+
+Each `dataFile` is relative to, and must stay inside, the config directory.
+The file contains one postcode per line. AddressQL NFKC-normalizes, sorts, and
+deduplicates the values, then verifies the canonical dataset digest before
+loading it. Inspect a file without printing its contents:
+
+```bash
+npx tsx scripts/verify-addressql-runtime-config.ts \
+  --data ./postcodes.txt
+```
+
+Validate a complete runtime config before startup:
+
+```bash
+npx tsx scripts/verify-addressql-runtime-config.ts \
+  --config ./runtime-config.json \
+  --trust-store ./trust-store.json
+```
+
+Approved adapters require an Ed25519 signature over the canonical payload
+returned by `buildAddressQlRuntimeAttestationPayload`. The trust store contains
+public keys only:
+
+```json
+{
+  "version": "addressql-trust-store-v1",
+  "keys": {
+    "independent-reviewer-key-id": "-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----\n"
+  }
+}
+```
+
+An empty trust store is valid but trusts nobody. This lets source intake finish
+without weakening the approval gate. Register a public key supplied by an
+independently controlled reviewer:
+
+```bash
+npx tsx scripts/register-addressql-trusted-public-key.ts \
+  --trust-store ./.agid-runtime/addressql/jp/trust-store.json \
+  --key-id independent-reviewer-2026 \
+  --public-key ./reviewer-public.pem
+```
+
+The registrar accepts Ed25519 public keys only, rejects private-key material,
+and refuses to bind an existing key ID to a different key.
+
+For a reusable JP runtime, AddressQL can derive postcode-only sets from the
+Japan Post UTF-8 CSV and the GeoNames CC BY 4.0 country archive:
+
+```bash
+npm run sync:addressql-public-postal-data
+$env:ADDRESSQL_RUNTIME_CONFIG=".agid-runtime/addressql/jp/runtime-config.json"
+$env:ADDRESSQL_TRUST_STORE=".agid-runtime/addressql/jp/trust-store.json"
+$env:ADDRESSQL_ALLOW_CONFORMANCE="1"
+npm run serve:addressql-api
+```
+
+The generated source ledger records URL, source version, reuse terms,
+attribution, archive and derived digests, scope, correction route, and aggregate
+holdout metrics. Source ZIPs and address/locality/coordinate columns are not
+retained. These adapters remain non-live conformance evidence until their
+canonical payloads are independently signed and changed to `approved`.
+
+Private keys, credentials, address rows, recipient data, and precise
+coordinates are not accepted by this runtime configuration path. A
+conformance config can be loaded only with
+`ADDRESSQL_ALLOW_CONFORMANCE=1`; it remains non-live.
+
 ## Limits
 
 - request body: 64 KiB;
@@ -118,6 +202,7 @@ adapter gate as validation requests.
 
 ```bash
 npm run verify:addressql-api
+npm run verify:addressql-runtime-config
 npm run verify:addressql-multilingual-quality
 npm run verify:addressql
 ```

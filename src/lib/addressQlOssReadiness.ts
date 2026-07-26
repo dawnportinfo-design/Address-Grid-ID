@@ -59,6 +59,7 @@ const REQUIRED_PUBLIC_DOCS = [
   'docs/addressql/country-data-promotion-v0.1.md',
   'docs/addressql/multilingual-quality-v0.1.md',
   'docs/addressql/practical-api-v1.md',
+  'docs/addressql/sources/jp-public-postal-sources-v1.json',
   'docs/addressql/zk-proof-hooks-v0.6.md',
   'docs/addressql/calcite-v0.5.md',
   'docs/addressql/repository-files/README.md',
@@ -69,6 +70,10 @@ const REQUIRED_PUBLIC_DOCS = [
   'docs/addressql/repository-files/SECURITY.md',
   'docs/addressql/repository-files/CODE_OF_CONDUCT.md',
   'docs/specs/openapi/addressql-practical-api-v1.openapi.json',
+  'docs/specs/fixtures/addressql-runtime-config-conformance-v1.json',
+  'docs/specs/fixtures/addressql-runtime-config-conformance-v1.postcodes.txt',
+  'docs/specs/schemas/addressql-runtime-config-v1.schema.json',
+  'docs/specs/schemas/addressql-trust-store-v1.schema.json',
   POSTAL_VALIDATION_NEGATIVE_CLAIMS_FIXTURE,
   POSTAL_VALIDATION_NEGATIVE_CLAIMS_SCHEMA,
 ];
@@ -90,6 +95,10 @@ const REQUIRED_PUBLIC_ARTIFACTS = [
   'integrations/addressql-calcite/README.md',
   'scripts/verify-addressql-postal-negative-claims.ts',
   'scripts/export-addressql-oss-repository.ts',
+  'scripts/verify-addressql-runtime-config.ts',
+  'scripts/sync-addressql-public-postal-data.ts',
+  'scripts/register-addressql-trusted-public-key.ts',
+  'scripts/register-addressql-trusted-public-key.test.ts',
   'src/lib/addressQlGlobalCountryPreload.ts',
   'src/lib/addressQlGlobalCountryPreload.test.ts',
   'src/lib/addressQlGlobalCountryCoverage.ts',
@@ -108,6 +117,10 @@ const REQUIRED_PUBLIC_ARTIFACTS = [
   'src/lib/addressQlRuntimeAdapter.test.ts',
   'src/lib/addressQlPostalSetAdapter.ts',
   'src/lib/addressQlPostalSetAdapter.test.ts',
+  'src/lib/addressQlRuntimeConfig.ts',
+  'src/lib/addressQlRuntimeConfig.test.ts',
+  'src/lib/addressQlPublicPostalData.ts',
+  'src/lib/addressQlPublicPostalData.test.ts',
   'src/lib/officialPostalSourceCatalog.ts',
   'src/data/address_formats',
   'data/postal_country_packs',
@@ -130,6 +143,9 @@ const REQUIRED_PACKAGE_SCRIPTS = [
   'verify:addressql-country-data-promotion',
   'verify:addressql-multilingual-quality',
   'verify:addressql-api',
+  'verify:addressql-runtime-config',
+  'sync:addressql-public-postal-data',
+  'register:addressql-trusted-public-key',
   'verify:addressql-zk',
   'verify:addressql-calcite',
   'verify:addressql-export',
@@ -291,6 +307,9 @@ export function buildAddressQlOssReadinessReport(root = process.cwd()): AddressQ
   }
   if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlPostalSetAdapter.test.ts')) {
     addOnce(errors, 'addressql-full-verification-must-include-postal-set-adapter-test');
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlRuntimeConfig.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-runtime-config-test');
   }
   if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('run-addressql-api.test.ts')) {
     addOnce(errors, 'addressql-full-verification-must-include-http-api-test');

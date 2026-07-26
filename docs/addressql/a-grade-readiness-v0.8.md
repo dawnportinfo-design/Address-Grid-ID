@@ -15,6 +15,8 @@ This document is a release-readiness contract. It is not a claim that AddressQL 
 | ZK hooks | proof input schema, verifier hook, forbidden private material checks, non-claims | `npm run verify:addressql-zk` |
 | Country/postal preload | official, weak, no-postal-code, postal-equivalent profiles | `npm run verify:addressql-global-preload` |
 | OSS boundary | public repository manifest, license split, no private fixtures, export dry-run | `npm run verify:addressql-oss` and `npm run verify:addressql-export` |
+| Runtime data | canonical postcode digest, Ed25519 attestation, trust-store, expiry, and path-boundary checks | `npm run verify:addressql-runtime-config` |
+| Public source intake | Japan Post official CSV plus GeoNames CC BY 4.0 cross-check, aggregate holdout, mutable-archive digest receipt, and no-key fail-closed state | `npm run verify:addressql-api` |
 | Umbrella gate | all lightweight AddressQL tests plus A-grade readiness | `npm run verify:addressql` |
 
 ## Current A-Grade Score Model

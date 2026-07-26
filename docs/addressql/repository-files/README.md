@@ -30,6 +30,7 @@ npm run verify:addressql-country-core
 npm run verify:addressql-country-data-promotion
 npm run verify:addressql-multilingual-quality
 npm run verify:addressql-api
+npm run verify:addressql-runtime-config
 ```
 
 The exported address-format profiles and postal country packs are bounded
@@ -50,6 +51,24 @@ Start the P1 API on loopback with:
 ```bash
 npm run serve:addressql-api
 ```
+
+The server optionally loads signed local postcode datasets through
+`ADDRESSQL_RUNTIME_CONFIG` and `ADDRESSQL_TRUST_STORE`. The checked-in
+conformance fixture can be enabled explicitly with
+`ADDRESSQL_ALLOW_CONFORMANCE=1`; conformance decisions never become live
+postal-existence evidence.
+
+Create the local JP official-plus-OSS runtime with:
+
+```bash
+npm run sync:addressql-public-postal-data
+```
+
+It combines the reusable Japan Post UTF-8 CSV with a GeoNames CC BY 4.0
+cross-check, retains postcodes only, and writes source/version/terms/correction
+evidence under ignored `.agid-runtime/`. An empty generated trust store trusts
+nobody. Add only an independently supplied Ed25519 public key with
+`scripts/register-addressql-trusted-public-key.ts`; private keys are rejected.
 
 Release rule:
 

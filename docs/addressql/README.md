@@ -30,10 +30,11 @@ project with its own papers, specification, tests, and release gates.
 
 ## Quick Start
 
-AddressQL currently ships as a repo-ready OSS scaffold inside the AGID
-workspace.  The first public repository should expose the same local-first
-verification commands and avoid hosted services, production APIs, and private
-address fixtures.
+AddressQL ships as a repo-ready, self-hosted OSS implementation inside the
+AGID workspace. It includes an executable API, PostgreSQL and DuckDB surfaces,
+TypeScript/Python/Rust SDKs, global country-format metadata, and signed local
+runtime data adapters. It avoids hosted dependencies, production credentials,
+and private address fixtures.
 
 ```bash
 npm run verify:addressql
@@ -47,6 +48,7 @@ npm run verify:addressql-global-preload
 npm run verify:addressql-global-coverage
 npm run verify:addressql-multilingual-quality
 npm run verify:addressql-api
+npm run verify:addressql-runtime-config
 npm run verify:addressql-zk
 ```
 
@@ -55,6 +57,32 @@ Run the P1 self-hosted API on loopback:
 ```bash
 npm run serve:addressql-api
 ```
+
+The default server is useful for L1 format validation. To exercise the
+fail-closed runtime adapter path with the checked-in synthetic fixture:
+
+```powershell
+$env:ADDRESSQL_RUNTIME_CONFIG="docs/specs/fixtures/addressql-runtime-config-conformance-v1.json"
+$env:ADDRESSQL_ALLOW_CONFORMANCE="1"
+npm run serve:addressql-api
+```
+
+Conformance data is never promoted to live evidence. Approved local datasets
+also require `ADDRESSQL_TRUST_STORE` with a trusted Ed25519 public key.
+
+Build a local JP postcode-only runtime from the reusable Japan Post official
+CSV and the GeoNames CC BY 4.0 cross-check:
+
+```bash
+npm run sync:addressql-public-postal-data
+```
+
+The command stores derived postcodes, aggregate quality evidence, source
+versions, archive digests, terms, and correction routes under the ignored
+`.agid-runtime/addressql/jp` directory. It does not retain source ZIP files,
+address rows, recipient data, or coordinates. The generated adapters remain
+`conformance` until an independent reviewer supplies an Ed25519 public key and
+signatures.
 
 `verify:addressql-duckdb:cli` is optional for ordinary local development: it
 skips when DuckDB is not installed.  The GitHub Actions smoke workflow installs
@@ -106,6 +134,7 @@ Detailed planning docs:
 - [Country Data Promotion v0.1](country-data-promotion-v0.1.md)
 - [Multilingual Quality v0.1](multilingual-quality-v0.1.md)
 - [Practical API v1](practical-api-v1.md)
+- [JP Public Postal Source Receipt](sources/jp-public-postal-sources-v1.json)
 
 The practical API includes fail-closed runtime evidence adapters and a local
 postcode-set adapter. Only independently attested, non-expired source

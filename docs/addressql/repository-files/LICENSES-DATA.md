@@ -16,6 +16,18 @@ CC-BY-4.0 unless a file states otherwise.
 
 Public tests must use synthetic fixtures only.
 
+The optional JP runtime sync uses source-specific terms:
+
+| source | retained runtime fields | reuse terms | attribution |
+| --- | --- | --- | --- |
+| Japan Post UTF-8 postal CSV | unique ordinary-address postcodes only | Japan Post states that it asserts no copyright in postal-code data and permits free redistribution | Japan Post Co., Ltd. |
+| GeoNames JP postal archive | unique postcodes only | CC BY 4.0 | GeoNames, https://www.geonames.org/ |
+
+The source receipt is
+`docs/addressql/sources/jp-public-postal-sources-v1.json`. Downloaded ZIP files
+are not retained. Local derived data is written below `.agid-runtime/`, which
+is excluded from the public repository.
+
 AddressQL public fixtures must not include:
 
 ```text
