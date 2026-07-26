@@ -100,7 +100,7 @@ test('approved synthetic administrative metadata is auditable but cannot satisfy
   assert.equal(countryQuality.syntheticAdministrativeEvaluationEligible, true);
   assert.equal(result.geographicMetadataReadiness.syntheticAdministrativeEvaluationEligible, true);
   assert.equal(result.geographicMetadataReadiness.sources[0]?.sourceId, 'segeplan-gt-nbi-municipal-2018');
-  assert.equal(result.geographicMetadataReadiness.sources[0]?.approvedAdministrativeKeyCount, 1);
+  assert.equal(result.geographicMetadataReadiness.sources[0]?.approvedAdministrativeKeyCount, 2);
   assert.equal(result.geographicMetadataReadiness.deliveryClaimsEnabled, false);
   assert.equal(result.postal.lookupRequired, true);
   assert.equal(result.postal.lookupSatisfied, false);

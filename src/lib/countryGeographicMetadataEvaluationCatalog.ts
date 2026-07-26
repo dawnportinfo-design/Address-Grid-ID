@@ -6,7 +6,7 @@ import {
 } from './countryGeographicMetadataEvaluationIndex';
 
 export const COUNTRY_GEOGRAPHIC_METADATA_EVALUATION_CATALOG_VERSION =
-  'country-geographic-metadata-evaluation-catalog-v3';
+  'country-geographic-metadata-evaluation-catalog-v4';
 
 export type CountryGeographicMetadataCatalogEvidence = {
   retrievedAt: string;
@@ -97,6 +97,15 @@ const GUATEMALA_SEGEPLAN_MUNICIPAL_2018: CountryGeographicMetadataCatalogEntry =
   },
   syntheticAdministrativeKeys: [
     {
+      keyId: 'synthetic-admin-key:gt:segeplan-gt-nbi-municipal-2018:first-order-subdivision-holdout-v1',
+      countryCode: 'GT',
+      sourceId: 'segeplan-gt-nbi-municipal-2018',
+      keyKind: 'first-order-subdivision',
+      syntheticKeyToken: 'synthetic:GT:first-order-subdivision-holdout-v1',
+      synthetic: true,
+      approvalStatus: 'approved',
+    },
+    {
       keyId: 'synthetic-admin-key:gt:segeplan-gt-nbi-municipal-2018:municipality-holdout-v1',
       countryCode: 'GT',
       sourceId: 'segeplan-gt-nbi-municipal-2018',
@@ -142,6 +151,15 @@ const PANAMA_INEC_POLITICAL_DIVISION_2020: CountryGeographicMetadataCatalogEntry
   },
   syntheticAdministrativeKeys: [
     {
+      keyId: 'synthetic-admin-key:pa:inec-pa-political-division-2020:first-order-subdivision-holdout-v1',
+      countryCode: 'PA',
+      sourceId: 'inec-pa-political-division-2020',
+      keyKind: 'first-order-subdivision',
+      syntheticKeyToken: 'synthetic:PA:first-order-subdivision-holdout-v1',
+      synthetic: true,
+      approvalStatus: 'approved',
+    },
+    {
       keyId: 'synthetic-admin-key:pa:inec-pa-political-division-2020:district-holdout-v1',
       countryCode: 'PA',
       sourceId: 'inec-pa-political-division-2020',
@@ -186,6 +204,15 @@ const NEW_ZEALAND_STATS_NZ_GEOGRAPHIC_BOUNDARIES_2026: CountryGeographicMetadata
     rawPrivateMaterialStored: false,
   },
   syntheticAdministrativeKeys: [
+    {
+      keyId: 'synthetic-admin-key:nz:stats-nz-geographic-boundaries-2026:regional-council-holdout-v1',
+      countryCode: 'NZ',
+      sourceId: 'stats-nz-geographic-boundaries-2026',
+      keyKind: 'first-order-subdivision',
+      syntheticKeyToken: 'synthetic:NZ:regional-council-holdout-v1',
+      synthetic: true,
+      approvalStatus: 'approved',
+    },
     {
       keyId: 'synthetic-admin-key:nz:stats-nz-geographic-boundaries-2026:territorial-authority-holdout-v1',
       countryCode: 'NZ',

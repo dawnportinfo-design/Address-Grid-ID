@@ -10,7 +10,7 @@ import { projectCountryGeographicMetadataReadiness } from './countryGeographicMe
 
 test('registers Guatemala official-source metadata only with reuse, version, scope, and correction evidence', () => {
   const entries = listCountryGeographicMetadataCatalogEntries();
-  assert.equal(COUNTRY_GEOGRAPHIC_METADATA_EVALUATION_CATALOG_VERSION, 'country-geographic-metadata-evaluation-catalog-v3');
+  assert.equal(COUNTRY_GEOGRAPHIC_METADATA_EVALUATION_CATALOG_VERSION, 'country-geographic-metadata-evaluation-catalog-v4');
   assert.equal(entries.length, 4);
 
   const guatemala = entries.find(entry => entry.source.countryCode === 'GT')!;
@@ -94,14 +94,14 @@ test('registers the current Stats NZ geographic-boundaries release for synthetic
     approvedAdministrativeKeyKinds: ['first-order-subdivision', 'second-order-subdivision'],
     reviewedAt: '2026-07-25T00:00:00Z',
     reviewBy: '2026-08-25T00:00:00Z',
-    syntheticAdministrativeKeyCount: 1,
+    syntheticAdministrativeKeyCount: 2,
     deliveryClaimsEnabled: false,
   });
   assert.deepEqual(projectCountryGeographicMetadataReadiness(index, 'NZ'), [{
     countryCode: 'NZ',
     sourceId: 'stats-nz-geographic-boundaries-2026',
     sourceOrigin: 'official-publication',
-    approvedAdministrativeKeyCount: 1,
+    approvedAdministrativeKeyCount: 2,
     syntheticAdministrativeEvaluationEligible: true,
     deliveryClaimsEnabled: false,
   }]);
@@ -127,14 +127,14 @@ test('registers Panama INEC political-division metadata under the CC BY source l
     approvedAdministrativeKeyKinds: ['first-order-subdivision', 'second-order-subdivision'],
     reviewedAt: '2026-07-25T00:00:00Z',
     reviewBy: '2026-08-25T00:00:00Z',
-    syntheticAdministrativeKeyCount: 1,
+    syntheticAdministrativeKeyCount: 2,
     deliveryClaimsEnabled: false,
   });
   assert.deepEqual(projectCountryGeographicMetadataReadiness(index, 'PA'), [{
     countryCode: 'PA',
     sourceId: 'inec-pa-political-division-2020',
     sourceOrigin: 'official-publication',
-    approvedAdministrativeKeyCount: 1,
+    approvedAdministrativeKeyCount: 2,
     syntheticAdministrativeEvaluationEligible: true,
     deliveryClaimsEnabled: false,
   }]);
@@ -147,7 +147,7 @@ test('projects current approved sources only for synthetic administrative evalua
     countryCode: 'GT',
     sourceId: 'segeplan-gt-nbi-municipal-2018',
     sourceOrigin: 'official-publication',
-    approvedAdministrativeKeyCount: 1,
+    approvedAdministrativeKeyCount: 2,
     syntheticAdministrativeEvaluationEligible: true,
     deliveryClaimsEnabled: false,
   }]);

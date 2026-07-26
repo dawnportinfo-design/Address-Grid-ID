@@ -1,5 +1,5 @@
 export const COUNTRY_GEOGRAPHIC_METADATA_EVALUATION_INDEX_VERSION =
-  'country-geographic-metadata-evaluation-index-v2';
+  'country-geographic-metadata-evaluation-index-v3';
 
 export type AdministrativeKeyKind =
   | 'country'
@@ -335,9 +335,15 @@ export function buildCountryGeographicMetadataEvaluationIndex(input: {
   });
   const duplicateKeyIds = new Set<string>();
   const seenKeyIds = new Set<string>();
+  const duplicateSyntheticTokens = new Set<string>();
+  const seenSyntheticTokens = new Set<string>();
   for (const candidate of keyCandidates) {
     if (seenKeyIds.has(candidate.keyId)) duplicateKeyIds.add(candidate.keyId);
     seenKeyIds.add(candidate.keyId);
+    if (seenSyntheticTokens.has(candidate.syntheticKeyToken)) {
+      duplicateSyntheticTokens.add(candidate.syntheticKeyToken);
+    }
+    seenSyntheticTokens.add(candidate.syntheticKeyToken);
   }
   for (const candidate of keyCandidates) {
     const countryCode = normalizedCountryCode(candidate.countryCode);
@@ -345,6 +351,8 @@ export function buildCountryGeographicMetadataEvaluationIndex(input: {
     const source = countryCode && sourceId ? approvedSourceCandidates.get(`${countryCode}:${sourceId}`) : undefined;
     const reason = duplicateKeyIds.has(candidate.keyId)
       ? 'duplicate-synthetic-key-id'
+      : duplicateSyntheticTokens.has(candidate.syntheticKeyToken)
+        ? 'duplicate-synthetic-key-token'
       : keyGateFailure(candidate, source);
     if (reason) {
       blockedCandidates.push({ countryCode, sourceId, reason });

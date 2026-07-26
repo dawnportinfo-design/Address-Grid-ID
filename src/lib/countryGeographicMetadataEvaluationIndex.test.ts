@@ -236,6 +236,26 @@ test('blocks keys that are non-synthetic, unapproved, unscoped, or use an unappr
   }
 });
 
+test('rejects duplicate synthetic tokens so one fixture cannot inflate holdout coverage', () => {
+  const duplicateTokenKey: SyntheticAdministrativeKeyCandidate = {
+    ...approvedKey,
+    keyId: 'synthetic-admin-key:gt:synthetic-gt-official-admin:case-002',
+    keyKind: 'first-order-subdivision',
+  };
+  const index = buildCountryGeographicMetadataEvaluationIndex({
+    sources: [approvedSource],
+    syntheticAdministrativeKeys: [approvedKey, duplicateTokenKey],
+    now: '2026-07-25T00:00:00Z',
+  });
+
+  assert.equal(index.sources.length, 0);
+  assert.equal(index.syntheticAdministrativeKeys.length, 0);
+  assert.equal(
+    index.blockedCandidates.filter(candidate => candidate.reason === 'duplicate-synthetic-key-token').length,
+    2,
+  );
+});
+
 test('rejects fields outside the metadata-only contract and never projects delivery claims', () => {
   assert.throws(() => buildCountryGeographicMetadataEvaluationIndex({
     sources: [{ ...approvedSource, address: 'must-not-be-accepted' } as unknown as CountryGeographicMetadataSourceCandidate],

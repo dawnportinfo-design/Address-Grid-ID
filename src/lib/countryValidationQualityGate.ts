@@ -2,8 +2,10 @@ import type {
   CountryGeographicMetadataEvaluationIndex,
   CountryGeographicMetadataReadinessEvidence,
 } from './countryGeographicMetadataEvaluationIndex';
+import { sha256Hex } from './sha256';
 
-export const COUNTRY_VALIDATION_QUALITY_GATE_VERSION = 'country-validation-quality-gate-v1';
+export const COUNTRY_VALIDATION_QUALITY_GATE_VERSION = 'country-validation-quality-gate-v3';
+export const COUNTRY_VALIDATION_HOLDOUT_DIGEST_ALGORITHM = 'sha256-country-admin-holdout-v1';
 
 export type CountryValidationQualityGateId =
   | 'reuse-terms'
@@ -46,6 +48,8 @@ export type CountryValidationQualityReport = {
   sourceIds: string[];
   gates: CountryValidationQualityGateResult[];
   syntheticAdministrativeEvaluationEligible: boolean;
+  syntheticHoldoutDigestAlgorithm: typeof COUNTRY_VALIDATION_HOLDOUT_DIGEST_ALGORITHM | null;
+  syntheticHoldoutDigest: string | null;
   geographicMetadataReadiness: CountryGeographicMetadataReadinessEvidence[];
   postalLookupEnabled: false;
   addressValidationEnabled: false;
@@ -129,11 +133,13 @@ export function buildCountryValidationQualityReport(
     sources.length > 0 && sources.every(predicate)
   );
   const hasSyntheticHoldoutForEverySource = everySource(source => (
-    source.syntheticAdministrativeKeyCount > 0
-    && index.syntheticAdministrativeKeys.some(key => (
-      key.countryCode === normalized
-      && key.sourceId === source.sourceId
-      && key.deliveryClaimsEnabled === false
+    source.approvedAdministrativeKeyKinds.every(keyKind => (
+      index.syntheticAdministrativeKeys.some(key => (
+        key.countryCode === normalized
+        && key.sourceId === source.sourceId
+        && key.keyKind === keyKind
+        && key.deliveryClaimsEnabled === false
+      ))
     ))
   ));
 
@@ -189,12 +195,35 @@ export function buildCountryValidationQualityReport(
       'synthetic-holdout',
       hasSyntheticHoldoutForEverySource ? 'passed' : 'blocked',
       sourceIds,
-      'Every attached source must have at least one approved synthetic administrative holdout fixture.',
-      'Add an approved synthetic administrative holdout without storing real administrative keys.',
+      'Every attached source must have an approved synthetic holdout for each administrative key kind it declares.',
+      'Add approved synthetic holdouts for every declared administrative key kind without storing real administrative keys.',
     ),
   ];
 
   const syntheticAdministrativeEvaluationEligible = gates.every(result => result.status === 'passed');
+  const syntheticHoldoutDigest = syntheticAdministrativeEvaluationEligible
+    ? `sha256:${sha256Hex(JSON.stringify({
+        algorithm: COUNTRY_VALIDATION_HOLDOUT_DIGEST_ALGORITHM,
+        countryCode: normalized,
+        indexVersion: index.indexVersion,
+        sources: sources
+          .map(source => ({
+            sourceId: source.sourceId,
+            sourceVersion: source.sourceVersion,
+            reviewBy: source.reviewBy,
+          }))
+          .sort((left, right) => left.sourceId.localeCompare(right.sourceId)),
+        holdouts: index.syntheticAdministrativeKeys
+          .filter(key => key.countryCode === normalized && sourceIds.includes(key.sourceId))
+          .map(key => ({
+            keyId: key.keyId,
+            sourceId: key.sourceId,
+            keyKind: key.keyKind,
+            syntheticKeyToken: key.syntheticKeyToken,
+          }))
+          .sort((left, right) => left.keyId.localeCompare(right.keyId)),
+      }))}`
+    : null;
   const geographicMetadataReadiness = syntheticAdministrativeEvaluationEligible
     ? sources.map(source => ({
         countryCode: source.countryCode,
@@ -213,6 +242,10 @@ export function buildCountryValidationQualityReport(
     sourceIds,
     gates,
     syntheticAdministrativeEvaluationEligible,
+    syntheticHoldoutDigestAlgorithm: syntheticAdministrativeEvaluationEligible
+      ? COUNTRY_VALIDATION_HOLDOUT_DIGEST_ALGORITHM
+      : null,
+    syntheticHoldoutDigest,
     geographicMetadataReadiness,
     postalLookupEnabled: false,
     addressValidationEnabled: false,
