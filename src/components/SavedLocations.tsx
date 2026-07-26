@@ -33,9 +33,11 @@ interface SavedLocationsProps {
   copied: string | null;
   deleteSavedAgid: (id: string) => void;
   deleteSavedQr: (id: string) => void;
+  saveCurrentAgid: () => void;
   jumpToSaved: (saved: any) => void;
   aoids: any[];
   setAoids: React.Dispatch<React.SetStateAction<any[]>>;
+  setAoidModeForced: (forced: boolean) => void;
   setShowAddressRegistration: (show: boolean) => void;
   setLat: (lat: number) => void;
   setLng: (lng: number) => void;
@@ -58,9 +60,11 @@ export const SavedLocations: React.FC<SavedLocationsProps> = ({
   copied,
   deleteSavedAgid,
   deleteSavedQr,
+  saveCurrentAgid,
   jumpToSaved,
   aoids,
   setAoids,
+  setAoidModeForced,
   setShowAddressRegistration,
   setLat,
   setLng,
@@ -68,6 +72,30 @@ export const SavedLocations: React.FC<SavedLocationsProps> = ({
   setShowMenu,
   openQrReader
 }) => {
+  const startAoidRegistration = () => {
+    setAoidModeForced(true);
+    setShowAddressRegistration(true);
+    onClose();
+  };
+
+  const header = savedTab === 'agid'
+    ? {
+        title: 'Saved AGIDs',
+        subtitle: 'Local Public Location IDs',
+        icon: <History className="w-5 h-5" />,
+      }
+    : savedTab === 'aoid'
+      ? {
+          title: 'Saved AOIDs',
+          subtitle: 'Private Owner-Managed IDs',
+          icon: <ShieldIcon className="w-5 h-5" />,
+        }
+      : {
+          title: 'Saved QR',
+          subtitle: 'Local Address QR Records',
+          icon: <QrCode className="w-5 h-5" />,
+        };
+
   return (
     <AnimatePresence>
       {show && (
@@ -89,14 +117,14 @@ export const SavedLocations: React.FC<SavedLocationsProps> = ({
             <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center shadow-inner">
-                  {savedTab === 'agid' ? <History className="w-5 h-5" /> : <ShieldIcon className="w-5 h-5" />}
+                  {header.icon}
                 </div>
                 <div>
                   <h2 className="text-xl font-black text-slate-900 tracking-tight leading-none">
-                    {savedTab === 'agid' ? 'Favorites' : 'Verified IDs'}
+                    {header.title}
                   </h2>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                    {savedTab === 'agid' ? 'Public Location History' : 'Registered Private Addresses'}
+                    {header.subtitle}
                   </p>
                 </div>
               </div>
@@ -142,22 +170,38 @@ export const SavedLocations: React.FC<SavedLocationsProps> = ({
               {savedTab === 'agid' ? (
                 <>
                   <div className="sticky top-0 z-10 bg-white pb-2">
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder={t('search_agid_placeholder')}
-                        value={savedSearch}
-                        onChange={(e) => setSavedSearch(e.target.value)}
-                        className="w-full bg-slate-50 px-4 py-2 pl-10 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                      />
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <input
+                          type="text"
+                          placeholder={t('search_agid_placeholder')}
+                          value={savedSearch}
+                          onChange={(e) => setSavedSearch(e.target.value)}
+                          className="w-full bg-slate-50 px-4 py-2 pl-10 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                        />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      </div>
+                      <button
+                        onClick={saveCurrentAgid}
+                        className="flex h-10 w-10 shrink-0 items-center justify-center border border-blue-100 bg-blue-50 text-blue-600 transition-colors hover:bg-blue-100"
+                        title="Save current AGID"
+                        aria-label="Save current AGID"
+                      >
+                        <Bookmark className="h-5 w-5" />
+                      </button>
                     </div>
                   </div>
 
                   {savedAgids.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-40 py-20">
+                    <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-20">
                       <Bookmark className="w-12 h-12 text-slate-300" />
-                      <p className="text-sm font-medium text-slate-500">No saved AGIDs yet.<br/>Click the bookmark icon to save one.</p>
+                      <p className="text-sm font-medium text-slate-500">No saved AGIDs yet.<br/>Save the AGID at the current map location.</p>
+                      <button
+                        onClick={saveCurrentAgid}
+                        className="bg-blue-600 px-6 py-2 text-xs font-bold text-white shadow-lg shadow-blue-100"
+                      >
+                        Save Current AGID
+                      </button>
                     </div>
                   ) : (
                     savedAgids
@@ -314,25 +358,35 @@ export const SavedLocations: React.FC<SavedLocationsProps> = ({
               ) : (
                 <>
                   <div className="sticky top-0 z-10 bg-white pb-2">
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder={t('search_aoid_placeholder')}
-                        value={savedSearch}
-                        onChange={(e) => setSavedSearch(e.target.value)}
-                        className="w-full bg-slate-50 px-4 py-2 pl-10 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
-                      />
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <input
+                          type="text"
+                          placeholder={t('search_aoid_placeholder')}
+                          value={savedSearch}
+                          onChange={(e) => setSavedSearch(e.target.value)}
+                          className="w-full bg-slate-50 px-4 py-2 pl-10 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+                        />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      </div>
+                      <button
+                        onClick={startAoidRegistration}
+                        className="flex h-10 w-10 shrink-0 items-center justify-center border border-emerald-100 bg-emerald-50 text-emerald-600 transition-colors hover:bg-emerald-100"
+                        title="Register AOID"
+                        aria-label="Register AOID"
+                      >
+                        <ShieldIcon className="h-5 w-5" />
+                      </button>
                     </div>
                   </div>
 
                   {aoids.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-40 py-12">
+                    <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12">
                       <ShieldIcon className="w-12 h-12 text-slate-300" />
                       <p className="text-sm font-medium text-slate-500">No AOIDs registered yet.<br/>Create private IDs for your locations.</p>
                       <button
-                        onClick={() => { setShowAddressRegistration(true); onClose(); }}
-                        className="px-6 py-2 bg-emerald-600 text-white rounded-xl font-bold text-xs shadow-lg shadow-emerald-100"
+                        onClick={startAoidRegistration}
+                        className="px-6 py-2 bg-emerald-600 text-white font-bold text-xs shadow-lg shadow-emerald-100"
                       >
                         Register First AOID
                       </button>
@@ -341,8 +395,8 @@ export const SavedLocations: React.FC<SavedLocationsProps> = ({
                     aoids
                       .filter(aoid =>
                         aoid.id.toLowerCase().includes(savedSearch.toLowerCase()) ||
-                        aoid.name.toLowerCase().includes(savedSearch.toLowerCase()) ||
-                        aoid.address.toLowerCase().includes(savedSearch.toLowerCase())
+                        (aoid.name || '').toLowerCase().includes(savedSearch.toLowerCase()) ||
+                        (aoid.address || '').toLowerCase().includes(savedSearch.toLowerCase())
                       )
                       .map((aoid) => (
                         <div

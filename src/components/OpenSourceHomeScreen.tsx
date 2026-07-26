@@ -43,7 +43,7 @@ const heroCopy = {
     },
     menu: {
       map: 'Map',
-      portal: 'My Page',
+      aoid: 'AOID',
       posField: 'POS & Field',
       research: 'Research',
       developers: 'Developers',
@@ -79,9 +79,9 @@ const heroCopy = {
         label: 'Register Address',
         text: 'Create a private address QR, alias, receipt, and country-format record without exposing raw address by default.',
       },
-      portal: {
-        label: 'My Page',
-        text: 'Manage credentials, permissions, consent, security status, and safe exports without exposing raw address data.',
+      aoid: {
+        label: 'AOID',
+        text: 'Manage private Address Owner IDs and register location identities without exposing raw address data.',
       },
       ops: {
         label: 'POS & Field Ops',
@@ -235,7 +235,7 @@ const heroCopy = {
         settings: 'Settings & Help',
       },
       links: {
-        portal: 'My Page',
+        aoid: 'AOID',
         pos: 'POS',
         hotel: 'Hotel',
         opera: 'OPERA',
@@ -266,7 +266,7 @@ const heroCopy = {
     },
     menu: {
       map: '地図',
-      portal: 'マイページ',
+      aoid: 'AOID',
       posField: 'POS・現場',
       research: '研究',
       developers: '開発',
@@ -302,9 +302,9 @@ const heroCopy = {
         label: '住所登録',
         text: '生の住所を標準で出さずに、非公開住所QR、別名、受領証、国別フォーマットの記録を作ります。',
       },
-      portal: {
-        label: 'マイページ',
-        text: 'Credential、許可、同意、安全状態、安全exportを、生の住所を出さずに管理します。',
+      aoid: {
+        label: 'AOID',
+        text: '生の住所を出さずに、非公開のAddress Owner IDと場所の識別情報を登録・管理します。',
       },
       ops: {
         label: 'POS・現場運用',
@@ -458,7 +458,7 @@ const heroCopy = {
         settings: '設定とヘルプ',
       },
       links: {
-        portal: 'マイページ',
+        aoid: 'AOID',
         pos: 'POS',
         hotel: 'ホテル',
         opera: 'OPERA',
@@ -513,7 +513,7 @@ const heroResourceLinks = [
 
 const heroMenuLinks = [
   { key: 'map', href: '/' },
-  { key: 'portal', href: '/portal' },
+  { key: 'aoid', href: '/?action=aoid' },
   { key: 'posField', href: '/pos' },
   { key: 'research', href: '/research' },
   { key: 'developers', href: '/developer' },
@@ -526,9 +526,9 @@ const heroEntryLinks = [
     icon: ShieldCheck,
   },
   {
-    key: 'portal',
-    href: '/portal',
-    icon: Building2,
+    key: 'aoid',
+    href: '/?action=aoid',
+    icon: ShieldCheck,
   },
   {
     key: 'ops',
@@ -559,7 +559,7 @@ const footerMenuGroups = [
   {
     key: 'apps',
     links: [
-      { key: 'portal', href: '/portal', icon: ShieldCheck },
+      { key: 'aoid', href: '/?action=aoid', icon: ShieldCheck },
       { key: 'pos', href: '/pos', icon: Terminal },
       { key: 'hotel', href: '/hotel', icon: Building2 },
       { key: 'opera', href: '/opera', icon: Building2 },

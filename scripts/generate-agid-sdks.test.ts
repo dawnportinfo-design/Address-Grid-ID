@@ -35,6 +35,10 @@ test('writes shared spec, manifests, and API files for publishable SDKs', async 
     assert.match(spec, /"profile": "agid-public-security-v1"/);
     assert.match(spec, /"sdkValidationApi"/);
     assert.match(spec, /"validateAgid\(agid\) -> AgidValidationResult"/);
+    assert.match(spec, /"version": "agid-grid-neighborhood-v0.1"/);
+    assert.match(spec, /"publicIdentity": "canonical AGID \+ opaque buildingId"/);
+    assert.match(spec, /"syntheticVectorCount": 10000/);
+    assert.match(spec, /"adjacentCells\(agid\) -> AgidAdjacentCell\[\]"/);
 
     const rustManifest = await readFile(path.join(outputDir, 'agid-rs', 'Cargo.toml'), 'utf8');
     assert.match(rustManifest, /name = "agid"/);

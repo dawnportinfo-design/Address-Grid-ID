@@ -18,11 +18,11 @@ INSERT INTO addressql.country_profiles (
   required_components,
   source_version
 ) VALUES
-  ('JP', 'Japan', '日本', ARRAY['Nippon', 'Nihon', '日本国'], ARRAY['ja', 'en'], 'native_and_english_preloaded', 'format_and_postal', 'official', true, '^[0-9]{3}-?[0-9]{4}$', '100-0001', 'official_postal_code', true, true, ARRAY['postcode', 'state', 'city'], 'synthetic-addressql-v0.1'),
-  ('US', 'United States', 'United States', ARRAY['USA', 'United States of America'], ARRAY['en', 'es'], 'native_and_english_preloaded', 'format_and_postal', 'official', true, '^[0-9]{5}(-[0-9]{4})?$', '94105', 'official_postal_code', true, true, ARRAY['postcode', 'state', 'city'], 'synthetic-addressql-v0.1'),
+  ('JP', 'Japan', '日本', ARRAY['Nippon', 'Nihon', '日本国'], ARRAY['ja', 'en'], 'native_and_english_preloaded', 'format_only', 'official', true, '^[0-9]{3}-?[0-9]{4}$', '100-0001', 'official_postal_code', true, true, ARRAY['postcode', 'state', 'city'], 'synthetic-addressql-v0.1'),
+  ('US', 'United States', 'United States', ARRAY['USA', 'United States of America'], ARRAY['en', 'es'], 'native_and_english_preloaded', 'format_only', 'official', true, '^[0-9]{5}(-[0-9]{4})?$', '94105', 'official_postal_code', true, true, ARRAY['postcode', 'state', 'city'], 'synthetic-addressql-v0.1'),
   ('HK', 'Hong Kong', '香港', ARRAY['Hong Kong SAR', '香港特別行政区'], ARRAY['zh-Hant', 'en'], 'native_and_english_preloaded', 'postal_equivalent_required', 'none', false, NULL, NULL, 'agid_region_postal_equivalent', true, true, ARRAY['district', 'street', 'building'], 'synthetic-addressql-v0.1'),
   ('AE', 'United Arab Emirates', 'الإمارات العربية المتحدة', ARRAY['UAE'], ARRAY['ar', 'en'], 'native_and_english_preloaded', 'postal_equivalent_required', 'none', false, NULL, NULL, 'agid_region_postal_equivalent', true, true, ARRAY['emirate', 'area', 'street'], 'synthetic-addressql-v0.1'),
-  ('GH', 'Ghana', 'Ghana', ARRAY[]::text[], ARRAY['en'], 'english_only_preloaded', 'format_with_postal_warning', 'weak', false, NULL, NULL, 'digital_address_or_agid_region', true, true, ARRAY['region', 'locality'], 'synthetic-addressql-v0.1')
+  ('GH', 'Ghana', 'Ghana', ARRAY[]::text[], ARRAY['en'], 'native_and_english_preloaded', 'metadata_gated', 'weak', false, NULL, NULL, 'digital_address_or_agid_region', true, true, ARRAY['region', 'locality'], 'synthetic-addressql-v0.1')
 ON CONFLICT (country_code) DO UPDATE SET
   country_name = EXCLUDED.country_name,
   native_name = EXCLUDED.native_name,

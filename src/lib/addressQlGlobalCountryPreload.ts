@@ -17,8 +17,8 @@ export type AddressQlAddressFormatCoverage =
   | 'seed_profile_required';
 
 export type AddressQlValidationReadiness =
-  | 'format_and_postal'
-  | 'format_with_postal_warning'
+  | 'format_only'
+  | 'metadata_gated'
   | 'postal_equivalent_required'
   | 'delivery_source_required'
   | 'manual_review_required';
@@ -32,6 +32,7 @@ export type AddressQlGlobalCountryPreloadProfile = {
   validationReadiness: AddressQlValidationReadiness;
   postalStatus: AddressQlPostalStatusClass;
   postalFormat: string | null;
+  postalRegex: string | null;
   postalRegexAvailable: boolean;
   nativeInputAvailable: boolean;
   englishInputAvailable: boolean;
@@ -57,7 +58,7 @@ export type AddressQlGlobalCountryPreloadSummary = {
   seedOnlyProfiles: number;
   noPostalCodeProfiles: number;
   weakPostalProfiles: number;
-  officialPostalProfiles: number;
+  postalFormatProfiles: number;
   nativeAndEnglishProfiles: number;
   manualReviewProfiles: number;
 };
@@ -98,7 +99,7 @@ type LocalAddressFormatRecord = {
   raw: RawAddressFormatProfile;
 };
 
-const CORE_COUNTRY_REGION_CODES = `
+export const ADDRESSQL_CORE_COUNTRY_REGION_CODES = `
 AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO
 BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ
 DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP
@@ -234,9 +235,9 @@ function classifyValidationReadiness(
   postalStatus: AddressQlPostalStatusClass,
   coverage: AddressQlAddressFormatCoverage,
 ): AddressQlValidationReadiness {
-  if (postalStatus === 'official_postal_code' && coverage !== 'seed_profile_required') return 'format_and_postal';
+  if (postalStatus === 'official_postal_code' && coverage !== 'seed_profile_required') return 'format_only';
   if (postalStatus === 'no_postal_code' || postalStatus === 'postal_equivalent_required') return 'postal_equivalent_required';
-  if (postalStatus === 'weak_or_partial_postal_code') return 'format_with_postal_warning';
+  if (postalStatus === 'weak_or_partial_postal_code') return 'metadata_gated';
   if (postalStatus === 'carrier_specific_postal_code') return 'delivery_source_required';
   return 'manual_review_required';
 }
@@ -299,7 +300,7 @@ export function buildAddressQlGlobalCountryPreloadProfiles(
     if (!byCountry.has(record.countryCode)) byCountry.set(record.countryCode, record);
   }
 
-  const codes = [...new Set([...CORE_COUNTRY_REGION_CODES, ...byCountry.keys()])].sort();
+  const codes = [...new Set([...ADDRESSQL_CORE_COUNTRY_REGION_CODES, ...byCountry.keys()])].sort();
 
   return codes.map((countryCode) => {
     const local = byCountry.get(countryCode) || null;
@@ -324,6 +325,7 @@ export function buildAddressQlGlobalCountryPreloadProfiles(
       validationReadiness: classifyValidationReadiness(postalStatus, coverage),
       postalStatus,
       postalFormat: postalStatus === 'no_postal_code' ? null : raw?.postalCode?.format || null,
+      postalRegex: postalStatus === 'no_postal_code' ? null : raw?.postalCode?.regex || null,
       postalRegexAvailable: postalStatus === 'no_postal_code' ? false : Boolean(raw?.postalCode?.regex),
       nativeInputAvailable: Boolean(raw?.native?.fields?.length),
       englishInputAvailable: Boolean(raw?.english?.fields?.length),
@@ -363,7 +365,7 @@ export function summarizeAddressQlGlobalCountryPreload(
     seedOnlyProfiles: profiles.filter(profile => !profile.sourcePath).length,
     noPostalCodeProfiles: profiles.filter(profile => profile.postalStatus === 'no_postal_code').length,
     weakPostalProfiles: profiles.filter(profile => profile.postalStatus === 'weak_or_partial_postal_code').length,
-    officialPostalProfiles: profiles.filter(profile => profile.postalStatus === 'official_postal_code').length,
+    postalFormatProfiles: profiles.filter(profile => profile.postalStatus === 'official_postal_code').length,
     nativeAndEnglishProfiles: profiles.filter(profile => profile.addressFormatCoverage === 'native_and_english_preloaded').length,
     manualReviewProfiles: profiles.filter(profile => profile.validationReadiness === 'manual_review_required').length,
   };
@@ -375,7 +377,7 @@ export function validateAddressQlGlobalCountryPreload(root = process.cwd()): str
   const profileCodes = new Set(profiles.map(profile => profile.countryCode));
 
   if (profiles.length < 249) errors.push('global preload must cover at least ISO country/region codes');
-  for (const code of CORE_COUNTRY_REGION_CODES) {
+  for (const code of ADDRESSQL_CORE_COUNTRY_REGION_CODES) {
     if (!profileCodes.has(code)) errors.push(`missing-core-country-region:${code}`);
   }
   if (profileCodes.size !== profiles.length) errors.push('duplicate-country-region-profile');
@@ -390,8 +392,8 @@ export function validateAddressQlGlobalCountryPreload(root = process.cwd()): str
     if (profile.postalStatus === 'no_postal_code' && !/do not invent official postal codes/i.test(profile.sourcePolicy.postalEquivalentStrategy)) {
       errors.push(`${profile.countryCode}:no-postal-strategy-must-forbid-invented-postal-codes`);
     }
-    if (profile.validationReadiness === 'format_and_postal' && !profile.postalRegexAvailable) {
-      errors.push(`${profile.countryCode}:format-and-postal-readiness-needs-regex`);
+    if (profile.validationReadiness === 'format_only' && !profile.postalRegexAvailable) {
+      errors.push(`${profile.countryCode}:format-only-readiness-needs-regex`);
     }
   }
 

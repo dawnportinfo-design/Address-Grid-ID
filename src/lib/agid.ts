@@ -22,8 +22,10 @@ const OPEN_OCEAN_CODES = 220; // 22 Letters * 10 Numbers
 const COASTAL_SEA_CODES = 220; // 10 Numbers * 22 Letters
 const OTHER_CODES = 100; // 10 Numbers * 10 Numbers
 
-const K = 2097152; // 2^21 divisions
-const M = 2097151; // 2^21 - 1
+export const AGID_GRID_AXIS_BITS = 21;
+export const AGID_GRID_AXIS_CELLS = 2 ** AGID_GRID_AXIS_BITS;
+const K = AGID_GRID_AXIS_CELLS;
+const M = AGID_GRID_AXIS_CELLS - 1;
 const REGION_CACHE_EPSILON_DEGREES = 1e-9;
 
 /**
@@ -98,7 +100,7 @@ function getQuantized(lat: number, lon: number) {
  */
 function getFromQuantized(face: number, qx: number, qy: number) {
   const wasmCore = getAgidWasmCore();
-  if (wasmCore) {
+  if (wasmCore && Number.isInteger(qx) && Number.isInteger(qy)) {
     return {
       lat: wasmCore.agid_get_lat(face, qx, qy),
       lon: wasmCore.agid_get_lon(face, qx, qy),
@@ -437,9 +439,36 @@ function getClaimAwareRegionCode(lat: number, lon: number, fallbackCode: string)
   return normalizedFallback;
 }
 
+export type AGIDCellInput = string | Pick<AGIDResult, 'id' | 'face' | 'qx' | 'qy'>;
+
+export type AGIDAdjacentCell = {
+  relation: 'edge-adjacent' | 'corner-adjacent';
+  sourceCellKey: string;
+  cellKey: string;
+  agid: AGIDResult;
+};
+
+export type AGIDGridRelation =
+  | 'same-cell'
+  | 'edge-adjacent'
+  | 'corner-adjacent'
+  | 'separate'
+  | 'invalid';
+
+export type AGIDGridNeighborhoodMatch = {
+  version: 'agid-grid-neighborhood-v0.1';
+  gridAxisBits: typeof AGID_GRID_AXIS_BITS;
+  relation: AGIDGridRelation;
+  acceptedAsSameOrNearArea: boolean;
+  boundaryMatch: boolean;
+  leftCellKey: string | null;
+  rightCellKey: string | null;
+  nonClaims: string[];
+};
+
 /**
  * Core AGID Encoding
- * Redesigned for Cubed Sphere (23-bit precision per face axis).
+ * Redesigned for Cubed Sphere (21-bit precision per face axis).
  * This ensures near-uniform cell size (~4.78m) globally.
  */
 export function encodeAGID(lat: number, lon: number): AGIDResult {
@@ -566,6 +595,120 @@ export function decodeAGID(id: string): {
   } catch (e) {
     return null;
   }
+}
+
+function resolveAGIDCell(input: AGIDCellInput) {
+  const id = typeof input === 'string' ? input : input.id;
+  const decoded = decodeAGID(id);
+  if (!decoded) return null;
+  if (
+    typeof input !== 'string'
+    && (
+      input.face !== decoded.face
+      || input.qx !== decoded.qx
+      || input.qy !== decoded.qy
+    )
+  ) {
+    return null;
+  }
+  return decoded;
+}
+
+function agidCellKey(face: number, qx: number, qy: number) {
+  return `${face}:${qx}:${qy}`;
+}
+
+export function getAGIDCellKey(input: AGIDCellInput): string | null {
+  const cell = resolveAGIDCell(input);
+  return cell ? agidCellKey(cell.face, cell.qx, cell.qy) : null;
+}
+
+/**
+ * Returns the eight immediate cells around an AGID cell.
+ *
+ * Sampling through the sphere and re-encoding is intentional. Direct qx/qy
+ * arithmetic is insufficient at cubed-sphere face edges, corners, poles, and
+ * the antimeridian.
+ */
+export function getAdjacentAGIDCells(input: AGIDCellInput): AGIDAdjacentCell[] {
+  const source = resolveAGIDCell(input);
+  if (!source) return [];
+  const sourceCellKey = agidCellKey(source.face, source.qx, source.qy);
+  const neighbors = new Map<string, AGIDAdjacentCell>();
+
+  for (let dy = -1; dy <= 1; dy += 1) {
+    for (let dx = -1; dx <= 1; dx += 1) {
+      if (dx === 0 && dy === 0) continue;
+      const center = getFromQuantized(
+        source.face,
+        source.qx + dx + 0.5,
+        source.qy + dy + 0.5,
+      );
+      const agid = encodeAGID(center.lat, center.lon);
+      const cellKey = agidCellKey(agid.face, agid.qx, agid.qy);
+      if (cellKey === sourceCellKey) continue;
+      const relation: AGIDAdjacentCell['relation'] =
+        dx === 0 || dy === 0 ? 'edge-adjacent' : 'corner-adjacent';
+      const existing = neighbors.get(cellKey);
+      if (!existing || (
+        existing.relation === 'corner-adjacent'
+        && relation === 'edge-adjacent'
+      )) {
+        neighbors.set(cellKey, {
+          relation,
+          sourceCellKey,
+          cellKey,
+          agid,
+        });
+      }
+    }
+  }
+
+  return [...neighbors.values()].sort((left, right) => {
+    if (left.relation !== right.relation) {
+      return left.relation === 'edge-adjacent' ? -1 : 1;
+    }
+    return left.cellKey.localeCompare(right.cellKey);
+  });
+}
+
+export function matchAGIDGridNeighborhood(
+  left: AGIDCellInput,
+  right: AGIDCellInput,
+): AGIDGridNeighborhoodMatch {
+  const leftCellKey = getAGIDCellKey(left);
+  const rightCellKey = getAGIDCellKey(right);
+  let relation: AGIDGridRelation = 'invalid';
+
+  if (leftCellKey && rightCellKey) {
+    if (leftCellKey === rightCellKey) {
+      relation = 'same-cell';
+    } else {
+      const neighbor = getAdjacentAGIDCells(left)
+        .find(candidate => candidate.cellKey === rightCellKey);
+      relation = neighbor?.relation || 'separate';
+    }
+  }
+
+  return {
+    version: 'agid-grid-neighborhood-v0.1',
+    gridAxisBits: AGID_GRID_AXIS_BITS,
+    relation,
+    acceptedAsSameOrNearArea:
+      relation === 'same-cell'
+      || relation === 'edge-adjacent'
+      || relation === 'corner-adjacent',
+    boundaryMatch:
+      relation === 'edge-adjacent'
+      || relation === 'corner-adjacent',
+    leftCellKey,
+    rightCellKey,
+    nonClaims: [
+      'Cell proximity does not prove that two address records have the same referent.',
+      'Adjacent cells do not prove a traversable entrance or carrier delivery route.',
+      'Public AGID proximity must not disclose a unit, room, recipient, or access instruction.',
+    ],
+  };
 }
 
 // Spatial Cache for faster lookup (Grid Index)
@@ -757,7 +900,7 @@ const COARSE_OCEANIC_ARCHIPELAGO_CODES = new Set([
   "BM", "CV", "ES_CAN", "FK", "GS", "PT", "PT_AZO", "PT_MAD",
   "CC", "CX", "ID", "IO", "KM", "MU", "MV", "RE", "SC", "YT",
   "AS", "CK", "FJ", "FM", "GU", "KI", "MH", "MP", "NC", "PF",
-  "PW", "SB", "TO", "TV", "VU", "WS",
+  "PW", "SB", "TO", "TV", "UM", "VU", "WS",
 ]);
 
 const COASTAL_LAND_ANCHORS = [
@@ -820,6 +963,7 @@ const COASTAL_LAND_ANCHORS = [
   { code: "TV", lat: -8.5243, lon: 179.1942, radiusKm: 45 },
   { code: "GU", lat: 13.4763, lon: 144.7502, radiusKm: 35 },
   { code: "MP", lat: 15.1778, lon: 145.7509, radiusKm: 45 },
+  { code: "UM", lat: 19.2823, lon: 166.6470, radiusKm: 25 },
   { code: "AS", lat: -14.2756, lon: -170.7020, radiusKm: 55 },
   { code: "CK", lat: -21.2129, lon: -159.7823, radiusKm: 60 },
   { code: "PF", lat: -17.5516, lon: -149.5585, radiusKm: 70 },

@@ -178,13 +178,13 @@ export const FieldActionBar: React.FC<FieldActionBarProps> = ({ surface }) => {
     return (
       <div className="pointer-events-none fixed right-[max(12px,var(--safe-area-right))] top-[74px] z-[70]">
         <section
-          aria-label="Map current location action"
-          className="pointer-events-auto rounded-xl border border-slate-200/80 bg-white/95 p-1 shadow-lg shadow-slate-950/10 backdrop-blur"
+          aria-label="Map quick actions"
+          className="pointer-events-auto flex items-center gap-1 rounded-lg border border-slate-200/80 bg-white/95 p-1 shadow-lg shadow-slate-950/10 backdrop-blur"
         >
           <button
             type="button"
             onClick={useCurrentLocation}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-blue-600 text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-md bg-blue-600 text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             aria-label="現在地へ移動"
             title="現在地へ移動"
           >

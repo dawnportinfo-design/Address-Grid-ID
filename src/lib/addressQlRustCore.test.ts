@@ -71,8 +71,9 @@ test('AddressQL Rust core keeps non-claim semantics visible', () => {
   assert.match(lib, /Normalization is not referent resolution/);
   assert.match(lib, /Postal validity is not full address identity/);
   assert.match(lib, /not official postal codes/);
-  assert.match(lib, /postal_code_not_found_in_fixture/);
-  assert.match(lib, /format_and_existence/);
+  assert.match(lib, /postal_existence_evidence_required/);
+  assert.match(lib, /approved_delivery_source_required/);
+  assert.doesNotMatch(lib, /format_and_existence/);
   assert.match(lib, /not proof of residence or identity/);
   assert.match(packageJson, /"verify:addressql-core:cargo": "cargo test --manifest-path native\/addressql-core\/Cargo\.toml"/);
 });

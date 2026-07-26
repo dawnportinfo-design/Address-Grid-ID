@@ -20,13 +20,15 @@ test('FieldActionBar keeps one visible next action and field controls', () => {
   assert.match(source, /取消/);
 });
 
-test('map surface uses compact quick actions instead of the full-width operations bar', () => {
+test('map surface keeps only current location after add moves to the side menu', () => {
   assert.match(source, /if \(isCompactActionSurface\)/);
-  assert.match(source, /aria-label="Map current location action"/);
+  assert.match(source, /aria-label="Map quick actions"/);
   assert.match(source, /fixed right-\[max\(12px,var\(--safe-area-right\)\)\] top-\[74px\]/);
+  assert.doesNotMatch(compactBlock, /aria-label="追加する"/);
+  assert.doesNotMatch(compactBlock, /title="住所を追加する"/);
+  assert.doesNotMatch(compactBlock, /onClick=\{openAddressRegistration\}/);
   assert.match(compactBlock, /aria-label="現在地へ移動"/);
   assert.doesNotMatch(compactBlock, /aria-label="QR読み取り"/);
-  assert.doesNotMatch(compactBlock, /aria-label="住所登録"/);
   assert.match(source, /h-11 w-11/);
   assert.match(source, /sticky top-0 bg-slate-50\/80/);
 });

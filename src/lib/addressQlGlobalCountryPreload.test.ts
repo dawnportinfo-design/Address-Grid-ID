@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import {
@@ -9,6 +9,11 @@ import {
   summarizeAddressQlGlobalCountryPreload,
   validateAddressQlGlobalCountryPreload,
 } from './addressQlGlobalCountryPreload';
+
+function addressQlDocPath(fileName: string) {
+  const workspacePath = `docs/addressql/${fileName}`;
+  return existsSync(workspacePath) ? workspacePath : `docs/${fileName}`;
+}
 
 test('AddressQL global preload covers all core countries and existing local address formats', () => {
   const profiles = buildAddressQlGlobalCountryPreloadProfiles();
@@ -35,14 +40,14 @@ test('AddressQL preload distinguishes official, no-postal, and weak-postal count
   const gh = getAddressQlGlobalCountryPreloadProfile('GH');
 
   assert.equal(jp?.postalStatus, 'official_postal_code');
-  assert.equal(jp?.validationReadiness, 'format_and_postal');
+  assert.equal(jp?.validationReadiness, 'format_only');
   assert.equal(hk?.postalStatus, 'no_postal_code');
   assert.equal(ae?.postalStatus, 'no_postal_code');
   assert.equal(hk?.validationReadiness, 'postal_equivalent_required');
   assert.match(hk?.sourcePolicy.postalEquivalentStrategy ?? '', /do not invent official postal codes/i);
   assert.equal(ke?.postalStatus, 'weak_or_partial_postal_code');
   assert.equal(gh?.postalStatus, 'weak_or_partial_postal_code');
-  assert.equal(ke?.validationReadiness, 'format_with_postal_warning');
+  assert.equal(ke?.validationReadiness, 'metadata_gated');
 });
 
 test('AddressQL preload exposes native and English input readiness without raw address claims', () => {
@@ -63,9 +68,9 @@ test('AddressQL preload exposes native and English input readiness without raw a
 });
 
 test('AddressQL global preload docs and manifest are wired for OSS release', () => {
-  const readme = readFileSync('docs/addressql/README.md', 'utf8');
-  const globalPreload = readFileSync('docs/addressql/global-country-preload-v0.7.md', 'utf8');
-  const manifest = readFileSync('docs/addressql/repository-manifest.json', 'utf8');
+  const readme = readFileSync(addressQlDocPath('README.md'), 'utf8');
+  const globalPreload = readFileSync(addressQlDocPath('global-country-preload-v0.7.md'), 'utf8');
+  const manifest = readFileSync(addressQlDocPath('repository-manifest.json'), 'utf8');
   const packageJson = readFileSync('package.json', 'utf8');
 
   assert.match(readme, /global-country-preload-v0\.7\.md/);

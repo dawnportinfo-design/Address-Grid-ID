@@ -73,9 +73,9 @@ test('AddressQL PostgreSQL fixtures and smoke tests cover countries, postal fall
   assert.match(fixture, /'HK'/);
   assert.match(fixture, /'AE'/);
   assert.match(fixture, /native_and_english_preloaded/);
-  assert.match(fixture, /format_and_postal/);
+  assert.match(fixture, /format_only/);
   assert.match(fixture, /postal_equivalent_required/);
-  assert.match(fixture, /format_with_postal_warning/);
+  assert.match(fixture, /metadata_gated/);
   assert.match(fixture, /postal_equivalent/);
   assert.match(fixture, /POLYGON/);
   assert.match(fixture, /POINT/);

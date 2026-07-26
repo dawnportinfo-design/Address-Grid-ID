@@ -17,8 +17,12 @@ fn rust_sdk_preserves_non_claims() {
     let delivery = delivery_available("HK", None, "synthetic_carrier", "standard");
 
     assert!(postal.valid);
+    assert_eq!(postal.exists, None);
+    assert_eq!(postal.validation_scope, "format_only");
+    assert!(postal.warnings.contains(&"postal_existence_evidence_required"));
     assert!(postal.non_claims[0].contains("not full address identity"));
-    assert!(delivery.available);
+    assert!(!delivery.available);
+    assert!(delivery.reasons.contains(&"approved_delivery_source_required"));
     assert!(delivery.non_claims[0].contains("not proof of residence"));
 }
 

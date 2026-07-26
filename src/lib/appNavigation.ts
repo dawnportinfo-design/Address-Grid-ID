@@ -3,6 +3,7 @@ export const APP_NAVIGATION_MODEL_VERSION = 'agid-integrated-app-navigation-v2';
 export type AppSurfaceId =
   | 'open-source-home'
   | 'map-workspace'
+  | 'topographic-export'
   | 'veygrit-wallet'
   | 'address-registration'
   | 'friends'
@@ -78,6 +79,15 @@ export type AppNavigationValidation = {
   errors: string[];
   warnings: string[];
 };
+
+export const AGID_RETIRED_CONSUMER_SURFACE_IDS = [
+  'friends',
+  'address-portal',
+  'store-topics',
+  'store-discover',
+  'store-my-stores',
+  'playlist-commerce',
+] as const satisfies readonly AppSurfaceId[];
 
 export type AppSurfaceDiscoverability =
   | 'primary-side-menu'
@@ -279,6 +289,30 @@ export const APP_SURFACES: AppSurfaceDefinition[] = [
         label: 'ホーム',
         shortLabel: 'Home',
         description: '住所、配送中、旅行パス、AGID地図を日常ホームに集約。',
+      },
+    },
+  },
+  {
+    id: 'topographic-export',
+    group: 'developer',
+    route: '/topographic-export',
+    action: 'navigate',
+    deployment: 'standalone-route',
+    status: 'ready',
+    menuTier: 'secondary',
+    roles: ['operator', 'field', 'admin', 'developer'],
+    icon: 'map',
+    privacyBoundary: 'local-first',
+    copy: {
+      en: {
+        label: 'Topographic Export',
+        shortLabel: 'Topo',
+        description: 'Source-gated terrain, CAD, BIM, vector, raster, and raw exports.',
+      },
+      ja: {
+        label: '地形エクスポート',
+        shortLabel: '地形',
+        description: '出典ゲート付きの地形、CAD、BIM、ベクター、ラスター、Raw出力。',
       },
     },
   },
@@ -944,6 +978,13 @@ export function getAppSurfaces(
     }));
 }
 
+export function getAgidAppSurfaces(
+  roles: AppSurfaceRole[] = ['user', 'operator', 'field', 'admin', 'developer'],
+): AppSurfaceDefinition[] {
+  const retiredIds = new Set<AppSurfaceId>(AGID_RETIRED_CONSUMER_SURFACE_IDS);
+  return getAppSurfaces(roles).filter(surface => !retiredIds.has(surface.id));
+}
+
 export function getAppSurfaceGroupLabel(group: AppSurfaceGroup, language: string): string {
   const normalizedLanguage = normalizeAppNavigationLanguage(language);
   return APP_SURFACE_GROUPS.find(item => item.id === group)?.copy[normalizedLanguage].label ?? group;
@@ -1017,7 +1058,7 @@ export function validateAppNavigation(surfaces = APP_SURFACES): AppNavigationVal
     }
   }
 
-  for (const required of ['/', '/veygrit', '/pos', '/hotel', '/portal', '/dashboard', '/settings', '/field', '/machine', '/developer', '/address-login', '/merchant-console', '/playlist-commerce', '/element', '/research', '/postal-zones', '/locker', '/ops']) {
+  for (const required of ['/', '/topographic-export', '/veygrit', '/pos', '/hotel', '/portal', '/dashboard', '/settings', '/field', '/machine', '/developer', '/address-login', '/merchant-console', '/playlist-commerce', '/element', '/research', '/postal-zones', '/locker', '/ops']) {
     if (!surfaces.some(surface => surface.route?.split('?')[0] === required)) {
       errors.push(`missing-route:${required}`);
     }

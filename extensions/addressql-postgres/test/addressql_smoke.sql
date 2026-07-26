@@ -21,7 +21,7 @@ BEGIN
   END IF;
 
   v_result := addressql.country_address_profile('JP');
-  IF v_result->>'address_format_coverage' <> 'native_and_english_preloaded' OR v_result->>'validation_readiness' <> 'format_and_postal' THEN
+  IF v_result->>'address_format_coverage' <> 'native_and_english_preloaded' OR v_result->>'validation_readiness' <> 'format_only' THEN
     RAISE EXCEPTION 'country_address_profile official preload failed: %', v_result;
   END IF;
 

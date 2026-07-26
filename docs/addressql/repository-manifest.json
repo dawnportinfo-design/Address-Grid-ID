@@ -47,6 +47,42 @@
       "verification": "npm run verify:addressql-global-preload"
     },
     {
+      "name": "addressql-global-country-coverage",
+      "path": "src/lib/addressQlGlobalCountryCoverage.ts",
+      "readiness": "capability-gate-ready",
+      "verification": "npm run verify:addressql-global-coverage"
+    },
+    {
+      "name": "addressql-country-data-promotion",
+      "path": "src/lib/addressQlCountryDataPromotion.ts",
+      "readiness": "p2-review-candidate-index-ready",
+      "verification": "npm run verify:addressql-country-data-promotion"
+    },
+    {
+      "name": "addressql-multilingual-quality",
+      "path": "src/lib/addressQlMultilingualQuality.ts",
+      "readiness": "p3-quality-gate-index-ready",
+      "verification": "npm run verify:addressql-multilingual-quality"
+    },
+    {
+      "name": "addressql-practical-api",
+      "path": "src/lib/addressQlPracticalApi.ts",
+      "readiness": "p1-self-hosted-api-ready",
+      "verification": "npm run verify:addressql-api"
+    },
+    {
+      "name": "addressql-runtime-evidence-adapters",
+      "path": "src/lib/addressQlRuntimeAdapter.ts",
+      "readiness": "fail-closed-attestation-gate-ready",
+      "verification": "npm run verify:addressql-api"
+    },
+    {
+      "name": "addressql-postal-set-adapter",
+      "path": "src/lib/addressQlPostalSetAdapter.ts",
+      "readiness": "approved-dataset-loader-ready",
+      "verification": "npm run verify:addressql-api"
+    },
+    {
       "name": "addressql-duckdb",
       "path": "extensions/addressql-duckdb",
       "readiness": "scaffold-ready",
@@ -91,15 +127,21 @@
     "docs/addressql/research-plan.md",
     "docs/addressql/open-source-release-readiness.md",
     "docs/addressql/global-country-preload-v0.7.md",
+    "docs/addressql/global-country-coverage-v0.1.md",
+    "docs/addressql/country-data-promotion-v0.1.md",
+    "docs/addressql/multilingual-quality-v0.1.md",
+    "docs/addressql/practical-api-v1.md",
     "docs/addressql/zk-proof-hooks-v0.6.md",
     "docs/addressql/calcite-v0.5.md",
     "docs/addressql/repository-files/README.md",
+    "docs/addressql/repository-files/package.json",
     "docs/addressql/repository-files/LICENSE",
     "docs/addressql/repository-files/LICENSES-DATA.md",
     "docs/addressql/repository-files/CONTRIBUTING.md",
     "docs/addressql/repository-files/SECURITY.md",
     "docs/addressql/repository-files/CODE_OF_CONDUCT.md",
     "docs/addressql/repository-manifest.json",
+    "docs/specs/openapi/addressql-practical-api-v1.openapi.json",
     "docs/specs/fixtures/addressql-postal-validation-negative-claims-v0.1.json",
     "docs/specs/schemas/addressql-postal-validation-negative-claims-v0.1.schema.json"
   ],
@@ -111,7 +153,9 @@
     "Calcite remains deferred until activation gates are met.",
     "ZK hooks remain proof-input/verifier-hook readiness, not audited circuits.",
     "AMT compatibility is an adapter boundary, not an AMT paper chapter.",
-    "Third-party source/data licenses remain separate from code licensing."
+    "Third-party source/data licenses remain separate from code licensing.",
+    "Practical API responses must not reflect submitted postal codes or accept raw address and recipient fields.",
+    "Cross-language place-name transformation remains disabled until country-specific source, holdout, signature, and runtime evidence is approved."
   ],
   "verification_commands": [
     "npm run verify:addressql-oss",
@@ -122,6 +166,10 @@
     "npm run verify:addressql-postal-negative-claims",
     "npm run verify:addressql-sdk",
     "npm run verify:addressql-global-preload",
+    "npm run verify:addressql-global-coverage",
+    "npm run verify:addressql-country-data-promotion",
+    "npm run verify:addressql-multilingual-quality",
+    "npm run verify:addressql-api",
     "npm run verify:addressql-zk",
     "npm run verify:addressql-calcite",
     "npm run verify:addressql-export",

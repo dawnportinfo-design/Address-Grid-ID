@@ -43,6 +43,17 @@ test('AddressQL OSS readiness report passes all public release gates', () => {
   assert.ok(report.score >= 95);
   assert.ok(report.verifiedPaths.includes('docs/addressql/README.md'));
   assert.ok(report.verifiedPaths.includes('extensions/addressql-postgres/sql/addressql--0.1.0.sql'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlGlobalCountryCoverage.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlGlobalCountryCoverage.test.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlMultilingualQuality.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlMultilingualQuality.test.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlPracticalApi.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlPracticalApi.test.ts'));
+  assert.ok(report.verifiedPaths.includes('scripts/run-addressql-api.ts'));
+  assert.ok(report.verifiedPaths.includes('docs/specs/openapi/addressql-practical-api-v1.openapi.json'));
+  assert.ok(report.verifiedPaths.includes('src/data/address_formats'));
+  assert.ok(report.verifiedPaths.includes('data/postal_country_packs'));
+  assert.ok(report.verifiedPaths.includes('docs/addressql/repository-files/package.json'));
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlZkProofHooks.ts'));
   assert.ok(report.verifiedPaths.includes('docs/addressql/repository-files/LICENSE'));
   assert.ok(report.verifiedPaths.includes('docs/addressql/repository-files/CONTRIBUTING.md'));
@@ -66,6 +77,8 @@ test('AddressQL OSS readiness commands cover core, adapters, SDKs, ZK, and Calci
     'npm run verify:addressql-duckdb',
     'npm run verify:addressql-duckdb:cli',
     'npm run verify:addressql-sdk',
+    'npm run verify:addressql-multilingual-quality',
+    'npm run verify:addressql-api',
     'npm run verify:addressql-zk',
     'npm run verify:addressql-calcite',
     'npm run verify:addressql-export',
@@ -108,6 +121,30 @@ test('AddressQL OSS export snapshot includes manifest-owned specs fixtures and s
   for (const documentPath of exportableSpecDocuments) {
     assert.ok(snapshot.readiness.verifiedPaths.includes(documentPath), `${documentPath} missing from readiness snapshot`);
     assert.ok(snapshot.included.includes(documentPath), `${documentPath} missing from export included snapshot`);
+  }
+});
+
+test('AddressQL OSS export snapshot includes the executable country core', () => {
+  const snapshot = buildAddressQlRepositoryExportCheckSnapshot();
+
+  for (const expectedPath of [
+    'package.json',
+    'src/lib/addressQlGlobalCountryPreload.ts',
+    'src/lib/addressQlGlobalCountryPreload.test.ts',
+    'src/lib/addressQlGlobalCountryCoverage.ts',
+    'src/lib/addressQlGlobalCountryCoverage.test.ts',
+    'src/lib/addressQlMultilingualQuality.ts',
+    'src/lib/addressQlMultilingualQuality.test.ts',
+    'src/lib/addressQlPracticalApi.ts',
+    'src/lib/addressQlPracticalApi.test.ts',
+    'scripts/run-addressql-api.ts',
+    'scripts/run-addressql-api.test.ts',
+    'docs/specs/openapi/addressql-practical-api-v1.openapi.json',
+    'src/lib/officialPostalSourceCatalog.ts',
+    'src/data/address_formats',
+    'data/postal_country_packs',
+  ]) {
+    assert.ok(snapshot.included.includes(expectedPath), `${expectedPath} missing from export snapshot`);
   }
 });
 

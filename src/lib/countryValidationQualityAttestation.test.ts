@@ -3,6 +3,7 @@ import { test } from 'node:test';
 
 import { buildApprovedCountryGeographicMetadataEvaluationIndex } from './countryGeographicMetadataEvaluationCatalog';
 import {
+  COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS,
   COUNTRY_VALIDATION_REVIEWER_REGISTRY_DIGEST_ALGORITHM,
   COUNTRY_VALIDATION_REVIEWER_REGISTRY_SIGNATURE_VERSION,
   COUNTRY_VALIDATION_QUALITY_ATTESTATION_VERSION,
@@ -59,6 +60,254 @@ function report() {
   });
   return buildCountryValidationQualityReport(index, 'GT', '2026-07-25T12:00:00Z');
 }
+
+test('canonicalizes reviewer registry fields independently of object insertion order', () => {
+  const canonical = registry();
+  const reorderedKey = Object.fromEntries(
+    Object.entries(canonical.keys[0]).reverse(),
+  ) as typeof canonical.keys[number];
+
+  assert.equal(
+    countryValidationReviewerRegistryDigest({
+      version: canonical.version,
+      keys: [reorderedKey],
+    }),
+    canonical.registryDigest,
+  );
+  assert.equal(
+    canonical.digestAlgorithm,
+    'sha256-country-quality-reviewer-registry-v2',
+  );
+});
+
+test('rejects oversized reviewer and issuer registries before signature verification', async () => {
+  const oversizedReviewerRegistry = registry();
+  oversizedReviewerRegistry.keys = Array.from(
+    { length: COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxReviewerKeys + 1 },
+    (_, index) => ({
+      ...oversizedReviewerRegistry.keys[0],
+      keyId: `reviewer-key-${index}`,
+      reviewerId: `reviewer-${index}`,
+    }),
+  );
+  oversizedReviewerRegistry.registryDigest = countryValidationReviewerRegistryDigest(
+    oversizedReviewerRegistry,
+  );
+
+  const qualityResult = await verifyCountryValidationQualityAttestation({
+    report: report(),
+    evaluatorId: 'agid-local-evaluator',
+    registry: oversizedReviewerRegistry,
+    signature: {
+      algorithm: 'Ed25519',
+      keyId: 'reviewer-key-0',
+      signedAt: '2026-07-25T13:00:00.000Z',
+      signatureBase64Url: RFC_8032_EMPTY_MESSAGE_SIGNATURE,
+    },
+    asOf: '2026-07-25T13:01:00.000Z',
+  });
+  assert.equal(qualityResult.status, 'rejected');
+  assert.equal(qualityResult.signatureValid, false);
+  assert.deepEqual(qualityResult.issues, ['registry.keys: limit exceeded']);
+
+  const oversizedIssuerRegistry: CountryValidationReviewerRegistryIssuerRegistry = {
+    version: COUNTRY_VALIDATION_REVIEWER_REGISTRY_SIGNATURE_VERSION,
+    keys: Array.from(
+      { length: COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxIssuerKeys + 1 },
+      (_, index) => ({
+        keyId: `issuer-key-${index}`,
+        issuerId: `issuer-${index}`,
+        algorithm: 'Ed25519',
+        purpose: 'country-validation-reviewer-registry',
+        publicKeyBase64Url: RFC_8032_PUBLIC_KEY,
+        status: 'trusted',
+        validFrom: '2026-01-01T00:00:00.000Z',
+        validUntil: '2027-01-01T00:00:00.000Z',
+        reviewedAt: '2026-07-01T00:00:00.000Z',
+        reviewBy: '2026-10-01T00:00:00.000Z',
+        registryUrl: 'https://example.invalid/agid-registry-issuers',
+        revocationUrl: 'https://example.invalid/agid-registry-issuers/revocations',
+      })),
+  };
+  const registryResult = await verifyCountryValidationReviewerRegistrySignature({
+    registry: registry(),
+    issuerRegistry: oversizedIssuerRegistry,
+    signature: {
+      algorithm: 'Ed25519',
+      keyId: 'issuer-key-0',
+      signedAt: '2026-07-25T12:00:00.000Z',
+      signatureBase64Url: RFC_8032_EMPTY_MESSAGE_SIGNATURE,
+    },
+    asOf: '2026-07-25T12:01:00.000Z',
+  });
+  assert.equal(registryResult.status, 'rejected');
+  assert.equal(registryResult.signatureValid, false);
+  assert.deepEqual(registryResult.issues, ['issuerRegistry.keys: limit exceeded']);
+});
+
+test('rejects oversized UTF-8 fields before digest or signature processing', async () => {
+  const oversizedMultilingualId = 'é'.repeat(
+    Math.floor(COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxUtf8BytesPerField / 2) + 1,
+  );
+  const qualityResult = await verifyCountryValidationQualityAttestation({
+    report: report(),
+    evaluatorId: 'agid-local-evaluator',
+    registry: registry(),
+    signature: {
+      algorithm: 'Ed25519',
+      keyId: oversizedMultilingualId,
+      signedAt: '2026-07-25T13:00:00.000Z',
+      signatureBase64Url: RFC_8032_EMPTY_MESSAGE_SIGNATURE,
+    },
+    asOf: '2026-07-25T13:01:00.000Z',
+  });
+  assert.equal(qualityResult.status, 'rejected');
+  assert.equal(qualityResult.digestBound, false);
+  assert.deepEqual(qualityResult.issues, ['signature.keyId: UTF-8 byte limit exceeded']);
+
+  const issuerRegistry: CountryValidationReviewerRegistryIssuerRegistry = {
+    version: COUNTRY_VALIDATION_REVIEWER_REGISTRY_SIGNATURE_VERSION,
+    keys: [{
+      keyId: 'registry-issuer-rfc-vector',
+      issuerId: 'agid-public-trust-maintainer',
+      algorithm: 'Ed25519',
+      purpose: 'country-validation-reviewer-registry',
+      publicKeyBase64Url: RFC_8032_PUBLIC_KEY,
+      status: 'trusted',
+      validFrom: '2026-01-01T00:00:00.000Z',
+      validUntil: '2027-01-01T00:00:00.000Z',
+      reviewedAt: '2026-07-01T00:00:00.000Z',
+      reviewBy: '2026-10-01T00:00:00.000Z',
+      registryUrl: `https://example.invalid/${'x'.repeat(
+        COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxUtf8BytesPerField,
+      )}`,
+      revocationUrl: 'https://example.invalid/agid-registry-issuers/revocations',
+    }],
+  };
+  const registryResult = await verifyCountryValidationReviewerRegistrySignature({
+    registry: registry(),
+    issuerRegistry,
+    signature: {
+      algorithm: 'Ed25519',
+      keyId: 'registry-issuer-rfc-vector',
+      signedAt: '2026-07-25T12:00:00.000Z',
+      signatureBase64Url: RFC_8032_EMPTY_MESSAGE_SIGNATURE,
+    },
+    asOf: '2026-07-25T12:01:00.000Z',
+  });
+  assert.equal(registryResult.status, 'rejected');
+  assert.equal(registryResult.digestValid, false);
+  assert.deepEqual(
+    registryResult.issues,
+    ['issuerRegistry.keys[0].registryUrl: UTF-8 byte limit exceeded'],
+  );
+});
+
+test('rejects non-NFC trust metadata before digest or signature processing', async () => {
+  const decomposedReviewerRegistry = registry();
+  decomposedReviewerRegistry.keys[0].reviewerId = 'independent-quality-lab-e\u0301';
+  decomposedReviewerRegistry.registryDigest = countryValidationReviewerRegistryDigest(
+    decomposedReviewerRegistry,
+  );
+  const qualityResult = await verifyCountryValidationQualityAttestation({
+    report: report(),
+    evaluatorId: 'agid-local-evaluator',
+    registry: decomposedReviewerRegistry,
+    signature: {
+      algorithm: 'Ed25519',
+      keyId: 'independent-reviewer-rfc-vector',
+      signedAt: '2026-07-25T13:00:00.000Z',
+      signatureBase64Url: RFC_8032_EMPTY_MESSAGE_SIGNATURE,
+    },
+    asOf: '2026-07-25T13:01:00.000Z',
+  });
+  assert.equal(qualityResult.status, 'rejected');
+  assert.equal(qualityResult.digestBound, false);
+  assert.deepEqual(
+    qualityResult.issues,
+    ['registry.keys[0].reviewerId: NFC normalization required'],
+  );
+
+  const issuerRegistry: CountryValidationReviewerRegistryIssuerRegistry = {
+    version: COUNTRY_VALIDATION_REVIEWER_REGISTRY_SIGNATURE_VERSION,
+    keys: [{
+      keyId: 'registry-issuer-rfc-vector',
+      issuerId: 'agid-public-trust-maintainer-e\u0301',
+      algorithm: 'Ed25519',
+      purpose: 'country-validation-reviewer-registry',
+      publicKeyBase64Url: RFC_8032_PUBLIC_KEY,
+      status: 'trusted',
+      validFrom: '2026-01-01T00:00:00.000Z',
+      validUntil: '2027-01-01T00:00:00.000Z',
+      reviewedAt: '2026-07-01T00:00:00.000Z',
+      reviewBy: '2026-10-01T00:00:00.000Z',
+      registryUrl: 'https://example.invalid/agid-registry-issuers',
+      revocationUrl: 'https://example.invalid/agid-registry-issuers/revocations',
+    }],
+  };
+  const registryResult = await verifyCountryValidationReviewerRegistrySignature({
+    registry: registry(),
+    issuerRegistry,
+    signature: {
+      algorithm: 'Ed25519',
+      keyId: 'registry-issuer-rfc-vector',
+      signedAt: '2026-07-25T12:00:00.000Z',
+      signatureBase64Url: RFC_8032_EMPTY_MESSAGE_SIGNATURE,
+    },
+    asOf: '2026-07-25T12:01:00.000Z',
+  });
+  assert.equal(registryResult.status, 'rejected');
+  assert.equal(registryResult.digestValid, false);
+  assert.deepEqual(
+    registryResult.issues,
+    ['issuerRegistry.keys[0].issuerId: NFC normalization required'],
+  );
+});
+
+test('rejects non-ASCII technical identifiers and deeply nested metadata', async () => {
+  const identifierResult = await verifyCountryValidationQualityAttestation({
+    report: report(),
+    evaluatorId: 'agid-local-evaluator',
+    registry: registry(),
+    signature: {
+      algorithm: 'Ed25519',
+      keyId: 'reviewer-\u0456d',
+      signedAt: '2026-07-25T13:00:00.000Z',
+      signatureBase64Url: RFC_8032_EMPTY_MESSAGE_SIGNATURE,
+    },
+    asOf: '2026-07-25T13:01:00.000Z',
+  });
+  assert.equal(identifierResult.status, 'rejected');
+  assert.deepEqual(
+    identifierResult.issues,
+    ['signature.keyId: ASCII technical identifier required'],
+  );
+
+  let nested: Record<string, unknown> = { value: 'synthetic' };
+  for (
+    let depth = 0;
+    depth <= COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxMetadataDepth;
+    depth += 1
+  ) {
+    nested = { extension: nested };
+  }
+  const signature = {
+    algorithm: 'Ed25519' as const,
+    keyId: 'independent-reviewer-rfc-vector',
+    signedAt: '2026-07-25T13:00:00.000Z',
+    signatureBase64Url: RFC_8032_EMPTY_MESSAGE_SIGNATURE,
+  };
+  (signature as unknown as Record<string, unknown>).metadata = nested;
+  const nestingResult = await verifyCountryValidationQualityAttestation({
+    report: report(),
+    evaluatorId: 'agid-local-evaluator',
+    registry: registry(),
+    signature,
+    asOf: '2026-07-25T13:01:00.000Z',
+  });
+  assert.equal(nestingResult.status, 'rejected');
+  assert.ok(nestingResult.issues.some(issue => issue.endsWith('metadata nesting limit exceeded')));
+});
 
 test('publishes a canonical signing message bound to the country holdout digest', () => {
   const message = countryValidationQualitySigningMessage({

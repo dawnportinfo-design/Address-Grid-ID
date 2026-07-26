@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS addressql.country_profiles (
   address_format_coverage text NOT NULL DEFAULT 'seed_profile_required'
     CHECK (address_format_coverage IN ('native_and_english_preloaded', 'native_only_preloaded', 'english_only_preloaded', 'seed_profile_required')),
   validation_readiness text NOT NULL DEFAULT 'manual_review_required'
-    CHECK (validation_readiness IN ('format_and_postal', 'format_with_postal_warning', 'postal_equivalent_required', 'delivery_source_required', 'manual_review_required')),
+    CHECK (validation_readiness IN ('format_only', 'metadata_gated', 'postal_equivalent_required', 'delivery_source_required', 'manual_review_required')),
   postal_status text NOT NULL CHECK (postal_status IN ('official', 'weak', 'none', 'carrier_specific', 'unknown')),
   postal_required_default boolean NOT NULL DEFAULT false,
   postal_pattern text,

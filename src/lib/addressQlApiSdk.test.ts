@@ -64,7 +64,8 @@ test('AddressQL TypeScript SDK executes the v0.4 parity surface locally', () => 
   assert.equal(noPostal.valid, false);
   assert.ok(noPostal.warnings.includes('postal_equivalent_required'));
   assert.match(noPostal.nonClaims.join(' '), /Do not invent an official postal code/);
-  assert.equal(delivery.available, true);
+  assert.equal(delivery.available, false);
+  assert.ok(delivery.reasons.includes('approved_delivery_source_required'));
   assert.match(delivery.nonClaims.join(' '), /not proof of residence/);
   assert.equal(decision.match, true);
 });

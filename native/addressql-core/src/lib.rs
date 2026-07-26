@@ -7,6 +7,8 @@
 pub mod fixtures;
 pub mod model;
 
+use std::collections::HashSet;
+
 use fixtures::{COUNTRY_PROFILES, POSTAL_AREAS, SOURCE_VERSION};
 use model::{
     AddressMatchDecision, CountryProfile, CountryResolution, DeliveryAvailability,
@@ -18,6 +20,78 @@ pub const ADDRESSQL_CORE_VERSION: &str = "addressql-core-v0.2";
 
 pub fn clean_text(input: &str) -> String {
     input.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+fn canonical_address_token(token: &str) -> &str {
+    match token {
+        "ave" | "avenue" => "avenue",
+        "blvd" | "boulevard" => "boulevard",
+        "rd" | "road" => "road",
+        "st" | "street" | "strasse" | "straße" => "street",
+        _ => token,
+    }
+}
+
+fn normalize_address_match_text(input: &str) -> String {
+    let punctuation_folded = input
+        .chars()
+        .flat_map(char::to_lowercase)
+        .map(|character| {
+            if character.is_alphanumeric() {
+                character
+            } else {
+                ' '
+            }
+        })
+        .collect::<String>();
+
+    clean_text(&punctuation_folded)
+        .split_whitespace()
+        .map(canonical_address_token)
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+fn edit_distance(left: &str, right: &str) -> usize {
+    let left_chars = left.chars().collect::<Vec<_>>();
+    let right_chars = right.chars().collect::<Vec<_>>();
+    let mut previous = (0..=right_chars.len()).collect::<Vec<_>>();
+
+    for (left_index, left_character) in left_chars.iter().enumerate() {
+        let mut current = vec![left_index + 1];
+        for (right_index, right_character) in right_chars.iter().enumerate() {
+            let substitution = previous[right_index]
+                + usize::from(left_character != right_character);
+            current.push(
+                (current[right_index] + 1)
+                    .min(previous[right_index + 1] + 1)
+                    .min(substitution),
+            );
+        }
+        previous = current;
+    }
+
+    previous[right_chars.len()]
+}
+
+fn address_similarity(left: &str, right: &str) -> f64 {
+    if left.is_empty() || right.is_empty() {
+        return 0.0;
+    }
+    if left == right {
+        return 1.0;
+    }
+
+    let left_tokens = left.split_whitespace().collect::<HashSet<_>>();
+    let right_tokens = right.split_whitespace().collect::<HashSet<_>>();
+    let shared_tokens = left_tokens.intersection(&right_tokens).count();
+    let token_dice =
+        (2 * shared_tokens) as f64 / (left_tokens.len() + right_tokens.len()) as f64;
+    let max_length = left.chars().count().max(right.chars().count());
+    let character_similarity =
+        1.0 - edit_distance(left, right) as f64 / max_length as f64;
+
+    (token_dice * 0.4 + character_similarity * 0.6).clamp(0.0, 1.0)
 }
 
 pub fn normalize_country(input: &str) -> String {
@@ -108,7 +182,7 @@ pub fn postal_format_validate(postal_code: Option<&str>, country_code: &str) -> 
     match profile {
         Some(profile) if profile.postal_status == PostalStatus::None => postal.is_empty(),
         Some(profile) if profile.postal_required_default && postal.is_empty() => false,
-        Some(profile) if postal.is_empty() => true,
+        Some(_) if postal.is_empty() => true,
         Some(profile) => profile
             .postal_pattern
             .map(|pattern| pattern.matches(&postal))
@@ -118,15 +192,9 @@ pub fn postal_format_validate(postal_code: Option<&str>, country_code: &str) -> 
 }
 
 pub fn postal_exists(postal_code: &str, country_code: &str) -> Option<bool> {
-    let country = normalize_country(country_code);
-    let profile = country_address_profile(&country)?;
-    if profile.postal_status == PostalStatus::None {
-        return None;
-    }
-    if postal_code.is_empty() {
-        return None;
-    }
-    Some(!postal_lookup(postal_code, &country).is_empty())
+    let _ = postal_code;
+    let _ = country_code;
+    None
 }
 
 pub fn postal_validate(postal_code: Option<&str>, country_code: &str) -> PostalValidation {
@@ -139,7 +207,6 @@ pub fn postal_validate(postal_code: Option<&str>, country_code: &str) -> PostalV
 
     let validation_scope = match profile {
         Some(profile) if profile.postal_status == PostalStatus::None => "postal_equivalent_required",
-        Some(profile) if profile.postal_pattern.is_some() && exists.is_some() => "format_and_existence",
         Some(profile) if profile.postal_pattern.is_some() => "format_only",
         Some(_) => "policy_only",
         None => "country_profile_missing",
@@ -157,7 +224,6 @@ pub fn postal_validate(postal_code: Option<&str>, country_code: &str) -> PostalV
             false
         }
         Some(_) if !format_valid => false,
-        Some(_) if exists == Some(false) => false,
         Some(_) => true,
         None => {
             warnings.push("country_profile_missing");
@@ -165,14 +231,13 @@ pub fn postal_validate(postal_code: Option<&str>, country_code: &str) -> PostalV
         }
     };
 
-    let region_hint = postal_lookup(&postal, &country)
-        .first()
-        .map(|area| area.region_ref);
-
-    if exists == Some(false) {
-        warnings.push("postal_code_not_found_in_fixture");
-    } else if region_hint.is_none() && !postal.is_empty() {
-        warnings.push("postal_area_not_found_or_not_required");
+    if format_valid
+        && !postal.is_empty()
+        && profile
+            .map(|candidate| candidate.postal_status != PostalStatus::None)
+            .unwrap_or(false)
+    {
+        warnings.push("postal_existence_evidence_required");
     }
 
     PostalValidation {
@@ -182,7 +247,7 @@ pub fn postal_validate(postal_code: Option<&str>, country_code: &str) -> PostalV
         validation_scope,
         postal_code: postal,
         country,
-        region_hint,
+        region_hint: None,
         source_version: SOURCE_VERSION,
         warnings,
         non_claims: vec!["Postal validity is not full address identity."],
@@ -221,20 +286,27 @@ pub fn address_match(
     address_b: &NormalizedAddress,
     purpose: &str,
 ) -> AddressMatchDecision {
-    let same_text = address_a
-        .normalized_text
-        .eq_ignore_ascii_case(&address_b.normalized_text);
     let same_country = address_a.country.is_empty()
         || address_b.country.is_empty()
         || address_a.country == address_b.country;
-    let is_match = !address_a.normalized_text.is_empty() && same_text && same_country;
+    let left = normalize_address_match_text(&address_a.normalized_text);
+    let right = normalize_address_match_text(&address_b.normalized_text);
+    let confidence = if same_country {
+        address_similarity(&left, &right)
+    } else {
+        0.0
+    };
+    let is_match = !left.is_empty() && !right.is_empty() && confidence >= 0.84;
 
     AddressMatchDecision {
         is_match,
-        confidence: if is_match { 0.95 } else { 0.25 },
+        confidence,
         purpose: clean_text(purpose),
         source_version: SOURCE_VERSION,
-        non_claims: vec!["A match decision is purpose-relative and not proof of residence."],
+        non_claims: vec![
+            "A match decision is purpose-relative and not proof of residence.",
+            "Fuzzy lexical similarity is not delivery-point identity.",
+        ],
     }
 }
 
@@ -278,10 +350,9 @@ pub fn delivery_available(
     let profile = country_address_profile(&country);
     let validation = postal_validate(postal_code, &country);
     let mut reasons = Vec::new();
-    let mut available = true;
+    let available = false;
 
     if profile.is_none() {
-        available = false;
         reasons.push("country_profile_missing");
     }
 
@@ -290,9 +361,9 @@ pub fn delivery_available(
         .unwrap_or(false)
         && !validation.valid
     {
-        available = false;
         reasons.push("postal_required_but_invalid_or_missing");
     }
+    reasons.push("approved_delivery_source_required");
 
     DeliveryAvailability {
         available,
@@ -332,15 +403,16 @@ mod tests {
         let jp = postal_validate(Some("1000001"), "JP");
         assert!(jp.valid);
         assert!(jp.format_valid);
-        assert_eq!(jp.exists, Some(true));
-        assert_eq!(jp.validation_scope, "format_and_existence");
-        assert_eq!(jp.region_hint, Some("agid-jp-tokyo-chiyoda-chiyoda"));
+        assert_eq!(jp.exists, None);
+        assert_eq!(jp.validation_scope, "format_only");
+        assert_eq!(jp.region_hint, None);
+        assert!(jp.warnings.contains(&"postal_existence_evidence_required"));
 
         let missing = postal_validate(Some("9999999"), "JP");
-        assert!(!missing.valid);
+        assert!(missing.valid);
         assert!(missing.format_valid);
-        assert_eq!(missing.exists, Some(false));
-        assert!(missing.warnings.contains(&"postal_code_not_found_in_fixture"));
+        assert_eq!(missing.exists, None);
+        assert!(missing.warnings.contains(&"postal_existence_evidence_required"));
 
         let hk = postal_validate(None, "HK");
         assert!(hk.valid);
@@ -365,13 +437,33 @@ mod tests {
     }
 
     #[test]
+    fn address_matching_handles_bounded_variants_without_crossing_country_boundaries() {
+        let canonical = address_normalize("10 Synthetic Fixture Street", "US");
+        let abbreviated = address_normalize("10, Synthetic Fixture St.", "US");
+        let typo = address_normalize("10 Synthetic Fixtur Street", "US");
+        let other_country = address_normalize("10 Synthetic Fixture Street", "CA");
+
+        let abbreviation_match = address_match(&canonical, &abbreviated, "delivery");
+        let typo_match = address_match(&canonical, &typo, "delivery");
+        let country_mismatch = address_match(&canonical, &other_country, "delivery");
+
+        assert!(abbreviation_match.is_match);
+        assert_eq!(abbreviation_match.confidence, 1.0);
+        assert!(typo_match.is_match);
+        assert!(typo_match.confidence >= 0.84);
+        assert!(!country_mismatch.is_match);
+        assert_eq!(country_mismatch.confidence, 0.0);
+    }
+
+    #[test]
     fn distance_and_delivery_are_advisory_not_identity() {
         let distance = address_distance_km(35.6852, 139.7528, 37.7936, -122.3958);
         assert!(distance.distance_km.unwrap() > 8000.0);
         assert!(distance.non_claims[0].contains("not route availability"));
 
         let hk = delivery_available("HK", None, "synthetic_carrier", "standard");
-        assert!(hk.available);
+        assert!(!hk.available);
+        assert!(hk.reasons.contains(&"approved_delivery_source_required"));
         assert!(hk.non_claims[0].contains("not proof of residence"));
     }
 }

@@ -16,6 +16,7 @@ Use `agid-spec.json` as the contract for every generated AGID SDK package. Do no
 | `test-vectors.json` | Parity vectors for SDK implementations. |
 | `sdk-targets.json` | Multi-language SDK release matrix. |
 | `agid-sdk.json` | Manifest for the spec package itself. |
+| `../../docs/agid-address-neighborhood-and-subpremise-v0.1.md` | Neighborhood, building-reference, sub-premise privacy, and synthetic benchmark profile. |
 
 ## SDK Parity Requirement
 
@@ -29,6 +30,23 @@ A generated SDK is not ready for formal distribution until it passes parity test
 - `validateAgid`
 
 `cellPolygon` should also be implemented for map and GIS clients, but `encode`, `decode`, `cellBounds`, and the validation helpers are the minimum cross-language compatibility gate.
+
+The v0.1 neighborhood extension adds `adjacentCells` and
+`gridNeighborhoodMatch`. It uses eight-neighbor semantics and reprojects across
+cubed-sphere face boundaries. This extension does not change AGID encoding or
+the minimum parity gate for existing SDKs.
+
+## Address Reference Boundary
+
+A public building reference is the canonical AGID plus an opaque `buildingId`.
+Unit, floor, entrance, and internal-route fields are private sub-premise
+metadata. They are client-controlled and excluded from the AGID, public
+reference key, public building comparison, and public conformance vectors.
+
+Run `npm run verify:agid-address-matching` and
+`npm run benchmark:agid-address-normalization` to verify this boundary and the
+10,000-vector synthetic normalization regression set. Synthetic results are not
+a measured real-world delivery success rate.
 
 ## Security Requirement
 

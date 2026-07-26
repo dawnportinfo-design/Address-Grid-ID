@@ -1395,7 +1395,6 @@ function DeveloperCommandCenter({
   }> = [
     { label: t.openWorkbench, detail: model.openApi.highlightedPaths[0] ?? '/openapi.json', tab: 'openapi' as DeveloperTab, icon: Play },
     { label: t.viewSdk, detail: primarySdk?.install ?? 'npm install @agid/sdk', tab: 'sdk' as DeveloperTab, icon: Code2 },
-    { label: 'Playlist Commerce', detail: 'Commercial/private demo / not OSS', tab: 'sdk' as DeveloperTab, icon: Boxes, href: '/playlist-commerce' },
     { label: 'Vey Ecosystem', detail: 'Wallet + Delivery Gateway + Carrier API Stripe', tab: 'sdk' as DeveloperTab, icon: ServerCog, href: '/merchant-console' },
     { label: t.runConformance, detail: conformanceCommand, tab: 'vectors' as DeveloperTab, icon: ListChecks },
     { label: t.deployReview, detail: launchCenter.nextActions[0] ?? t.auditReady, tab: 'launch' as DeveloperTab, icon: ClipboardCheck },

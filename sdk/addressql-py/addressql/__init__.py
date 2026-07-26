@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from math import asin, cos, isfinite, radians, sin, sqrt
 from re import sub
+from unicodedata import category, normalize
 
 SOURCE_VERSION = "synthetic-addressql-sdk-v0.4"
 
@@ -28,12 +29,6 @@ COUNTRY_PROFILES = (
     CountryProfile("AE", "United Arab Emirates", "الإمارات العربية المتحدة", ("UAE",), ("ar", "en"), "none", False, None, "agid_region_postal_equivalent"),
     CountryProfile("GH", "Ghana", "Ghana", tuple(), ("en",), "weak", False, None, "digital_address_or_agid_region"),
 )
-
-POSTAL_AREAS = {
-    ("JP", "100-0001"): "agid-jp-tokyo-chiyoda-chiyoda",
-    ("US", "94105"): "agid-us-ca-san-francisco-soma",
-}
-
 
 def clean_text(value: object) -> str:
     return " ".join(str(value).strip().split()) if isinstance(value, str) else ""
@@ -92,30 +87,36 @@ def postal_validate(postal_code: object, country_code: object) -> dict:
     profile = country_address_profile(country)
     postal = postal_normalize(postal_code, country)
     warnings: list[str] = []
-    region_hint = POSTAL_AREAS.get((country, postal))
     valid = False
+    format_valid = False
 
     if profile is None:
         warnings.append("country_profile_missing")
     elif not postal:
         valid = not profile.postal_required_default
+        format_valid = valid
         if not valid:
             warnings.append("postal_required_but_missing")
     elif country == "JP":
-        valid = len(postal) == 8 and postal[3] == "-" and postal[:3].isdigit() and postal[4:].isdigit()
+        format_valid = len(postal) == 8 and postal[3] == "-" and postal[:3].isdigit() and postal[4:].isdigit()
+        valid = format_valid
     elif country == "US":
-        valid = len(postal) == 5 and postal.isdigit() or len(postal) == 10 and postal[5] == "-"
+        format_valid = len(postal) == 5 and postal.isdigit() or len(postal) == 10 and postal[5] == "-"
+        valid = format_valid
     else:
-        valid = profile.postal_status != "none"
+        format_valid = profile.postal_status != "none"
+        valid = format_valid
 
-    if postal and region_hint is None:
-        warnings.append("postal_area_not_found_or_not_required")
+    if postal and format_valid and profile and profile.postal_status != "none":
+        warnings.append("postal_existence_evidence_required")
 
     return {
         "valid": valid,
+        "format_valid": format_valid,
+        "exists": None,
+        "validation_scope": "postal_equivalent_required" if profile and profile.postal_status == "none" else "format_only",
         "postal_code": postal,
         "country": country,
-        "region_hint": region_hint,
         "source_version": SOURCE_VERSION,
         "warnings": warnings,
         "non_claims": ["Postal validity is not full address identity."],
@@ -145,18 +146,85 @@ def normalize_address(address_text: object, country_code: object) -> dict:
     }
 
 
+ADDRESS_TOKEN_ALIASES = {
+    "avenue": "avenue",
+    "ave": "avenue",
+    "boulevard": "boulevard",
+    "blvd": "boulevard",
+    "road": "road",
+    "rd": "road",
+    "street": "street",
+    "st": "street",
+    "strasse": "street",
+    "straße": "street",
+}
+
+
+def normalize_address_match_text(value: object) -> str:
+    folded = normalize("NFKC", clean_text(value)).casefold()
+    punctuation_folded = "".join(
+        " " if category(character)[0] in {"P", "S"} else character
+        for character in folded
+    )
+    return " ".join(
+        ADDRESS_TOKEN_ALIASES.get(token, token)
+        for token in punctuation_folded.split()
+    )
+
+
+def edit_distance(left: str, right: str) -> int:
+    if not left:
+        return len(right)
+    if not right:
+        return len(left)
+    previous = list(range(len(right) + 1))
+    for left_index, left_character in enumerate(left, start=1):
+        current = [left_index]
+        for right_index, right_character in enumerate(right, start=1):
+            current.append(
+                min(
+                    current[-1] + 1,
+                    previous[right_index] + 1,
+                    previous[right_index - 1]
+                    + (left_character != right_character),
+                )
+            )
+        previous = current
+    return previous[-1]
+
+
+def address_similarity(left: str, right: str) -> float:
+    if not left or not right:
+        return 0.0
+    if left == right:
+        return 1.0
+    left_tokens = set(left.split())
+    right_tokens = set(right.split())
+    token_dice = (
+        2 * len(left_tokens & right_tokens)
+        / (len(left_tokens) + len(right_tokens))
+    )
+    character_similarity = 1 - edit_distance(left, right) / max(len(left), len(right))
+    return max(0.0, min(1.0, token_dice * 0.4 + character_similarity * 0.6))
+
+
 def address_match(address_a: dict, address_b: dict, purpose: str = "delivery") -> dict:
-    text_a = address_a.get("normalized_text", "")
-    text_b = address_b.get("normalized_text", "")
-    country_a = address_a.get("country", "")
-    country_b = address_b.get("country", "")
-    matched = bool(text_a and text_a.lower() == text_b.lower() and (not country_a or not country_b or country_a == country_b))
+    text_a = normalize_address_match_text(address_a.get("normalized_text", ""))
+    text_b = normalize_address_match_text(address_b.get("normalized_text", ""))
+    country_a = normalize_country(address_a.get("country", ""))
+    country_b = normalize_country(address_b.get("country", ""))
+    countries_compatible = not country_a or not country_b or country_a == country_b
+    similarity = address_similarity(text_a, text_b) if countries_compatible else 0.0
+    matched = bool(text_a and text_b and countries_compatible and similarity >= 0.84)
     return {
         "match": matched,
-        "confidence": 0.95 if matched else 0.25,
+        "confidence": similarity,
         "purpose": clean_text(purpose),
         "source_version": SOURCE_VERSION,
-        "non_claims": ["A match decision is purpose-relative and not proof of residence."],
+        "non_claims": [
+            "A match decision is purpose-relative and not proof of residence.",
+            "Fuzzy similarity is not evidence that two addresses have the same referent.",
+        ],
     }
 
 
@@ -174,11 +242,10 @@ def delivery_available(country_code: object, postal_code: object, carrier: str =
     profile = country_address_profile(country)
     validation = postal_validate(postal_code, country)
     reasons: list[str] = []
-    available = True
+    available = False
     if profile is None:
-        available = False
         reasons.append("country_profile_missing")
     if profile and profile.postal_required_default and not validation["valid"]:
-        available = False
         reasons.append("postal_required_but_invalid_or_missing")
+    reasons.append("approved_delivery_source_required")
     return {"available": available, "carrier": clean_text(carrier), "service_level": clean_text(service_level), "reasons": reasons, "source_version": SOURCE_VERSION, "non_claims": ["Deliverability is not proof of residence or identity."]}

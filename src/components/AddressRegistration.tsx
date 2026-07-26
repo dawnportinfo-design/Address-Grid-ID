@@ -287,6 +287,10 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     registerAoid: 'AOIDを生成・登録する',
     aoidTip: 'AOIDは自分だけが管理できるプライベートな住所IDです。建物名や部屋番号、連絡先を含みます。',
     registerAsAoid: 'AOIDとしてプライベート登録する',
+    identifierMode: '保存するID',
+    agidSaveTip: 'AGIDを公開ロケーションIDとしてこの端末に保存します。',
+    showDetails: '詳細',
+    hideDetails: '詳細を隠す',
     phoneRequired: '電話番号は必須です',
     nameRequired: '氏名は必須です',
     documentAutofill: '写真/PDFから自動入力',
@@ -592,6 +596,10 @@ const UI_STRINGS: Record<string, Record<string, string>> = {
     registerAoid: 'Generate & Register AOID',
     aoidTip: 'AOID is a private ID containing fixed details like building, room, and phone. Not searchable by others.',
     registerAsAoid: 'Register as Private AOID',
+    identifierMode: 'Identifier to save',
+    agidSaveTip: 'Save the AGID as a public location ID on this device.',
+    showDetails: 'Details',
+    hideDetails: 'Hide details',
     phoneRequired: 'Phone is required for AOID',
     nameRequired: 'Name is required for AOID',
     documentAutofill: 'Autofill from photo/PDF',
@@ -1270,6 +1278,7 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
   });
 
   const [isAoidMode, setIsAoidMode] = useState(forceAoidMode || false);
+  const [showRegistrationDetails, setShowRegistrationDetails] = useState(false);
   const registrationUiLanguage = useMemo(() => normalizeRegistrationUiLanguage(appLanguage), [appLanguage]);
   const [activeTab, setActiveTab] = useState<string>(() => normalizeRegistrationAddressLanguage(addressLanguage));
   const [viewMode, setViewMode] = useState<'form' | 'country-select'>('form');
@@ -1316,6 +1325,7 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
 
   useEffect(() => {
     if (!isOpen) return;
+    setShowRegistrationDetails(false);
     setCorrectionHistory(listRegistrationCorrectionSamples(undefined, 4));
   }, [isOpen]);
 
@@ -2488,28 +2498,37 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
             className="fixed inset-0 z-[101] overflow-y-auto bg-slate-50 text-slate-950"
           >
             <div
-              className="min-h-screen w-full bg-[linear-gradient(180deg,#f8fafc_0%,#eef4ff_42%,#f8fafc_100%)] px-4 py-6 sm:px-8 lg:px-12"
+              className="min-h-screen w-full bg-slate-50 px-3 py-3 sm:px-5"
               style={{
-                paddingTop: 'calc(env(safe-area-inset-top) + 1.5rem)',
-                paddingBottom: 'calc(env(safe-area-inset-bottom) + 1.5rem)'
+                paddingTop: 'calc(env(safe-area-inset-top) + 0.75rem)',
+                paddingBottom: 'calc(env(safe-area-inset-bottom) + 0.75rem)'
               }}
             >
-              <div className="mx-auto w-full max-w-7xl">
-                <div className="mb-6 rounded-2xl border border-white/80 bg-white/90 p-4 shadow-sm shadow-slate-200/70 backdrop-blur md:p-5">
-                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-200">
-                        <MapPin className="h-6 w-6" />
+              <div className="mx-auto w-full max-w-5xl">
+                <div className="sticky top-0 z-20 mb-3 rounded-lg border border-slate-200 bg-white/95 p-3 shadow-sm backdrop-blur">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-blue-600 text-white shadow-sm">
+                        <MapPin className="h-4 w-4" />
                       </div>
-                      <div>
-                        <h2 className="text-2xl font-black tracking-tight text-slate-950">
+                      <div className="min-w-0">
+                        <h2 className="truncate text-lg font-black tracking-tight text-slate-950">
                           {t('addressRegistration')}
                         </h2>
                       </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => setShowRegistrationDetails(previous => !previous)}
+                        aria-expanded={showRegistrationDetails}
+                        className="inline-flex h-9 items-center gap-1.5 rounded-md border border-slate-200 bg-white px-2.5 text-[10px] font-black text-slate-600 transition-colors hover:bg-slate-50"
+                      >
+                        <ListFilter className="h-3.5 w-3.5" />
+                        {showRegistrationDetails ? t('hideDetails') : t('showDetails')}
+                      </button>
                       <span className={cn(
-                        "inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-widest",
+                        "hidden h-9 items-center gap-1.5 rounded-md border px-2.5 text-[9px] font-black uppercase sm:inline-flex",
                         READINESS_STATUS_STYLES[registrationReadiness.status] || READINESS_STATUS_STYLES.needs_review,
                       )}>
                         <ShieldIcon className="h-3.5 w-3.5" />
@@ -2517,10 +2536,10 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                       </span>
                       <button
                         onClick={onClose}
-                        className="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
+                        className="grid h-9 w-9 place-items-center rounded-md border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
                         aria-label="Close address registration"
                       >
-                        <X className="h-5 w-5" />
+                        <X className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -2534,9 +2553,9 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     onSubmit={handleRegister}
-                    className="mx-auto flex w-full max-w-5xl flex-col gap-4"
+                    className="mx-auto flex w-full max-w-3xl flex-col gap-3"
                   >
-                    <aside className="order-30">
+                    <aside className={cn("order-30", !showRegistrationDetails && "hidden")}>
                       <details className="rounded-2xl border border-white/80 bg-white/90 p-4 shadow-sm shadow-slate-200/70">
                         <summary className="cursor-pointer list-none text-sm font-black text-slate-800">
                           {t('registrationStepsSafety')}
@@ -2597,35 +2616,54 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                       </details>
                     </aside>
 
-                    <div className="order-1 flex min-w-0 flex-col gap-4" data-address-registration-form-first>
+                    <div className="order-1 flex min-w-0 flex-col gap-2" data-address-registration-form-first>
                 {/* AOID Mode Toggle */}
-                <div className="order-30 rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm shadow-emerald-100/60 space-y-3">
+                <div className="order-1 space-y-1.5 rounded-lg border border-slate-200 bg-white p-2 shadow-sm">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-emerald-700 font-black text-[10px] uppercase tracking-widest">
+                    <div className="flex items-center gap-2 text-slate-700 font-black text-[10px] uppercase tracking-widest">
                       <ShieldIcon className="w-3 h-3" />
-                      {t('registerAoid')}
+                      {t('identifierMode')}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setIsAoidMode(!isAoidMode)}
-                      className={cn(
-                        "relative w-14 h-7 rounded-3xl transition-colors",
-                        isAoidMode ? "bg-emerald-500" : "bg-slate-300"
-                      )}
+                    <div
+                      className="grid grid-cols-2 border border-slate-200 bg-slate-100 p-1"
+                      role="group"
+                      aria-label={t('identifierMode')}
                     >
-                      <motion.div
-                        animate={{ x: isAoidMode ? 29 : 3 }}
-                        className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-md"
-                      />
-                    </button>
+                      <button
+                        type="button"
+                        aria-pressed={!isAoidMode}
+                        onClick={() => setIsAoidMode(false)}
+                        className={cn(
+                          "h-8 min-w-[68px] px-3 text-xs font-black transition-colors",
+                          !isAoidMode ? "bg-blue-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
+                        )}
+                      >
+                        AGID
+                      </button>
+                      <button
+                        type="button"
+                        aria-pressed={isAoidMode}
+                        onClick={() => setIsAoidMode(true)}
+                        className={cn(
+                          "h-8 min-w-[68px] px-3 text-xs font-black transition-colors",
+                          isAoidMode ? "bg-emerald-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-900"
+                        )}
+                      >
+                        AOID
+                      </button>
+                    </div>
                   </div>
-                  <p className="text-[10px] text-emerald-600/80 font-bold leading-relaxed">
-                    {t('aoidTip')}
+                  <p className={cn(
+                    "text-[10px] font-bold leading-relaxed",
+                    isAoidMode ? "text-emerald-700" : "text-blue-700",
+                    !showRegistrationDetails && "hidden"
+                  )}>
+                    {isAoidMode ? t('aoidTip') : t('agidSaveTip')}
                   </p>
                 </div>
 
                 {(initialQrRecord || initialHotelCheckInSession) && (
-                  <div id="qr-address-intake" className="order-20 rounded-2xl border border-blue-100 bg-blue-50/80 p-4 shadow-sm shadow-blue-100/60">
+                  <div id="qr-address-intake" className="order-2 rounded-lg border border-blue-100 bg-blue-50/80 p-3 shadow-sm shadow-blue-100/60">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div className="flex gap-3">
                         <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white text-blue-600 shadow-sm">
@@ -2688,37 +2726,40 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                   </div>
                 )}
 
-                <div id="postal-coverage-policy" className="order-40 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="flex gap-3">
+                <div id="postal-coverage-policy" className="order-3 rounded-lg border border-slate-200 bg-white p-2 shadow-sm">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
                       <div className={cn(
-                        "grid h-10 w-10 shrink-0 place-items-center rounded-xl",
+                        "grid h-8 w-8 shrink-0 place-items-center rounded-lg",
                         postalCoverageDisplay.tone === 'emerald' && "bg-emerald-50 text-emerald-700",
                         postalCoverageDisplay.tone === 'amber' && "bg-amber-50 text-amber-700",
                         postalCoverageDisplay.tone === 'blue' && "bg-blue-50 text-blue-700",
                         postalCoverageDisplay.tone === 'orange' && "bg-orange-50 text-orange-700",
                       )}>
                         {isAgidPrimaryIdentifier ? (
-                          <AgidIcon className="h-5 w-5" />
+                          <AgidIcon className="h-4 w-4" />
                         ) : (
-                          <Mail className="h-5 w-5" />
+                          <Mail className="h-4 w-4" />
                         )}
                       </div>
-                      <div>
+                      <div className="min-w-0">
                         <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">
                           {t('postalCoveragePolicyLabel')}
                         </div>
-                        <h4 className="mt-1 text-sm font-black text-slate-900">
+                        <h4 className="truncate text-xs font-black text-slate-900">
                           {postalCoverageDisplay.title}
                         </h4>
-                        <p className="mt-1 max-w-2xl text-[11px] font-bold leading-5 text-slate-500">
+                        <p className={cn(
+                          "mt-1 max-w-2xl text-[11px] font-bold leading-5 text-slate-500",
+                          !showRegistrationDetails && "hidden",
+                        )}>
                           {postalCoverageDisplay.description}
                         </p>
                       </div>
                     </div>
-                    <div className="flex flex-wrap gap-1.5 lg:justify-end">
+                    <div className="flex shrink-0 flex-wrap gap-1">
                       <span className={cn(
-                        "rounded-full px-3 py-1 text-[9px] font-black uppercase",
+                        "rounded-full px-2 py-0.5 text-[9px] font-black uppercase",
                         postalCoverageDisplay.tone === 'emerald' && "bg-emerald-100 text-emerald-700",
                         postalCoverageDisplay.tone === 'amber' && "bg-amber-100 text-amber-700",
                         postalCoverageDisplay.tone === 'blue' && "bg-blue-100 text-blue-700",
@@ -2726,19 +2767,28 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                       )}>
                         {postalCoverageDisplay.badge}
                       </span>
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-[9px] font-black uppercase text-slate-600">
+                      <span className={cn(
+                        "rounded-full bg-slate-100 px-3 py-1 text-[9px] font-black uppercase text-slate-600",
+                        !showRegistrationDetails && "hidden",
+                      )}>
                         {addressCoveragePolicy.label}
                       </span>
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-[9px] font-black uppercase text-slate-600">
+                      <span className={cn(
+                        "rounded-full bg-slate-100 px-3 py-1 text-[9px] font-black uppercase text-slate-600",
+                        !showRegistrationDetails && "hidden",
+                      )}>
                         {addressCoveragePolicy.validationMode}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                    <div className="order-1 flex flex-col gap-4">
+                    <div className="order-10 flex flex-col gap-2">
                       {/* Address Rendering Preview (Carrier Label Style) */}
-                      <div className="order-20 bg-slate-900 rounded-xl p-6 text-white shadow-inner overflow-hidden relative group">
+                      <div className={cn(
+                        "order-20 overflow-hidden rounded-lg bg-slate-900 p-4 text-white shadow-inner relative group",
+                        !showRegistrationDetails && "hidden",
+                      )}>
                         <div className="absolute top-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity">
                           <QrCode className="w-12 h-12" />
                         </div>
@@ -2777,7 +2827,10 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                         )}
                       </div>
 
-                      <div id="native-international-compat-preview" className="order-21 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                      <div id="native-international-compat-preview" className={cn(
+                        "order-21 rounded-lg border border-slate-200 bg-white p-4 shadow-sm",
+                        !showRegistrationDetails && "hidden",
+                      )}>
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                           <div>
                             <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">
@@ -2830,7 +2883,10 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                         </div>
                       </div>
 
-                      <div className="order-22 grid gap-3 xl:grid-cols-2">
+                      <div className={cn(
+                        "order-22 grid gap-3 xl:grid-cols-2",
+                        !showRegistrationDetails && "hidden",
+                      )}>
                         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                           <div className="flex items-start justify-between gap-3">
                             <div>
@@ -2962,7 +3018,10 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                         </AnimatePresence>
 
                       {(agidAssistanceCandidate || postcodeLookupStatus !== 'idle' || assistanceComparison.candidates.length > 0) && (
-                        <div className="order-30 rounded-xl border border-slate-200 bg-white p-4 shadow-sm space-y-3">
+                        <div className={cn(
+                          "order-30 space-y-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm",
+                          !showRegistrationDetails && "hidden",
+                        )}>
                           <div className="flex items-center justify-between gap-3">
                             <div>
                               <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
@@ -3176,7 +3235,10 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                         </div>
                       )}
 
-                      <div id="address-document-reading-ai" className="order-40 rounded-xl border border-blue-100 bg-blue-50/70 p-4 shadow-sm space-y-4">
+                      <div id="address-document-reading-ai" className={cn(
+                        "order-40 space-y-4 rounded-lg border border-blue-100 bg-blue-50/70 p-4 shadow-sm",
+                        !showRegistrationDetails && "hidden",
+                      )}>
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div className="flex gap-3">
                             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-blue-600 shadow-sm">
@@ -3277,7 +3339,10 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                         )}
                       </div>
 
-                      <div id="address-registration-readiness" className="order-50 rounded-xl border border-slate-200 bg-white p-4 shadow-sm space-y-4">
+                      <div id="address-registration-readiness" className={cn(
+                        "order-50 space-y-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm",
+                        !showRegistrationDetails && "hidden",
+                      )}>
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div>
                             <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">
@@ -3382,18 +3447,18 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                       </div>
 
                       {/* Language Selection */}
-                      <div className="order-1 space-y-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                          {t('addressLanguageLabel')}
-                        </label>
+                      <div className="order-1 rounded-lg border border-slate-200 bg-white p-2 shadow-sm">
                         <div className="flex flex-wrap items-center gap-2">
+                          <label className="shrink-0 text-[9px] font-black uppercase tracking-widest text-slate-400">
+                            {t('addressLanguageLabel')}
+                          </label>
                           {addressLanguageTabs.map(tab => (
                             <button
                               key={tab.code}
                               type="button"
                               onClick={() => handleAddressLanguageTabClick(tab.code)}
                               className={cn(
-                                "px-4 py-2 rounded-xl text-xs font-black transition-all border",
+                                "h-8 rounded-md border px-2.5 text-[11px] font-black transition-all",
                                 activeTab === tab.code
                                   ? "bg-slate-900 text-white border-slate-900 shadow-sm"
                                   : "bg-slate-100 text-slate-500 border-slate-100 hover:text-slate-700"
@@ -3462,19 +3527,22 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                         )}
                       </div>
 
-                      <div id="address-registration-primary-form" className="order-1 mx-auto w-full max-w-3xl space-y-6 rounded-2xl border border-white/80 bg-white/95 p-4 shadow-sm shadow-slate-200/70 md:p-5">
-                      <div id="address-registration-feedback-ui" className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3">
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div id="address-registration-primary-form" className="order-2 mx-auto w-full max-w-3xl space-y-2.5 rounded-lg border border-slate-200 bg-white p-2.5 shadow-sm">
+                      <div id="address-registration-feedback-ui" className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5">
+                        <div className="flex items-center justify-between gap-2">
                           <div className="min-w-0">
                             <div className="flex items-center gap-2 text-xs font-black text-slate-900">
                               <ShieldIcon className="h-4 w-4 text-emerald-600" />
                               {t('feedbackConsent')}
                             </div>
-                            <p className="mt-1 text-[11px] font-bold leading-5 text-slate-500">
+                            <p className={cn(
+                              "mt-1 text-[11px] font-bold leading-5 text-slate-500",
+                              !showRegistrationDetails && "hidden",
+                            )}>
                               {t('feedbackConsentDesc')}
                             </p>
                           </div>
-                          <label className="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-[10px] font-black text-slate-700">
+                          <label className="inline-flex h-8 shrink-0 cursor-pointer items-center gap-2 rounded-md border border-slate-200 bg-white px-2.5 text-[10px] font-black text-slate-700">
                             <input
                               type="checkbox"
                               checked={feedbackConsent}
@@ -3484,7 +3552,10 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                             {t('localLearning')}
                           </label>
                         </div>
-                        <div className="mt-3 flex flex-wrap gap-1.5">
+                        <div className={cn(
+                          "mt-3 flex flex-wrap gap-1.5",
+                          !showRegistrationDetails && "hidden",
+                        )}>
                           <span className="rounded-full bg-white px-2.5 py-1 text-[9px] font-black text-slate-600">
                             {t('noRawExport')}
                           </span>
@@ -3497,15 +3568,15 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                         </div>
                       </div>
                       {/* Country Selector */}
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      <div>
+                        <div className="space-y-1">
+                          <label className="text-[9px] font-black uppercase tracking-widest text-slate-400">
                             {t('countryRegion')}
                           </label>
                           <button
                             type="button"
                             onClick={() => setViewMode('country-select')}
-                            className="w-full bg-slate-50 px-4 py-4 rounded-xl border border-slate-200 flex items-center justify-between hover:bg-white transition-all group"
+                            className="group flex h-9 w-full items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-2.5 transition-all hover:bg-white"
                           >
                             <div className="flex items-center gap-3">
                               <CountryFlag
@@ -3529,15 +3600,25 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                       </div>
 
                       {/* Dynamic Ordered Fields */}
-                  <div className="space-y-6">
+                  <div className="grid grid-cols-2 gap-x-2.5 gap-y-2.5 sm:gap-x-3">
                     {localFormat ? (
                       (() => {
                         const currentFormat = selectRegistrationAddressFormat(localFormat, activeTab);
                         const fields = currentFormat?.fields || localFormat.fields || [];
 
                         return fields.map(field => (
-                          <div key={field.key} className="space-y-2">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                          <div
+                            key={field.key}
+                            className={cn(
+                              "space-y-1",
+                              (
+                                field.key === 'organization'
+                                || field.key === 'street'
+                                || field.key === 'postcode'
+                              ) && "col-span-2",
+                            )}
+                          >
+                            <label className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-slate-400">
                               {field.key === 'postcode' && <Mail className="w-3 h-3" />}
                               {field.key === 'organization' && <Building2 className="w-3 h-3" />}
                               {field.label}
@@ -3545,12 +3626,12 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                             {field.key === 'street' || field.key === 'organization' ? (
                               <>
                                 <textarea
-                                  rows={field.key === 'organization' ? 2 : 3}
+                                  rows={1}
                                   value={(formData as any)[field.key] || ''}
                                   onChange={(e) => handleFieldChange(field.key, e.target.value)}
                                   placeholder={field.placeholder}
                                   autoFocus={field.key === fields[0]?.key}
-                                  className="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm resize-none"
+                                  className="h-9 w-full resize-none rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-sm leading-5 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 />
                                 {field.key === 'organization' && (
                                   <div className="space-y-2">
@@ -3587,7 +3668,7 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                                         </div>
                                       </div>
                                     )}
-                                    {buildingNameStatus === 'empty' && !formData.organization && (
+                                    {buildingNameStatus === 'empty' && !formData.organization && showRegistrationDetails && (
                                       <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400">
                                         <AlertCircle className="h-3 w-3" />
                                         {t('buildingNoCandidate')}
@@ -3676,7 +3757,7 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                                 onChange={(e) => handleFieldChange(field.key, e.target.value)}
                                 placeholder={field.placeholder}
                                 autoFocus={field.key === fields[0]?.key}
-                                className="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+                                className="h-9 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                               />
                             )}
                           </div>
@@ -3689,17 +3770,17 @@ export const AddressRegistration: React.FC<AddressRegistrationProps> = ({
                 </div>
                 </div>
 
-                    <div className="sticky bottom-4 z-10 flex justify-center pt-2 sm:justify-end">
+                    <div className="sticky bottom-2 z-10 flex justify-center sm:justify-end">
                       <button
                         type="submit"
                         className={cn(
-                          "w-full rounded-2xl px-5 py-4 font-black uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3 active:scale-95 sm:w-auto sm:min-w-[220px]",
+                          "flex h-10 w-full items-center justify-center gap-2 rounded-lg px-4 text-xs font-black uppercase tracking-wider shadow-lg transition-all active:scale-95 sm:w-auto sm:min-w-[180px]",
                           isAoidMode
                             ? "bg-slate-950 text-white shadow-slate-300"
                             : "bg-blue-600 text-white shadow-blue-200 hover:bg-blue-700"
                         )}
                       >
-                        {isAoidMode ? <ShieldIcon className="w-5 h-5" /> : <CheckCircle2 className="w-5 h-5" />}
+                        {isAoidMode ? <ShieldIcon className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
                         {isAoidMode ? t('registerAsAoid') : t('registerAddress')}
                       </button>
                     </div>

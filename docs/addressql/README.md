@@ -44,7 +44,16 @@ npm run verify:addressql-duckdb:cli
 npm run verify:addressql-postal-negative-claims
 npm run verify:addressql-sdk
 npm run verify:addressql-global-preload
+npm run verify:addressql-global-coverage
+npm run verify:addressql-multilingual-quality
+npm run verify:addressql-api
 npm run verify:addressql-zk
+```
+
+Run the P1 self-hosted API on loopback:
+
+```bash
+npm run serve:addressql-api
 ```
 
 `verify:addressql-duckdb:cli` is optional for ordinary local development: it
@@ -93,6 +102,15 @@ Detailed planning docs:
 - [Function Registry v0.1](function-registry-v0.1.md)
 - [Country And Postal Functions](country-postal-functions.md)
 - [Global Country Preload v0.7](global-country-preload-v0.7.md)
+- [Global Country Coverage v0.1](global-country-coverage-v0.1.md)
+- [Country Data Promotion v0.1](country-data-promotion-v0.1.md)
+- [Multilingual Quality v0.1](multilingual-quality-v0.1.md)
+- [Practical API v1](practical-api-v1.md)
+
+The practical API includes fail-closed runtime evidence adapters and a local
+postcode-set adapter. Only independently attested, non-expired source
+versions can enable postal-existence or delivery-area decisions; partial
+datasets never turn absence into a negative result.
 - [Congestion And Mobility Functions](congestion-mobility-functions.md)
 - [API/SDK v0.4](api-sdk-v0.4.md)
 - [Calcite v0.5](calcite-v0.5.md)

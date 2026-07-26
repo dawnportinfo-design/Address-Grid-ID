@@ -46,6 +46,11 @@ Recommended extraction map:
 | `sdk/addressql-rs/` | `sdk/addressql-rs/` |
 | `integrations/addressql-calcite/` | `integrations/addressql-calcite/` |
 | `src/lib/addressQl*.ts` | TypeScript reference/conformance modules |
+| `src/data/address_formats/` | bounded country format profiles |
+| `data/postal_country_packs/` | source metadata and synthetic country packs |
+| `src/lib/addressQlMultilingualQuality.ts` | P3 country language and translation gates |
+| `scripts/run-addressql-api.ts` | P1 localhost-first HTTP adapter |
+| `docs/specs/openapi/` | public Practical API contract |
 
 ## Required GitHub Files
 
@@ -58,6 +63,7 @@ LICENSES-DATA.md
 CONTRIBUTING.md
 SECURITY.md
 CODE_OF_CONDUCT.md
+package.json
 docs/specification-v0.1.md
 docs/function-registry-v0.1.md
 docs/open-source-release-readiness.md
@@ -75,6 +81,21 @@ docs/addressql/repository-files/
 ```
 
 Copy them to the standalone repository root before public push.
+
+The standalone `package.json` runs the exported country-core conformance
+tests. This keeps country-profile resolution, L0-L5 capability gates, M0-M4
+multilingual gates, and evidence-backed refusal behavior independently
+reproducible after extraction:
+
+```bash
+npm install
+npm run verify:addressql-country-core
+```
+
+Country packs remain draft metadata and synthetic-test assets. Their presence
+must not enable postal-existence, administrative-consistency, delivery-area,
+or delivery-point claims without approved source, rights, version, freshness,
+coverage, correction, holdout, and signature evidence.
 
 ## Manifest-Owned Spec Assets
 
@@ -96,6 +117,8 @@ Core verification:
 ```bash
 npm run verify:addressql
 npm run verify:addressql-oss
+npm run verify:addressql-multilingual-quality
+npm run verify:addressql-api
 ```
 
 Adapter and SDK verification:

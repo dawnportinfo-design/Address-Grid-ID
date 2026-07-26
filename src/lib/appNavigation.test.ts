@@ -2,9 +2,11 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
+  AGID_RETIRED_CONSUMER_SURFACE_IDS,
   APP_NAVIGATION_MODEL_VERSION,
   classifyAppSurfaceDiscoverability,
   detectHiddenAppFeatures,
+  getAgidAppSurfaces,
   getAppSurfaceCopy,
   getAppSurfaces,
   getHeroWorkspaceSurfaceGroups,
@@ -48,19 +50,15 @@ test('app navigation model validates integrated shell routes and app groups', ()
     false,
   );
 
-  const sideMenuPrimary = getSideMenuPrimaryAppSurfaces();
-  assert.deepEqual(sideMenuPrimary.map(surface => surface.id), [
-    'map-workspace',
-    'friends',
-    'address-portal',
-  ]);
+  const agidSurfaces = getAgidAppSurfaces();
+  const sideMenuPrimary = getSideMenuPrimaryAppSurfaces(agidSurfaces);
+  assert.deepEqual(sideMenuPrimary.map(surface => surface.id), ['map-workspace']);
+  for (const retiredId of AGID_RETIRED_CONSUMER_SURFACE_IDS) {
+    assert.equal(agidSurfaces.some(surface => surface.id === retiredId), false, retiredId);
+  }
 
-  const sideMenuStore = getSideMenuStoreAppSurfaces();
-  assert.deepEqual(sideMenuStore.map(surface => surface.id), [
-    'store-topics',
-    'store-discover',
-    'store-my-stores',
-  ]);
+  const sideMenuStore = getSideMenuStoreAppSurfaces(agidSurfaces);
+  assert.deepEqual(sideMenuStore, []);
 
   const sideMenuSecondaryGroups = getSideMenuSecondaryAppSurfaceGroups();
   assert.deepEqual(sideMenuSecondaryGroups.map(group => group.group.id), ['core', 'developer']);

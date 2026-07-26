@@ -22,9 +22,6 @@ const OracleOperaHotelAddressScreen = React.lazy(() => import('./components/Orac
 const SettingsPolicyCenterScreen = React.lazy(() => import('./components/SettingsPolicyCenterScreen').then(module => ({
   default: module.SettingsPolicyCenterScreen,
 })));
-const AddressPortalScreen = React.lazy(() => import('./components/AddressPortalScreen').then(module => ({
-  default: module.AddressPortalScreen,
-})));
 const AddressDashboardScreen = React.lazy(() => import('./components/AddressDashboardScreen').then(module => ({
   default: module.AddressDashboardScreen,
 })));
@@ -36,9 +33,6 @@ const AddressLoginExperienceScreen = React.lazy(() => import('./components/Addre
 })));
 const MerchantConsoleScreen = React.lazy(() => import('./components/MerchantConsoleScreen').then(module => ({
   default: module.MerchantConsoleScreen,
-})));
-const PlaylistCommerceWidgetScreen = React.lazy(() => import('./components/PlaylistCommerceWidgetScreen').then(module => ({
-  default: module.PlaylistCommerceWidgetScreen,
 })));
 const VeygritAppScreen = React.lazy(() => import('./components/VeygritAppScreen').then(module => ({
   default: module.VeygritAppScreen,
@@ -66,6 +60,9 @@ const DroneLockerOpsScreen = React.lazy(() => import('./components/DroneLockerOp
 })));
 const OpenSourceHomeScreen = React.lazy(() => import('./components/OpenSourceHomeScreen').then(module => ({
   default: module.OpenSourceHomeScreen,
+})));
+const TopographicExportStudioScreen = React.lazy(() => import('./components/TopographicExportStudioScreen').then(module => ({
+  default: module.TopographicExportStudioScreen,
 })));
 
 function RouteLoadingShell() {
@@ -99,10 +96,6 @@ function isSettingsRoute() {
   return window.location.pathname === '/settings' || window.location.hash === '#/settings';
 }
 
-function isPortalRoute() {
-  return window.location.pathname === '/portal' || window.location.hash === '#/portal';
-}
-
 function isDashboardRoute() {
   return window.location.pathname === '/dashboard' || window.location.hash === '#/dashboard';
 }
@@ -117,10 +110,6 @@ function isAddressLoginRoute() {
 
 function isMerchantConsoleRoute() {
   return window.location.pathname === '/merchant-console' || window.location.hash === '#/merchant-console';
-}
-
-function isPlaylistCommerceRoute() {
-  return window.location.pathname === '/playlist-commerce' || window.location.hash === '#/playlist-commerce';
 }
 
 function isVeygritRoute() {
@@ -159,18 +148,28 @@ function isOpenSourceRoute() {
   return window.location.pathname === '/open-source' || window.location.hash === '#/open-source';
 }
 
+function isTopographicExportRoute() {
+  return window.location.pathname === '/topographic-export' || window.location.hash === '#/topographic-export';
+}
+
+function isRetiredConsumerRoute() {
+  const { hash, pathname } = window.location;
+  return pathname === '/portal'
+    || pathname === '/playlist-commerce'
+    || hash.startsWith('#/portal')
+    || hash.startsWith('#/playlist-commerce');
+}
+
 type RouteSnapshot = {
   pos: boolean;
   field: boolean;
   hotel: boolean;
   opera: boolean;
   settings: boolean;
-  portal: boolean;
   dashboard: boolean;
   developer: boolean;
   addressLogin: boolean;
   merchantConsole: boolean;
-  playlistCommerce: boolean;
   veygrit: boolean;
   element: boolean;
   evidence: boolean;
@@ -180,6 +179,7 @@ type RouteSnapshot = {
   locker: boolean;
   ops: boolean;
   openSource: boolean;
+  topographicExport: boolean;
 };
 
 function readRouteSnapshot(): RouteSnapshot {
@@ -189,12 +189,10 @@ function readRouteSnapshot(): RouteSnapshot {
     hotel: isHotelRoute(),
     opera: isOracleOperaRoute(),
     settings: isSettingsRoute(),
-    portal: isPortalRoute(),
     dashboard: isDashboardRoute(),
     developer: isDeveloperRoute(),
     addressLogin: isAddressLoginRoute(),
     merchantConsole: isMerchantConsoleRoute(),
-    playlistCommerce: isPlaylistCommerceRoute(),
     veygrit: isVeygritRoute(),
     element: isAddressElementRoute(),
     evidence: isEvidenceRoute(),
@@ -204,6 +202,7 @@ function readRouteSnapshot(): RouteSnapshot {
     locker: isOpenLockerPudoRoute(),
     ops: isDroneLockerOpsRoute(),
     openSource: isOpenSourceRoute(),
+    topographicExport: isTopographicExportRoute(),
   };
 }
 
@@ -213,12 +212,10 @@ function routeDesignKey(route: RouteSnapshot): AgidDesignRouteKey {
   if (route.hotel) return 'hotel';
   if (route.opera) return 'opera';
   if (route.settings) return 'settings';
-  if (route.portal) return 'portal';
   if (route.dashboard) return 'dashboard';
   if (route.developer) return 'developer';
   if (route.addressLogin) return 'address-login';
   if (route.merchantConsole) return 'merchant-console';
-  if (route.playlistCommerce) return 'playlist-commerce';
   if (route.veygrit) return 'veygrit';
   if (route.element) return 'element';
   if (route.evidence) return 'evidence';
@@ -228,6 +225,7 @@ function routeDesignKey(route: RouteSnapshot): AgidDesignRouteKey {
   if (route.locker) return 'locker';
   if (route.ops) return 'ops';
   if (route.openSource) return 'open-source';
+  if (route.topographicExport) return 'map';
   return 'map';
 }
 
@@ -240,6 +238,7 @@ function routeSurface(route: RouteSnapshot): FieldActionSurface {
 }
 
 function shouldShowFieldActionBar(route: RouteSnapshot) {
+  if (route.topographicExport) return false;
   return shouldShowAgidFieldActionBar(routeDesignKey(route));
 }
 
@@ -247,7 +246,16 @@ export default function RootApp() {
   const [route, setRoute] = React.useState(readRouteSnapshot);
 
   React.useEffect(() => {
-    const handleNavigation = () => setRoute(readRouteSnapshot());
+    const handleNavigation = () => {
+      if (isRetiredConsumerRoute()) {
+        window.history.replaceState(window.history.state, '', '/?action=aoid');
+        setRoute(readRouteSnapshot());
+        window.setTimeout(() => window.dispatchEvent(new Event('agid:open-aoid')), 0);
+        return;
+      }
+      setRoute(readRouteSnapshot());
+    };
+    handleNavigation();
     window.addEventListener('popstate', handleNavigation);
     window.addEventListener('hashchange', handleNavigation);
     window.addEventListener('agid:navigation', handleNavigation);
@@ -265,6 +273,8 @@ export default function RootApp() {
       <React.Suspense fallback={<RouteLoadingShell />}>
         {route.openSource
           ? <OpenSourceHomeScreen />
+          : route.topographicExport
+            ? <TopographicExportStudioScreen />
           : route.pos
           ? <PosAppScreen />
           : route.field
@@ -273,11 +283,9 @@ export default function RootApp() {
               ? <HotelCheckInScreen />
               : route.opera
                 ? <OracleOperaHotelAddressScreen />
-                : route.settings
+              : route.settings
                   ? <SettingsPolicyCenterScreen />
-                  : route.portal
-                    ? <AddressPortalScreen />
-                    : route.dashboard
+                  : route.dashboard
                       ? <AddressDashboardScreen />
                       : route.developer
                         ? <DeveloperConsoleScreen />
@@ -285,9 +293,7 @@ export default function RootApp() {
                           ? <AddressLoginExperienceScreen />
                           : route.merchantConsole
                             ? <MerchantConsoleScreen />
-                            : route.playlistCommerce
-                              ? <PlaylistCommerceWidgetScreen />
-                              : route.veygrit
+                            : route.veygrit
                                 ? <VeygritAppScreen />
                                 : route.element
                                   ? <AddressElementPlaygroundScreen />

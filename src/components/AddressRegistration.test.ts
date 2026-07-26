@@ -13,22 +13,47 @@ test('Address Registration header does not render the app language shortcut tabs
   assert.doesNotMatch(source, /\(\['en', 'ja', 'de', 'zh-Hant', 'zh-Hans', 'es', 'pt', 'fr', 'ar'\] as const\)\.map/);
 });
 
+test('Address Registration exposes an explicit AGID or AOID save mode', () => {
+  assert.match(source, /identifierMode: '保存するID'/);
+  assert.match(source, /identifierMode: 'Identifier to save'/);
+  assert.match(source, /aria-pressed=\{!isAoidMode\}/);
+  assert.match(source, /onClick=\{\(\) => setIsAoidMode\(false\)\}/);
+  assert.match(source, /onClick=\{\(\) => setIsAoidMode\(true\)\}/);
+  assert.match(source, /\{isAoidMode \? t\('aoidTip'\) : t\('agidSaveTip'\)\}/);
+});
+
 test('Address Registration opens as a full-screen surface instead of a centered modal', () => {
   assert.match(source, /className="fixed inset-0 z-\[101\] overflow-y-auto bg-slate-50 text-slate-950/);
   assert.doesNotMatch(source, /Local-first Address Workspace/);
   assert.match(source, /registrationWorkflowSteps\.map/);
   assert.match(source, /data-address-registration-form-first/);
   assert.match(source, /id="address-registration-primary-form"/);
-  assert.match(source, /max-w-5xl/);
-  assert.doesNotMatch(source, /xl:grid-cols-\[260px_minmax\(0,1fr\)\]/);
-  assert.match(source, /sticky bottom-4/);
   assert.match(source, /max-w-3xl/);
-  assert.match(source, /sm:w-auto sm:min-w-\[220px\]/);
+  assert.doesNotMatch(source, /xl:grid-cols-\[260px_minmax\(0,1fr\)\]/);
+  assert.match(source, /sticky bottom-2/);
+  assert.match(source, /sm:w-auto sm:min-w-\[180px\]/);
   assert.doesNotMatch(source, /AGID Algorithm Metadata/);
   assert.doesNotMatch(source, /Mountain Class/);
   assert.doesNotMatch(source, /top-1\/2 left-1\/2 -translate-x-1\/2 -translate-y-1\/2/);
   assert.doesNotMatch(source, /bg-slate-900\/60 backdrop-blur-sm z-\[100\]/);
   assert.doesNotMatch(source, /max-h-\[90vh\]/);
+});
+
+test('Address Registration defaults to a compact input-first layout with expandable evidence', () => {
+  assert.match(source, /showRegistrationDetails/);
+  assert.match(source, /setShowRegistrationDetails\(false\)/);
+  assert.match(source, /aria-expanded=\{showRegistrationDetails\}/);
+  assert.match(source, /showRegistrationDetails \? t\('hideDetails'\) : t\('showDetails'\)/);
+  assert.match(source, /className="order-1 space-y-1\.5 rounded-lg border border-slate-200 bg-white p-2 shadow-sm"/);
+  assert.match(source, /className="order-2 mx-auto w-full max-w-3xl space-y-2\.5 rounded-lg/);
+  assert.match(source, /!showRegistrationDetails && "hidden"/);
+  assert.match(source, /className="grid grid-cols-2 gap-x-2\.5 gap-y-2\.5 sm:gap-x-3"/);
+  assert.match(source, /field\.key === 'organization'[\s\S]*field\.key === 'street'[\s\S]*field\.key === 'postcode'[\s\S]*&& "col-span-2"/);
+  assert.match(source, /rows=\{1\}/);
+  assert.match(source, /className="h-9 w-full resize-none/);
+  assert.match(source, /className="h-9 w-full rounded-lg/);
+  assert.match(source, /className="group flex h-9 w-full/);
+  assert.match(source, /className="sticky bottom-2 z-10 flex justify-center sm:justify-end"/);
 });
 
 test('Address Registration keeps app language, address language, and country selection as separate inputs', () => {

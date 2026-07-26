@@ -23,7 +23,7 @@ test('Open Source hero keeps first-use navigation in the header and three hero c
   assert.match(source, /const heroEntryLinks/);
   assert.match(source, /function HeroEntryCardGrid/);
   assert.match(source, /key: 'map', href: '\/'/);
-  assert.match(source, /key: 'portal', href: '\/portal'/);
+  assert.match(source, /key: 'aoid', href: '\/\?action=aoid'/);
   assert.match(source, /key: 'posField', href: '\/pos'/);
   assert.match(source, /A Global Address ID for Every Place/);
   assert.match(source, /Open infrastructure for address IDs, private address QR, and machine-readable delivery handoff/);
@@ -31,9 +31,11 @@ test('Open Source hero keeps first-use navigation in the header and three hero c
   assert.match(source, /AGID-SO-00123/);
   assert.match(source, /TO-ISL-004/);
   assert.match(source, /label: 'Register Address'/);
-  assert.match(source, /label: 'My Page'/);
-  assert.match(source, /label: 'マイページ'/);
-  assert.match(source, /credentials, permissions, consent, security status, and safe exports/);
+  assert.match(source, /label: 'AOID'/);
+  assert.match(source, /private Address Owner IDs/);
+  assert.match(source, /非公開のAddress Owner ID/);
+  assert.doesNotMatch(source, /label: 'My Page'/);
+  assert.doesNotMatch(source, /label: 'マイページ'/);
   assert.doesNotMatch(source, /label: 'Address Portal'/);
   assert.doesNotMatch(source, /label: '住所ポータル'/);
   assert.match(source, /label: 'POS & Field Ops'/);
@@ -173,7 +175,7 @@ test('Open Source footer groups the full product map by job intent', () => {
   assert.match(source, /apps: 'アプリ一覧'/);
   assert.match(source, /developers: '開発者'/);
   assert.match(source, /settings: '設定とヘルプ'/);
-  assert.match(source, /key: 'portal', href: '\/portal'/);
+  assert.match(source, /key: 'aoid', href: '\/\?action=aoid'/);
   assert.match(source, /key: 'pos', href: '\/pos'/);
   assert.match(source, /key: 'hotel', href: '\/hotel'/);
   assert.match(source, /key: 'opera', href: '\/opera'/);

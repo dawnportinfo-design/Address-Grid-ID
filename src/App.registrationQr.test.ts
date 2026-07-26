@@ -20,9 +20,12 @@ test('App persists regular address registrations and links them to generated QR 
   assert.doesNotMatch(source, /import \{[\s\S]*buildRegisteredAddressQrPayload[\s\S]*\} from '\.\/lib\/registeredAddressQr';/);
   assert.match(source, /await import\('\.\/lib\/registeredAddressQr'\)/);
   assert.match(source, /enqueueSyncQueueRecord\('registeredAddress'/);
+  assert.match(source, /enqueueSyncQueueRecord\('savedAgid'/);
   assert.match(source, /enqueueSyncQueueRecord\('savedQr'/);
   assert.match(source, /setRegisteredAddresses/);
+  assert.match(source, /saveAgid\(\{[\s\S]*?id: data\.agid \|\| registeredAgid\.id,[\s\S]*?\}, data\.address\)/);
   assert.match(persistenceHookSource, /localStorage\.setItem\('saved_qrs', JSON\.stringify\(savedQrs\)\)/);
+  assert.match(persistenceHookSource, /localStorage\.setItem\('saved_agids', JSON\.stringify\(savedAgids\)\)/);
 });
 
 test('App can read registered-address QR payloads before falling back to AGID or general search', () => {
@@ -64,12 +67,18 @@ test('address registration opened from the menu still has a current map AGID and
   assert.match(source, /currentCoords=\{clickedAgid \? \{ lat: clickedAgid\.lat, lon: clickedAgid\.lon \} : \{ lat, lon: lng \}\}/);
 });
 
-test('App defaults generated address QR sharing to no-raw public mode and opens saved QR output immediately', () => {
+test('App defaults generated address QR sharing to no-raw public mode and opens the saved identifier output', () => {
   assert.match(source, /localStorage\.getItem\('agid_qr_payload_privacy'\) === 'full' \? 'full' : 'public'/);
   assert.match(source, /catch \{ return 'public'; \}/);
   assert.match(source, /onRegister=\{async \(data\) =>/);
   assert.match(source, /buildSavedQrFromRegisteredAddress\(data, payload, undefined, \{ privacy: qrPayloadPrivacy \}\)/);
-  assert.match(source, /setSavedTab\('qr'\);[\s\S]*?setShowSaved\(true\);/);
+  assert.match(source, /setSavedTab\(isAoidRegistration \? 'aoid' : 'agid'\);[\s\S]*?setShowSaved\(true\);/);
+});
+
+test('App can save the current map AGID directly into the persistent identifier list', () => {
+  assert.match(source, /const saveCurrentAgid = \(\) => \{/);
+  assert.match(source, /saveAgid\(clickedAgid \?\? encodeAGID\(lat, lng\)\)/);
+  assert.match(source, /saveCurrentAgid=\{saveCurrentAgid\}/);
 });
 
 test('home search QR action starts camera scanning in one tap', () => {

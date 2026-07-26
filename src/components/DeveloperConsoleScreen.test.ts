@@ -199,10 +199,9 @@ test('Developer Console is oriented like a usable developer admin dashboard', ()
   assert.match(source, /lg:hidden" aria-label="Developer Console"/);
 });
 
-test('Developer Console links to the commercial Playlist Commerce developer demo surface', () => {
-  assert.match(source, /Playlist Commerce/);
-  assert.match(source, /Commercial\/private demo \/ not OSS/);
-  assert.match(source, /\/playlist-commerce/);
+test('Developer Console keeps Vey integration access without re-exposing Store', () => {
+  assert.doesNotMatch(source, /Commercial\/private demo \/ not OSS/);
+  assert.doesNotMatch(source, /href: '\/playlist-commerce'/);
   assert.match(source, /Vey Ecosystem/);
   assert.match(source, /Wallet \+ Delivery Gateway \+ Carrier API Stripe/);
   assert.match(source, /\/merchant-console/);

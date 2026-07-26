@@ -1,12 +1,13 @@
 export type PostalStatus = "official" | "weak" | "none" | "carrier_specific" | "unknown";
+export * from "./api-client";
 export type AddressFormatCoverage =
   | "native_and_english_preloaded"
   | "native_only_preloaded"
   | "english_only_preloaded"
   | "seed_profile_required";
 export type ValidationReadiness =
-  | "format_and_postal"
-  | "format_with_postal_warning"
+  | "format_only"
+  | "metadata_gated"
   | "postal_equivalent_required"
   | "delivery_source_required"
   | "manual_review_required"
@@ -43,7 +44,7 @@ export type PostalValidation = {
   valid: boolean;
   formatValid: boolean;
   exists: boolean | null;
-  validationScope: "format_and_existence" | "format_only" | "policy_only" | "postal_equivalent_required" | "country_profile_missing";
+  validationScope: "format_only" | "policy_only" | "postal_equivalent_required" | "country_profile_missing";
   postalCode: string;
   country: string;
   regionHint?: string;
@@ -105,7 +106,7 @@ const COUNTRY_PROFILES: CountryProfile[] = [
     aliases: ["Nippon", "Nihon", "日本国"],
     languages: ["ja", "en"],
     addressFormatCoverage: "native_and_english_preloaded",
-    validationReadiness: "format_and_postal",
+    validationReadiness: "format_only",
     postalStatus: "official",
     postalRequiredDefault: true,
     postalExample: "100-0001",
@@ -122,7 +123,7 @@ const COUNTRY_PROFILES: CountryProfile[] = [
     aliases: ["USA", "United States of America"],
     languages: ["en", "es"],
     addressFormatCoverage: "native_and_english_preloaded",
-    validationReadiness: "format_and_postal",
+    validationReadiness: "format_only",
     postalStatus: "official",
     postalRequiredDefault: true,
     postalExample: "94105",
@@ -171,7 +172,7 @@ const COUNTRY_PROFILES: CountryProfile[] = [
     aliases: [],
     languages: ["en"],
     addressFormatCoverage: "english_only_preloaded",
-    validationReadiness: "format_with_postal_warning",
+    validationReadiness: "metadata_gated",
     postalStatus: "weak",
     postalRequiredDefault: false,
     postalEquivalentStrategy: "digital_address_or_agid_region",
@@ -182,13 +183,71 @@ const COUNTRY_PROFILES: CountryProfile[] = [
   },
 ];
 
-const POSTAL_AREAS = [
-  { countryCode: "JP", postalCode: "100-0001", regionRef: "agid-jp-tokyo-chiyoda-chiyoda" },
-  { countryCode: "US", postalCode: "94105", regionRef: "agid-us-ca-san-francisco-soma" },
-] as const;
-
 export function cleanText(input: unknown): string {
   return typeof input === "string" ? input.trim().replace(/\s+/g, " ") : "";
+}
+
+const ADDRESS_TOKEN_ALIASES: Readonly<Record<string, string>> = {
+  avenue: "avenue",
+  ave: "avenue",
+  boulevard: "boulevard",
+  blvd: "boulevard",
+  road: "road",
+  rd: "road",
+  street: "street",
+  st: "street",
+  strasse: "street",
+  straße: "street",
+};
+
+function normalizeAddressMatchText(input: unknown): string {
+  const normalized = cleanText(input)
+    .normalize("NFKC")
+    .toLocaleLowerCase("und")
+    .replace(/[\p{P}\p{S}]+/gu, " ");
+  return cleanText(normalized)
+    .split(" ")
+    .filter(Boolean)
+    .map(token => ADDRESS_TOKEN_ALIASES[token] ?? token)
+    .join(" ");
+}
+
+function editDistance(left: string, right: string): number {
+  if (!left) return right.length;
+  if (!right) return left.length;
+  const previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+
+  for (let leftIndex = 1; leftIndex <= left.length; leftIndex += 1) {
+    const current = [leftIndex];
+    for (let rightIndex = 1; rightIndex <= right.length; rightIndex += 1) {
+      const substitution = previous[rightIndex - 1]
+        + (left[leftIndex - 1] === right[rightIndex - 1] ? 0 : 1);
+      current[rightIndex] = Math.min(
+        current[rightIndex - 1] + 1,
+        previous[rightIndex] + 1,
+        substitution,
+      );
+    }
+    previous.splice(0, previous.length, ...current);
+  }
+
+  return previous[right.length];
+}
+
+function addressSimilarity(left: string, right: string): number {
+  if (!left || !right) return 0;
+  if (left === right) return 1;
+
+  const leftTokens = new Set(left.split(" "));
+  const rightTokens = new Set(right.split(" "));
+  const sharedTokens = [...leftTokens].filter(token => rightTokens.has(token)).length;
+  const tokenDice = (2 * sharedTokens) / (leftTokens.size + rightTokens.size);
+  const maxLength = Math.max(left.length, right.length);
+  const characterSimilarity = maxLength
+    ? 1 - editDistance(left, right) / maxLength
+    : 1;
+
+  return Math.max(0, Math.min(1, tokenDice * 0.4 + characterSimilarity * 0.6));
 }
 
 export function normalizeCountry(input: unknown): string {
@@ -243,18 +302,15 @@ export function postalValidate(postalCode: unknown, countryCode: unknown): Posta
   const profile = countryAddressProfile(country);
   const postal = postalNormalize(postalCode, country);
   const warnings: string[] = [];
-  const region = POSTAL_AREAS.find(area => area.countryCode === country && area.postalCode === postal);
   const formatValid = postalFormatValidate(postal, country);
   const exists = postalExists(postal, country);
   const validationScope = !profile
     ? "country_profile_missing"
     : profile.postalStatus === "none"
       ? "postal_equivalent_required"
-      : exists !== null
-        ? "format_and_existence"
-        : profile.postalRequiredDefault
-          ? "format_only"
-          : "policy_only";
+      : profile.postalRequiredDefault
+        ? "format_only"
+        : "policy_only";
   let valid = false;
 
   if (!profile) {
@@ -269,14 +325,13 @@ export function postalValidate(postalCode: unknown, countryCode: unknown): Posta
     warnings.push("country_has_no_postal_code_system", "postal_equivalent_required");
   } else if (!formatValid) {
     valid = false;
-  } else if (exists === false) {
-    valid = false;
-    warnings.push("postal_code_not_found_in_fixture");
   } else {
     valid = true;
   }
 
-  if (postal && !region && profile?.postalStatus !== "none" && exists !== false) warnings.push("postal_area_not_found_or_not_required");
+  if (postal && formatValid && profile?.postalStatus !== "none") {
+    warnings.push("postal_existence_evidence_required");
+  }
 
   return {
     valid,
@@ -285,7 +340,6 @@ export function postalValidate(postalCode: unknown, countryCode: unknown): Posta
     validationScope,
     postalCode: postal,
     country,
-    regionHint: region?.regionRef,
     sourceVersion: SOURCE_VERSION,
     warnings,
     nonClaims: profile?.postalStatus === "none"
@@ -309,11 +363,9 @@ export function postalFormatValidate(postalCode: unknown, countryCode: unknown):
 }
 
 export function postalExists(postalCode: unknown, countryCode: unknown): boolean | null {
-  const country = normalizeCountry(countryCode);
-  const profile = countryAddressProfile(country);
-  const postal = postalNormalize(postalCode, country);
-  if (!profile || profile.postalStatus === "none" || !postal) return null;
-  return POSTAL_AREAS.some(area => area.countryCode === country && area.postalCode === postal);
+  void postalCode;
+  void countryCode;
+  return null;
 }
 
 export function postalEquivalent(regionRef: unknown, countryCode: unknown): PostalEquivalent {
@@ -329,26 +381,34 @@ export function postalEquivalent(regionRef: unknown, countryCode: unknown): Post
 }
 
 export function normalizeAddress(addressText: unknown, countryCode: unknown): NormalizedAddress {
+  const normalizedText = cleanText(addressText).normalize("NFKC");
   return {
-    normalizedText: cleanText(addressText),
+    normalizedText,
     country: normalizeCountry(countryCode),
     locale: "und",
     sourceVersion: SOURCE_VERSION,
-    warnings: [],
+    warnings: normalizedText ? [] : ["address_text_empty"],
     nonClaims: ["Normalization is not referent resolution."],
   };
 }
 
 export function addressMatch(addressA: NormalizedAddress, addressB: NormalizedAddress, purpose = "delivery"): AddressMatchDecision {
-  const sameText = addressA.normalizedText.toLowerCase() === addressB.normalizedText.toLowerCase();
   const sameCountry = !addressA.country || !addressB.country || addressA.country === addressB.country;
-  const match = Boolean(addressA.normalizedText && sameText && sameCountry);
+  const left = normalizeAddressMatchText(addressA.normalizedText);
+  const right = normalizeAddressMatchText(addressB.normalizedText);
+  const similarity = sameCountry
+    ? addressSimilarity(left, right)
+    : 0;
+  const match = Boolean(left && right && similarity >= 0.84);
   return {
     match,
-    confidence: match ? 0.95 : 0.25,
+    confidence: Number(similarity.toFixed(4)),
     purpose: cleanText(purpose),
     sourceVersion: SOURCE_VERSION,
-    nonClaims: ["A match decision is purpose-relative and not proof of residence."],
+    nonClaims: [
+      "A match decision is purpose-relative and not proof of residence.",
+      "Fuzzy lexical similarity is not delivery-point identity.",
+    ],
   };
 }
 
@@ -382,16 +442,15 @@ export function deliveryAvailable(countryCode: unknown, postalCode: unknown, car
   const profile = countryAddressProfile(country);
   const validation = postalValidate(postalCode, country);
   const reasons: string[] = [];
-  let available = true;
+  let available = false;
 
   if (!profile) {
-    available = false;
     reasons.push("country_profile_missing");
   }
   if (profile?.postalRequiredDefault && !validation.valid) {
-    available = false;
     reasons.push("postal_required_but_invalid_or_missing");
   }
+  reasons.push("approved_delivery_source_required");
 
   return {
     available,

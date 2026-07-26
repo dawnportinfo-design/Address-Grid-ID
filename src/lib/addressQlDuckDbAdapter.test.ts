@@ -83,9 +83,9 @@ test('AddressQL DuckDB fixtures cover strong, weak, and no-postal-code countries
   assert.match(countries, /AE,United Arab Emirates.*none,false/);
   assert.match(countries, /GH,Ghana.*weak,false/);
   assert.match(countries, /native_and_english_preloaded/);
-  assert.match(countries, /format_and_postal/);
+  assert.match(countries, /format_only/);
   assert.match(countries, /postal_equivalent_required/);
-  assert.match(countries, /format_with_postal_warning/);
+  assert.match(countries, /metadata_gated/);
   assert.match(countries, /postcode\|state\|city/);
   assert.match(postalAreas, /100-0001/);
   assert.match(postalAreas, /GA-184-3321/);

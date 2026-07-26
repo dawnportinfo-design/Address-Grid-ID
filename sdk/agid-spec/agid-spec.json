@@ -19,6 +19,48 @@
     "coastalSeaPrefix": "number + letter",
     "otherPrefix": "number + number"
   },
+  "neighborhood": {
+    "version": "agid-grid-neighborhood-v0.1",
+    "topology": "eight-neighbor",
+    "relations": [
+      "same-cell",
+      "edge-adjacent",
+      "corner-adjacent",
+      "separate",
+      "invalid"
+    ],
+    "calculation": "sample adjacent cell centers through the cubed sphere and re-encode",
+    "crossesFaceBoundaries": true,
+    "boundarySemantics": "same, edge-adjacent, and corner-adjacent cells may be accepted as the same-or-near area candidate",
+    "nonClaim": "proximity does not prove a shared building, entrance, traversable route, or delivery endpoint",
+    "extensionApi": [
+      "adjacentCells(agid) -> AgidAdjacentCell[]",
+      "gridNeighborhoodMatch(left, right) -> AgidGridNeighborhoodMatch"
+    ]
+  },
+  "addressReference": {
+    "version": "agid-address-reference-v0.1",
+    "publicIdentity": "canonical AGID + opaque buildingId",
+    "buildingIdPattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
+    "subPremiseClassification": "private-sub-premise",
+    "subPremiseRetention": "client-controlled",
+    "subPremiseExcludedFrom": [
+      "AGID",
+      "public reference key",
+      "public building comparison",
+      "public conformance vectors"
+    ]
+  },
+  "addressNormalizationBenchmark": {
+    "version": "agid-address-normalization-benchmark-v0.1",
+    "syntheticVectorCount": 10000,
+    "boundaryCheckCount": 2000,
+    "subPremiseSeparationCheckCount": 1000,
+    "minimumNormalizationSuccessRate": 0.995,
+    "maximumBoundaryValueErrorRate": 0.001,
+    "maximumSubPremiseLeakageRate": 0,
+    "realWorldQualityClaim": false
+  },
   "security": {
     "profile": "agid-public-security-v1",
     "publicByDesign": true,

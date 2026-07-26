@@ -105,11 +105,12 @@ test('Playlist Commerce widget keeps the mobile reading order and JSON panel bou
   assert.match(source, /sm:max-h-\[520px\]/);
 });
 
-test('Playlist Commerce is routed as a standalone developer surface', () => {
-  assert.match(rootSource, /PlaylistCommerceWidgetScreen/);
-  assert.match(rootSource, /isPlaylistCommerceRoute/);
-  assert.match(rootSource, /window\.location\.pathname === '\/playlist-commerce'/);
-  assert.match(rootSource, /route\.playlistCommerce/);
+test('Playlist Commerce implementation is retained but retired from the AGID runtime', () => {
+  assert.doesNotMatch(rootSource, /import\('\.\/components\/PlaylistCommerceWidgetScreen'\)/);
+  assert.doesNotMatch(rootSource, /isPlaylistCommerceRoute/);
+  assert.doesNotMatch(rootSource, /route\.playlistCommerce/);
+  assert.match(rootSource, /pathname === '\/playlist-commerce'/);
+  assert.match(rootSource, /window\.history\.replaceState\(window\.history\.state, '', '\/\?action=aoid'\)/);
   assert.match(navigationSource, /id: 'playlist-commerce'/);
   assert.match(navigationSource, /route: '\/playlist-commerce'/);
   assert.match(navigationSource, /id: 'store-topics'/);
@@ -118,5 +119,6 @@ test('Playlist Commerce is routed as a standalone developer surface', () => {
   assert.match(navigationSource, /route: '\/playlist-commerce#discover'/);
   assert.match(navigationSource, /id: 'store-my-stores'/);
   assert.match(navigationSource, /route: '\/playlist-commerce#my-stores'/);
+  assert.match(navigationSource, /AGID_RETIRED_CONSUMER_SURFACE_IDS/);
   assert.match(designRulesSource, /'playlist-commerce': 'hidden'/);
 });

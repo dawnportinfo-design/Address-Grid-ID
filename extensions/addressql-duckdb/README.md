@@ -47,9 +47,9 @@ This keeps the local analytics adapter aligned with the AddressQL core
 preload model:
 
 ```text
-official postal country -> format_and_postal
+official postal country -> format_only
 no-postal-code country  -> postal_equivalent_required
-weak postal country     -> format_with_postal_warning
+weak postal country     -> metadata_gated
 ```
 
 ## Why DuckDB

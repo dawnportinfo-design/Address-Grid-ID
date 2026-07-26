@@ -55,14 +55,20 @@ const REQUIRED_PUBLIC_DOCS = [
   'docs/addressql/open-source-release-readiness.md',
   'docs/addressql/repository-manifest.json',
   'docs/addressql/global-country-preload-v0.7.md',
+  'docs/addressql/global-country-coverage-v0.1.md',
+  'docs/addressql/country-data-promotion-v0.1.md',
+  'docs/addressql/multilingual-quality-v0.1.md',
+  'docs/addressql/practical-api-v1.md',
   'docs/addressql/zk-proof-hooks-v0.6.md',
   'docs/addressql/calcite-v0.5.md',
   'docs/addressql/repository-files/README.md',
+  'docs/addressql/repository-files/package.json',
   'docs/addressql/repository-files/LICENSE',
   'docs/addressql/repository-files/LICENSES-DATA.md',
   'docs/addressql/repository-files/CONTRIBUTING.md',
   'docs/addressql/repository-files/SECURITY.md',
   'docs/addressql/repository-files/CODE_OF_CONDUCT.md',
+  'docs/specs/openapi/addressql-practical-api-v1.openapi.json',
   POSTAL_VALIDATION_NEGATIVE_CLAIMS_FIXTURE,
   POSTAL_VALIDATION_NEGATIVE_CLAIMS_SCHEMA,
 ];
@@ -85,6 +91,28 @@ const REQUIRED_PUBLIC_ARTIFACTS = [
   'scripts/verify-addressql-postal-negative-claims.ts',
   'scripts/export-addressql-oss-repository.ts',
   'src/lib/addressQlGlobalCountryPreload.ts',
+  'src/lib/addressQlGlobalCountryPreload.test.ts',
+  'src/lib/addressQlGlobalCountryCoverage.ts',
+  'src/lib/addressQlGlobalCountryCoverage.test.ts',
+  'src/lib/addressQlCountryDataPromotion.ts',
+  'src/lib/addressQlCountryDataPromotion.test.ts',
+  'src/lib/addressQlMultilingualQuality.ts',
+  'src/lib/addressQlMultilingualQuality.test.ts',
+  'src/lib/countryGeographicMetadataEvaluationCatalog.ts',
+  'src/lib/countryGeographicMetadataEvaluationIndex.ts',
+  'src/lib/countryValidationQualityGate.ts',
+  'src/lib/sha256.ts',
+  'src/lib/addressQlPracticalApi.ts',
+  'src/lib/addressQlPracticalApi.test.ts',
+  'src/lib/addressQlRuntimeAdapter.ts',
+  'src/lib/addressQlRuntimeAdapter.test.ts',
+  'src/lib/addressQlPostalSetAdapter.ts',
+  'src/lib/addressQlPostalSetAdapter.test.ts',
+  'src/lib/officialPostalSourceCatalog.ts',
+  'src/data/address_formats',
+  'data/postal_country_packs',
+  'scripts/run-addressql-api.ts',
+  'scripts/run-addressql-api.test.ts',
   'src/lib/addressQlZkProofHooks.ts',
   'src/lib/addressQlOssReadiness.ts',
 ];
@@ -98,6 +126,10 @@ const REQUIRED_PACKAGE_SCRIPTS = [
   'verify:addressql-postal-negative-claims',
   'verify:addressql-sdk',
   'verify:addressql-global-preload',
+  'verify:addressql-global-coverage',
+  'verify:addressql-country-data-promotion',
+  'verify:addressql-multilingual-quality',
+  'verify:addressql-api',
   'verify:addressql-zk',
   'verify:addressql-calcite',
   'verify:addressql-export',
@@ -242,6 +274,30 @@ export function buildAddressQlOssReadinessReport(root = process.cwd()): AddressQ
   if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlGlobalCountryPreload.test.ts')) {
     addOnce(errors, 'addressql-full-verification-must-include-global-country-preload-test');
   }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlGlobalCountryCoverage.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-global-country-coverage-test');
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlCountryDataPromotion.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-country-data-promotion-test');
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlMultilingualQuality.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-multilingual-quality-test');
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlPracticalApi.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-practical-api-test');
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlRuntimeAdapter.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-runtime-adapter-test');
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlPostalSetAdapter.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-postal-set-adapter-test');
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('run-addressql-api.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-http-api-test');
+  }
+  if (!scripts['serve:addressql-api']?.includes('scripts/run-addressql-api.ts')) {
+    addOnce(errors, 'addressql-practical-api-serve-script-missing');
+  }
 
   for (const relativePath of FIXTURE_PATHS) {
     if (!pathExists(root, relativePath)) {
@@ -268,6 +324,78 @@ export function buildAddressQlOssReadinessReport(root = process.cwd()): AddressQ
     : '';
   for (const phrase of ['not proof of global address completeness', 'POSTAL_EQUIVALENT', 'Do not invent an official postal code']) {
     if (!globalPreloadDoc.includes(phrase)) addOnce(errors, `global-preload-doc-missing:${phrase}`);
+  }
+
+  const globalCoverageDoc = pathExists(root, 'docs/addressql/global-country-coverage-v0.1.md')
+    ? readText(root, 'docs/addressql/global-country-coverage-v0.1.md')
+    : '';
+  for (const phrase of [
+    'L0 country profile resolution',
+    'L5 delivery-point validation',
+    'Postal existence lookup remains blocked',
+  ]) {
+    if (!globalCoverageDoc.includes(phrase)) addOnce(errors, `global-coverage-doc-missing:${phrase}`);
+  }
+
+  const practicalApiDoc = pathExists(root, 'docs/addressql/practical-api-v1.md')
+    ? readText(root, 'docs/addressql/practical-api-v1.md')
+    : '';
+  for (const phrase of [
+    'POST /v1/postal/validate',
+    'POST /v1/postal/validate/batch',
+    'does not repeat the submitted postal code',
+    'HTTP `200` means the request was evaluated',
+  ]) {
+    if (!practicalApiDoc.includes(phrase)) addOnce(errors, `practical-api-doc-missing:${phrase}`);
+  }
+
+  const multilingualQualityDoc = pathExists(root, 'docs/addressql/multilingual-quality-v0.1.md')
+    ? readText(root, 'docs/addressql/multilingual-quality-v0.1.md')
+    : '';
+  for (const phrase of [
+    'M0',
+    'M4',
+    'zero profiles enable automatic place-name translation',
+    'POST /v1/multilingual/assess',
+    'independently signed report',
+  ]) {
+    if (!multilingualQualityDoc.includes(phrase)) {
+      addOnce(errors, `multilingual-quality-doc-missing:${phrase}`);
+    }
+  }
+
+  const countryDataPromotionDoc = pathExists(root, 'docs/addressql/country-data-promotion-v0.1.md')
+    ? readText(root, 'docs/addressql/country-data-promotion-v0.1.md')
+    : '';
+  for (const phrase of [
+    'AU, GT, NZ, and PA',
+    'review_candidate',
+    'independent-signature',
+    'runtime-adapter',
+    'No L2, L3, L4, or L5 country capability is enabled',
+  ]) {
+    if (!countryDataPromotionDoc.includes(phrase)) {
+      addOnce(errors, `country-data-promotion-doc-missing:${phrase}`);
+    }
+  }
+
+  const practicalOpenApi = pathExists(root, 'docs/specs/openapi/addressql-practical-api-v1.openapi.json')
+    ? readText(root, 'docs/specs/openapi/addressql-practical-api-v1.openapi.json')
+    : '';
+  for (const phrase of [
+    '"/v1/health"',
+    '"/v1/countries/{countryCode}/capabilities"',
+    '"/v1/countries/{countryCode}/promotions"',
+    '"/v1/promotions"',
+    '"/v1/multilingual"',
+    '"/v1/countries/{countryCode}/languages"',
+    '"/v1/multilingual/assess"',
+    '"/v1/postal/validate"',
+    '"/v1/postal/validate/batch"',
+    '"additionalProperties": false',
+    '"maxItems": 100',
+  ]) {
+    if (!practicalOpenApi.includes(phrase)) addOnce(errors, `practical-openapi-missing:${phrase}`);
   }
 
   const scoreBase = requiredPaths.length + REQUIRED_PACKAGE_SCRIPTS.length + 8;

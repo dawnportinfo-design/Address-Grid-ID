@@ -71,8 +71,10 @@ Application
   -> local source pack / addressql-core / database adapter
 ```
 
-A hosted API can be added later, but v0.4 avoids a hosted dependency so that
-open-source users can validate forms, fixtures, and source packs locally.
+P1 adds an optional self-hosted Practical API without making it a dependency of
+the local v0.4 functions. The TypeScript SDK provides a bounded HTTP client;
+Python and Rust retain local embedding surfaces. See
+`practical-api-v1.md`.
 
 ## TypeScript
 

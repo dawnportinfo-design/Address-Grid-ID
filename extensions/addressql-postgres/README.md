@@ -90,9 +90,9 @@ postal_equivalent_strategy
 This makes PostgreSQL choose the same first validation path as AddressQL core:
 
 ```text
-official postal country -> format_and_postal
+official postal country -> format_only
 no-postal-code country  -> postal_equivalent_required
-weak postal country     -> format_with_postal_warning
+weak postal country     -> metadata_gated
 ```
 
 The PostgreSQL adapter still does not claim complete global address coverage.

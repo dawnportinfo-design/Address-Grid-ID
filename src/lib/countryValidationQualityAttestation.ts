@@ -6,11 +6,18 @@ export const COUNTRY_VALIDATION_QUALITY_ATTESTATION_VERSION =
 export const COUNTRY_VALIDATION_QUALITY_SIGNATURE_DOMAIN =
   'agid-country-validation-quality-review-ed25519-v5';
 export const COUNTRY_VALIDATION_REVIEWER_REGISTRY_DIGEST_ALGORITHM =
-  'sha256-country-quality-reviewer-registry-v1';
+  'sha256-country-quality-reviewer-registry-v2';
 export const COUNTRY_VALIDATION_REVIEWER_REGISTRY_SIGNATURE_VERSION =
   'country-validation-reviewer-registry-signature-v1';
 export const COUNTRY_VALIDATION_REVIEWER_REGISTRY_SIGNATURE_DOMAIN =
   'agid-country-validation-reviewer-registry-ed25519-v1';
+export const COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS = {
+  maxReviewerKeys: 256,
+  maxIssuerKeys: 64,
+  maxUtf8BytesPerField: 2048,
+  maxMetadataDepth: 12,
+  maxTechnicalIdentifierCharacters: 128,
+} as const;
 
 export type CountryValidationQualityReviewerKey = {
   keyId: string;
@@ -142,27 +149,147 @@ const FORBIDDEN_ATTESTATION_FIELDS = new Set([
   'proofsecret',
 ]);
 
-function forbiddenFieldPaths(value: unknown, path = ''): string[] {
+function metadataSafetyIssues(
+  value: unknown,
+  path = '',
+  depth = 0,
+  seen = new WeakSet<object>(),
+): string[] {
+  if (depth > COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxMetadataDepth) {
+    return [`${path || 'metadata'}: metadata nesting limit exceeded`];
+  }
   if (Array.isArray(value)) {
-    return value.flatMap((item, index) => forbiddenFieldPaths(item, `${path}[${index}]`));
+    if (seen.has(value)) return [`${path || 'metadata'}: cyclic metadata prohibited`];
+    seen.add(value);
+    return value.flatMap((item, index) =>
+      metadataSafetyIssues(item, `${path}[${index}]`, depth + 1, seen));
   }
   if (!value || typeof value !== 'object') return [];
+  if (seen.has(value)) return [`${path || 'metadata'}: cyclic metadata prohibited`];
+  seen.add(value);
   return Object.entries(value as Record<string, unknown>).flatMap(([key, item]) => {
     const itemPath = path ? `${path}.${key}` : key;
     const normalizedKey = key.replace(/[^a-z]/gi, '').toLowerCase();
     return [
-      ...(FORBIDDEN_ATTESTATION_FIELDS.has(normalizedKey) ? [itemPath] : []),
-      ...forbiddenFieldPaths(item, itemPath),
+      ...(FORBIDDEN_ATTESTATION_FIELDS.has(normalizedKey)
+        ? [`${itemPath}: private or sensitive field is prohibited`]
+        : []),
+      ...metadataSafetyIssues(item, itemPath, depth + 1, seen),
     ];
   });
+}
+
+function canonicalReviewerKey(key: CountryValidationQualityReviewerKey) {
+  return {
+    keyId: key.keyId,
+    reviewerId: key.reviewerId,
+    algorithm: key.algorithm,
+    purpose: key.purpose,
+    publicKeyBase64Url: key.publicKeyBase64Url,
+    status: key.status,
+    revokedAt: key.revokedAt,
+    supersedesKeyId: key.supersedesKeyId,
+    validFrom: key.validFrom,
+    validUntil: key.validUntil,
+    reviewedAt: key.reviewedAt,
+    reviewBy: key.reviewBy,
+    registryUrl: key.registryUrl,
+    revocationUrl: key.revocationUrl,
+  };
+}
+
+function compareCanonicalText(left: string, right: string) {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function oversizedStringFields(
+  value: Record<string, unknown>,
+  path: string,
+) {
+  return Object.entries(value).flatMap(([key, field]) => (
+    typeof field === 'string'
+    && Buffer.byteLength(field, 'utf8')
+      > COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxUtf8BytesPerField
+      ? [`${path}.${key}: UTF-8 byte limit exceeded`]
+      : []
+  ));
+}
+
+function nonCanonicalUnicodeFields(
+  value: Record<string, unknown>,
+  path: string,
+) {
+  return Object.entries(value).flatMap(([key, field]) => (
+    typeof field === 'string' && field !== field.normalize('NFC')
+      ? [`${path}.${key}: NFC normalization required`]
+      : []
+  ));
+}
+
+function technicalIdentifierIssues(
+  value: Record<string, unknown>,
+  path: string,
+  fields: string[],
+) {
+  const pattern = /^[A-Za-z0-9][A-Za-z0-9._:-]*$/;
+  return fields.flatMap((fieldName) => {
+    const field = value[fieldName];
+    if (field === null || field === undefined) return [];
+    return typeof field !== 'string'
+      || field.length === 0
+      || field.length > COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxTechnicalIdentifierCharacters
+      || !pattern.test(field)
+      ? [`${path}.${fieldName}: ASCII technical identifier required`]
+      : [];
+  });
+}
+
+function reviewerRegistryStringSizeIssues(
+  registry: CountryValidationQualityReviewerRegistry,
+) {
+  return [
+    ...oversizedStringFields(registry, 'registry'),
+    ...registry.keys.flatMap((key, index) =>
+      oversizedStringFields(key, `registry.keys[${index}]`)),
+  ];
+}
+
+function reviewerRegistryUnicodeIssues(
+  registry: CountryValidationQualityReviewerRegistry,
+) {
+  return [
+    ...nonCanonicalUnicodeFields(registry, 'registry'),
+    ...registry.keys.flatMap((key, index) =>
+      nonCanonicalUnicodeFields(key, `registry.keys[${index}]`)),
+  ];
+}
+
+function issuerRegistryStringSizeIssues(
+  registry: CountryValidationReviewerRegistryIssuerRegistry,
+) {
+  return [
+    ...oversizedStringFields(registry, 'issuerRegistry'),
+    ...registry.keys.flatMap((key, index) =>
+      oversizedStringFields(key, `issuerRegistry.keys[${index}]`)),
+  ];
+}
+
+function issuerRegistryUnicodeIssues(
+  registry: CountryValidationReviewerRegistryIssuerRegistry,
+) {
+  return [
+    ...nonCanonicalUnicodeFields(registry, 'issuerRegistry'),
+    ...registry.keys.flatMap((key, index) =>
+      nonCanonicalUnicodeFields(key, `issuerRegistry.keys[${index}]`)),
+  ];
 }
 
 export function countryValidationReviewerRegistryDigest(
   registry: Pick<CountryValidationQualityReviewerRegistry, 'version' | 'keys'>,
 ) {
   const keys = registry.keys
-    .map(key => ({ ...key }))
-    .sort((left, right) => left.keyId.localeCompare(right.keyId));
+    .map(canonicalReviewerKey)
+    .sort((left, right) => compareCanonicalText(left.keyId, right.keyId));
   return `sha256:${sha256Hex(JSON.stringify({
     domain: COUNTRY_VALIDATION_REVIEWER_REGISTRY_DIGEST_ALGORITHM,
     version: registry.version,
@@ -218,10 +345,82 @@ export async function verifyCountryValidationReviewerRegistrySignature(input: {
   issuerRegistry: CountryValidationReviewerRegistryIssuerRegistry;
   asOf: string;
 }): Promise<CountryValidationReviewerRegistrySignatureVerification> {
-  const issues = forbiddenFieldPaths({
+  const sizeIssues = [
+    ...(input.registry.keys.length > COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxReviewerKeys
+      ? ['registry.keys: limit exceeded']
+      : []),
+    ...(input.issuerRegistry.keys.length > COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxIssuerKeys
+      ? ['issuerRegistry.keys: limit exceeded']
+      : []),
+  ];
+  if (sizeIssues.length > 0) {
+    return {
+      status: 'rejected',
+      digestValid: false,
+      trustValid: false,
+      signatureValid: false,
+      issues: sizeIssues,
+    };
+  }
+  const stringSizeIssues = [
+    ...reviewerRegistryStringSizeIssues(input.registry),
+    ...issuerRegistryStringSizeIssues(input.issuerRegistry),
+    ...oversizedStringFields(input.signature, 'signature'),
+    ...oversizedStringFields({ asOf: input.asOf }, 'input'),
+  ];
+  if (stringSizeIssues.length > 0) {
+    return {
+      status: 'rejected',
+      digestValid: false,
+      trustValid: false,
+      signatureValid: false,
+      issues: stringSizeIssues,
+    };
+  }
+  const unicodeIssues = [
+    ...reviewerRegistryUnicodeIssues(input.registry),
+    ...issuerRegistryUnicodeIssues(input.issuerRegistry),
+    ...nonCanonicalUnicodeFields(input.signature, 'signature'),
+    ...nonCanonicalUnicodeFields({ asOf: input.asOf }, 'input'),
+  ];
+  if (unicodeIssues.length > 0) {
+    return {
+      status: 'rejected',
+      digestValid: false,
+      trustValid: false,
+      signatureValid: false,
+      issues: unicodeIssues,
+    };
+  }
+  const identifierIssues = [
+    ...input.registry.keys.flatMap((key, index) =>
+      technicalIdentifierIssues(
+        key,
+        `registry.keys[${index}]`,
+        ['keyId', 'reviewerId', 'supersedesKeyId'],
+      )),
+    ...input.issuerRegistry.keys.flatMap((key, index) =>
+      technicalIdentifierIssues(
+        key,
+        `issuerRegistry.keys[${index}]`,
+        ['keyId', 'issuerId'],
+      )),
+    ...technicalIdentifierIssues(input.signature, 'signature', ['keyId']),
+  ];
+  if (identifierIssues.length > 0) {
+    return {
+      status: 'rejected',
+      digestValid: false,
+      trustValid: false,
+      signatureValid: false,
+      issues: identifierIssues,
+    };
+  }
+
+  const issues = metadataSafetyIssues({
     signature: input.signature,
     issuerRegistry: input.issuerRegistry,
-  }).map(path => `${path}: private or sensitive field is prohibited`);
+  });
   const digestValid = (
     input.registry.digestAlgorithm === COUNTRY_VALIDATION_REVIEWER_REGISTRY_DIGEST_ALGORITHM
     && /^sha256:[0-9a-f]{64}$/.test(input.registry.registryDigest)
@@ -379,12 +578,93 @@ export async function verifyCountryValidationQualityAttestation(input: {
   registry: CountryValidationQualityReviewerRegistry;
   asOf: string;
 }): Promise<CountryValidationQualityAttestationVerification> {
-  const issues: string[] = [];
-  const forbiddenFields = forbiddenFieldPaths({
+  if (input.registry.keys.length > COUNTRY_VALIDATION_QUALITY_ATTESTATION_LIMITS.maxReviewerKeys) {
+    return {
+      status: 'rejected',
+      digestBound: false,
+      trustValid: false,
+      signatureValid: false,
+      independentReviewComplete: false,
+      deliveryClaimsEnabled: false,
+      issues: ['registry.keys: limit exceeded'],
+    };
+  }
+  const stringSizeIssues = [
+    ...reviewerRegistryStringSizeIssues(input.registry),
+    ...oversizedStringFields(input.signature, 'signature'),
+    ...oversizedStringFields({
+      asOf: input.asOf,
+      evaluatorId: input.evaluatorId,
+      reportVersion: input.report.version,
+      countryCode: input.report.countryCode,
+      holdoutDigestAlgorithm: input.report.syntheticHoldoutDigestAlgorithm,
+      holdoutDigest: input.report.syntheticHoldoutDigest,
+    }, 'input'),
+  ];
+  if (stringSizeIssues.length > 0) {
+    return {
+      status: 'rejected',
+      digestBound: false,
+      trustValid: false,
+      signatureValid: false,
+      independentReviewComplete: false,
+      deliveryClaimsEnabled: false,
+      issues: stringSizeIssues,
+    };
+  }
+  const unicodeIssues = [
+    ...reviewerRegistryUnicodeIssues(input.registry),
+    ...nonCanonicalUnicodeFields(input.signature, 'signature'),
+    ...nonCanonicalUnicodeFields({
+      asOf: input.asOf,
+      evaluatorId: input.evaluatorId,
+      reportVersion: input.report.version,
+      countryCode: input.report.countryCode,
+      holdoutDigestAlgorithm: input.report.syntheticHoldoutDigestAlgorithm,
+      holdoutDigest: input.report.syntheticHoldoutDigest,
+    }, 'input'),
+  ];
+  if (unicodeIssues.length > 0) {
+    return {
+      status: 'rejected',
+      digestBound: false,
+      trustValid: false,
+      signatureValid: false,
+      independentReviewComplete: false,
+      deliveryClaimsEnabled: false,
+      issues: unicodeIssues,
+    };
+  }
+  const identifierIssues = [
+    ...input.registry.keys.flatMap((key, index) =>
+      technicalIdentifierIssues(
+        key,
+        `registry.keys[${index}]`,
+        ['keyId', 'reviewerId', 'supersedesKeyId'],
+      )),
+    ...technicalIdentifierIssues(input.signature, 'signature', ['keyId']),
+    ...technicalIdentifierIssues(
+      { evaluatorId: input.evaluatorId },
+      'input',
+      ['evaluatorId'],
+    ),
+  ];
+  if (identifierIssues.length > 0) {
+    return {
+      status: 'rejected',
+      digestBound: false,
+      trustValid: false,
+      signatureValid: false,
+      independentReviewComplete: false,
+      deliveryClaimsEnabled: false,
+      issues: identifierIssues,
+    };
+  }
+
+  const issues = metadataSafetyIssues({
     registry: input.registry,
     signature: input.signature,
   });
-  issues.push(...forbiddenFields.map(path => `${path}: private or sensitive field is prohibited`));
   const asOf = exactTimestamp(input.asOf);
   const signedAt = exactTimestamp(input.signature.signedAt);
   const digestBound = (

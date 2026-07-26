@@ -70,8 +70,8 @@ postal_equivalent_required
 ### Validation Readiness
 
 ```text
-format_and_postal
-format_with_postal_warning
+format_only
+metadata_gated
 postal_equivalent_required
 delivery_source_required
 manual_review_required
@@ -230,7 +230,7 @@ The tests assert that:
 - every local address-format JSON profile is included;
 - no-postal-code countries require postal-equivalent fallback;
 - weak postal-code countries return warning readiness;
-- official postal-code countries can reach `format_and_postal` only when a
+- official postal-code countries can reach `format_only` only when a
   postal regex and source policy exist;
 - every profile declares non-claims.
 

@@ -21,7 +21,7 @@ FROM addressql_postal_status('HK');
 
 SELECT CASE
   WHEN result.address_format_coverage = 'native_and_english_preloaded'
-    AND result.validation_readiness = 'format_and_postal' THEN true
+    AND result.validation_readiness = 'format_only' THEN true
   ELSE error('japan_preload_profile_ready')
 END AS japan_preload_profile_ready
 FROM addressql_country_address_profile('JP');

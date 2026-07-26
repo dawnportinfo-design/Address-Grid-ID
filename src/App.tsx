@@ -1263,22 +1263,37 @@ export default function App() {
     setShowStyleMenu(false);
   };
 
-  const saveAgid = (agidData: any) => {
+  const saveAgid = (agidData: any, addressOverride = clickedAddress) => {
+    if (!agidData?.id) return;
+
+    const savedAt = new Date().toISOString();
     const newEntry = {
       id: agidData.id,
       lat: agidData.lat,
       lon: agidData.lon,
       prefix: agidData.prefix,
       isSea: agidData.isSea,
-      address: clickedAddress,
-      savedAt: new Date().toISOString(),
+      address: addressOverride,
+      savedAt,
     };
 
-    const newSaved = [newEntry, ...savedAgids.filter(s => s.id !== agidData.id)];
-    setSavedAgids(newSaved);
-    localStorage.setItem('saved_agids', JSON.stringify(newSaved));
+    setSavedAgids(previous => {
+      const next = [newEntry, ...previous.filter(saved => saved.id !== agidData.id)];
+      localStorage.setItem('saved_agids', JSON.stringify(next));
+      return next;
+    });
+    enqueueSyncQueueRecord('savedAgid', newEntry.id, 'create', {
+      id: newEntry.id,
+      savedAt,
+      source: 'local-map-selection',
+    });
     setCopied('saved-' + agidData.id);
     setTimeout(() => setCopied(null), 2000);
+  };
+
+  const saveCurrentAgid = () => {
+    saveAgid(clickedAgid ?? encodeAGID(lat, lng));
+    setSavedTab('agid');
   };
 
   const deleteSavedAgid = (id: string) => {
@@ -2783,14 +2798,20 @@ export default function App() {
       setPendingHotelCheckInSession(null);
       setShowAddressRegistration(true);
     };
+    const handleOpenAoid = () => {
+      setSavedTab('aoid');
+      setShowSaved(true);
+    };
 
     window.addEventListener('agid:open-qr-reader', handleOpenQrReader);
     window.addEventListener('agid:use-current-location', handleUseCurrentLocation);
     window.addEventListener('agid:open-address-registration', handleOpenAddressRegistration);
+    window.addEventListener('agid:open-aoid', handleOpenAoid);
     return () => {
       window.removeEventListener('agid:open-qr-reader', handleOpenQrReader);
       window.removeEventListener('agid:use-current-location', handleUseCurrentLocation);
       window.removeEventListener('agid:open-address-registration', handleOpenAddressRegistration);
+      window.removeEventListener('agid:open-aoid', handleOpenAoid);
     };
   }, [jumpToMyLocation, startQrScanner]);
 
@@ -2846,7 +2867,7 @@ export default function App() {
   useEffect(() => {
     const url = new URL(window.location.href);
     const action = url.searchParams.get('action');
-    if (action !== 'qr' && action !== 'current-location' && action !== 'register-address') return;
+    if (action !== 'qr' && action !== 'current-location' && action !== 'register-address' && action !== 'aoid') return;
 
     url.searchParams.delete('action');
     window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
@@ -2854,6 +2875,10 @@ export default function App() {
     window.setTimeout(() => {
       if (action === 'qr') startQrScanner();
       if (action === 'current-location') jumpToMyLocation();
+      if (action === 'aoid') {
+        setSavedTab('aoid');
+        setShowSaved(true);
+      }
       if (action === 'register-address') {
         setAoidModeForced(false);
         setPendingRegistrationQrRecord(null);
@@ -4789,18 +4814,7 @@ export default function App() {
             setShowSaved={setShowSaved}
             setAoidModeForced={setAoidModeForced}
             setShowAddressRegistration={setShowAddressRegistration}
-            setShowHistory={setShowHistory}
-            setShowSettings={setShowSettings}
-            setSettingsTab={(t) => setSettingsTab(t as any)}
-            handleShare={handleShare}
-            isSearchVisible={isSearchFocused}
-            setSearchVisible={(v) => {
-              setIsSearchFocused(v);
-              if (v) setShowCoordinateSearch(true);
-            }}
             appLanguage={appLanguage}
-            setAppLanguage={setAppLanguage}
-            t={t}
           />
         </React.Suspense>
       )}
@@ -4988,6 +5002,13 @@ export default function App() {
             initialHotelCheckInSession={pendingHotelCheckInSession}
             currentCoords={clickedAgid ? { lat: clickedAgid.lat, lon: clickedAgid.lon } : { lat, lon: lng }}
             onRegister={async (data) => {
+              const isAoidRegistration = data.type === 'AOID' || data.isAoid;
+              const existingAoid = isAoidRegistration && aoids.some(aoid => aoid.id === data.id);
+              if (isAoidRegistration && !existingAoid && aoids.length >= 3) {
+                showAlert("Limit Reached", "You can only register up to 3 AOIDs. Please delete one to register a new one.");
+                return;
+              }
+
               const {
                 buildRegisteredAddressQrPayload,
                 buildSavedQrFromRegisteredAddress,
@@ -5003,12 +5024,7 @@ export default function App() {
                 savedAt: savedQr.savedAt,
               });
 
-              if (data.type === 'AOID' || data.isAoid) {
-                const exists = aoids.some(aoid => aoid.id === data.id);
-                if (!exists && aoids.length >= 3) {
-                  showAlert("Limit Reached", "You can only register up to 3 AOIDs. Please delete one to register a new one.");
-                  return;
-                }
+              if (isAoidRegistration) {
                 setAoids(prev => [data, ...prev.filter(aoid => aoid.id !== data.id)]);
                 enqueueSyncQueueRecord('aoid', data.id, 'create', {
                   id: data.id,
@@ -5027,9 +5043,20 @@ export default function App() {
                   country: data.country,
                   registeredAt: data.registeredAt,
                 });
+                const registrationLat = typeof data.lat === 'number' ? data.lat : lat;
+                const registrationLon = typeof data.lon === 'number'
+                  ? data.lon
+                  : typeof data.lng === 'number'
+                    ? data.lng
+                    : lng;
+                const registeredAgid = encodeAGID(registrationLat, registrationLon);
+                saveAgid({
+                  ...registeredAgid,
+                  id: data.agid || registeredAgid.id,
+                }, data.address);
                 showAlert("Address Registered", `Address for ${data.name || data.recipient} has been saved locally and a QR has been generated.`);
               }
-              setSavedTab('qr');
+              setSavedTab(isAoidRegistration ? 'aoid' : 'agid');
               setShowSaved(true);
               setPendingRegistrationQrRecord(null);
               setPendingHotelCheckInSession(null);
@@ -5067,9 +5094,11 @@ export default function App() {
             copied={copied}
             deleteSavedAgid={deleteSavedAgid}
             deleteSavedQr={deleteSavedQr}
+            saveCurrentAgid={saveCurrentAgid}
             jumpToSaved={jumpToSaved}
             aoids={aoids}
             setAoids={setAoids}
+            setAoidModeForced={setAoidModeForced}
             setShowAddressRegistration={setShowAddressRegistration}
             setLat={setLat}
             setLng={setLng}

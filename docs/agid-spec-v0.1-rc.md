@@ -14,6 +14,8 @@ AGID v0.1 includes:
 
 - deterministic AGID encode/decode behavior
 - public cell and approximate location reference semantics
+- 21-bit-per-axis eight-neighbor cell relations
+- public `AGID + buildingId` references with private sub-premise separation
 - SDK conformance vectors
 - public QR/NFC parsing boundaries
 - local resolver and address display conformance expectations
@@ -52,6 +54,7 @@ The v0.1 release candidate expects these artifacts:
 | `docs/agid-standard.md` | yes | Human-readable standard |
 | `sdk/agid-spec/agid-spec.json` | yes | Machine-readable core contract |
 | `sdk/agid-spec/test-vectors.json` | yes | SDK conformance vectors |
+| `docs/agid-address-neighborhood-and-subpremise-v0.1.md` | yes | Neighborhood, building reference, privacy, and synthetic benchmark profile |
 | `/api/v1/openapi.json` | recommended | Server/API contract |
 | `DATA_LICENSES.md` | yes | Source data license boundary |
 | `SECURITY.md` | yes | Vulnerability reporting and safety policy |
@@ -69,6 +72,10 @@ An implementation is core-conformant when it passes shared vectors for:
 - `cellBounds`
 
 `cellPolygon` is recommended but not mandatory for v0.1.
+
+`adjacentCells` and `gridNeighborhoodMatch` are implemented neighborhood
+extensions. They must reproject across cubed-sphere face boundaries and must
+not convert proximity into a building, entrance, route, or delivery proof.
 
 ### 4.2 Local Resolver Conformance
 
@@ -120,6 +127,8 @@ Before marking v0.1 as released:
 npm run verify:no-raw-address
 npm run verify:preaudit-secrets
 npm run verify:external-audit
+npm run verify:agid-address-matching
+npm run benchmark:agid-address-normalization
 npm run verify:a11y
 npm run lint
 ```

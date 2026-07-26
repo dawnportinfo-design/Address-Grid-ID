@@ -261,7 +261,7 @@ const RESEARCH_CLAIMS = [
     evidenceJa: 'commitment、alias、receipt、scope、実住所なし公開ゲート。',
     boundary: 'QR payloads must avoid recipient data and raw address fields by default.',
     boundaryJa: 'QR payloadは標準で受取人情報と実住所フィールドを避ける。',
-    route: '/portal',
+    route: '/?action=aoid',
   },
   {
     title: 'ZK Address Predicates',
@@ -314,7 +314,7 @@ const PAPER_TO_IMPLEMENTATION = [
 const RESEARCH_ARTIFACTS = [
   { label: 'AMT paper', labelJa: 'AMT論文', route: '/developer#community', icon: BookOpen },
   { label: 'AGID/AOID Spec', labelJa: 'AGID/AOID仕様', route: '/developer#api', icon: FileText },
-  { label: 'Secure QR', labelJa: 'Secure QR', route: '/portal', icon: ShieldCheck },
+  { label: 'Secure QR', labelJa: 'Secure QR', route: '/?action=aoid', icon: ShieldCheck },
   { label: 'Conformance', labelJa: '互換性テスト', route: '/developer#vectors', icon: GitBranch },
   { label: 'Evidence Vault', labelJa: '証跡Vault', route: '/evidence', icon: Database },
   { label: 'Postal Zones', labelJa: '郵便区画', route: '/postal-zones', icon: Grid3X3 },
