@@ -1,0 +1,39 @@
+# Address Validation 60-Point Quality Floor
+
+`address-validation-quality-floor-v1` turns the repository's existing
+readiness contracts into one executable scorecard. It evaluates nine
+engineering dimensions using five equally weighted criteria per dimension.
+Every engineering dimension must score at least 60/100.
+
+Run:
+
+```bash
+npm run verify:address-validation-quality-floor
+```
+
+The engineering dimensions are:
+
+1. API, SDK, SQL, and portable runtime
+2. country and territory format coverage
+3. security and privacy boundaries
+4. postal format and source-gated lookup
+5. multilingual normalization safety
+6. official and OSS source governance
+7. official postal verification pipeline
+8. privacy-preserving delivery reachability
+9. freshness and correction operations
+
+The report deliberately separates engineering quality from deployment
+evidence. Parser, signature verification, aggregate holdout, reachability,
+expiry, and correction paths can be tested locally. They do not prove that a
+country has an approved live source, an independently controlled signing key,
+carrier evidence, or measured correction SLA.
+
+`engineeringQualityFloorPassed` may therefore be true while
+`productionEvidenceReady` remains false. Production evidence can cross the
+same 60-point threshold only after the relevant country promotion records
+contain approved runtime adapters and independently signed aggregate reports.
+
+The scorecard consumes synthetic and aggregate evidence only. It does not
+accept raw addresses, recipient data, precise coordinates, query logs,
+production credentials, or secrets.
