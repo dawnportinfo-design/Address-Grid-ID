@@ -1,9 +1,9 @@
-# Address Validation 60-Point Quality Floor
+# Address Validation 80-Point Quality Floor
 
-`address-validation-quality-floor-v1` turns the repository's existing
+`address-validation-quality-floor-v2` turns the repository's existing
 readiness contracts into one executable scorecard. It evaluates nine
 engineering dimensions using five equally weighted criteria per dimension.
-Every engineering dimension must score at least 60/100.
+Every engineering dimension must score at least 80/100.
 
 Run:
 
@@ -31,7 +31,7 @@ carrier evidence, or measured correction SLA.
 
 `engineeringQualityFloorPassed` may therefore be true while
 `productionEvidenceReady` remains false. Production evidence can cross the
-same 60-point threshold only after the relevant country promotion records
+same 80-point threshold only after the relevant country promotion records
 contain approved runtime adapters and independently signed aggregate reports.
 
 The scorecard consumes synthetic and aggregate evidence only. It does not

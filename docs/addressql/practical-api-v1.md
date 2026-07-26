@@ -165,6 +165,36 @@ npx tsx scripts/register-addressql-trusted-public-key.ts \
 The registrar accepts Ed25519 public keys only, rejects private-key material,
 and refuses to bind an existing key ID to a different key.
 
+Prepare the exact canonical payload for an independent offline reviewer:
+
+```bash
+npm run prepare:addressql-runtime-attestation -- \
+  --config ./.agid-runtime/addressql/jp/runtime-config.json \
+  --adapter japan-post-utf-csv-jp-existence \
+  --key-id independent-reviewer-2026 \
+  --output ./.agid-runtime/addressql/jp/japan-post.attestation.json
+```
+
+The reviewer signs the payload bytes outside AGID and returns one Base64
+Ed25519 detached signature. After registering the reviewer's public key,
+verify the signature and create a new approved config without overwriting the
+conformance source config:
+
+```bash
+npm run finalize:addressql-runtime-attestation -- \
+  --config ./.agid-runtime/addressql/jp/runtime-config.json \
+  --adapter japan-post-utf-csv-jp-existence \
+  --key-id independent-reviewer-2026 \
+  --signature ./japan-post.attestation.base64 \
+  --trust-store ./.agid-runtime/addressql/jp/trust-store.json \
+  --output ./.agid-runtime/addressql/jp/runtime-config.approved.json
+```
+
+Finalization rechecks the source data digest, reconstructs the canonical
+payload, verifies the detached signature, and loads the resulting adapter
+through the normal runtime gate. The output must be a new file beside the
+input config so relative dataset paths cannot be redirected.
+
 For a reusable JP runtime, AddressQL can derive postcode-only sets from the
 Japan Post UTF-8 CSV and the GeoNames CC BY 4.0 country archive:
 

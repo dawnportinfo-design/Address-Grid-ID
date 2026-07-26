@@ -33,6 +33,10 @@ npm run verify:addressql-api
 npm run verify:addressql-runtime-config
 ```
 
+The `prepare:addressql-runtime-attestation` and
+`finalize:addressql-runtime-attestation` commands provide the offline
+independent-signature workflow documented in `docs/practical-api-v1.md`.
+
 The exported address-format profiles and postal country packs are bounded
 format metadata, source catalogs, and synthetic-test assets. They are not
 complete postal-existence or delivery-point databases. L2 and higher remain

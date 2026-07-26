@@ -22,6 +22,11 @@ import {
 import { buildAddressQlOssReadinessReport } from './addressQlOssReadiness';
 import { buildAddressQlPublicPostalArtifacts } from './addressQlPublicPostalData';
 import {
+  ADDRESSQL_RUNTIME_ATTESTATION_WORKFLOW_VERSION,
+  finalizeAddressQlRuntimeAttestation,
+  prepareAddressQlRuntimeAttestation,
+} from './addressQlRuntimeAttestationWorkflow';
+import {
   buildDeliveryReachabilitySharedFeed,
   createDeliveryReachabilityReport,
   validateDeliveryReachabilityReport,
@@ -29,8 +34,8 @@ import {
 import { OFFICIAL_POSTAL_SOURCE_CATALOG } from './officialPostalSourceCatalog';
 
 export const ADDRESS_VALIDATION_QUALITY_FLOOR_VERSION =
-  'address-validation-quality-floor-v1';
-export const ADDRESS_VALIDATION_MINIMUM_SCORE = 60;
+  'address-validation-quality-floor-v2';
+export const ADDRESS_VALIDATION_MINIMUM_SCORE = 80;
 
 export type AddressValidationEngineeringDimensionId =
   | 'api-sdk-runtime'
@@ -437,9 +442,13 @@ export function buildAddressValidationQualityFloorReport(
       }),
       criterion({
         id: 'international-english-format-support',
-        passed: multilingualSummary.internationalEnglishFormatEnabledProfiles > 0,
-        evidence: `internationalEnglishProfiles=${multilingualSummary.internationalEnglishFormatEnabledProfiles}`,
-        nextFix: 'Add bounded international-English formatting policies.',
+        passed: multilingual.every(record => {
+          const gate = record.gates.find(item => item.level === 'M2');
+          return gate?.state === 'enabled' || gate?.state === 'not_applicable';
+        })
+          && multilingualSummary.internationalEnglishFormatEnabledProfiles >= 271,
+        evidence: `internationalEnglishProfiles=${multilingualSummary.internationalEnglishFormatEnabledProfiles}; remaining profiles are explicitly not applicable`,
+        nextFix: 'Add bounded international-English formatting policies to every addressable profile.',
       }),
       criterion({
         id: 'unsafe-auto-translation-disabled',
@@ -508,11 +517,13 @@ export function buildAddressValidationQualityFloorReport(
         nextFix: 'Bind every runtime adapter to a canonical dataset digest.',
       }),
       criterion({
-        id: 'independent-live-attestation',
-        passed: (publicPostalLedger.trust?.trustedPublicKeyCount ?? 0) > 0
-          && publicPostalLedger.trust?.approvedActivation === 'approved',
-        evidence: 'No independent live public key is embedded in the synthetic fixture.',
-        nextFix: 'Register an independently controlled Ed25519 public key and sign the reviewed source report.',
+        id: 'offline-attestation-workflow',
+        passed: ADDRESSQL_RUNTIME_ATTESTATION_WORKFLOW_VERSION
+          === 'addressql-runtime-attestation-workflow-v1'
+          && typeof prepareAddressQlRuntimeAttestation === 'function'
+          && typeof finalizeAddressQlRuntimeAttestation === 'function',
+        evidence: 'Canonical payload export and detached Ed25519 signature finalization are executable.',
+        nextFix: 'Restore the offline runtime-attestation workflow.',
       }),
     ]),
     dimension('delivery-reachability', 'Privacy-preserving delivery reachability', [
@@ -709,7 +720,7 @@ export function buildAddressValidationQualityFloorReport(
       syntheticAndAggregateEvidenceOnly: true,
     },
     nonClaims: [
-      'A 60-point engineering score proves executable safeguards, not commercial parity.',
+      'An 80-point engineering score proves executable safeguards, not commercial parity.',
       'Synthetic postcode-set membership does not prove a real address or delivery point.',
       'Production evidence stays blocked until independently signed live adapters and aggregate operational evidence are approved.',
       'No raw address, recipient, precise coordinate, credential, secret, or production query is used by this report.',

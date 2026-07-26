@@ -191,6 +191,8 @@
     "npm run verify:addressql-runtime-config",
     "npm run sync:addressql-public-postal-data",
     "npm run register:addressql-trusted-public-key",
+    "npm run prepare:addressql-runtime-attestation",
+    "npm run finalize:addressql-runtime-attestation",
     "npm run verify:addressql-zk",
     "npm run verify:addressql-calcite",
     "npm run verify:addressql-export",

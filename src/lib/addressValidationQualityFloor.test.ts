@@ -7,7 +7,7 @@ import {
   validateAddressValidationQualityFloorReport,
 } from './addressValidationQualityFloor';
 
-test('every address-validation engineering dimension meets the 60-point floor', () => {
+test('every address-validation engineering dimension meets the 80-point floor', () => {
   const report = buildAddressValidationQualityFloorReport();
 
   assert.equal(report.engineeringQualityFloorPassed, true);
