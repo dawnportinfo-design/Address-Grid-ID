@@ -8,6 +8,12 @@ import type {
 export const ADDRESSQL_CHECKPOINT_BINDING_VERSION = 'addressql-checkpoint-binding-v0.1';
 export const ADDRESSQL_CHECKPOINT_DIGEST_DOMAIN = 'AGID/AddressQlCheckpoint/v1';
 export const ADDRESSQL_PUBLIC_INPUT_DOMAIN = 'AGID/AddressQlPublicInputBinding/v1';
+export const ADDRESSQL_CHECKPOINT_BINDING_LIMITS = {
+  maxRefs: 16,
+  maxZoneIds: 512,
+  maxTargetsPerSource: 32,
+  maxUtf8BytesPerString: 4096,
+} as const;
 
 export type CheckpointBindingRef = {
   authorityKind: AddressAuthorityKind;
@@ -41,6 +47,25 @@ export type CheckpointBindingDecision = {
 
 function utf8(value: string): Buffer {
   return Buffer.from(value, 'utf8');
+}
+
+function isCanonicalUnicode(value: string): boolean {
+  return value === value.normalize('NFC');
+}
+
+function validateCanonicalScalar(
+  value: string | number,
+  path: string,
+  errors: string[],
+): void {
+  if (typeof value === 'number') {
+    if (!Number.isSafeInteger(value) || value < 0) errors.push(`invalid-canonical-integer:${path}`);
+    return;
+  }
+  if (!isCanonicalUnicode(value)) errors.push(`non-canonical-unicode:${path}`);
+  if (utf8(value).length > ADDRESSQL_CHECKPOINT_BINDING_LIMITS.maxUtf8BytesPerString) {
+    errors.push(`canonical-string-too-large:${path}`);
+  }
 }
 
 /**
@@ -150,6 +175,17 @@ export function verifyAddressQlCheckpointBinding(
   const byKind = new Map(checkpoints.map(checkpoint => [checkpoint.authorityKind, checkpoint]));
 
   if (binding.version !== ADDRESSQL_CHECKPOINT_BINDING_VERSION) errors.push('unsupported-binding-version');
+  validateCanonicalScalar(binding.claimKind, 'claimKind', errors);
+  validateCanonicalScalar(binding.purpose, 'purpose', errors);
+  if (binding.refs.length > ADDRESSQL_CHECKPOINT_BINDING_LIMITS.maxRefs) {
+    errors.push('too-many-authority-refs');
+  }
+  binding.refs.forEach((ref, index) => {
+    validateCanonicalScalar(ref.authorityKind, `refs.${index}.authorityKind`, errors);
+    validateCanonicalScalar(ref.checkpointDigest, `refs.${index}.checkpointDigest`, errors);
+    validateCanonicalScalar(ref.rootHash, `refs.${index}.rootHash`, errors);
+    validateCanonicalScalar(ref.boundaryEpoch, `refs.${index}.boundaryEpoch`, errors);
+  });
 
   for (const requiredKind of REQUIRED_AUTHORITIES[binding.claimKind]) {
     const matchingRefs = binding.refs.filter(candidate => candidate.authorityKind === requiredKind);
@@ -172,6 +208,41 @@ export function verifyAddressQlCheckpointBinding(
 
   if (binding.transition) {
     const transition = binding.transition;
+    validateCanonicalScalar(transition.fromBoundaryEpoch, 'transition.fromBoundaryEpoch', errors);
+    validateCanonicalScalar(transition.toBoundaryEpoch, 'transition.toBoundaryEpoch', errors);
+    validateCanonicalScalar(
+      transition.translatedReferentBefore,
+      'transition.translatedReferentBefore',
+      errors,
+    );
+    validateCanonicalScalar(
+      transition.translatedReferentAfter,
+      'transition.translatedReferentAfter',
+      errors,
+    );
+    if (
+      transition.sourceZoneIds.length > ADDRESSQL_CHECKPOINT_BINDING_LIMITS.maxZoneIds
+      || transition.targetZoneIds.length > ADDRESSQL_CHECKPOINT_BINDING_LIMITS.maxZoneIds
+    ) errors.push('transition-zone-limit-exceeded');
+    if (new Set(transition.sourceZoneIds).size !== transition.sourceZoneIds.length) {
+      errors.push('duplicate-transition-source-zone');
+    }
+    if (new Set(transition.targetZoneIds).size !== transition.targetZoneIds.length) {
+      errors.push('duplicate-transition-target-zone');
+    }
+    transition.sourceZoneIds.forEach((zone, index) =>
+      validateCanonicalScalar(zone, `transition.sourceZoneIds.${index}`, errors));
+    transition.targetZoneIds.forEach((zone, index) =>
+      validateCanonicalScalar(zone, `transition.targetZoneIds.${index}`, errors));
+    for (const [source, targets] of Object.entries(transition.sourceToTargets)) {
+      validateCanonicalScalar(source, 'transition.sourceToTargets.source', errors);
+      if (targets.length > ADDRESSQL_CHECKPOINT_BINDING_LIMITS.maxTargetsPerSource) {
+        errors.push('transition-target-fanout-limit-exceeded');
+      }
+      if (new Set(targets).size !== targets.length) errors.push('duplicate-transition-target-edge');
+      targets.forEach((target, index) =>
+        validateCanonicalScalar(target, `transition.sourceToTargets.target.${index}`, errors));
+    }
     const missingSources = transition.sourceZoneIds.filter(source =>
       !transition.sourceToTargets[source]?.length,
     );
@@ -193,7 +264,13 @@ export function verifyAddressQlCheckpointBinding(
   const hardBlock = errors.some(error =>
     error.startsWith('root-substitution:')
     || error.startsWith('checkpoint-substitution:')
-    || error.startsWith('boundary-epoch-replay:'),
+    || error.startsWith('boundary-epoch-replay:')
+    || error.startsWith('invalid-canonical-')
+    || error.startsWith('non-canonical-unicode:')
+    || error.startsWith('canonical-string-too-large:')
+    || error.includes('limit-exceeded')
+    || error.startsWith('too-many-')
+    || error.startsWith('duplicate-'),
   );
 
   return {

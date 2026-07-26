@@ -165,6 +165,56 @@ test('rejects ambiguous duplicate authority refs', () => {
   const candidate = binding();
   candidate.refs.push({ ...candidate.refs.find(ref => ref.authorityKind === 'customs')! });
   const result = verifyAddressQlCheckpointBinding(candidate, checkpoints);
-  assert.equal(result.status, 'manual_review');
+  assert.equal(result.status, 'block');
   assert.ok(result.errors.includes('duplicate-authority-ref:customs'));
+});
+
+test('blocks non-NFC Unicode before cross-language commitment verification', () => {
+  const candidate = binding();
+  candidate.transition = {
+    fromBoundaryEpoch: 4,
+    toBoundaryEpoch: 5,
+    sourceZoneIds: ['zone-e\u0301'],
+    targetZoneIds: ['zone-é'],
+    sourceToTargets: { 'zone-e\u0301': ['zone-é'] },
+    translatedReferentBefore: 'referent:synthetic-1',
+    translatedReferentAfter: 'referent:synthetic-1',
+  };
+  const result = verifyAddressQlCheckpointBinding(candidate, checkpoints);
+  assert.equal(result.status, 'block');
+  assert.ok(result.errors.some(error => error.startsWith('non-canonical-unicode:')));
+});
+
+test('blocks unsafe integers and duplicate transition keys or edges', () => {
+  const candidate = binding();
+  candidate.transition = {
+    fromBoundaryEpoch: Number.MAX_SAFE_INTEGER + 1,
+    toBoundaryEpoch: Number.MAX_SAFE_INTEGER + 2,
+    sourceZoneIds: ['zone-a', 'zone-a'],
+    targetZoneIds: ['zone-b'],
+    sourceToTargets: { 'zone-a': ['zone-b', 'zone-b'] },
+    translatedReferentBefore: 'referent:synthetic-1',
+    translatedReferentAfter: 'referent:synthetic-1',
+  };
+  const result = verifyAddressQlCheckpointBinding(candidate, checkpoints);
+  assert.equal(result.status, 'block');
+  assert.ok(result.errors.includes('invalid-canonical-integer:transition.fromBoundaryEpoch'));
+  assert.ok(result.errors.includes('duplicate-transition-source-zone'));
+  assert.ok(result.errors.includes('duplicate-transition-target-edge'));
+});
+
+test('has a fixed digest vector for independent implementations', () => {
+  const checkpoint = createSyntheticAddressStateCheckpoint({
+    authorityKind: 'issuer',
+    logId: 'synthetic:東京',
+    rootHash: 'sha256:0123456789abcdef',
+    policyVersion: 'policy-v1',
+    epoch: 7,
+    treeSize: 11,
+    boundaryEpoch: 3,
+  });
+  assert.equal(
+    checkpointDigest(checkpoint),
+    'sha256:b7fd1ed040bad34b043e2c2a9ad3c0410fca5f18121e0308151cde4f09bf0c2f',
+  );
 });
