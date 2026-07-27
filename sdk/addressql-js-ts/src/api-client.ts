@@ -15,6 +15,72 @@ export type AddressQlApiMultilingualAssessmentRequest = {
   requestId?: string;
 };
 
+export type AddressQlApiPlaceNameRankingRequest = {
+  countryCode: string;
+  query: string;
+  targetLanguage: string;
+  purpose?: "domestic" | "international-shipping";
+  hierarchyLevel?: "country" | "admin1" | "admin2" | "admin3" | "locality";
+  parentPlaceIds?: string[];
+  maxCandidates?: number;
+  requestId?: string;
+};
+
+export type AddressQlApiPlaceNameKind =
+  | "official-native"
+  | "official-alias"
+  | "official-romanization"
+  | "standardized-transliteration"
+  | "generated-transliteration"
+  | "compatibility-search-alias";
+
+export type AddressQlApiPlaceNameCandidate = {
+  placeId: string;
+  countryCode: string;
+  hierarchyLevel: "country" | "admin1" | "admin2" | "admin3" | "locality";
+  parentPlaceIds: string[];
+  displayName: string;
+  displayLanguage: string;
+  displayNameKind: AddressQlApiPlaceNameKind;
+  matchedNameKinds: AddressQlApiPlaceNameKind[];
+  sourceIds: string[];
+  sourceVersions: string[];
+  sourceState: "active" | "review-required" | "conformance-only";
+  score: number;
+  reasonCodes: string[];
+  officialAliasPreferred: boolean;
+  generatedTransliterationUsed: boolean;
+  translationUsed: false;
+  automaticUseAllowed: false;
+};
+
+export type AddressQlApiPlaceNameRankingResponse = {
+  version: "addressql-practical-api-v1";
+  requestId?: string;
+  ranking: {
+    version: "addressql-official-place-name-catalog-v1";
+    catalogId: string;
+    catalogVersion: string;
+    catalogDigest: `sha256:${string}`;
+    countryCode: string;
+    targetLanguage: string;
+    purpose: "domestic" | "international-shipping";
+    status: "ranked" | "ambiguous" | "unmatched";
+    candidates: AddressQlApiPlaceNameCandidate[];
+    requiresReview: boolean;
+    issues: string[];
+    translationUsed: false;
+    automaticUseAllowed: false;
+    nonClaims: string[];
+  };
+  privacy: {
+    acceptsPublicPlaceName: true;
+    acceptsRawAddress: false;
+    storesPlaceName: false;
+    logsPlaceName: false;
+  };
+};
+
 export type AddressQlApiL5CarrierDecision =
   | "reachable"
   | "unreachable"
@@ -131,6 +197,16 @@ export class AddressQlApiClient {
     });
   }
 
+  rankPlaceNames(
+    input: AddressQlApiPlaceNameRankingRequest,
+  ): Promise<AddressQlApiPlaceNameRankingResponse> {
+    return this.request<AddressQlApiPlaceNameRankingResponse>("/v1/place-names/rank", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(input),
+    });
+  }
+
   assessDeliveryPoint(
     input: AddressQlApiL5DeliveryPointRequest,
   ): Promise<Record<string, unknown>> {
@@ -159,7 +235,10 @@ export class AddressQlApiClient {
     });
   }
 
-  private async request(path: string, init: RequestInit = {}): Promise<Record<string, unknown>> {
+  private async request<T extends Record<string, unknown> = Record<string, unknown>>(
+    path: string,
+    init: RequestInit = {},
+  ): Promise<T> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.timeoutMs);
     try {
@@ -178,7 +257,7 @@ export class AddressQlApiClient {
           : `AddressQL API request failed with HTTP ${output.status}.`;
         throw new AddressQlApiError(output.status, code, message, payload);
       }
-      return payload;
+      return payload as T;
     } finally {
       clearTimeout(timer);
     }

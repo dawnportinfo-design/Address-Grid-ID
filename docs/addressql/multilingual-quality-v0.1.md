@@ -65,10 +65,19 @@ ability to distinguish:
 Promotion still requires source-backed aliases, country-specific synthetic
 holdouts, an independently signed report, and a reviewed runtime adapter.
 
+Official-name ranking is now an executable shared contract. Its versioned
+catalog pins source versions and per-place alias digests, while aggregate
+holdouts report country and administrative-hierarchy accuracy. Official aliases
+and official romanizations outrank generated transliteration. Missing context
+for same-script names produces a safe deferral instead of a guessed reading.
+
+See [Official Place-Name Ranking v1](official-place-name-ranking-v1.md).
+
 ## Verification
 
 ```bash
 npm run verify:addressql-multilingual-quality
+npm run verify:addressql-place-names
 npm run verify:addressql-api
 npm run verify:addressql
 ```

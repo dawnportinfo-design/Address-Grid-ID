@@ -19,6 +19,7 @@ import {
   ADDRESSQL_PRACTICAL_API_VERSION,
   createAddressQlPracticalApi,
 } from './addressQlPracticalApi';
+import type { AddressQlOfficialPlaceNameCatalog } from './addressQlOfficialPlaceNames';
 import type { AddressQlRuntimeAdapter } from './addressQlRuntimeAdapter';
 import {
   ADDRESSQL_CARRIER_TRUST_STORE_VERSION,
@@ -31,6 +32,16 @@ import {
 
 const api = createAddressQlPracticalApi(process.cwd(), {
   now: '2026-07-26T00:00:00Z',
+});
+const placeNameCatalog = (
+  JSON.parse(readFileSync(
+    'docs/specs/fixtures/addressql-official-place-name-conformance-v1.json',
+    'utf8',
+  )) as { catalog: AddressQlOfficialPlaceNameCatalog }
+).catalog;
+const placeNameApi = createAddressQlPracticalApi(process.cwd(), {
+  now: '2026-07-27T00:00:00Z',
+  placeNameCatalog,
 });
 
 const runtimeDigest = (character: string) => `sha256:${character.repeat(64)}`;
@@ -530,6 +541,7 @@ test('P1 batch validation isolates item errors and OpenAPI publishes the same ro
     '/v1/promotions',
     '/v1/multilingual',
     '/v1/multilingual/assess',
+    '/v1/place-names/rank',
     '/v1/delivery-points/assess',
     '/v1/postal/validate',
     '/v1/postal/validate/batch',
@@ -626,5 +638,85 @@ test('P3 multilingual assessment rejects address text and invalid language tags'
   assert.equal(
     (invalidLanguage.body.error as Record<string, unknown>).code,
     'invalid_language_tag',
+  );
+});
+
+test('P3 place-name API ranks official aliases with administrative context', () => {
+  const unavailable = api.handle({
+    method: 'POST',
+    path: '/v1/place-names/rank',
+    body: {
+      countryCode: 'JP',
+      query: '日本橋',
+      targetLanguage: 'en',
+    },
+  });
+  const ranked = placeNameApi.handle({
+    method: 'POST',
+    path: '/v1/place-names/rank',
+    headers: { 'x-request-id': 'place.jp.1' },
+    body: {
+      countryCode: 'JP',
+      query: '日本橋',
+      targetLanguage: 'en',
+      purpose: 'international-shipping',
+      hierarchyLevel: 'locality',
+      parentPlaceIds: ['jp-tokyo', 'jp-tokyo-chuo'],
+      maxCandidates: 3,
+      requestId: 'place.jp.1',
+    },
+  });
+  const ranking = ranked.body.ranking as Record<string, unknown>;
+  const candidates = ranking.candidates as Array<Record<string, unknown>>;
+
+  assert.equal(unavailable.statusCode, 503);
+  assert.equal(
+    (unavailable.body.error as Record<string, unknown>).code,
+    'place_name_catalog_not_configured',
+  );
+  assert.equal(ranked.statusCode, 200);
+  assert.equal(ranked.body.requestId, 'place.jp.1');
+  assert.equal(ranking.status, 'ranked');
+  assert.equal(ranking.translationUsed, false);
+  assert.equal(ranking.automaticUseAllowed, false);
+  assert.equal(candidates[0].displayName, 'Nihonbashi');
+  assert.equal(candidates[0].displayNameKind, 'official-romanization');
+  assert.equal(
+    (ranked.body.privacy as Record<string, unknown>).storesPlaceName,
+    false,
+  );
+});
+
+test('P3 place-name API rejects address fields and unsafe context', () => {
+  const rawAddress = placeNameApi.handle({
+    method: 'POST',
+    path: '/v1/place-names/rank',
+    body: {
+      countryCode: 'JP',
+      query: '日本橋',
+      targetLanguage: 'en',
+      address: 'not accepted',
+    },
+  });
+  const badParents = placeNameApi.handle({
+    method: 'POST',
+    path: '/v1/place-names/rank',
+    body: {
+      countryCode: 'JP',
+      query: '日本橋',
+      targetLanguage: 'en',
+      parentPlaceIds: ['valid-parent', 'rev\u0456ewer'],
+    },
+  });
+
+  assert.equal(rawAddress.statusCode, 400);
+  assert.equal(
+    (rawAddress.body.error as Record<string, unknown>).code,
+    'unknown_field',
+  );
+  assert.equal(badParents.statusCode, 400);
+  assert.equal(
+    (badParents.body.error as Record<string, unknown>).code,
+    'invalid_parent_context',
   );
 });

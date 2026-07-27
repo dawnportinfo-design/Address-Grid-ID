@@ -146,6 +146,21 @@ export const ADDRESSQL_EXPORT_ITEMS: ExportItem[] = [
     required: true,
   },
   {
+    from: 'docs/specs/fixtures/addressql-official-place-name-conformance-v1.json',
+    to: 'docs/specs/fixtures/addressql-official-place-name-conformance-v1.json',
+    required: true,
+  },
+  {
+    from: 'docs/specs/schemas/addressql-official-place-name-conformance-v1.schema.json',
+    to: 'docs/specs/schemas/addressql-official-place-name-conformance-v1.schema.json',
+    required: true,
+  },
+  {
+    from: 'docs/specs/schemas/addressql-place-name-holdout-report-v1.schema.json',
+    to: 'docs/specs/schemas/addressql-place-name-holdout-report-v1.schema.json',
+    required: true,
+  },
+  {
     from: 'docs/addressql/sources/jp-public-postal-sources-v1.json',
     to: 'docs/sources/jp-public-postal-sources-v1.json',
     required: true,
@@ -165,6 +180,8 @@ export const ADDRESSQL_EXPORT_ITEMS: ExportItem[] = [
   { from: 'src/lib/addressQlCountryDataPromotion.test.ts', to: 'src/lib/addressQlCountryDataPromotion.test.ts', required: true },
   { from: 'src/lib/addressQlMultilingualQuality.ts', to: 'src/lib/addressQlMultilingualQuality.ts', required: true },
   { from: 'src/lib/addressQlMultilingualQuality.test.ts', to: 'src/lib/addressQlMultilingualQuality.test.ts', required: true },
+  { from: 'src/lib/addressQlOfficialPlaceNames.ts', to: 'src/lib/addressQlOfficialPlaceNames.ts', required: true },
+  { from: 'src/lib/addressQlOfficialPlaceNames.test.ts', to: 'src/lib/addressQlOfficialPlaceNames.test.ts', required: true },
   { from: 'src/lib/countryGeographicMetadataEvaluationCatalog.ts', to: 'src/lib/countryGeographicMetadataEvaluationCatalog.ts', required: true },
   { from: 'src/lib/countryGeographicMetadataEvaluationIndex.ts', to: 'src/lib/countryGeographicMetadataEvaluationIndex.ts', required: true },
   { from: 'src/lib/countryValidationQualityGate.ts', to: 'src/lib/countryValidationQualityGate.ts', required: true },

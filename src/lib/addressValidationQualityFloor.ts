@@ -1,4 +1,6 @@
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import {
   evaluatePostalSourcePromotion,
@@ -53,6 +55,11 @@ import {
   validateAddressQlPostalOperationsReport,
   type AddressQlPostalOperationsInput,
 } from './addressQlPostalOperations';
+import {
+  evaluateAddressQlPlaceNameHoldout,
+  type AddressQlOfficialPlaceNameCatalog,
+  type AddressQlPlaceNameHoldoutPack,
+} from './addressQlOfficialPlaceNames';
 import {
   buildDeliveryReachabilitySharedFeed,
   createDeliveryReachabilityReport,
@@ -271,6 +278,21 @@ export function buildAddressValidationQualityFloorReport(
   const multilingual = buildAddressQlMultilingualQualityIndex(root);
   const multilingualSummary = summarizeAddressQlMultilingualQuality(multilingual);
   const multilingualErrors = validateAddressQlMultilingualQuality(multilingual);
+  const placeNameFixture = JSON.parse(readFileSync(
+    join(
+      root,
+      'docs/specs/fixtures/addressql-official-place-name-conformance-v1.json',
+    ),
+    'utf8',
+  )) as {
+    catalog: AddressQlOfficialPlaceNameCatalog;
+    holdout: AddressQlPlaceNameHoldoutPack;
+  };
+  const placeNameHoldout = evaluateAddressQlPlaceNameHoldout({
+    catalog: placeNameFixture.catalog,
+    pack: placeNameFixture.holdout,
+    now: '2026-07-27T00:00:00Z',
+  });
   const freshPromotion = evaluatePostalSourcePromotion(
     buildSyntheticPostalEvidence(),
     { now: '2026-07-15T00:00:00Z' },
@@ -580,10 +602,17 @@ export function buildAddressValidationQualityFloorReport(
         nextFix: 'Add bounded international-English formatting policies to every addressable profile.',
       }),
       criterion({
-        id: 'unsafe-auto-translation-disabled',
-        passed: multilingualSummary.automaticPlaceNameTranslationEnabledProfiles === 0,
-        evidence: 'Automatic place-name translation remains disabled without signed contextual holdouts.',
-        nextFix: 'Disable unverified automatic place-name translation.',
+        id: 'official-alias-context-holdout',
+        passed:
+          multilingualSummary.automaticPlaceNameTranslationEnabledProfiles === 0
+          && placeNameHoldout.top1Accuracy === 1
+          && placeNameHoldout.safeDeferralRate === 1
+          && placeNameHoldout.officialAliasPriorityPassed
+            === placeNameHoldout.officialAliasPriorityCases
+          && placeNameHoldout.sameScriptDifferentReadingPassed
+            === placeNameHoldout.sameScriptDifferentReadingCases,
+        evidence: `aggregateCases=${placeNameHoldout.total}; top1=${placeNameHoldout.top1Accuracy}; safeDeferral=${placeNameHoldout.safeDeferralRate}; automaticTranslationProfiles=0`,
+        nextFix: 'Restore official-alias priority, contextual same-script readings, and safe deferral without enabling automatic translation.',
       }),
     ]),
     dimension('source-governance', 'Official and OSS source governance', [

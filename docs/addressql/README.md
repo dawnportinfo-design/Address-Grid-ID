@@ -47,6 +47,7 @@ npm run verify:addressql-sdk
 npm run verify:addressql-global-preload
 npm run verify:addressql-global-coverage
 npm run verify:addressql-multilingual-quality
+npm run verify:addressql-place-names
 npm run verify:addressql-api
 npm run verify:addressql-runtime-config
 npm run verify:addressql-runtime-release
@@ -135,6 +136,7 @@ Detailed planning docs:
 - [Global Country Coverage v0.1](global-country-coverage-v0.1.md)
 - [Country Data Promotion v0.1](country-data-promotion-v0.1.md)
 - [Multilingual Quality v0.1](multilingual-quality-v0.1.md)
+- [Official Place-Name Ranking v1](official-place-name-ranking-v1.md)
 - [Practical API v1](practical-api-v1.md)
 - [Runtime Release Security v1](runtime-release-security-v1.md)
 - [Signed L5 Delivery-Point Contract v1](signed-delivery-point-contract-v1.md)

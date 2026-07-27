@@ -31,6 +31,8 @@ test('AddressQL OSS readiness manifest targets dawnportinfo-design/addressql', (
     pkg.name === 'addressql-signed-delivery-point'));
   assert.ok(manifest.public_packages.some(pkg =>
     pkg.name === 'addressql-postal-operations'));
+  assert.ok(manifest.public_packages.some(pkg =>
+    pkg.name === 'addressql-official-place-names'));
   assert.ok(manifest.required_documents.includes('docs/addressql/repository-files/LICENSE'));
   assert.ok(manifest.required_documents.includes('docs/addressql/repository-files/SECURITY.md'));
   assert.ok(manifest.required_documents.includes(POSTAL_VALIDATION_NEGATIVE_CLAIMS_FIXTURE));
@@ -51,6 +53,17 @@ test('AddressQL OSS readiness report passes all public release gates', () => {
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlGlobalCountryCoverage.test.ts'));
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlMultilingualQuality.ts'));
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlMultilingualQuality.test.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlOfficialPlaceNames.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlOfficialPlaceNames.test.ts'));
+  assert.ok(report.verifiedPaths.includes(
+    'docs/specs/fixtures/addressql-official-place-name-conformance-v1.json'
+  ));
+  assert.ok(report.verifiedPaths.includes(
+    'docs/specs/schemas/addressql-official-place-name-conformance-v1.schema.json'
+  ));
+  assert.ok(report.verifiedPaths.includes(
+    'docs/specs/schemas/addressql-place-name-holdout-report-v1.schema.json'
+  ));
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlPracticalApi.ts'));
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlPracticalApi.test.ts'));
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlDeliveryPointDecision.ts'));
@@ -86,6 +99,7 @@ test('AddressQL OSS readiness commands cover core, adapters, SDKs, ZK, and Calci
     'npm run verify:addressql-duckdb:cli',
     'npm run verify:addressql-sdk',
     'npm run verify:addressql-multilingual-quality',
+    'npm run verify:addressql-place-names',
     'npm run verify:addressql-api',
     'npm run verify:addressql-delivery-point',
     'npm run verify:addressql-postal-operations',
@@ -145,6 +159,8 @@ test('AddressQL OSS export snapshot includes the executable country core', () =>
     'src/lib/addressQlGlobalCountryCoverage.test.ts',
     'src/lib/addressQlMultilingualQuality.ts',
     'src/lib/addressQlMultilingualQuality.test.ts',
+    'src/lib/addressQlOfficialPlaceNames.ts',
+    'src/lib/addressQlOfficialPlaceNames.test.ts',
     'src/lib/addressQlPracticalApi.ts',
     'src/lib/addressQlPracticalApi.test.ts',
     'src/lib/addressQlRuntimeAttestationWorkflow.ts',
@@ -189,4 +205,7 @@ test('AddressQL OSS readiness note documents manifest-owned spec asset exports',
   assert.match(readinessDoc, /readiness\.verifiedPaths/);
   assert.match(readinessDoc, /included/);
   assert.match(readinessDoc, /synthetic fixtures or public schemas only/);
+  assert.match(readinessDoc, /official alias/i);
+  assert.match(readinessDoc, /administrative hierarchy/i);
+  assert.match(readinessDoc, /country and administrative-hierarchy\s+aggregates/i);
 });

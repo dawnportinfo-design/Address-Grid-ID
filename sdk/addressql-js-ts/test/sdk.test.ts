@@ -180,6 +180,15 @@ test("AddressQL TypeScript SDK P1 client uses bounded HTTP calls and structured 
     targetLanguage: "en",
     purpose: "international-shipping",
   });
+  await client.rankPlaceNames({
+    countryCode: "JP",
+    query: "日本橋",
+    targetLanguage: "en",
+    purpose: "international-shipping",
+    hierarchyLevel: "locality",
+    parentPlaceIds: ["jp-tokyo", "jp-tokyo-chuo"],
+    maxCandidates: 3,
+  });
   const commitment = `sha256:${"a".repeat(64)}` as const;
   await client.assessDeliveryPoint({
     version: "addressql-l5-delivery-point-request-v1",
@@ -207,8 +216,22 @@ test("AddressQL TypeScript SDK P1 client uses bounded HTTP calls and structured 
   assert.equal(calls[3].url, "http://127.0.0.1:8787/v1/multilingual");
   assert.equal(calls[4].url, "http://127.0.0.1:8787/v1/countries/JP/languages");
   assert.equal(calls[5].url, "http://127.0.0.1:8787/v1/multilingual/assess");
-  assert.equal(calls[6].url, "http://127.0.0.1:8787/v1/delivery-points/assess");
-  const l5Body = JSON.parse(String(calls[6].init?.body)) as Record<string, unknown>;
+  assert.equal(calls[6].url, "http://127.0.0.1:8787/v1/place-names/rank");
+  assert.equal(calls[7].url, "http://127.0.0.1:8787/v1/delivery-points/assess");
+  const placeNameBody = JSON.parse(
+    String(calls[6].init?.body),
+  ) as Record<string, unknown>;
+  assert.deepEqual(Object.keys(placeNameBody).sort(), [
+    "countryCode",
+    "hierarchyLevel",
+    "maxCandidates",
+    "parentPlaceIds",
+    "purpose",
+    "query",
+    "targetLanguage",
+  ]);
+  assert.equal("rawAddress" in placeNameBody, false);
+  const l5Body = JSON.parse(String(calls[7].init?.body)) as Record<string, unknown>;
   assert.deepEqual(Object.keys(l5Body).sort(), [
     "assertions",
     "countryCode",

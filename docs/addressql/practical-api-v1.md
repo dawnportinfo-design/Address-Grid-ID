@@ -29,6 +29,7 @@ GET  /v1/countries/{countryCode}/promotions
 GET  /v1/multilingual
 GET  /v1/countries/{countryCode}/languages
 POST /v1/multilingual/assess
+POST /v1/place-names/rank
 POST /v1/delivery-points/assess
 POST /v1/postal/validate
 POST /v1/postal/validate/batch
@@ -62,6 +63,12 @@ it rejects address text. Same-language normalization can be `ready`, while
 cross-language routes remain `review_required` until source-backed aliases,
 country holdouts, independent signatures, and runtime adapters are approved.
 No automatic place-name translation is enabled.
+
+The place-name ranking endpoint accepts one bounded public place-name token,
+country, target language, and optional hierarchy context. It uses a configured
+versioned catalog, ranks official aliases and romanizations above generated
+transliteration, and returns `ambiguous` when a same-script name lacks enough
+administrative context. It does not accept or retain full addresses.
 
 ## Capability Semantics
 

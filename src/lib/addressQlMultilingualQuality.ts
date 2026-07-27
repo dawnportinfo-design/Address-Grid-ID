@@ -303,6 +303,9 @@ export function buildAddressQlMultilingualQualityRecord(
           profile.countryCode === 'JP'
             ? 'holdout-engine:japanese-contextual-reading'
             : 'holdout-engine:chinese-regional-place-name',
+          'ranking-contract:official-place-name-ranking-v1',
+          'holdout-slices:country-and-administrative-hierarchy',
+          'candidate-policy:official-alias-before-generated-transliteration',
           ...adapters.map(adapter => `adapter-contract:${adapter}`),
         ]
         : [],

@@ -49,6 +49,7 @@ Recommended extraction map:
 | `src/data/address_formats/` | bounded country format profiles |
 | `data/postal_country_packs/` | source metadata and synthetic country packs |
 | `src/lib/addressQlMultilingualQuality.ts` | P3 country language and translation gates |
+| `src/lib/addressQlOfficialPlaceNames.ts` | versioned official-name catalog, hierarchy-aware candidate ranking, and aggregate holdout evaluation |
 | `scripts/run-addressql-api.ts` | P1 localhost-first HTTP adapter |
 | `scripts/monitor-addressql-postal-operations.ts` | P2 offline source expiry, correction SLA, and country action monitor |
 | `docs/specs/openapi/` | public Practical API contract |
@@ -98,6 +99,12 @@ must not enable postal-existence, administrative-consistency, delivery-area,
 or delivery-point claims without approved source, rights, version, freshness,
 coverage, correction, holdout, and signature evidence.
 
+Official place-name ranking is evidence-bounded. An official alias or official
+romanization outranks a generated transliteration, while translation cannot
+create an official-name claim. Same-script, different-reading names require
+country and administrative hierarchy context; unresolved ambiguity is a safe
+deferral, not an automatic correction.
+
 ## Manifest-Owned Spec Assets
 
 Any `docs/specs/fixtures/` or `docs/specs/schemas/` path listed in
@@ -111,6 +118,10 @@ These assets must remain synthetic fixtures or public schemas only.  Do not add
 raw private address, recipient, witness, private-key, proof-secret, production
 credential, or production traffic material.
 
+Place-name holdout exports contain country and administrative-hierarchy
+aggregates only. Individual query strings are conformance inputs and are never
+copied into the report.
+
 ## Verification Commands
 
 Core verification:
@@ -119,6 +130,7 @@ Core verification:
 npm run verify:addressql
 npm run verify:addressql-oss
 npm run verify:addressql-multilingual-quality
+npm run verify:addressql-place-names
 npm run verify:addressql-api
 ```
 

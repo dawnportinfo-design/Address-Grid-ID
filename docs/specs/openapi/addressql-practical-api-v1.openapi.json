@@ -337,6 +337,43 @@
           }
         }
       }
+    },
+    "/v1/place-names/rank": {
+      "post": {
+        "operationId": "rankOfficialPlaceNames",
+        "description": "Ranks versioned official aliases and romanizations for a bounded public place-name token. Full addresses, recipients, coordinates, and automatic translation are not accepted.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlaceNameRankingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Official-name candidate ranking or safe ambiguity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaceNameRankingResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "413": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ApiError"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1301,6 +1338,311 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          }
+        }
+      },
+      "PlaceNameRankingRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "countryCode",
+          "query",
+          "targetLanguage"
+        ],
+        "properties": {
+          "countryCode": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "description": "A public place-name token, never a full address."
+          },
+          "targetLanguage": {
+            "$ref": "#/components/schemas/LanguageTag"
+          },
+          "purpose": {
+            "type": "string",
+            "enum": [
+              "domestic",
+              "international-shipping"
+            ],
+            "default": "international-shipping"
+          },
+          "hierarchyLevel": {
+            "type": "string",
+            "enum": [
+              "country",
+              "admin1",
+              "admin2",
+              "admin3",
+              "locality"
+            ]
+          },
+          "parentPlaceIds": {
+            "type": "array",
+            "maxItems": 8,
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/components/schemas/TechnicalId"
+            }
+          },
+          "maxCandidates": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "default": 20
+          },
+          "requestId": {
+            "$ref": "#/components/schemas/TechnicalId"
+          }
+        }
+      },
+      "PlaceNameCandidate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "placeId",
+          "countryCode",
+          "hierarchyLevel",
+          "parentPlaceIds",
+          "displayName",
+          "displayLanguage",
+          "displayNameKind",
+          "matchedNameKinds",
+          "sourceIds",
+          "sourceVersions",
+          "sourceState",
+          "score",
+          "reasonCodes",
+          "officialAliasPreferred",
+          "generatedTransliterationUsed",
+          "translationUsed",
+          "automaticUseAllowed"
+        ],
+        "properties": {
+          "placeId": {
+            "$ref": "#/components/schemas/TechnicalId"
+          },
+          "countryCode": {
+            "type": "string"
+          },
+          "hierarchyLevel": {
+            "type": "string",
+            "enum": [
+              "country",
+              "admin1",
+              "admin2",
+              "admin3",
+              "locality"
+            ]
+          },
+          "parentPlaceIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TechnicalId"
+            }
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "displayLanguage": {
+            "$ref": "#/components/schemas/LanguageTag"
+          },
+          "displayNameKind": {
+            "type": "string",
+            "enum": [
+              "official-native",
+              "official-alias",
+              "official-romanization",
+              "standardized-transliteration",
+              "generated-transliteration",
+              "compatibility-search-alias"
+            ]
+          },
+          "matchedNameKinds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "official-native",
+                "official-alias",
+                "official-romanization",
+                "standardized-transliteration",
+                "generated-transliteration",
+                "compatibility-search-alias"
+              ]
+            }
+          },
+          "sourceIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TechnicalId"
+            }
+          },
+          "sourceVersions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceState": {
+            "type": "string",
+            "enum": [
+              "active",
+              "review-required",
+              "conformance-only"
+            ]
+          },
+          "score": {
+            "type": "number"
+          },
+          "reasonCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "officialAliasPreferred": {
+            "type": "boolean"
+          },
+          "generatedTransliterationUsed": {
+            "type": "boolean"
+          },
+          "translationUsed": {
+            "const": false
+          },
+          "automaticUseAllowed": {
+            "const": false
+          }
+        }
+      },
+      "PlaceNameRankingResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "version",
+          "ranking",
+          "privacy"
+        ],
+        "properties": {
+          "version": {
+            "const": "addressql-practical-api-v1"
+          },
+          "requestId": {
+            "$ref": "#/components/schemas/TechnicalId"
+          },
+          "ranking": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "version",
+              "catalogId",
+              "catalogVersion",
+              "catalogDigest",
+              "countryCode",
+              "targetLanguage",
+              "purpose",
+              "status",
+              "candidates",
+              "requiresReview",
+              "issues",
+              "translationUsed",
+              "automaticUseAllowed",
+              "nonClaims"
+            ],
+            "properties": {
+              "version": {
+                "const": "addressql-official-place-name-catalog-v1"
+              },
+              "catalogId": {
+                "$ref": "#/components/schemas/TechnicalId"
+              },
+              "catalogVersion": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "catalogDigest": {
+                "type": "string",
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              },
+              "countryCode": {
+                "type": "string",
+                "pattern": "^[A-Z]{2}$"
+              },
+              "targetLanguage": {
+                "$ref": "#/components/schemas/LanguageTag"
+              },
+              "purpose": {
+                "type": "string",
+                "enum": [
+                  "domestic",
+                  "international-shipping"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "ranked",
+                  "ambiguous",
+                  "unmatched"
+                ]
+              },
+              "candidates": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PlaceNameCandidate"
+                }
+              },
+              "requiresReview": {
+                "type": "boolean"
+              },
+              "issues": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "translationUsed": {
+                "const": false
+              },
+              "automaticUseAllowed": {
+                "const": false
+              },
+              "nonClaims": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "privacy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "acceptsPublicPlaceName",
+              "acceptsRawAddress",
+              "storesPlaceName",
+              "logsPlaceName"
+            ],
+            "properties": {
+              "acceptsPublicPlaceName": {
+                "const": true
+              },
+              "acceptsRawAddress": {
+                "const": false
+              },
+              "storesPlaceName": {
+                "const": false
+              },
+              "logsPlaceName": {
+                "const": false
+              }
             }
           }
         }

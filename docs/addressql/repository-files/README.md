@@ -29,6 +29,7 @@ npm install
 npm run verify:addressql-country-core
 npm run verify:addressql-country-data-promotion
 npm run verify:addressql-multilingual-quality
+npm run verify:addressql-place-names
 npm run verify:addressql-api
 npm run verify:addressql-runtime-config
 npm run verify:addressql-runtime-release
@@ -71,6 +72,10 @@ P3 publishes M0-M4 country language-quality gates. Native and international
 templates are independently testable, while transliteration and place-name
 translation remain review candidates until their source, holdout, signature,
 and runtime evidence is approved.
+
+The official place-name ranker keeps source versions and alias-set digests,
+prefers official aliases and romanizations to generated forms, and safely
+defers same-script readings when administrative hierarchy context is missing.
 
 Start the P1 API on loopback with:
 

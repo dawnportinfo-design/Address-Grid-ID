@@ -65,6 +65,12 @@
       "verification": "npm run verify:addressql-multilingual-quality"
     },
     {
+      "name": "addressql-official-place-names",
+      "path": "src/lib/addressQlOfficialPlaceNames.ts",
+      "readiness": "versioned-ranking-and-holdout-ready",
+      "verification": "npm run verify:addressql-place-names"
+    },
+    {
       "name": "addressql-practical-api",
       "path": "src/lib/addressQlPracticalApi.ts",
       "readiness": "p1-self-hosted-api-ready",
@@ -154,6 +160,7 @@
     "docs/addressql/global-country-coverage-v0.1.md",
     "docs/addressql/country-data-promotion-v0.1.md",
     "docs/addressql/multilingual-quality-v0.1.md",
+    "docs/addressql/official-place-name-ranking-v1.md",
     "docs/addressql/practical-api-v1.md",
     "docs/addressql/runtime-release-security-v1.md",
     "docs/addressql/signed-delivery-point-contract-v1.md",
@@ -184,6 +191,9 @@
     "docs/specs/fixtures/addressql-postal-operations-input-v1.json",
     "docs/specs/schemas/addressql-postal-operations-input-v1.schema.json",
     "docs/specs/schemas/addressql-postal-operations-report-v1.schema.json",
+    "docs/specs/fixtures/addressql-official-place-name-conformance-v1.json",
+    "docs/specs/schemas/addressql-official-place-name-conformance-v1.schema.json",
+    "docs/specs/schemas/addressql-place-name-holdout-report-v1.schema.json",
     "docs/specs/fixtures/addressql-postal-validation-negative-claims-v0.1.json",
     "docs/specs/schemas/addressql-postal-validation-negative-claims-v0.1.schema.json"
   ],
@@ -199,6 +209,9 @@
     "Practical API responses must not reflect submitted postal codes or accept raw address and recipient fields.",
     "Public-source sync may create conformance adapters, but only an independently supplied Ed25519 public key and valid signature may activate approved evidence.",
     "Cross-language place-name transformation remains disabled until country-specific source, holdout, signature, and runtime evidence is approved.",
+    "Official aliases and official romanizations must outrank generated transliterations; translation alone must never create an official-name claim.",
+    "Same-script place-name ambiguity must defer unless country and administrative hierarchy context identify a unique supported candidate.",
+    "Place-name holdout reports contain country and administrative-hierarchy aggregates only; raw address or recipient vectors are prohibited.",
     "L4 delivery-area evidence must never be promoted to an L5 delivery-point decision.",
     "L5 requests accept only delivery-point commitments and signed carrier decisions; carrier disagreement stops as conflict.",
     "Expired postal adapters must disappear from runtime capability and evaluation without requiring a restart.",
@@ -216,6 +229,7 @@
     "npm run verify:addressql-global-coverage",
     "npm run verify:addressql-country-data-promotion",
     "npm run verify:addressql-multilingual-quality",
+    "npm run verify:addressql-place-names",
     "npm run verify:addressql-api",
     "npm run verify:addressql-runtime-config",
     "npm run verify:addressql-runtime-release",

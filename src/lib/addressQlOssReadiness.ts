@@ -58,6 +58,7 @@ const REQUIRED_PUBLIC_DOCS = [
   'docs/addressql/global-country-coverage-v0.1.md',
   'docs/addressql/country-data-promotion-v0.1.md',
   'docs/addressql/multilingual-quality-v0.1.md',
+  'docs/addressql/official-place-name-ranking-v1.md',
   'docs/addressql/practical-api-v1.md',
   'docs/addressql/runtime-release-security-v1.md',
   'docs/addressql/signed-delivery-point-contract-v1.md',
@@ -87,6 +88,9 @@ const REQUIRED_PUBLIC_DOCS = [
   'docs/specs/fixtures/addressql-postal-operations-input-v1.json',
   'docs/specs/schemas/addressql-postal-operations-input-v1.schema.json',
   'docs/specs/schemas/addressql-postal-operations-report-v1.schema.json',
+  'docs/specs/fixtures/addressql-official-place-name-conformance-v1.json',
+  'docs/specs/schemas/addressql-official-place-name-conformance-v1.schema.json',
+  'docs/specs/schemas/addressql-place-name-holdout-report-v1.schema.json',
   POSTAL_VALIDATION_NEGATIVE_CLAIMS_FIXTURE,
   POSTAL_VALIDATION_NEGATIVE_CLAIMS_SCHEMA,
 ];
@@ -132,6 +136,8 @@ const REQUIRED_PUBLIC_ARTIFACTS = [
   'src/lib/addressQlCountryDataPromotion.test.ts',
   'src/lib/addressQlMultilingualQuality.ts',
   'src/lib/addressQlMultilingualQuality.test.ts',
+  'src/lib/addressQlOfficialPlaceNames.ts',
+  'src/lib/addressQlOfficialPlaceNames.test.ts',
   'src/lib/countryGeographicMetadataEvaluationCatalog.ts',
   'src/lib/countryGeographicMetadataEvaluationIndex.ts',
   'src/lib/countryValidationQualityGate.ts',
@@ -176,6 +182,7 @@ const REQUIRED_PACKAGE_SCRIPTS = [
   'verify:addressql-global-coverage',
   'verify:addressql-country-data-promotion',
   'verify:addressql-multilingual-quality',
+  'verify:addressql-place-names',
   'verify:addressql-api',
   'verify:addressql-runtime-config',
   'verify:addressql-runtime-release',
@@ -342,6 +349,9 @@ export function buildAddressQlOssReadinessReport(root = process.cwd()): AddressQ
   if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlMultilingualQuality.test.ts')) {
     addOnce(errors, 'addressql-full-verification-must-include-multilingual-quality-test');
   }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlOfficialPlaceNames.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-official-place-name-test');
+  }
   if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlPracticalApi.test.ts')) {
     addOnce(errors, 'addressql-full-verification-must-include-practical-api-test');
   }
@@ -419,6 +429,7 @@ export function buildAddressQlOssReadinessReport(root = process.cwd()): AddressQ
     'M4',
     'zero profiles enable automatic place-name translation',
     'POST /v1/multilingual/assess',
+    'Official-name ranking',
     'independently signed report',
   ]) {
     if (!multilingualQualityDoc.includes(phrase)) {
@@ -452,6 +463,7 @@ export function buildAddressQlOssReadinessReport(root = process.cwd()): AddressQ
     '"/v1/multilingual"',
     '"/v1/countries/{countryCode}/languages"',
     '"/v1/multilingual/assess"',
+    '"/v1/place-names/rank"',
     '"/v1/postal/validate"',
     '"/v1/postal/validate/batch"',
     '"additionalProperties": false',

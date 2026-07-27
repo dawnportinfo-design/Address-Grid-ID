@@ -38,6 +38,11 @@ import {
   ADDRESSQL_L5_DELIVERY_POINT_DECISION_VERSION,
   type AddressQlDeliveryPointVerifier,
 } from './addressQlDeliveryPointDecision';
+import {
+  rankAddressQlOfficialPlaceNameCandidates,
+  type AddressQlOfficialPlaceNameCatalog,
+  type AddressQlPlaceHierarchyLevel,
+} from './addressQlOfficialPlaceNames';
 
 export const ADDRESSQL_PRACTICAL_API_VERSION = 'addressql-practical-api-v1';
 export const ADDRESSQL_PRACTICAL_API_LIMITS = {
@@ -46,6 +51,9 @@ export const ADDRESSQL_PRACTICAL_API_LIMITS = {
   maxCountryCodeCharacters: 16,
   maxPostalCodeCharacters: 32,
   maxLanguageTagCharacters: 35,
+  maxPlaceNameCharacters: 160,
+  maxPlaceNameCandidates: 20,
+  maxParentPlaceIds: 8,
   maxRequestIdCharacters: 64,
 } as const;
 
@@ -86,6 +94,17 @@ export type AddressQlMultilingualAssessmentRequest = {
   requestId?: string;
 };
 
+export type AddressQlPlaceNameRankingRequest = {
+  countryCode: string;
+  query: string;
+  targetLanguage: string;
+  purpose?: AddressQlMultilingualPurpose;
+  hierarchyLevel?: AddressQlPlaceHierarchyLevel;
+  parentPlaceIds?: string[];
+  maxCandidates?: number;
+  requestId?: string;
+};
+
 export type AddressQlValidationResult = {
   version: 'address-validation-result-v0.1';
   purpose: AddressQlValidationPurpose;
@@ -121,6 +140,7 @@ export type AddressQlPracticalApiOptions =
   & {
     runtimeAdapters?: readonly AddressQlRuntimeAdapter[];
     deliveryPointVerifier?: AddressQlDeliveryPointVerifier;
+    placeNameCatalog?: AddressQlOfficialPlaceNameCatalog;
   };
 
 type CountryRuntime = {
@@ -155,6 +175,23 @@ const ALLOWED_MULTILINGUAL_REQUEST_FIELDS = new Set([
   'purpose',
   'requestId',
 ]);
+const ALLOWED_PLACE_NAME_REQUEST_FIELDS = new Set([
+  'countryCode',
+  'query',
+  'targetLanguage',
+  'purpose',
+  'hierarchyLevel',
+  'parentPlaceIds',
+  'maxCandidates',
+  'requestId',
+]);
+const PLACE_HIERARCHY_LEVELS: readonly AddressQlPlaceHierarchyLevel[] = [
+  'country',
+  'admin1',
+  'admin2',
+  'admin3',
+  'locality',
+];
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -395,6 +432,164 @@ function parseMultilingualRequest(
       sourceLanguage,
       targetLanguage,
       purpose: purpose as AddressQlMultilingualPurpose,
+      ...(bodyRequestId || headerRequestId
+        ? { requestId: String(bodyRequestId || headerRequestId) }
+        : {}),
+    },
+  };
+}
+
+function parsePlaceNameRequest(
+  body: unknown,
+  headerRequestId?: string,
+): {
+  ok: true;
+  request: Required<Pick<
+    AddressQlPlaceNameRankingRequest,
+    'countryCode' | 'query' | 'targetLanguage' | 'purpose' | 'maxCandidates'
+  >> & Pick<
+    AddressQlPlaceNameRankingRequest,
+    'hierarchyLevel' | 'parentPlaceIds' | 'requestId'
+  >;
+} | {
+  ok: false;
+  code: string;
+  message: string;
+} {
+  if (!isRecord(body)) {
+    return {
+      ok: false,
+      code: 'invalid_body',
+      message: 'Request body must be a JSON object.',
+    };
+  }
+  if (Object.keys(body).some(key => !ALLOWED_PLACE_NAME_REQUEST_FIELDS.has(key))) {
+    return {
+      ok: false,
+      code: 'unknown_field',
+      message: 'Request body contains unsupported fields.',
+    };
+  }
+  const countryCode = normalizeCountryCode(body.countryCode);
+  if (
+    !countryCode
+    || countryCode.length > ADDRESSQL_PRACTICAL_API_LIMITS.maxCountryCodeCharacters
+    || !COUNTRY_CODE_PATTERN.test(countryCode)
+  ) {
+    return {
+      ok: false,
+      code: 'invalid_country_code',
+      message: 'countryCode must be a bounded ASCII country identifier.',
+    };
+  }
+  if (
+    typeof body.query !== 'string'
+    || !body.query.trim()
+    || body.query.length > ADDRESSQL_PRACTICAL_API_LIMITS.maxPlaceNameCharacters
+  ) {
+    return {
+      ok: false,
+      code: 'invalid_place_name',
+      message: 'query must be a public place-name token of at most 160 characters.',
+    };
+  }
+  const targetLanguage = typeof body.targetLanguage === 'string'
+    ? normalizeAddressQlLanguageTag(body.targetLanguage)
+    : null;
+  if (!targetLanguage) {
+    return {
+      ok: false,
+      code: 'invalid_language_tag',
+      message: 'targetLanguage must be a bounded BCP 47 language tag.',
+    };
+  }
+  const purpose = body.purpose ?? 'international-shipping';
+  if (!['domestic', 'international-shipping'].includes(String(purpose))) {
+    return {
+      ok: false,
+      code: 'invalid_multilingual_purpose',
+      message: 'purpose must be domestic or international-shipping.',
+    };
+  }
+  const hierarchyLevel = body.hierarchyLevel;
+  if (
+    hierarchyLevel !== undefined
+    && (
+      typeof hierarchyLevel !== 'string'
+      || !PLACE_HIERARCHY_LEVELS.includes(
+        hierarchyLevel as AddressQlPlaceHierarchyLevel,
+      )
+    )
+  ) {
+    return {
+      ok: false,
+      code: 'invalid_hierarchy_level',
+      message: 'hierarchyLevel must be country, admin1, admin2, admin3, or locality.',
+    };
+  }
+  const parentPlaceIds = body.parentPlaceIds ?? [];
+  if (
+    !Array.isArray(parentPlaceIds)
+    || parentPlaceIds.length > ADDRESSQL_PRACTICAL_API_LIMITS.maxParentPlaceIds
+    || parentPlaceIds.some(item => !validateTechnicalId(item))
+    || new Set(parentPlaceIds).size !== parentPlaceIds.length
+  ) {
+    return {
+      ok: false,
+      code: 'invalid_parent_context',
+      message: 'parentPlaceIds must contain at most 8 unique technical IDs.',
+    };
+  }
+  const maxCandidates = body.maxCandidates
+    ?? ADDRESSQL_PRACTICAL_API_LIMITS.maxPlaceNameCandidates;
+  if (
+    !Number.isInteger(maxCandidates)
+    || Number(maxCandidates) < 1
+    || Number(maxCandidates)
+      > ADDRESSQL_PRACTICAL_API_LIMITS.maxPlaceNameCandidates
+  ) {
+    return {
+      ok: false,
+      code: 'invalid_max_candidates',
+      message: 'maxCandidates must be an integer from 1 to 20.',
+    };
+  }
+  const bodyRequestId = body.requestId;
+  if (bodyRequestId !== undefined && !validateTechnicalId(bodyRequestId)) {
+    return {
+      ok: false,
+      code: 'invalid_request_id',
+      message: 'requestId must be a bounded ASCII technical identifier.',
+    };
+  }
+  if (headerRequestId !== undefined && !validateTechnicalId(headerRequestId)) {
+    return {
+      ok: false,
+      code: 'invalid_request_id',
+      message: 'X-Request-Id must be a bounded ASCII technical identifier.',
+    };
+  }
+  if (bodyRequestId && headerRequestId && bodyRequestId !== headerRequestId) {
+    return {
+      ok: false,
+      code: 'request_id_conflict',
+      message: 'requestId and X-Request-Id must match when both are supplied.',
+    };
+  }
+  return {
+    ok: true,
+    request: {
+      countryCode,
+      query: body.query,
+      targetLanguage,
+      purpose: purpose as AddressQlMultilingualPurpose,
+      maxCandidates: Number(maxCandidates),
+      ...(hierarchyLevel
+        ? { hierarchyLevel: hierarchyLevel as AddressQlPlaceHierarchyLevel }
+        : {}),
+      ...(parentPlaceIds.length
+        ? { parentPlaceIds: parentPlaceIds as string[] }
+        : {}),
       ...(bodyRequestId || headerRequestId
         ? { requestId: String(bodyRequestId || headerRequestId) }
         : {}),
@@ -846,6 +1041,12 @@ export function createAddressQlPracticalApi(
           level: 'L5',
           scope: 'delivery-point',
         },
+        officialPlaceNameCatalog: {
+          configured: Boolean(options.placeNameCatalog),
+          catalogId: options.placeNameCatalog?.catalogId ?? null,
+          catalogVersion: options.placeNameCatalog?.catalogVersion ?? null,
+          automaticUseEnabled: false,
+        },
         privacy: { storesRequests: false, logsRequestBodies: false },
       });
     }
@@ -1006,6 +1207,55 @@ export function createAddressQlPracticalApi(
           acceptsAddressText: false,
           storesAddressText: false,
           logsAddressText: false,
+        },
+      });
+    }
+
+    if (method === 'POST' && path === '/v1/place-names/rank') {
+      if (!options.placeNameCatalog) {
+        return buildAddressQlApiErrorResponse(
+          503,
+          'place_name_catalog_not_configured',
+          'A versioned official place-name catalog is not configured.',
+        );
+      }
+      const parsed = parsePlaceNameRequest(
+        request.body,
+        requestIdFromHeaders(request.headers),
+      );
+      if (parsed.ok === false) {
+        return buildAddressQlApiErrorResponse(400, parsed.code, parsed.message);
+      }
+      const ranking = rankAddressQlOfficialPlaceNameCandidates({
+        catalog: options.placeNameCatalog,
+        countryCode: parsed.request.countryCode,
+        query: parsed.request.query,
+        targetLanguage: parsed.request.targetLanguage,
+        purpose: parsed.request.purpose,
+        hierarchyLevel: parsed.request.hierarchyLevel,
+        parentPlaceIds: parsed.request.parentPlaceIds,
+        maxCandidates: parsed.request.maxCandidates,
+        now: options.clock?.() ?? options.now,
+      });
+      if (ranking.status === 'rejected-evidence') {
+        return buildAddressQlApiErrorResponse(
+          503,
+          'place_name_catalog_rejected',
+          'The configured place-name catalog failed its evidence gate.',
+          parsed.request.requestId,
+        );
+      }
+      return response(200, {
+        version: ADDRESSQL_PRACTICAL_API_VERSION,
+        ...(parsed.request.requestId
+          ? { requestId: parsed.request.requestId }
+          : {}),
+        ranking,
+        privacy: {
+          acceptsPublicPlaceName: true,
+          acceptsRawAddress: false,
+          storesPlaceName: false,
+          logsPlaceName: false,
         },
       });
     }

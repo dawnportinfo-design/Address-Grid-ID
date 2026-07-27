@@ -11,6 +11,7 @@
     "monitor:addressql-postal-operations": "tsx scripts/monitor-addressql-postal-operations.ts",
     "verify:addressql-postal-operations": "tsx --test src/lib/addressQlRuntimeAdapter.test.ts src/lib/addressQlPostalOperations.test.ts scripts/monitor-addressql-postal-operations.test.ts",
     "verify:addressql-multilingual-quality": "tsx --test src/lib/addressQlMultilingualQuality.test.ts",
+    "verify:addressql-place-names": "tsx --test src/lib/addressQlOfficialPlaceNames.test.ts src/lib/addressQlMultilingualQuality.test.ts",
     "verify:addressql-api": "tsx --test src/lib/addressQlRuntimeAdapter.test.ts src/lib/addressQlPostalSetAdapter.test.ts src/lib/addressQlRuntimeConfig.test.ts src/lib/addressQlRuntimeAttestationWorkflow.test.ts src/lib/addressQlRuntimeReleaseLedger.test.ts src/lib/addressQlDeliveryPointDecision.test.ts src/lib/addressQlPublicPostalData.test.ts scripts/register-addressql-trusted-public-key.test.ts src/lib/addressQlPracticalApi.test.ts scripts/run-addressql-api.test.ts sdk/addressql-js-ts/test/sdk.test.ts",
     "verify:addressql-runtime-config": "tsx scripts/verify-addressql-runtime-config.ts --config docs/specs/fixtures/addressql-runtime-config-conformance-v1.json --allow-conformance --now 2026-07-26T00:00:00Z",
     "verify:addressql-country-core": "tsx --test src/lib/addressQlGlobalCountryPreload.test.ts src/lib/addressQlGlobalCountryCoverage.test.ts src/lib/addressQlCountryDataPromotion.test.ts src/lib/addressQlMultilingualQuality.test.ts",
