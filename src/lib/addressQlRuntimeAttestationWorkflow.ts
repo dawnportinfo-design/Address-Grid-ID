@@ -1,6 +1,5 @@
 import {
   createHash,
-  createPublicKey,
   verify,
 } from 'node:crypto';
 import {
@@ -16,18 +15,17 @@ import {
 
 import {
   ADDRESSQL_RUNTIME_CONFIG_VERSION,
-  ADDRESSQL_TRUST_STORE_VERSION,
   buildAddressQlRuntimeAttestationPayload,
   loadAddressQlRuntimeConfig,
   type AddressQlRuntimeAdapterConfig,
   type AddressQlRuntimeConfig,
 } from './addressQlRuntimeConfig';
+import { loadAddressQlTrustPolicy } from './addressQlTrustPolicy';
 
 export const ADDRESSQL_RUNTIME_ATTESTATION_WORKFLOW_VERSION =
   'addressql-runtime-attestation-workflow-v1';
 
 const MAX_CONFIG_BYTES = 1024 * 1024;
-const MAX_TRUST_STORE_BYTES = 256 * 1024;
 const MAX_SIGNATURE_BYTES = 1024;
 const KEY_ID = /^[a-z0-9][a-z0-9._:-]{0,127}$/;
 
@@ -54,10 +52,6 @@ type RuntimeConfigFile = AddressQlRuntimeConfig & {
   adapters: AddressQlRuntimeAdapterConfig[];
 };
 
-type TrustStoreFile = {
-  version: typeof ADDRESSQL_TRUST_STORE_VERSION;
-  keys: Record<string, string>;
-};
 
 function readBoundedText(path: string, maxBytes: number, label: string) {
   const absolutePath = resolve(path);
@@ -78,21 +72,6 @@ function readRuntimeConfig(path: string): RuntimeConfigFile {
     || !Array.isArray(value.adapters)
   ) {
     throw new Error('runtime config has an invalid version or adapter list');
-  }
-  return value;
-}
-
-function readTrustStore(path: string): TrustStoreFile {
-  const value = JSON.parse(
-    readBoundedText(path, MAX_TRUST_STORE_BYTES, 'trust store'),
-  ) as TrustStoreFile;
-  if (
-    value.version !== ADDRESSQL_TRUST_STORE_VERSION
-    || !value.keys
-    || typeof value.keys !== 'object'
-    || Array.isArray(value.keys)
-  ) {
-    throw new Error('trust store has an invalid version or key map');
   }
   return value;
 }
@@ -234,15 +213,12 @@ export function finalizeAddressQlRuntimeAttestation(
   if (adapter.mode !== 'conformance') {
     throw new Error('only a conformance adapter can be finalized for approval');
   }
-  const trustStore = readTrustStore(options.trustStorePath);
-  const pem = trustStore.keys[options.keyId];
-  if (!pem) throw new Error(`trust store does not contain key ${options.keyId}`);
-  if (/PRIVATE KEY/.test(pem)) {
-    throw new Error('trust store must not contain private key material');
-  }
-  const publicKey = createPublicKey(pem);
-  if (publicKey.asymmetricKeyType !== 'ed25519') {
-    throw new Error(`trust store key ${options.keyId} must be Ed25519`);
+  const trustPolicy = loadAddressQlTrustPolicy(options.trustStorePath, {
+    now: options.now,
+  });
+  const publicKey = trustPolicy.usableKeys.get(options.keyId);
+  if (!publicKey) {
+    throw new Error(`trust store does not contain an active key ${options.keyId}`);
   }
 
   const detached = readDetachedSignature(options.signaturePath);

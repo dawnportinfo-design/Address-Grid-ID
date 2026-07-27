@@ -114,3 +114,23 @@ test('P1 HTTP adapter loads an explicit local conformance runtime config', async
   assert.equal(validation.evidence_level, 'synthetic_conformance');
   assert.doesNotMatch(text, /000-0000/);
 });
+
+test('P1 runtime environment requires complete quorum release settings', () => {
+  assert.throws(
+    () => loadAddressQlRuntimeEnvironment({
+      ADDRESSQL_RUNTIME_CONFIG:
+        'docs/specs/fixtures/addressql-runtime-config-conformance-v1.json',
+      ADDRESSQL_RELEASE_LEDGER: 'release-ledger.json',
+    }, process.cwd()),
+    /RELEASE_LEDGER and ADDRESSQL_RELEASE_STATE/,
+  );
+  assert.throws(
+    () => loadAddressQlRuntimeEnvironment({
+      ADDRESSQL_RUNTIME_CONFIG:
+        'docs/specs/fixtures/addressql-runtime-config-conformance-v1.json',
+      ADDRESSQL_RELEASE_LEDGER: 'release-ledger.json',
+      ADDRESSQL_RELEASE_STATE: 'release-state.json',
+    }, process.cwd()),
+    /requires ADDRESSQL_TRUST_STORE/,
+  );
+});

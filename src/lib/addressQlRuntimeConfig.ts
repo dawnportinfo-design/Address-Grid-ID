@@ -1,7 +1,6 @@
 import { Buffer } from 'node:buffer';
 import {
   createHash,
-  createPublicKey,
   verify,
   type KeyObject,
 } from 'node:crypto';
@@ -27,6 +26,7 @@ import {
   type AddressQlRuntimeAdapterEvidence,
   type AddressQlRuntimeAdapterRegistryOptions,
 } from './addressQlRuntimeAdapter';
+import { loadAddressQlTrustedPublicKeys } from './addressQlTrustPolicy';
 
 export const ADDRESSQL_RUNTIME_CONFIG_VERSION = 'addressql-runtime-config-v1';
 export const ADDRESSQL_TRUST_STORE_VERSION = 'addressql-trust-store-v1';
@@ -64,11 +64,12 @@ export type LoadedAddressQlRuntimeConfig = {
     approvedAdapterCount: number;
     conformanceAdapterCount: number;
     countryCodes: string[];
+    releaseLedgerVerified?: boolean;
+    releaseSequence?: number;
   };
 };
 
 const MAX_CONFIG_BYTES = 1024 * 1024;
-const MAX_TRUST_STORE_BYTES = 256 * 1024;
 const MAX_POSTAL_DATA_BYTES = 64 * 1024 * 1024;
 const TECHNICAL_ID = /^[a-z0-9][a-z0-9._:-]{0,127}$/;
 const POSTAL_CODE_VALUE = /^[\p{L}\p{N} .-]{1,32}$/u;
@@ -97,7 +98,6 @@ const EVIDENCE_FIELDS = new Set([
   'attestationKeyId',
   'attestationSignature',
 ]);
-const TRUST_STORE_FIELDS = new Set(['version', 'keys']);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -253,26 +253,13 @@ function parseAdapterConfig(
   };
 }
 
-function loadTrustStore(path: string | undefined) {
+function loadTrustStore(
+  path: string | undefined,
+  now?: string | number | Date,
+) {
   const keys = new Map<string, KeyObject>();
   if (!path) return keys;
-  const parsed = readBoundedJson(path, MAX_TRUST_STORE_BYTES, 'trust store');
-  assertFields(parsed, TRUST_STORE_FIELDS, 'trust store');
-  if (parsed.version !== ADDRESSQL_TRUST_STORE_VERSION) {
-    throw new Error(`trust store version must be ${ADDRESSQL_TRUST_STORE_VERSION}`);
-  }
-  if (!isRecord(parsed.keys)) throw new Error('trust store keys must be an object');
-  for (const [keyId, pem] of Object.entries(parsed.keys)) {
-    if (!TECHNICAL_ID.test(keyId) || typeof pem !== 'string') {
-      throw new Error('trust store contains an invalid key identifier or PEM value');
-    }
-    if (/PRIVATE KEY/.test(pem)) {
-      throw new Error('trust store must not contain private keys');
-    }
-    const key = createPublicKey(pem);
-    if (key.asymmetricKeyType !== 'ed25519') {
-      throw new Error(`trust store key ${keyId} must be Ed25519`);
-    }
+  for (const [keyId, key] of loadAddressQlTrustedPublicKeys(path, { now })) {
     keys.set(keyId, key);
   }
   return keys;
@@ -352,6 +339,7 @@ export function loadAddressQlRuntimeConfig(
   }
   const trustedKeys = loadTrustStore(
     options.trustStorePath ? resolve(options.trustStorePath) : undefined,
+    options.now,
   );
   const verifiedEvidence = new WeakSet<object>();
   const runtimeAdapters = configs.map(adapter => {

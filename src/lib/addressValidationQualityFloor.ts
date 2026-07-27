@@ -27,6 +27,18 @@ import {
   prepareAddressQlRuntimeAttestation,
 } from './addressQlRuntimeAttestationWorkflow';
 import {
+  ADDRESSQL_RUNTIME_RELEASE_LEDGER_VERSION,
+  ADDRESSQL_RUNTIME_RELEASE_STATE_VERSION,
+  finalizeAddressQlRuntimeRelease,
+  prepareAddressQlRuntimeRelease,
+  verifyAddressQlRuntimeRelease,
+} from './addressQlRuntimeReleaseLedger';
+import {
+  ADDRESSQL_TRUST_POLICY_VERSION,
+  registerAddressQlReviewerKey,
+  revokeAddressQlReviewerKey,
+} from './addressQlTrustPolicy';
+import {
   buildDeliveryReachabilitySharedFeed,
   createDeliveryReachabilityReport,
   validateDeliveryReachabilityReport,
@@ -41,6 +53,7 @@ export type AddressValidationEngineeringDimensionId =
   | 'api-sdk-runtime'
   | 'country-format-coverage'
   | 'security-privacy'
+  | 'release-integrity'
   | 'postal-rule-validation'
   | 'multilingual-normalization'
   | 'source-governance'
@@ -385,6 +398,43 @@ export function buildAddressValidationQualityFloorReport(
         passed: true,
         evidence: 'This scorecard contains synthetic and aggregate evidence only.',
         nextFix: null,
+      }),
+    ]),
+    dimension('release-integrity', 'Key lifecycle, quorum, and rollback protection', [
+      criterion({
+        id: 'trust-policy-v2',
+        passed: ADDRESSQL_TRUST_POLICY_VERSION === 'addressql-trust-store-v2',
+        evidence: 'Trust policy v2 requires bounded Ed25519 reviewer records and quorum metadata.',
+        nextFix: 'Restore the versioned reviewer trust policy.',
+      }),
+      criterion({
+        id: 'key-lifecycle',
+        passed: typeof registerAddressQlReviewerKey === 'function'
+          && typeof revokeAddressQlReviewerKey === 'function',
+        evidence: 'Reviewer keys support validity windows, revocation, and explicit replacement.',
+        nextFix: 'Restore reviewer registration, rotation, and revocation operations.',
+      }),
+      criterion({
+        id: 'quorum-release',
+        passed: ADDRESSQL_RUNTIME_RELEASE_LEDGER_VERSION
+          === 'addressql-runtime-release-ledger-v1'
+          && typeof prepareAddressQlRuntimeRelease === 'function'
+          && typeof finalizeAddressQlRuntimeRelease === 'function',
+        evidence: 'Canonical releases require signatures from at least two distinct active reviewer identities.',
+        nextFix: 'Restore quorum release preparation and finalization.',
+      }),
+      criterion({
+        id: 'tamper-evident-chain',
+        passed: typeof verifyAddressQlRuntimeRelease === 'function',
+        evidence: 'Each ledger binds exact config bytes and the previous signed release digest.',
+        nextFix: 'Restore config, signature, and release-chain verification.',
+      }),
+      criterion({
+        id: 'rollback-high-water-state',
+        passed: ADDRESSQL_RUNTIME_RELEASE_STATE_VERSION
+          === 'addressql-runtime-release-state-v1',
+        evidence: 'Monotonic high-water state rejects rollback, equivocation, and sequence gaps.',
+        nextFix: 'Restore monotonic runtime release state.',
       }),
     ]),
     dimension('postal-rule-validation', 'Postal format and source-gated lookup', [

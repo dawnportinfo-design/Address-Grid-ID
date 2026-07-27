@@ -118,6 +118,9 @@ The runtime config and trust-store schemas are:
 ```text
 docs/specs/schemas/addressql-runtime-config-v1.schema.json
 docs/specs/schemas/addressql-trust-store-v1.schema.json
+docs/specs/schemas/addressql-trust-store-v2.schema.json
+docs/specs/schemas/addressql-runtime-release-ledger-v1.schema.json
+docs/specs/schemas/addressql-runtime-release-state-v1.schema.json
 ```
 
 Each `dataFile` is relative to, and must stay inside, the config directory.
@@ -216,6 +219,22 @@ Private keys, credentials, address rows, recipient data, and precise
 coordinates are not accepted by this runtime configuration path. A
 conformance config can be loaded only with
 `ADDRESSQL_ALLOW_CONFORMANCE=1`; it remains non-live.
+
+Production deployments can additionally require the quorum release boundary:
+
+```powershell
+$env:ADDRESSQL_RUNTIME_CONFIG="runtime-config.approved.json"
+$env:ADDRESSQL_TRUST_STORE="trust-store-v2.json"
+$env:ADDRESSQL_RELEASE_LEDGER="release-1.ledger.json"
+$env:ADDRESSQL_RELEASE_STATE="release-state.json"
+npm run serve:addressql-api
+```
+
+Both release variables must be configured together. This path requires at
+least two active, non-expired reviewer signatures and rejects revoked or
+rotated keys, config/ledger tampering, sequence rollback, sequence gaps, and
+incorrect previous-release digests. The complete workflow and its host-state
+threat boundary are documented in `runtime-release-security-v1.md`.
 
 ## Limits
 

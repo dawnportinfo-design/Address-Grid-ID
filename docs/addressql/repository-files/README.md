@@ -31,11 +31,14 @@ npm run verify:addressql-country-data-promotion
 npm run verify:addressql-multilingual-quality
 npm run verify:addressql-api
 npm run verify:addressql-runtime-config
+npm run verify:addressql-runtime-release
 ```
 
 The `prepare:addressql-runtime-attestation` and
 `finalize:addressql-runtime-attestation` commands provide the offline
 independent-signature workflow documented in `docs/practical-api-v1.md`.
+Reviewer-key lifecycle, quorum releases, and rollback prevention are
+documented in `docs/runtime-release-security-v1.md`.
 
 The exported address-format profiles and postal country packs are bounded
 format metadata, source catalogs, and synthetic-test assets. They are not

@@ -13,6 +13,7 @@ import {
   loadAddressQlRuntimeConfig,
   type LoadedAddressQlRuntimeConfig,
 } from '../src/lib/addressQlRuntimeConfig';
+import { loadAddressQlQuorumApprovedRuntimeConfig } from '../src/lib/addressQlRuntimeReleaseLedger';
 
 function writeResponse(
   response: ServerResponse,
@@ -162,6 +163,24 @@ export function loadAddressQlRuntimeEnvironment(
 ): LoadedAddressQlRuntimeConfig | null {
   const configPath = environment.ADDRESSQL_RUNTIME_CONFIG;
   if (!configPath) return null;
+  const releaseLedgerPath = environment.ADDRESSQL_RELEASE_LEDGER;
+  const releaseStatePath = environment.ADDRESSQL_RELEASE_STATE;
+  if (Boolean(releaseLedgerPath) !== Boolean(releaseStatePath)) {
+    throw new Error(
+      'ADDRESSQL_RELEASE_LEDGER and ADDRESSQL_RELEASE_STATE must be configured together',
+    );
+  }
+  if (releaseLedgerPath && !environment.ADDRESSQL_TRUST_STORE) {
+    throw new Error('quorum release loading requires ADDRESSQL_TRUST_STORE');
+  }
+  if (releaseLedgerPath && releaseStatePath) {
+    return loadAddressQlQuorumApprovedRuntimeConfig({
+      configPath: resolvePath(cwd, configPath),
+      ledgerPath: resolvePath(cwd, releaseLedgerPath),
+      trustStorePath: resolvePath(cwd, environment.ADDRESSQL_TRUST_STORE!),
+      statePath: resolvePath(cwd, releaseStatePath),
+    });
+  }
   return loadAddressQlRuntimeConfig({
     configPath: resolvePath(cwd, configPath),
     ...(environment.ADDRESSQL_TRUST_STORE

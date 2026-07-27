@@ -11,7 +11,7 @@ test('every address-validation engineering dimension meets the 80-point floor', 
   const report = buildAddressValidationQualityFloorReport();
 
   assert.equal(report.engineeringQualityFloorPassed, true);
-  assert.equal(report.engineeringDimensions.length, 9);
+  assert.equal(report.engineeringDimensions.length, 10);
   for (const dimension of report.engineeringDimensions) {
     assert.ok(
       dimension.score >= ADDRESS_VALIDATION_MINIMUM_SCORE,

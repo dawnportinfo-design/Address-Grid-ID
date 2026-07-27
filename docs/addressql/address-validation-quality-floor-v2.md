@@ -22,6 +22,7 @@ The engineering dimensions are:
 7. official postal verification pipeline
 8. privacy-preserving delivery reachability
 9. freshness and correction operations
+10. key lifecycle, quorum signatures, and rollback protection
 
 The report deliberately separates engineering quality from deployment
 evidence. Parser, signature verification, aggregate holdout, reachability,
