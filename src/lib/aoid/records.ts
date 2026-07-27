@@ -13,6 +13,7 @@ import {
   isValidAOIDId,
   normalizeAOIDId,
 } from './id';
+import { buildAOIDPrivateBody } from './privateBody';
 import type {
   AOIDDeliveryAccessKind,
   AOIDDeliveryAccessProfile,
@@ -171,7 +172,11 @@ export function validateAOIDRegistrationRequirements(
   const explicitAccess = explicitDeliveryAccessMarkers(record as Record<string, unknown>);
   const errors: string[] = [];
   const warnings: string[] = [];
+  const agid = cleanAgid((record as { agid?: unknown }).agid);
 
+  if (!agid) {
+    errors.push('aoid-linked-agid-required');
+  }
   if (deliveryAccess.autoLock && !explicitAccess.autoLock) {
     errors.push('aoid-delivery-access-kind-must-record-auto-lock');
   }
@@ -193,9 +198,15 @@ export function validateAOIDRegistrationRequirements(
   };
 }
 
-export function normalizeAOIDRecord(record: RegisteredAddressRecord | AOIDRecord): AOIDRecord {
+export function normalizeAOIDRecord(
+  record: RegisteredAddressRecord | AOIDRecord,
+  options: { requireLinkedAgid?: boolean } = {},
+): AOIDRecord {
   const updatedAt = typeof record.updatedAt === 'number' ? record.updatedAt : Date.now();
   const agid = cleanAgid(record.agid);
+  if (options.requireLinkedAgid && !agid) {
+    throw new Error('AOID registration requires a valid linked AGID.');
+  }
   const id = normalizeAOIDId(record.id, agid ? { linkedAgid: agid } : {});
   const ownerKeyId = cleanKeyId((record as { ownerKeyId?: unknown }).ownerKeyId);
   const deviceKeyId = cleanKeyId((record as { deviceKeyId?: unknown }).deviceKeyId);
@@ -209,10 +220,14 @@ export function normalizeAOIDRecord(record: RegisteredAddressRecord | AOIDRecord
   delete recordData.status;
   delete recordData.publicHandle;
   delete recordData.deliveryAccess;
+  delete recordData.privateBody;
   delete recordData.ownerKeyId;
   delete recordData.deviceKeyId;
   delete recordData.version;
   const deliveryAccess = normalizeAOIDDeliveryAccessProfile(record as RegisteredAddressRecord & Partial<AOIDRecord>);
+  const privateBody = agid
+    ? buildAOIDPrivateBody({ ...(record as Record<string, unknown>), agid })
+    : undefined;
 
   return {
     ...recordData,
@@ -230,6 +245,7 @@ export function normalizeAOIDRecord(record: RegisteredAddressRecord | AOIDRecord
     status: coerceAOIDStatus((record as { status?: unknown }).status),
     publicHandle: buildAOIDPublicHandle(id),
     deliveryAccess,
+    ...(privateBody ? { privateBody } : {}),
     ...(ownerKeyId ? { ownerKeyId } : {}),
     ...(deviceKeyId ? { deviceKeyId } : {}),
     updatedAt,

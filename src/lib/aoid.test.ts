@@ -3,6 +3,7 @@ import { test } from 'node:test';
 
 import {
   buildAOIDEncryptedSyncEnvelope,
+  buildAOIDPrivateBody,
   buildAOIDPublicDescriptor,
   buildAOIDPublicHandle,
   buildAOIDSyncQueuePayload,
@@ -18,6 +19,7 @@ import {
   redactAOIDForPublicUse,
   revokeAOIDRecord,
   validateAOIDRegistrationRequirements,
+  validateAOIDPrivateBody,
 } from './aoid';
 import { buildRegisteredAddressRecord } from './registeredAddressQr';
 
@@ -57,6 +59,72 @@ test('normalizes AOID records into owner-managed local-first private records', (
   assert.equal(record.syncReadiness, 'local-only');
   assert.equal(record.status, 'active');
   assert.equal(record.publicHandle, buildAOIDPublicHandle(linkedAoid));
+  assert.equal(record.privateBody?.agid, linkedAgid);
+  assert.equal(record.privateBody?.building?.name, 'Public Tower');
+  assert.equal(record.privateBody?.room, '2801');
+  assert.equal(record.privateBody?.recipient?.name, 'Private Receiver');
+});
+
+test('structures AGID, delivery detail, access policy, validity, and metadata inside the private AOID body', () => {
+  const body = buildAOIDPrivateBody({
+    ...baseAoid,
+    floor: '28',
+    deliveryOptions: {
+      dropOffPreference: 'front-desk',
+      unattendedDeliveryAllowed: true,
+      signatureRequired: false,
+      instructions: 'Synthetic delivery instruction',
+    },
+    intercom: {
+      callLabel: 'Synthetic Receiver',
+      accessCode: 'TEST-ONLY',
+    },
+    accessPolicy: {
+      allowedActors: ['owner', 'carrier'],
+      allowedPurposes: ['owner-management', 'delivery'],
+      disclosedFields: ['agid', 'building', 'floor', 'room'],
+      ownerConsentRequired: true,
+    },
+    validity: {
+      validFrom: 1780000000000,
+      validUntil: 1780003600000,
+    },
+    metadata: {
+      label: 'Primary delivery destination',
+      locale: 'ja-JP',
+      tags: ['home', 'synthetic'],
+    },
+  });
+  const validation = validateAOIDPrivateBody(body);
+
+  assert.equal(validation.ok, true);
+  assert.equal(body.agid, linkedAgid);
+  assert.equal(body.floor, '28');
+  assert.equal(body.deliveryOptions.dropOffPreference, 'front-desk');
+  assert.equal(body.intercom?.accessCode, 'TEST-ONLY');
+  assert.deepEqual(body.accessPolicy.allowedActors, ['owner', 'carrier']);
+  assert.equal(body.validity.validUntil, 1780003600000);
+  assert.deepEqual(body.metadata.tags, ['home', 'synthetic']);
+});
+
+test('requires a linked AGID for new AOID registration and rejects invalid validity windows', () => {
+  assert.throws(
+    () => buildRegisteredAddressRecord(
+      { recipient: 'Synthetic Receiver', room: '101' },
+      { mode: 'AOID', id: linkedAoid },
+    ),
+    /linked AGID/i,
+  );
+
+  const validation = validateAOIDPrivateBody({
+    agid: linkedAgid,
+    validity: {
+      validFrom: 1780003600000,
+      validUntil: 1780000000000,
+    },
+  });
+  assert.equal(validation.ok, false);
+  assert.match(validation.errors.join(' '), /validUntil/);
 });
 
 test('validates AOID ids as 9 to 16 unambiguous base32 handles with a linked AGID anchor', () => {
@@ -136,6 +204,7 @@ test('public AOID descriptor does not expose delivery recipient, phone, room, or
   assert.doesNotMatch(serialized, /\+81 3/);
   assert.doesNotMatch(serialized, /2801/);
   assert.doesNotMatch(serialized, /35\.66|139\.73/);
+  assert.doesNotMatch(serialized, /aoid-private-body-v1/);
 });
 
 test('AOID registration records auto-lock and PO Box access restrictions explicitly', () => {

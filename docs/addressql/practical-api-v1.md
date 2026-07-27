@@ -239,6 +239,7 @@ Japan Post UTF-8 CSV and the GeoNames CC BY 4.0 country archive:
 
 ```bash
 npm run sync:addressql-public-postal-data
+npm run sync:addressql-official-postal-data
 $env:ADDRESSQL_RUNTIME_CONFIG=".agid-runtime/addressql/jp/runtime-config.json"
 $env:ADDRESSQL_TRUST_STORE=".agid-runtime/addressql/jp/trust-store.json"
 $env:ADDRESSQL_ALLOW_CONFORMANCE="1"

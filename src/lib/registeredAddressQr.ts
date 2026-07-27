@@ -171,7 +171,9 @@ export function buildRegisteredAddressRecord(
     ...(quality ? { quality } : {}),
   };
 
-  return mode === 'AOID' ? normalizeAOIDRecord(record) : record;
+  return mode === 'AOID'
+    ? normalizeAOIDRecord(record, { requireLinkedAgid: true })
+    : record;
 }
 
 export function buildRegisteredAddressQrPayload(

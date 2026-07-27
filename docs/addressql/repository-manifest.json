@@ -113,6 +113,12 @@
       "verification": "npm run verify:addressql-api"
     },
     {
+      "name": "addressql-official-postal-multi-country-intake",
+      "path": "src/lib/addressQlOfficialPostalData.ts",
+      "readiness": "19-scope-official-conformance-ready",
+      "verification": "npm run verify:addressql-api"
+    },
+    {
       "name": "addressql-duckdb",
       "path": "extensions/addressql-duckdb",
       "readiness": "scaffold-ready",
@@ -237,6 +243,7 @@
     "npm run monitor:addressql-postal-operations",
     "npm run verify:addressql-postal-operations",
     "npm run sync:addressql-public-postal-data",
+    "npm run sync:addressql-official-postal-data",
     "npm run register:addressql-trusted-public-key",
     "npm run prepare:addressql-runtime-attestation",
     "npm run finalize:addressql-runtime-attestation",

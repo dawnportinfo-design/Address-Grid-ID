@@ -58,6 +58,25 @@ test('AGID public surfaces reject private registered-address fields', () => {
   assert.ok(decision.forbiddenFields.some(field => field.endsWith('.phone')));
 });
 
+test('AGID public surfaces reject an AOID private body even when it contains only structural fields', () => {
+  const decision = evaluateAgidAoidOperation({
+    layer: 'AGID',
+    operation: 'communicate',
+    surface: 'public-api',
+    payload: {
+      agid: 'JP05AV8TJGH8',
+      privateBody: {
+        schemaVersion: 'aoid-private-body-v1',
+        agid: 'JP05AV8TJGH8',
+        accessPolicy: { ownerConsentRequired: true },
+      },
+    },
+  });
+
+  assert.equal(decision.allowed, false);
+  assert.ok(decision.forbiddenFields.some(field => field.endsWith('.privateBody')));
+});
+
 test('AGID private QR keeps local registration possible with an audit warning', () => {
   const decision = evaluateAgidAoidOperation({
     layer: 'AGID',
@@ -94,6 +113,7 @@ test('AOID public communication exposes only public references', () => {
 
   assert.equal(plaintextDecision.allowed, false);
   assert.ok(plaintextDecision.forbiddenFields.some(field => field.endsWith('.recipient')));
+  assert.ok(plaintextDecision.forbiddenFields.some(field => field.endsWith('.privateBody')));
   assert.equal(referenceDecision.allowed, true);
   assert.equal(referenceDecision.payloadClass, 'aoid-public-reference');
 });

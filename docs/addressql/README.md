@@ -78,6 +78,7 @@ CSV and the GeoNames CC BY 4.0 cross-check:
 
 ```bash
 npm run sync:addressql-public-postal-data
+npm run sync:addressql-official-postal-data
 ```
 
 The command stores derived postcodes, aggregate quality evidence, source

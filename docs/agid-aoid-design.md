@@ -1,6 +1,6 @@
 # AGID and AOID Design Principles
 
-Last updated: 2026-06-07
+Last updated: 2026-07-27
 
 ## Summary
 
@@ -15,6 +15,43 @@ The system should never blur these two layers. AGID can be public and portable, 
 AGID = Public Location / Address / Building Layer
 AOID = Private Address Layer
 ```
+
+## Normative Role Contract
+
+AGID is a stable, public reference to a non-personal geographic entity. AOID is
+an owner-editable private delivery or residence destination that must reference
+an AGID. A human-readable value such as `JP-13-TKY-CHIYODA-001` can be used as
+an illustrative public alias, while the existing canonical 12-character AGID
+machine format remains unchanged for compatibility.
+
+```text
+AOID private body
+ ├─ AGID
+ ├─ Building
+ ├─ Floor
+ ├─ Room
+ ├─ Recipient
+ ├─ Delivery Options
+ ├─ Intercom
+ ├─ Access Policy
+ ├─ Validity
+ └─ Metadata
+```
+
+| Item | AGID | AOID |
+| --- | --- | --- |
+| Purpose | Public geographic identifier | Private delivery/residence identifier |
+| Editing | Stable public reference | Owner editable |
+| Scope | Region, block, building, or other public geographic entity | Building, floor, room, recipient, and delivery method |
+| Privacy | Public and non-personal | Private, local-first, or owner-device encrypted |
+| Holder | System-governed specification and public references | User owned and managed |
+| Cardinality | Normally one canonical reference per geographic entity | Multiple per owner, purpose, or validity period |
+| Relationship | Referenced by AOID | Must reference AGID |
+
+Changing a room, recipient, delivery option, access policy, or validity period
+updates the AOID private body. It does not rewrite AGID. When the referenced
+geographic entity itself is replaced or no longer represents the intended
+place, the owner moves the AOID to the new AGID and records the transition.
 
 ## Comparison
 
@@ -49,7 +86,10 @@ Allowed AGID network payloads are AGID, coordinates needed for public evidence l
 
 Forbidden AGID network payloads are recipient, phone, unit or room, private delivery instruction, and private ownership proof.
 
-Allowed AOID network payloads are AOID id, linked AGID, public handle, status/version, opaque encrypted payload, owner key id, and device key id.
+Allowed AOID network payloads are an AOID commitment or scoped reference,
+linked public AGID when policy permits, status/version, opaque encrypted
+payload, owner key id, and device key id. The complete AOID private body is not
+a public API payload.
 
 Forbidden AOID network payloads are plaintext recipient, plaintext phone, plaintext unit/room, plaintext delivery instruction, exact private coordinates in public payloads, and public update timestamps.
 
@@ -98,6 +138,12 @@ AOID can contain:
 - phone number,
 - delivery instructions,
 - temporary relocation or disaster recovery notes.
+- an explicit validity period and scoped access policy.
+
+The executable private-body schema is `aoid-private-body-v1`. New AOID
+registration requires a valid linked AGID. Older locally stored AOIDs without
+that link may still be read for migration, but they do not satisfy current
+registration readiness.
 
 AOID exists for cases where the public place, address, or building label alone is not enough. Delivery often needs the AGID plus the recipient, room, access route, or current owner-managed instruction.
 

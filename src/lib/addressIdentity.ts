@@ -2,7 +2,7 @@ export type AddressIdentityLayer = 'AGID' | 'AOID';
 
 export type AddressIdentityVisibility = 'public' | 'private';
 
-export type AddressIdentitySubject = 'place-or-public-address' | 'person-or-organization';
+export type AddressIdentitySubject = 'public-geographic-entity' | 'private-delivery-destination';
 
 export type AddressIdentityUpdateAuthority = 'operator-spec-only' | 'owner-only';
 
@@ -11,6 +11,11 @@ export type AddressIdentityQrAuthority = 'immutable-location' | 'owner-only';
 export type AddressIdentityDistributionMode =
   | 'sdk-and-device-generated'
   | 'owner-controlled-private-sync';
+export type AddressIdentityMutability = 'stable-public-reference' | 'owner-editable';
+export type AddressIdentityHolder = 'system-governed' | 'user-owned';
+export type AddressIdentityCardinality =
+  | 'one-canonical-reference-per-geographic-entity'
+  | 'multiple-per-owner-purpose-or-validity';
 
 export type AddressIdentityPolicy = {
   layer: AddressIdentityLayer;
@@ -27,6 +32,10 @@ export type AddressIdentityPolicy = {
   centralRole: string;
   distributedRole: string;
   distributionMode: AddressIdentityDistributionMode;
+  mutability: AddressIdentityMutability;
+  holder: AddressIdentityHolder;
+  cardinality: AddressIdentityCardinality;
+  referencesLayer?: 'AGID';
   publicLayerSafe: boolean;
 };
 
@@ -55,8 +64,8 @@ const ADDRESS_IDENTITY_POLICIES: Record<AddressIdentityLayer, AddressIdentityPol
     layer: 'AGID',
     label: 'Address Grid ID',
     visibility: 'public',
-    subject: 'place-or-public-address',
-    represents: 'public location, address, building, and map-feature layer',
+    subject: 'public-geographic-entity',
+    represents: 'public geographic location and non-personal place reference',
     includesPublicAddress: true,
     includesBuildingName: true,
     includesUnitOrRoom: false,
@@ -66,14 +75,17 @@ const ADDRESS_IDENTITY_POLICIES: Record<AddressIdentityLayer, AddressIdentityPol
     centralRole: 'govern grid specification, reserved ranges, deprecation rules, and public quality packs',
     distributedRole: 'encode, decode, and calculate cell bounds in SDKs and devices without central approval',
     distributionMode: 'sdk-and-device-generated',
+    mutability: 'stable-public-reference',
+    holder: 'system-governed',
+    cardinality: 'one-canonical-reference-per-geographic-entity',
     publicLayerSafe: true,
   },
   AOID: {
     layer: 'AOID',
     label: 'Address Owner ID',
     visibility: 'private',
-    subject: 'person-or-organization',
-    represents: 'private address and delivery layer',
+    subject: 'private-delivery-destination',
+    represents: 'private delivery and residence destination that references an AGID',
     includesPublicAddress: true,
     includesBuildingName: true,
     includesUnitOrRoom: true,
@@ -83,21 +95,23 @@ const ADDRESS_IDENTITY_POLICIES: Record<AddressIdentityLayer, AddressIdentityPol
     centralRole: 'optional encrypted or private sync, recovery, and quality assistance after explicit owner consent',
     distributedRole: 'local-first owner storage, owner-generated QR, and SDK-readable private payloads',
     distributionMode: 'owner-controlled-private-sync',
+    mutability: 'owner-editable',
+    holder: 'user-owned',
+    cardinality: 'multiple-per-owner-purpose-or-validity',
+    referencesLayer: 'AGID',
     publicLayerSafe: false,
   },
 };
 
 export const ADDRESS_IDENTITY_COMPARISON: AddressIdentityComparisonRow[] = [
-  { item: '公開範囲', agid: 'パブリック', aoid: 'プライベート' },
-  { item: '対象', agid: '場所・公開住所・公開建物・公開地物', aoid: '人・組織・施設' },
-  { item: '表現するもの', agid: '地理空間・公開住所・建物・地物', aoid: '配送先・私的配送情報' },
-  { item: '住所', agid: '公開住所ラベルを含む', aoid: '所有者管理の配送先住所を含む' },
-  { item: '建物名', agid: '公開建物名を含む', aoid: '所有者管理の建物詳細を含む' },
-  { item: '部屋番号', agid: '含まない', aoid: '含む' },
-  { item: '個人情報', agid: '含まない', aoid: '含む場合がある' },
-  { item: '更新権限', agid: '運営主体の仕様管理のみ', aoid: '所有者のみ' },
-  { item: 'QR更新', agid: '位置IDとして不変', aoid: '所有者のみ可能' },
-  { item: '主な用途', agid: '位置識別・仮想郵便番号', aoid: '住所管理・配送先管理' },
+  { item: '目的', agid: '公開可能な地理識別子', aoid: '配送・居住先の私的識別子' },
+  { item: '編集', agid: '不可（安定した公開参照）', aoid: '可（ユーザー管理）' },
+  { item: '範囲', agid: '地域・街区・建物など公開可能な地理実体', aoid: '建物・階・部屋・受取人・受取方法などを含む配送先' },
+  { item: 'プライバシー', agid: '公開前提・個人情報なし', aoid: '非公開前提・暗号化または端末内保存' },
+  { item: '保持者', agid: 'システムが仕様と公開参照を管理', aoid: 'ユーザーが所有・管理' },
+  { item: '数', agid: '地理実体ごとに基本1つ', aoid: '用途・有効期間に応じて複数作成可能' },
+  { item: '参照関係', agid: 'AOIDから参照される', aoid: '必ずAGIDを参照する' },
+  { item: '更新時', agid: '対象地理実体が変わる場合は新しい参照へ切替', aoid: '引越し・部屋・受取条件の変更時に本文を更新' },
 ];
 
 export const ADDRESS_IDENTITY_COMMUNICATION: Record<AddressIdentityLayer, AddressIdentityCommunicationPolicy> = {
@@ -131,21 +145,21 @@ export const ADDRESS_IDENTITY_COMMUNICATION: Record<AddressIdentityLayer, Addres
   AOID: {
     layer: 'AOID',
     defaultMode: 'local-first-private',
-    publicApiSurface: 'public surfaces expose only a reference handle plus linked AGID',
+    publicApiSurface: 'public surfaces expose only an opaque commitment or scoped reference plus linked public AGID when policy permits',
     sdkSurface: 'owner apps may create/read private payloads locally; SDK use does not grant ownership',
     qrSurface: 'public QR is reference-only; full QR is private trusted-device transfer',
     syncSurface: 'owner-consented owner-device encrypted envelope only',
     realtimeSurface: 'sync status only; no plaintext private AOID fields in events',
     allowedNetworkPayloads: [
-      'AOID id',
-      'linked AGID',
-      'public handle',
+      'AOID commitment or scoped reference',
+      'linked public AGID when policy permits',
       'status or version',
       'opaque encrypted payload',
       'owner key id',
       'device key id',
     ],
     forbiddenNetworkPayloads: [
+      'raw AOID private body',
       'plaintext recipient',
       'plaintext phone',
       'plaintext unit or room',

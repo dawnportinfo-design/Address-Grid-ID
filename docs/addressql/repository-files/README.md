@@ -99,6 +99,7 @@ Create the local JP official-plus-OSS runtime with:
 
 ```bash
 npm run sync:addressql-public-postal-data
+npm run sync:addressql-official-postal-data
 ```
 
 It combines the reusable Japan Post UTF-8 CSV with a GeoNames CC BY 4.0
