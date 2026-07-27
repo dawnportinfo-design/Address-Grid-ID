@@ -61,6 +61,7 @@ const REQUIRED_PUBLIC_DOCS = [
   'docs/addressql/practical-api-v1.md',
   'docs/addressql/runtime-release-security-v1.md',
   'docs/addressql/signed-delivery-point-contract-v1.md',
+  'docs/addressql/postal-operations-v1.md',
   'docs/addressql/sources/jp-public-postal-sources-v1.json',
   'docs/addressql/zk-proof-hooks-v0.6.md',
   'docs/addressql/calcite-v0.5.md',
@@ -83,6 +84,9 @@ const REQUIRED_PUBLIC_DOCS = [
   'docs/specs/schemas/addressql-l5-carrier-assertion-v1.schema.json',
   'docs/specs/schemas/addressql-l5-delivery-point-request-v1.schema.json',
   'docs/specs/schemas/addressql-l5-delivery-point-decision-v1.schema.json',
+  'docs/specs/fixtures/addressql-postal-operations-input-v1.json',
+  'docs/specs/schemas/addressql-postal-operations-input-v1.schema.json',
+  'docs/specs/schemas/addressql-postal-operations-report-v1.schema.json',
   POSTAL_VALIDATION_NEGATIVE_CLAIMS_FIXTURE,
   POSTAL_VALIDATION_NEGATIVE_CLAIMS_SCHEMA,
 ];
@@ -118,6 +122,8 @@ const REQUIRED_PUBLIC_ARTIFACTS = [
   'scripts/prepare-addressql-l5-carrier-assertion.ts',
   'scripts/finalize-addressql-l5-carrier-assertion.ts',
   'scripts/verify-addressql-l5-delivery-point.ts',
+  'scripts/monitor-addressql-postal-operations.ts',
+  'scripts/monitor-addressql-postal-operations.test.ts',
   'src/lib/addressQlGlobalCountryPreload.ts',
   'src/lib/addressQlGlobalCountryPreload.test.ts',
   'src/lib/addressQlGlobalCountryCoverage.ts',
@@ -145,6 +151,8 @@ const REQUIRED_PUBLIC_ARTIFACTS = [
   'src/lib/addressQlRuntimeReleaseLedger.test.ts',
   'src/lib/addressQlDeliveryPointDecision.ts',
   'src/lib/addressQlDeliveryPointDecision.test.ts',
+  'src/lib/addressQlPostalOperations.ts',
+  'src/lib/addressQlPostalOperations.test.ts',
   'src/lib/addressQlPublicPostalData.ts',
   'src/lib/addressQlPublicPostalData.test.ts',
   'src/lib/officialPostalSourceCatalog.ts',
@@ -172,6 +180,8 @@ const REQUIRED_PACKAGE_SCRIPTS = [
   'verify:addressql-runtime-config',
   'verify:addressql-runtime-release',
   'verify:addressql-delivery-point',
+  'monitor:addressql-postal-operations',
+  'verify:addressql-postal-operations',
   'sync:addressql-public-postal-data',
   'register:addressql-trusted-public-key',
   'prepare:addressql-runtime-attestation',
@@ -325,6 +335,9 @@ export function buildAddressQlOssReadinessReport(root = process.cwd()): AddressQ
   }
   if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlCountryDataPromotion.test.ts')) {
     addOnce(errors, 'addressql-full-verification-must-include-country-data-promotion-test');
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlPostalOperations.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-postal-operations-test');
   }
   if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlMultilingualQuality.test.ts')) {
     addOnce(errors, 'addressql-full-verification-must-include-multilingual-quality-test');

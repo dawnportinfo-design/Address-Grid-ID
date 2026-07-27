@@ -30,6 +30,12 @@ expiry, and correction paths can be tested locally. They do not prove that a
 country has an approved live source, an independently controlled signing key,
 carrier evidence, or measured correction SLA.
 
+The P2 engineering gate includes the offline postal-operations CLI, dynamic
+runtime-adapter expiry, aggregate receipt-to-publication SLA, and automatic
+country promotion or demotion recommendations. This can raise engineering
+freshness operations to 100/100 while live scheduling and independently
+signed operational reports remain deployment evidence.
+
 `engineeringQualityFloorPassed` may therefore be true while
 `productionEvidenceReady` remains false. Production evidence can cross the
 same 80-point threshold only after the relevant country promotion records

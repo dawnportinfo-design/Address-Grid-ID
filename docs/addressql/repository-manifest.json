@@ -83,6 +83,12 @@
       "verification": "npm run verify:addressql-delivery-point"
     },
     {
+      "name": "addressql-postal-operations",
+      "path": "src/lib/addressQlPostalOperations.ts",
+      "readiness": "p2-freshness-sla-country-action-ready",
+      "verification": "npm run verify:addressql-postal-operations"
+    },
+    {
       "name": "addressql-postal-set-adapter",
       "path": "src/lib/addressQlPostalSetAdapter.ts",
       "readiness": "approved-dataset-loader-ready",
@@ -151,6 +157,7 @@
     "docs/addressql/practical-api-v1.md",
     "docs/addressql/runtime-release-security-v1.md",
     "docs/addressql/signed-delivery-point-contract-v1.md",
+    "docs/addressql/postal-operations-v1.md",
     "docs/addressql/sources/jp-public-postal-sources-v1.json",
     "docs/addressql/zk-proof-hooks-v0.6.md",
     "docs/addressql/calcite-v0.5.md",
@@ -174,6 +181,9 @@
     "docs/specs/schemas/addressql-l5-carrier-assertion-v1.schema.json",
     "docs/specs/schemas/addressql-l5-delivery-point-request-v1.schema.json",
     "docs/specs/schemas/addressql-l5-delivery-point-decision-v1.schema.json",
+    "docs/specs/fixtures/addressql-postal-operations-input-v1.json",
+    "docs/specs/schemas/addressql-postal-operations-input-v1.schema.json",
+    "docs/specs/schemas/addressql-postal-operations-report-v1.schema.json",
     "docs/specs/fixtures/addressql-postal-validation-negative-claims-v0.1.json",
     "docs/specs/schemas/addressql-postal-validation-negative-claims-v0.1.schema.json"
   ],
@@ -190,7 +200,9 @@
     "Public-source sync may create conformance adapters, but only an independently supplied Ed25519 public key and valid signature may activate approved evidence.",
     "Cross-language place-name transformation remains disabled until country-specific source, holdout, signature, and runtime evidence is approved.",
     "L4 delivery-area evidence must never be promoted to an L5 delivery-point decision.",
-    "L5 requests accept only delivery-point commitments and signed carrier decisions; carrier disagreement stops as conflict."
+    "L5 requests accept only delivery-point commitments and signed carrier decisions; carrier disagreement stops as conflict.",
+    "Expired postal adapters must disappear from runtime capability and evaluation without requiring a restart.",
+    "Postal operations reports accept aggregate-safe correction timestamps only and never mutate country capability state."
   ],
   "verification_commands": [
     "npm run verify:addressql-oss",
@@ -208,6 +220,8 @@
     "npm run verify:addressql-runtime-config",
     "npm run verify:addressql-runtime-release",
     "npm run verify:addressql-delivery-point",
+    "npm run monitor:addressql-postal-operations",
+    "npm run verify:addressql-postal-operations",
     "npm run sync:addressql-public-postal-data",
     "npm run register:addressql-trusted-public-key",
     "npm run prepare:addressql-runtime-attestation",

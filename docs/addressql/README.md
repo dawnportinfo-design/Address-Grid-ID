@@ -138,6 +138,7 @@ Detailed planning docs:
 - [Practical API v1](practical-api-v1.md)
 - [Runtime Release Security v1](runtime-release-security-v1.md)
 - [Signed L5 Delivery-Point Contract v1](signed-delivery-point-contract-v1.md)
+- [Postal Operations v1](postal-operations-v1.md)
 - [JP Public Postal Source Receipt](sources/jp-public-postal-sources-v1.json)
 
 The practical API includes fail-closed runtime evidence adapters and a local
@@ -147,6 +148,21 @@ datasets never turn absence into a negative result.
 The L5 endpoint is separate: it accepts only a salted delivery-point
 commitment and bounded signed carrier assertions. Carrier disagreement is a
 stopping conflict, and L4 area evidence cannot become an L5 point decision.
+
+P2 postal operations run without network or private address data:
+
+```bash
+npm run monitor:addressql-postal-operations -- \
+  --input docs/specs/fixtures/addressql-postal-operations-input-v1.json \
+  --output .agid-runtime/postal-operations-report.json \
+  --fail-on-action
+```
+
+The runtime registry disables expired adapters during each evaluation. The
+operations report aggregates correction receipt-to-publication SLA and emits
+country promotion, demotion, review, hold, or blocked recommendations without
+changing country capability state.
+
 - [Congestion And Mobility Functions](congestion-mobility-functions.md)
 - [API/SDK v0.4](api-sdk-v0.4.md)
 - [Calcite v0.5](calcite-v0.5.md)

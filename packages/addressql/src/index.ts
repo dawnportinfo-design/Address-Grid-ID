@@ -4,5 +4,6 @@ export const ADDRESSQL_WORKSPACE_BRIDGE_VERSION =
 export * from '../../../sdk/addressql-js-ts/src/index';
 export * as practicalApi from '../../../src/lib/addressQlPracticalApi';
 export * as deliveryPointDecision from '../../../src/lib/addressQlDeliveryPointDecision';
+export * as postalOperations from '../../../src/lib/addressQlPostalOperations';
 export * as globalCountryCoverage from '../../../src/lib/addressQlGlobalCountryCoverage';
 export * as multilingualQuality from '../../../src/lib/addressQlMultilingualQuality';

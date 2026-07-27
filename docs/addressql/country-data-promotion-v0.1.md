@@ -56,6 +56,13 @@ Country source reviews are time bounded. Once `reviewBy` expires, the source
 is removed from the approved evaluation index and the country automatically
 falls back from `review_candidate` to `blocked`.
 
+The P2 operations monitor in `postal-operations-v1.md` adds the runtime side
+of this boundary. It compares source versions and correction routes,
+automatically removes expired adapters from runtime evaluation, measures
+aggregate receipt-to-publication correction SLA, and emits country promotion
+or demotion recommendations. Recommendations do not mutate this index or
+enable a country.
+
 ## Non-Claims
 
 - A review candidate is not an enabled validation capability.

@@ -33,6 +33,7 @@ npm run verify:addressql-api
 npm run verify:addressql-runtime-config
 npm run verify:addressql-runtime-release
 npm run verify:addressql-delivery-point
+npm run verify:addressql-postal-operations
 ```
 
 The `prepare:addressql-runtime-attestation` and
@@ -43,6 +44,20 @@ documented in `docs/runtime-release-security-v1.md`.
 Signed L5 carrier assertions, commitment-only requests, and fail-closed
 carrier conflicts are documented in
 `docs/signed-delivery-point-contract-v1.md`.
+
+Run the P2 source-expiry, aggregate correction SLA, and country-action report
+without network traffic:
+
+```bash
+npm run monitor:addressql-postal-operations -- \
+  --input docs/specs/fixtures/addressql-postal-operations-input-v1.json \
+  --output .agid-runtime/postal-operations-report.json \
+  --fail-on-action
+```
+
+The report never changes country capability state. Runtime adapters recheck
+their expiry during every evaluation and disable themselves when their signed
+validity window closes.
 
 The exported address-format profiles and postal country packs are bounded
 format metadata, source catalogs, and synthetic-test assets. They are not

@@ -50,6 +50,7 @@ export type AddressQlRuntimeAdapter = {
 
 export type AddressQlRuntimeAdapterRegistryOptions = {
   now?: string | number | Date;
+  clock?: () => string | number | Date;
   allowConformanceAdapters?: boolean;
   verifyIndependentAttestation?: (
     evidence: AddressQlRuntimeAdapterEvidence,
@@ -141,6 +142,14 @@ function adapterShapeIsValid(adapter: AddressQlRuntimeAdapter) {
   );
 }
 
+function evaluationTime(
+  options: Pick<AddressQlRuntimeAdapterRegistryOptions, 'now' | 'clock'>,
+) {
+  const value = options.clock?.() ?? options.now ?? new Date();
+  const now = new Date(value);
+  return Number.isNaN(now.getTime()) ? null : now;
+}
+
 function decisionIsValid(decision: AddressQlRuntimeAdapterDecision) {
   return Boolean(
     ['pass', 'fail', 'unknown', 'conflict'].includes(decision.status)
@@ -197,17 +206,22 @@ export function createAddressQlRuntimeAdapterRegistry(
   adapters: readonly AddressQlRuntimeAdapter[] = [],
   options: AddressQlRuntimeAdapterRegistryOptions = {},
 ): AddressQlRuntimeAdapterRegistry {
-  const now = options.now === undefined ? new Date() : new Date(options.now);
-  const eligibleAdapters = adapters.filter(adapter => {
-    if (Number.isNaN(now.getTime())) return false;
+  const authorizedAdapters = adapters.filter(adapter => {
     if (!adapterShapeIsValid(adapter)) return false;
-    const validUntil = exactDate(adapter.evidence.validUntil);
-    if (!validUntil || validUntil <= now) return false;
     if (adapter.mode === 'conformance') {
       return options.allowConformanceAdapters === true;
     }
     return options.verifyIndependentAttestation?.(adapter.evidence) === true;
   });
+
+  function activeAdapters() {
+    const now = evaluationTime(options);
+    if (!now) return [];
+    return authorizedAdapters.filter(adapter => {
+      const validUntil = exactDate(adapter.evidence.validUntil);
+      return Boolean(validUntil && validUntil > now);
+    });
+  }
 
   function matchingAdapters(input: {
     countryCode: string;
@@ -215,7 +229,7 @@ export function createAddressQlRuntimeAdapterRegistry(
   }) {
     const countryCode = input.countryCode.trim().toUpperCase();
     if (!COUNTRY_CODE.test(countryCode)) return [];
-    const matching = eligibleAdapters.filter(
+    const matching = activeAdapters().filter(
       adapter =>
         adapter.countryCodes.includes(countryCode)
         && adapter.purposes.includes(input.purpose),
@@ -254,13 +268,19 @@ export function createAddressQlRuntimeAdapterRegistry(
   }
 
   return {
-    adapterCount: eligibleAdapters.length,
-    approvedAdapterCount: eligibleAdapters.filter(
-      adapter => adapter.mode === 'approved',
-    ).length,
-    conformanceAdapterCount: eligibleAdapters.filter(
-      adapter => adapter.mode === 'conformance',
-    ).length,
+    get adapterCount() {
+      return activeAdapters().length;
+    },
+    get approvedAdapterCount() {
+      return activeAdapters().filter(
+        adapter => adapter.mode === 'approved',
+      ).length;
+    },
+    get conformanceAdapterCount() {
+      return activeAdapters().filter(
+        adapter => adapter.mode === 'conformance',
+      ).length;
+    },
     capability,
     evaluate(input) {
       const countryCode = input.countryCode.trim().toUpperCase();

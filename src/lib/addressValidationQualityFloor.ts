@@ -48,6 +48,12 @@ import {
   revokeAddressQlReviewerKey,
 } from './addressQlTrustPolicy';
 import {
+  ADDRESSQL_POSTAL_OPERATIONS_INPUT_VERSION,
+  buildAddressQlPostalOperationsReport,
+  validateAddressQlPostalOperationsReport,
+  type AddressQlPostalOperationsInput,
+} from './addressQlPostalOperations';
+import {
   buildDeliveryReachabilitySharedFeed,
   createDeliveryReachabilityReport,
   validateDeliveryReachabilityReport,
@@ -293,6 +299,52 @@ export function buildAddressValidationQualityFloorReport(
     'reachable',
     'unreachable',
   ]);
+  const postalOperationsInput: AddressQlPostalOperationsInput = {
+    version: ADDRESSQL_POSTAL_OPERATIONS_INPUT_VERSION,
+    monitorIntervalHours: 48,
+    correctionSlaTargetHours: 72,
+    currentCountryLevels: { JP: null },
+    sources: [{
+      sourceId: 'synthetic-jp-postal-operations',
+      countryCode: 'JP',
+      capabilityLevel: 'L2',
+      purpose: 'postal-existence',
+      sourceVersion: 'synthetic-v1',
+      releaseUrl: 'https://example.invalid/jp/releases',
+      termsUrl: 'https://example.invalid/jp/terms',
+      correctionUrl: 'https://example.invalid/jp/corrections',
+      retrievedAt: '2026-07-01T00:00:00Z',
+      lastCheckedAt: '2026-07-26T00:00:00Z',
+      validUntil: '2026-10-01T00:00:00Z',
+      datasetDigest: sha256('synthetic-operations-dataset'),
+      holdoutDigest: sha256('synthetic-operations-holdout'),
+      reportDigest: sha256('synthetic-operations-report'),
+      adapterId: 'synthetic-jp-postal-adapter',
+      adapterMode: 'approved',
+      attestationVerified: true,
+    }],
+    corrections: [{
+      correctionRef: sha256('synthetic-correction-reference'),
+      countryCode: 'JP',
+      sourceId: 'synthetic-jp-postal-operations',
+      receivedAt: '2026-07-25T00:00:00Z',
+      publishedAt: '2026-07-26T00:00:00Z',
+    }],
+  };
+  const postalOperations = buildAddressQlPostalOperationsReport(
+    postalOperationsInput,
+    { now: '2026-07-27T00:00:00Z' },
+  );
+  const expiredPostalOperations = buildAddressQlPostalOperationsReport({
+    ...postalOperationsInput,
+    currentCountryLevels: { JP: 'L2' },
+    sources: postalOperationsInput.sources.map(source => ({
+      ...source,
+      validUntil: '2026-07-26T00:00:00Z',
+    })),
+  }, {
+    now: '2026-07-27T00:00:00Z',
+  });
   const promotionSummary = summarizeAddressQlCountryDataPromotions(
     buildAddressQlCountryDataPromotionIndex(
       countryProfiles.map(profile => profile.countryCode),
@@ -671,10 +723,15 @@ export function buildAddressValidationQualityFloorReport(
         nextFix: 'Bind holdout and quality report digests to each release.',
       }),
       criterion({
-        id: 'live-update-monitor',
-        passed: false,
-        evidence: 'No production credentials or network traffic are used by this local quality gate.',
-        nextFix: 'Deploy a credential-isolated source monitor with signed releases and correction SLA metrics.',
+        id: 'periodic-monitor-sla-and-demotion',
+        passed: validateAddressQlPostalOperationsReport(postalOperations).length === 0
+          && postalOperations.correctionSla.aggregate.state === 'met'
+          && postalOperations.countries[0]?.action === 'promotion_candidate'
+          && expiredPostalOperations.countries[0]?.action === 'demotion_required'
+          && expiredPostalOperations.sourceSummary
+            .automaticallyDisabledAdapterIds.length === 1,
+        evidence: 'The local CLI contract monitors source versions and correction routes, aggregates receipt-to-publication SLA, and emits fail-closed country actions.',
+        nextFix: 'Restore periodic source monitoring, aggregate correction SLA, and automatic expiry demotion checks.',
       }),
     ]),
   ];

@@ -154,6 +154,37 @@ test('expired and malformed evidence cannot enter the registry', () => {
   assert.equal(registry.adapterCount, 0);
 });
 
+test('an adapter expires automatically while the registry remains running', () => {
+  let now = '2026-07-26T00:00:00Z';
+  const registry = createAddressQlRuntimeAdapterRegistry(
+    [adapter({
+      evidence: evidence({ validUntil: '2026-07-27T00:00:00Z' }),
+    })],
+    {
+      clock: () => now,
+      allowConformanceAdapters: true,
+    },
+  );
+
+  assert.equal(registry.adapterCount, 1);
+  assert.ok(registry.capability({
+    countryCode: 'JP',
+    purpose: 'existence',
+  }));
+
+  now = '2026-07-27T00:00:00Z';
+  assert.equal(registry.adapterCount, 0);
+  assert.equal(registry.capability({
+    countryCode: 'JP',
+    purpose: 'existence',
+  }), null);
+  assert.equal(registry.evaluate({
+    countryCode: 'JP',
+    postalCode: '100-0001',
+    purpose: 'existence',
+  }), null);
+});
+
 test('approved adapters take precedence over conformance adapters', () => {
   const registry = createAddressQlRuntimeAdapterRegistry(
     [

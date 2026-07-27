@@ -131,6 +131,21 @@ export const ADDRESSQL_EXPORT_ITEMS: ExportItem[] = [
     required: true,
   },
   {
+    from: 'docs/specs/fixtures/addressql-postal-operations-input-v1.json',
+    to: 'docs/specs/fixtures/addressql-postal-operations-input-v1.json',
+    required: true,
+  },
+  {
+    from: 'docs/specs/schemas/addressql-postal-operations-input-v1.schema.json',
+    to: 'docs/specs/schemas/addressql-postal-operations-input-v1.schema.json',
+    required: true,
+  },
+  {
+    from: 'docs/specs/schemas/addressql-postal-operations-report-v1.schema.json',
+    to: 'docs/specs/schemas/addressql-postal-operations-report-v1.schema.json',
+    required: true,
+  },
+  {
     from: 'docs/addressql/sources/jp-public-postal-sources-v1.json',
     to: 'docs/sources/jp-public-postal-sources-v1.json',
     required: true,
@@ -169,6 +184,8 @@ export const ADDRESSQL_EXPORT_ITEMS: ExportItem[] = [
   { from: 'src/lib/addressQlRuntimeReleaseLedger.test.ts', to: 'src/lib/addressQlRuntimeReleaseLedger.test.ts', required: true },
   { from: 'src/lib/addressQlDeliveryPointDecision.ts', to: 'src/lib/addressQlDeliveryPointDecision.ts', required: true },
   { from: 'src/lib/addressQlDeliveryPointDecision.test.ts', to: 'src/lib/addressQlDeliveryPointDecision.test.ts', required: true },
+  { from: 'src/lib/addressQlPostalOperations.ts', to: 'src/lib/addressQlPostalOperations.ts', required: true },
+  { from: 'src/lib/addressQlPostalOperations.test.ts', to: 'src/lib/addressQlPostalOperations.test.ts', required: true },
   { from: 'src/lib/addressQlPublicPostalData.ts', to: 'src/lib/addressQlPublicPostalData.ts', required: true },
   { from: 'src/lib/addressQlPublicPostalData.test.ts', to: 'src/lib/addressQlPublicPostalData.test.ts', required: true },
   { from: 'src/lib/officialPostalSourceCatalog.ts', to: 'src/lib/officialPostalSourceCatalog.ts', required: true },
@@ -191,6 +208,8 @@ export const ADDRESSQL_EXPORT_ITEMS: ExportItem[] = [
   { from: 'scripts/prepare-addressql-l5-carrier-assertion.ts', to: 'scripts/prepare-addressql-l5-carrier-assertion.ts', required: true },
   { from: 'scripts/finalize-addressql-l5-carrier-assertion.ts', to: 'scripts/finalize-addressql-l5-carrier-assertion.ts', required: true },
   { from: 'scripts/verify-addressql-l5-delivery-point.ts', to: 'scripts/verify-addressql-l5-delivery-point.ts', required: true },
+  { from: 'scripts/monitor-addressql-postal-operations.ts', to: 'scripts/monitor-addressql-postal-operations.ts', required: true },
+  { from: 'scripts/monitor-addressql-postal-operations.test.ts', to: 'scripts/monitor-addressql-postal-operations.test.ts', required: true },
   { from: 'scripts/run-addressql-api.ts', to: 'scripts/run-addressql-api.ts', required: true },
   { from: 'scripts/run-addressql-api.test.ts', to: 'scripts/run-addressql-api.test.ts', required: true },
   { from: '.github/workflows/addressql-duckdb-cli.yml', to: '.github/workflows/addressql-duckdb-cli.yml', required: true },
@@ -271,6 +290,7 @@ export function writeAddressQlRepositoryExport(root = process.cwd()) {
       'npm run verify:addressql-export',
       'npm run verify:addressql-duckdb:cli -- --require-cli',
       'npm run verify:addressql-core:cargo',
+      'npm run verify:addressql-postal-operations',
     ],
     nonClaims: [
       'This export contains synthetic fixtures and source metadata, not complete global postal data.',

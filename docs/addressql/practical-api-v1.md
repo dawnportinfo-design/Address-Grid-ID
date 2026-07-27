@@ -112,6 +112,12 @@ for misses, preventing incomplete open data from becoming false rejection
 evidence. Capability, promotion, and health endpoints use the same live
 adapter gate as validation requests.
 
+The registry rechecks `validUntil` on every capability lookup and validation.
+An adapter that expires while the server is running is removed immediately
+without a restart. `postal-operations-v1.md` provides the offline periodic CLI
+for source-version, correction-route, aggregate SLA, and country-action
+reporting.
+
 Signed L5 decisions use a separate carrier trust root:
 
 ```powershell

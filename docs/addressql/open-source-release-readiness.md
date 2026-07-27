@@ -50,6 +50,7 @@ Recommended extraction map:
 | `data/postal_country_packs/` | source metadata and synthetic country packs |
 | `src/lib/addressQlMultilingualQuality.ts` | P3 country language and translation gates |
 | `scripts/run-addressql-api.ts` | P1 localhost-first HTTP adapter |
+| `scripts/monitor-addressql-postal-operations.ts` | P2 offline source expiry, correction SLA, and country action monitor |
 | `docs/specs/openapi/` | public Practical API contract |
 
 ## Required GitHub Files
