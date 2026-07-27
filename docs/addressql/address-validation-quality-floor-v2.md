@@ -1,7 +1,7 @@
 # Address Validation 80-Point Quality Floor
 
 `address-validation-quality-floor-v2` turns the repository's existing
-readiness contracts into one executable scorecard. It evaluates nine
+readiness contracts into one executable scorecard. It evaluates ten
 engineering dimensions using five equally weighted criteria per dimension.
 Every engineering dimension must score at least 80/100.
 
@@ -20,7 +20,7 @@ The engineering dimensions are:
 5. multilingual normalization safety
 6. official and OSS source governance
 7. official postal verification pipeline
-8. privacy-preserving delivery reachability
+8. privacy-preserving L4/L5 delivery reachability and signed carrier conflicts
 9. freshness and correction operations
 10. key lifecycle, quorum signatures, and rollback protection
 

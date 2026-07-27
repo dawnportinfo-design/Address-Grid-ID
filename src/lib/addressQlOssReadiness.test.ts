@@ -27,6 +27,8 @@ test('AddressQL OSS readiness manifest targets dawnportinfo-design/addressql', (
   assert.ok(manifest.topics.includes('zero-knowledge'));
   assert.ok(manifest.public_packages.some(pkg => pkg.name === 'addressql-postgres'));
   assert.ok(manifest.public_packages.some(pkg => pkg.name === 'addressql-proof-hooks'));
+  assert.ok(manifest.public_packages.some(pkg =>
+    pkg.name === 'addressql-signed-delivery-point'));
   assert.ok(manifest.required_documents.includes('docs/addressql/repository-files/LICENSE'));
   assert.ok(manifest.required_documents.includes('docs/addressql/repository-files/SECURITY.md'));
   assert.ok(manifest.required_documents.includes(POSTAL_VALIDATION_NEGATIVE_CLAIMS_FIXTURE));
@@ -49,6 +51,8 @@ test('AddressQL OSS readiness report passes all public release gates', () => {
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlMultilingualQuality.test.ts'));
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlPracticalApi.ts'));
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlPracticalApi.test.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlDeliveryPointDecision.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlDeliveryPointDecision.test.ts'));
   assert.ok(report.verifiedPaths.includes('scripts/run-addressql-api.ts'));
   assert.ok(report.verifiedPaths.includes('docs/specs/openapi/addressql-practical-api-v1.openapi.json'));
   assert.ok(report.verifiedPaths.includes('src/data/address_formats'));
@@ -79,6 +83,7 @@ test('AddressQL OSS readiness commands cover core, adapters, SDKs, ZK, and Calci
     'npm run verify:addressql-sdk',
     'npm run verify:addressql-multilingual-quality',
     'npm run verify:addressql-api',
+    'npm run verify:addressql-delivery-point',
     'npm run verify:addressql-zk',
     'npm run verify:addressql-calcite',
     'npm run verify:addressql-export',
@@ -142,6 +147,8 @@ test('AddressQL OSS export snapshot includes the executable country core', () =>
     'src/lib/addressQlTrustPolicy.ts',
     'src/lib/addressQlRuntimeReleaseLedger.ts',
     'src/lib/addressQlRuntimeReleaseLedger.test.ts',
+    'src/lib/addressQlDeliveryPointDecision.ts',
+    'src/lib/addressQlDeliveryPointDecision.test.ts',
     'scripts/run-addressql-api.ts',
     'scripts/run-addressql-api.test.ts',
     'scripts/prepare-addressql-runtime-attestation.ts',
@@ -151,6 +158,9 @@ test('AddressQL OSS export snapshot includes the executable country core', () =>
     'scripts/prepare-addressql-runtime-release.ts',
     'scripts/finalize-addressql-runtime-release.ts',
     'scripts/verify-addressql-runtime-release.ts',
+    'scripts/prepare-addressql-l5-carrier-assertion.ts',
+    'scripts/finalize-addressql-l5-carrier-assertion.ts',
+    'scripts/verify-addressql-l5-delivery-point.ts',
     'docs/specs/openapi/addressql-practical-api-v1.openapi.json',
     'src/lib/officialPostalSourceCatalog.ts',
     'src/data/address_formats',

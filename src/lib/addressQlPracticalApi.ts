@@ -34,6 +34,10 @@ import {
   type AddressQlRuntimeAdapterRegistry,
   type AddressQlRuntimeAdapterRegistryOptions,
 } from './addressQlRuntimeAdapter';
+import {
+  ADDRESSQL_L5_DELIVERY_POINT_DECISION_VERSION,
+  type AddressQlDeliveryPointVerifier,
+} from './addressQlDeliveryPointDecision';
 
 export const ADDRESSQL_PRACTICAL_API_VERSION = 'addressql-practical-api-v1';
 export const ADDRESSQL_PRACTICAL_API_LIMITS = {
@@ -116,6 +120,7 @@ export type AddressQlPracticalApiOptions =
   & AddressQlRuntimeAdapterRegistryOptions
   & {
     runtimeAdapters?: readonly AddressQlRuntimeAdapter[];
+    deliveryPointVerifier?: AddressQlDeliveryPointVerifier;
   };
 
 type CountryRuntime = {
@@ -829,6 +834,18 @@ export function createAddressQlPracticalApi(
           approved: adapterRegistry.approvedAdapterCount,
           conformance: adapterRegistry.conformanceAdapterCount,
         },
+        deliveryPointDecisionContract: {
+          version: ADDRESSQL_L5_DELIVERY_POINT_DECISION_VERSION,
+          configured: Boolean(options.deliveryPointVerifier),
+          trustedCarrierCount:
+            options.deliveryPointVerifier?.trustedCarrierCount ?? 0,
+          trustedKeyCount:
+            options.deliveryPointVerifier?.trustedKeyCount ?? 0,
+          countryCodes:
+            options.deliveryPointVerifier?.countryCodes ?? [],
+          level: 'L5',
+          scope: 'delivery-point',
+        },
         privacy: { storesRequests: false, logsRequestBodies: false },
       });
     }
@@ -991,6 +1008,52 @@ export function createAddressQlPracticalApi(
           logsAddressText: false,
         },
       });
+    }
+
+    if (method === 'POST' && path === '/v1/delivery-points/assess') {
+      if (!options.deliveryPointVerifier) {
+        return buildAddressQlApiErrorResponse(
+          503,
+          'l5_verifier_not_configured',
+          'The signed L5 delivery-point verifier is not configured.',
+        );
+      }
+      if (!isRecord(request.body)) {
+        return buildAddressQlApiErrorResponse(
+          400,
+          'invalid_l5_contract',
+          'The L5 request must be a JSON object.',
+        );
+      }
+      const countryCode = normalizeCountryCode(request.body.countryCode);
+      if (!runtimes.has(countryCode)) {
+        return buildAddressQlApiErrorResponse(
+          404,
+          'country_not_found',
+          'No country profile exists for the signed L5 request.',
+        );
+      }
+      try {
+        const decision = options.deliveryPointVerifier.assess(request.body);
+        return response(200, {
+          version: ADDRESSQL_PRACTICAL_API_VERSION,
+          countryCode,
+          capability: {
+            requestedLevel: 'L5',
+            scope: 'delivery-point',
+            state: decision.status === 'conflict' ? 'conflict' : 'evaluated',
+            l4DeliveryAreaEvaluated: false,
+            signedCarrierEvidence: true,
+          },
+          decision,
+        });
+      } catch {
+        return buildAddressQlApiErrorResponse(
+          400,
+          'invalid_l5_contract',
+          'The signed L5 carrier assertion contract could not be verified.',
+        );
+      }
     }
 
     if (method === 'POST' && path === '/v1/postal/validate') {

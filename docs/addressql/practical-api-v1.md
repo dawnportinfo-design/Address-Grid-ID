@@ -13,9 +13,10 @@ The default listener is `http://127.0.0.1:8787`. Set
 deployment needs another binding.
 
 The reference adapter does not log request bodies and does not persist
-requests. It accepts country identifiers and postal codes only. Raw address,
-recipient, street, premise, coordinate, credential, and proof-secret fields
-are rejected by the strict request contract.
+requests. Postal routes accept country identifiers and postal codes. The L5
+route accepts a delivery-point commitment and signed carrier decisions. Raw
+address, recipient, street, premise, coordinate, credential, and proof-secret
+fields are rejected by the strict request contracts.
 
 ## Endpoints
 
@@ -28,6 +29,7 @@ GET  /v1/countries/{countryCode}/promotions
 GET  /v1/multilingual
 GET  /v1/countries/{countryCode}/languages
 POST /v1/multilingual/assess
+POST /v1/delivery-points/assess
 POST /v1/postal/validate
 POST /v1/postal/validate/batch
 ```
@@ -69,6 +71,13 @@ No automatic place-name translation is enabled.
 | `existence` | L2 | Returns `unknown` while source, rights, dataset digest, version, freshness, coverage, correction, holdout, signature, or runtime-adapter evidence is missing; independently attested adapters can enable it. |
 | `delivery` | L4 | Returns `unknown` until an independently attested delivery-area source and its evidence chain are available. |
 
+L5 delivery-point decisions use the separate
+`POST /v1/delivery-points/assess` contract. That route accepts only a salted
+`sha256:` delivery-point commitment and time-bounded Ed25519 carrier
+assertions. It does not accept a postal code as a substitute for a point.
+Carrier disagreement returns `conflict` and `stop_conflict`; no majority vote
+continues processing.
+
 An HTTP `200` means the request was evaluated. The validation status can still
 be `unknown`, `fail`, or `not_applicable`. Callers must inspect
 `validation.status`; they must not treat HTTP success as address existence or
@@ -103,6 +112,16 @@ for misses, preventing incomplete open data from becoming false rejection
 evidence. Capability, promotion, and health endpoints use the same live
 adapter gate as validation requests.
 
+Signed L5 decisions use a separate carrier trust root:
+
+```powershell
+$env:ADDRESSQL_L5_CARRIER_TRUST_STORE="carrier-trust-store-v1.json"
+```
+
+The store contains public Ed25519 keys, carrier identifiers, country scopes,
+status, and validity windows. See `signed-delivery-point-contract-v1.md` for
+the canonical assertion and conflict workflow.
+
 ## Local Runtime Configuration
 
 The HTTP server can load postcode-only datasets without code changes:
@@ -121,6 +140,10 @@ docs/specs/schemas/addressql-trust-store-v1.schema.json
 docs/specs/schemas/addressql-trust-store-v2.schema.json
 docs/specs/schemas/addressql-runtime-release-ledger-v1.schema.json
 docs/specs/schemas/addressql-runtime-release-state-v1.schema.json
+docs/specs/schemas/addressql-carrier-trust-store-v1.schema.json
+docs/specs/schemas/addressql-l5-carrier-assertion-v1.schema.json
+docs/specs/schemas/addressql-l5-delivery-point-request-v1.schema.json
+docs/specs/schemas/addressql-l5-delivery-point-decision-v1.schema.json
 ```
 
 Each `dataFile` is relative to, and must stay inside, the config directory.
@@ -265,5 +288,7 @@ traffic.
 - Format validation does not prove postal-code existence.
 - Postal-code existence does not prove address existence.
 - Delivery-area status does not prove delivery-point reachability.
+- L5 status never inherits from L4 area status.
+- L5 accepts a commitment and signed decisions, not a raw address.
 - No result proves residence, identity, recipient authorization, or a carrier
   service-level agreement.

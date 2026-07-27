@@ -180,11 +180,43 @@ test("AddressQL TypeScript SDK P1 client uses bounded HTTP calls and structured 
     targetLanguage: "en",
     purpose: "international-shipping",
   });
+  const commitment = `sha256:${"a".repeat(64)}` as const;
+  await client.assessDeliveryPoint({
+    version: "addressql-l5-delivery-point-request-v1",
+    countryCode: "JP",
+    deliveryPointCommitment: commitment,
+    serviceLevel: "standard",
+    assertions: [{
+      version: "addressql-l5-carrier-assertion-v1",
+      assertionId: "synthetic-assertion",
+      carrierId: "synthetic-carrier",
+      keyId: "synthetic-key",
+      countryCode: "JP",
+      deliveryPointCommitment: commitment,
+      serviceLevel: "standard",
+      decision: "reachable",
+      sourceVersion: "synthetic-v1",
+      evidenceDigest: `sha256:${"b".repeat(64)}`,
+      assessedAt: "2026-07-27T00:00:00Z",
+      expiresAt: "2026-07-27T01:00:00Z",
+      signature: "synthetic-detached-signature",
+    }],
+  });
   assert.equal(calls[1].url, "http://127.0.0.1:8787/v1/promotions");
   assert.equal(calls[2].url, "http://127.0.0.1:8787/v1/countries/GT/promotions");
   assert.equal(calls[3].url, "http://127.0.0.1:8787/v1/multilingual");
   assert.equal(calls[4].url, "http://127.0.0.1:8787/v1/countries/JP/languages");
   assert.equal(calls[5].url, "http://127.0.0.1:8787/v1/multilingual/assess");
+  assert.equal(calls[6].url, "http://127.0.0.1:8787/v1/delivery-points/assess");
+  const l5Body = JSON.parse(String(calls[6].init?.body)) as Record<string, unknown>;
+  assert.deepEqual(Object.keys(l5Body).sort(), [
+    "assertions",
+    "countryCode",
+    "deliveryPointCommitment",
+    "serviceLevel",
+    "version",
+  ]);
+  assert.equal("rawAddress" in l5Body, false);
 
   const failing = new AddressQlApiClient({
     fetchImpl: (async () => new Response(JSON.stringify({

@@ -219,6 +219,46 @@
         }
       }
     },
+    "/v1/delivery-points/assess": {
+      "post": {
+        "operationId": "assessSignedDeliveryPoint",
+        "summary": "Verify signed L5 carrier decisions over a delivery-point commitment",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/L5DeliveryPointRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Signed L5 decision; carrier disagreement returns conflict and stops processing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/L5DeliveryPointResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "413": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ApiError"
+          }
+        }
+      }
+    },
     "/v1/postal/validate": {
       "post": {
         "operationId": "validatePostal",
@@ -698,6 +738,138 @@
           },
           "privacy": {
             "type": "object"
+          }
+        }
+      },
+      "Sha256Commitment": {
+        "type": "string",
+        "pattern": "^sha256:[a-f0-9]{64}$"
+      },
+      "L5CarrierAssertion": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "version",
+          "assertionId",
+          "carrierId",
+          "keyId",
+          "countryCode",
+          "deliveryPointCommitment",
+          "serviceLevel",
+          "decision",
+          "sourceVersion",
+          "evidenceDigest",
+          "assessedAt",
+          "expiresAt",
+          "signature"
+        ],
+        "properties": {
+          "version": {
+            "const": "addressql-l5-carrier-assertion-v1"
+          },
+          "assertionId": {
+            "$ref": "#/components/schemas/TechnicalId"
+          },
+          "carrierId": {
+            "$ref": "#/components/schemas/TechnicalId"
+          },
+          "keyId": {
+            "$ref": "#/components/schemas/TechnicalId"
+          },
+          "countryCode": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "deliveryPointCommitment": {
+            "$ref": "#/components/schemas/Sha256Commitment"
+          },
+          "serviceLevel": {
+            "$ref": "#/components/schemas/TechnicalId"
+          },
+          "decision": {
+            "enum": [
+              "reachable",
+              "unreachable",
+              "unknown"
+            ]
+          },
+          "sourceVersion": {
+            "$ref": "#/components/schemas/TechnicalId"
+          },
+          "evidenceDigest": {
+            "$ref": "#/components/schemas/Sha256Commitment"
+          },
+          "assessedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "signature": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9+/]+={0,2}$"
+          }
+        }
+      },
+      "L5DeliveryPointRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "version",
+          "countryCode",
+          "deliveryPointCommitment",
+          "serviceLevel",
+          "assertions"
+        ],
+        "properties": {
+          "version": {
+            "const": "addressql-l5-delivery-point-request-v1"
+          },
+          "countryCode": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "deliveryPointCommitment": {
+            "$ref": "#/components/schemas/Sha256Commitment"
+          },
+          "serviceLevel": {
+            "$ref": "#/components/schemas/TechnicalId"
+          },
+          "assertions": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "items": {
+              "$ref": "#/components/schemas/L5CarrierAssertion"
+            }
+          }
+        }
+      },
+      "L5DeliveryPointResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "version",
+          "countryCode",
+          "capability",
+          "decision"
+        ],
+        "properties": {
+          "version": {
+            "const": "addressql-practical-api-v1"
+          },
+          "countryCode": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "capability": {
+            "type": "object"
+          },
+          "decision": {
+            "type": "object",
+            "description": "L5-only signed decision metadata. The commitment value is intentionally not reflected."
           }
         }
       },

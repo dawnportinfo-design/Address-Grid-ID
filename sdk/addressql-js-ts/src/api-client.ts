@@ -15,6 +15,35 @@ export type AddressQlApiMultilingualAssessmentRequest = {
   requestId?: string;
 };
 
+export type AddressQlApiL5CarrierDecision =
+  | "reachable"
+  | "unreachable"
+  | "unknown";
+
+export type AddressQlApiL5CarrierAssertion = {
+  version: "addressql-l5-carrier-assertion-v1";
+  assertionId: string;
+  carrierId: string;
+  keyId: string;
+  countryCode: string;
+  deliveryPointCommitment: `sha256:${string}`;
+  serviceLevel: string;
+  decision: AddressQlApiL5CarrierDecision;
+  sourceVersion: string;
+  evidenceDigest: `sha256:${string}`;
+  assessedAt: string;
+  expiresAt: string;
+  signature: string;
+};
+
+export type AddressQlApiL5DeliveryPointRequest = {
+  version: "addressql-l5-delivery-point-request-v1";
+  countryCode: string;
+  deliveryPointCommitment: `sha256:${string}`;
+  serviceLevel: string;
+  assertions: AddressQlApiL5CarrierAssertion[];
+};
+
 export type AddressQlApiClientOptions = {
   baseUrl?: string;
   timeoutMs?: number;
@@ -96,6 +125,16 @@ export class AddressQlApiClient {
     input: AddressQlApiMultilingualAssessmentRequest,
   ): Promise<Record<string, unknown>> {
     return this.request("/v1/multilingual/assess", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(input),
+    });
+  }
+
+  assessDeliveryPoint(
+    input: AddressQlApiL5DeliveryPointRequest,
+  ): Promise<Record<string, unknown>> {
+    return this.request("/v1/delivery-points/assess", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(input),

@@ -1,5 +1,17 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import {
+  generateKeyPairSync,
+  sign,
+  type KeyObject,
+} from 'node:crypto';
+import {
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import test from 'node:test';
 
 import {
@@ -8,6 +20,14 @@ import {
   createAddressQlPracticalApi,
 } from './addressQlPracticalApi';
 import type { AddressQlRuntimeAdapter } from './addressQlRuntimeAdapter';
+import {
+  ADDRESSQL_CARRIER_TRUST_STORE_VERSION,
+  ADDRESSQL_L5_CARRIER_ASSERTION_VERSION,
+  ADDRESSQL_L5_DELIVERY_POINT_REQUEST_VERSION,
+  buildAddressQlL5CarrierAssertionPayload,
+  loadAddressQlDeliveryPointVerifier,
+  type AddressQlL5CarrierAssertion,
+} from './addressQlDeliveryPointDecision';
 
 const api = createAddressQlPracticalApi(process.cwd(), {
   now: '2026-07-26T00:00:00Z',
@@ -43,6 +63,80 @@ function runtimeAdapter(
       confidence: 0.99,
       reasonCode: 'postal_source_exact_match',
     }),
+  };
+}
+
+function l5Fixture() {
+  const directory = mkdtempSync(join(tmpdir(), 'addressql-api-l5-'));
+  const carrierA = generateKeyPairSync('ed25519');
+  const carrierB = generateKeyPairSync('ed25519');
+  const trustStorePath = join(directory, 'carrier-trust.json');
+  const publicPem = (key: KeyObject) =>
+    key.export({ type: 'spki', format: 'pem' }).toString();
+  writeFileSync(trustStorePath, `${JSON.stringify({
+    version: ADDRESSQL_CARRIER_TRUST_STORE_VERSION,
+    keys: {
+      'carrier-a-key': {
+        carrierId: 'carrier-a',
+        countryCodes: ['JP'],
+        publicKey: publicPem(carrierA.publicKey),
+        status: 'active',
+        validFrom: '2026-07-01T00:00:00Z',
+        validUntil: '2027-07-01T00:00:00Z',
+      },
+      'carrier-b-key': {
+        carrierId: 'carrier-b',
+        countryCodes: ['JP'],
+        publicKey: publicPem(carrierB.publicKey),
+        status: 'active',
+        validFrom: '2026-07-01T00:00:00Z',
+        validUntil: '2027-07-01T00:00:00Z',
+      },
+    },
+  }, null, 2)}\n`);
+  const commitment = runtimeDigest('e');
+  const signed = (
+    carrierId: string,
+    keyId: string,
+    privateKey: KeyObject,
+    decision: AddressQlL5CarrierAssertion['decision'],
+  ): AddressQlL5CarrierAssertion => {
+    const unsigned: Omit<AddressQlL5CarrierAssertion, 'signature'> = {
+      version: ADDRESSQL_L5_CARRIER_ASSERTION_VERSION,
+      assertionId: `${carrierId}-api-assertion`,
+      carrierId,
+      keyId,
+      countryCode: 'JP',
+      deliveryPointCommitment: commitment,
+      serviceLevel: 'standard',
+      decision,
+      sourceVersion: 'synthetic-api-v1',
+      evidenceDigest: runtimeDigest(carrierId === 'carrier-a' ? 'f' : '9'),
+      assessedAt: '2026-07-26T23:55:00Z',
+      expiresAt: '2026-07-27T01:00:00Z',
+    };
+    return {
+      ...unsigned,
+      signature: sign(
+        null,
+        Buffer.from(buildAddressQlL5CarrierAssertionPayload(unsigned), 'utf8'),
+        privateKey,
+      ).toString('base64'),
+    };
+  };
+  return {
+    api: createAddressQlPracticalApi(process.cwd(), {
+      now: '2026-07-27T00:00:00Z',
+      deliveryPointVerifier: loadAddressQlDeliveryPointVerifier(
+        trustStorePath,
+        { now: '2026-07-27T00:00:00Z' },
+      ),
+    }),
+    commitment,
+    carrierA,
+    carrierB,
+    signed,
+    cleanup: () => rmSync(directory, { recursive: true, force: true }),
   };
 }
 
@@ -129,6 +223,125 @@ test('P1 existence and delivery requests fail closed with machine-readable evide
   assert.equal(deliveryCapability.requestedLevel, 'L4');
   assert.equal(deliveryCapability.state, 'blocked');
   assert.ok((deliveryCapability.missingEvidence as string[]).includes('delivery-area-source'));
+});
+
+test('P1 keeps L4 area checks separate from signed L5 point decisions', () => {
+  const files = l5Fixture();
+  try {
+    const l4 = files.api.handle({
+      method: 'POST',
+      path: '/v1/postal/validate',
+      body: { countryCode: 'JP', postalCode: '100-0001', purpose: 'delivery' },
+    });
+    const l5 = files.api.handle({
+      method: 'POST',
+      path: '/v1/delivery-points/assess',
+      body: {
+        version: ADDRESSQL_L5_DELIVERY_POINT_REQUEST_VERSION,
+        countryCode: 'JP',
+        deliveryPointCommitment: files.commitment,
+        serviceLevel: 'standard',
+        assertions: [
+          files.signed(
+            'carrier-a',
+            'carrier-a-key',
+            files.carrierA.privateKey,
+            'reachable',
+          ),
+        ],
+      },
+    });
+    const l5Capability = l5.body.capability as Record<string, unknown>;
+    const l5Decision = l5.body.decision as Record<string, unknown>;
+
+    assert.equal(
+      (l4.body.capability as Record<string, unknown>).requestedLevel,
+      'L4',
+    );
+    assert.equal(l5.statusCode, 200);
+    assert.equal(l5Capability.requestedLevel, 'L5');
+    assert.equal(l5Capability.scope, 'delivery-point');
+    assert.equal(l5Capability.l4DeliveryAreaEvaluated, false);
+    assert.equal(l5Decision.status, 'pass');
+    assert.equal(l5Decision.signatureVerified, true);
+    assert.doesNotMatch(JSON.stringify(l5.body), new RegExp(files.commitment));
+  } finally {
+    files.cleanup();
+  }
+});
+
+test('P1 stops signed L5 processing on carrier disagreement', () => {
+  const files = l5Fixture();
+  try {
+    const output = files.api.handle({
+      method: 'POST',
+      path: '/v1/delivery-points/assess',
+      body: {
+        version: ADDRESSQL_L5_DELIVERY_POINT_REQUEST_VERSION,
+        countryCode: 'JP',
+        deliveryPointCommitment: files.commitment,
+        serviceLevel: 'standard',
+        assertions: [
+          files.signed(
+            'carrier-a',
+            'carrier-a-key',
+            files.carrierA.privateKey,
+            'reachable',
+          ),
+          files.signed(
+            'carrier-b',
+            'carrier-b-key',
+            files.carrierB.privateKey,
+            'unreachable',
+          ),
+        ],
+      },
+    });
+    const decision = output.body.decision as Record<string, unknown>;
+
+    assert.equal(output.statusCode, 200);
+    assert.equal(decision.status, 'conflict');
+    assert.equal(decision.processingDirective, 'stop_conflict');
+    assert.equal(decision.stopProcessing, true);
+  } finally {
+    files.cleanup();
+  }
+});
+
+test('P1 signed L5 endpoint rejects raw address fields and fails closed without trust', () => {
+  const unconfigured = api.handle({
+    method: 'POST',
+    path: '/v1/delivery-points/assess',
+    body: {},
+  });
+  const files = l5Fixture();
+  try {
+    const unsafe = files.api.handle({
+      method: 'POST',
+      path: '/v1/delivery-points/assess',
+      body: {
+        version: ADDRESSQL_L5_DELIVERY_POINT_REQUEST_VERSION,
+        countryCode: 'JP',
+        deliveryPointCommitment: files.commitment,
+        serviceLevel: 'standard',
+        assertions: [],
+        rawAddress: 'not accepted',
+      },
+    });
+
+    assert.equal(unconfigured.statusCode, 503);
+    assert.equal(
+      (unconfigured.body.error as Record<string, unknown>).code,
+      'l5_verifier_not_configured',
+    );
+    assert.equal(unsafe.statusCode, 400);
+    assert.equal(
+      (unsafe.body.error as Record<string, unknown>).code,
+      'invalid_l5_contract',
+    );
+  } finally {
+    files.cleanup();
+  }
 });
 
 test('P1 executes independently attested runtime adapters without reflecting inputs', () => {
@@ -317,6 +530,7 @@ test('P1 batch validation isolates item errors and OpenAPI publishes the same ro
     '/v1/promotions',
     '/v1/multilingual',
     '/v1/multilingual/assess',
+    '/v1/delivery-points/assess',
     '/v1/postal/validate',
     '/v1/postal/validate/batch',
   ]) {

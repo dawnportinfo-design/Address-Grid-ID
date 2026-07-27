@@ -14,6 +14,10 @@ import {
   type LoadedAddressQlRuntimeConfig,
 } from '../src/lib/addressQlRuntimeConfig';
 import { loadAddressQlQuorumApprovedRuntimeConfig } from '../src/lib/addressQlRuntimeReleaseLedger';
+import {
+  loadAddressQlDeliveryPointVerifier,
+  type AddressQlDeliveryPointVerifier,
+} from '../src/lib/addressQlDeliveryPointDecision';
 
 function writeResponse(
   response: ServerResponse,
@@ -197,6 +201,16 @@ export function loadAddressQlRuntimeEnvironment(
   });
 }
 
+export function loadAddressQlDeliveryPointEnvironment(
+  environment: NodeJS.ProcessEnv = process.env,
+  cwd = process.cwd(),
+): AddressQlDeliveryPointVerifier | null {
+  const trustStorePath = environment.ADDRESSQL_L5_CARRIER_TRUST_STORE;
+  return trustStorePath
+    ? loadAddressQlDeliveryPointVerifier(resolvePath(cwd, trustStorePath))
+    : null;
+}
+
 function resolvePath(cwd: string, path: string) {
   return resolve(cwd, path);
 }
@@ -205,12 +219,16 @@ export function runAddressQlHttpServer() {
   const host = process.env.ADDRESSQL_API_HOST || '127.0.0.1';
   const port = parsePort(process.env.ADDRESSQL_API_PORT);
   const loadedRuntime = loadAddressQlRuntimeEnvironment();
-  const server = createAddressQlHttpServer(process.cwd(), loadedRuntime
-    ? {
+  const deliveryPointVerifier = loadAddressQlDeliveryPointEnvironment();
+  const server = createAddressQlHttpServer(process.cwd(), {
+    ...(loadedRuntime
+      ? {
       runtimeAdapters: loadedRuntime.runtimeAdapters,
       ...loadedRuntime.registryOptions,
-    }
-    : {});
+      }
+      : {}),
+    ...(deliveryPointVerifier ? { deliveryPointVerifier } : {}),
+  });
   server.listen(port, host, () => {
     const address = server.address();
     const selectedPort = typeof address === 'object' && address ? address.port : port;
@@ -220,6 +238,12 @@ export function runAddressQlHttpServer() {
       console.log(
         `Loaded ${loadedRuntime.diagnostics.adapterCount} verified runtime adapter(s)`
         + ` for ${loadedRuntime.diagnostics.countryCodes.join(', ')}.`,
+      );
+    }
+    if (deliveryPointVerifier) {
+      console.log(
+        `Loaded ${deliveryPointVerifier.trustedCarrierCount} trusted L5 carrier(s)`
+        + ` for ${deliveryPointVerifier.countryCodes.join(', ')}.`,
       );
     }
   });

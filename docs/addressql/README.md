@@ -49,6 +49,8 @@ npm run verify:addressql-global-coverage
 npm run verify:addressql-multilingual-quality
 npm run verify:addressql-api
 npm run verify:addressql-runtime-config
+npm run verify:addressql-runtime-release
+npm run verify:addressql-delivery-point
 npm run verify:addressql-zk
 ```
 
@@ -134,12 +136,17 @@ Detailed planning docs:
 - [Country Data Promotion v0.1](country-data-promotion-v0.1.md)
 - [Multilingual Quality v0.1](multilingual-quality-v0.1.md)
 - [Practical API v1](practical-api-v1.md)
+- [Runtime Release Security v1](runtime-release-security-v1.md)
+- [Signed L5 Delivery-Point Contract v1](signed-delivery-point-contract-v1.md)
 - [JP Public Postal Source Receipt](sources/jp-public-postal-sources-v1.json)
 
 The practical API includes fail-closed runtime evidence adapters and a local
 postcode-set adapter. Only independently attested, non-expired source
 versions can enable postal-existence or delivery-area decisions; partial
 datasets never turn absence into a negative result.
+The L5 endpoint is separate: it accepts only a salted delivery-point
+commitment and bounded signed carrier assertions. Carrier disagreement is a
+stopping conflict, and L4 area evidence cannot become an L5 point decision.
 - [Congestion And Mobility Functions](congestion-mobility-functions.md)
 - [API/SDK v0.4](api-sdk-v0.4.md)
 - [Calcite v0.5](calcite-v0.5.md)

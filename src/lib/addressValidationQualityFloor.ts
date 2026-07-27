@@ -22,6 +22,15 @@ import {
 import { buildAddressQlOssReadinessReport } from './addressQlOssReadiness';
 import { buildAddressQlPublicPostalArtifacts } from './addressQlPublicPostalData';
 import {
+  ADDRESSQL_L5_CARRIER_ASSERTION_VERSION,
+  ADDRESSQL_L5_DELIVERY_POINT_DECISION_VERSION,
+  ADDRESSQL_L5_DELIVERY_POINT_REQUEST_VERSION,
+  ADDRESSQL_L5_MAX_ASSERTION_LIFETIME_MS,
+  buildAddressQlL5CarrierAssertionPayload,
+  loadAddressQlDeliveryPointVerifier,
+  mergeAddressQlCarrierDecisions,
+} from './addressQlDeliveryPointDecision';
+import {
   ADDRESSQL_RUNTIME_ATTESTATION_WORKFLOW_VERSION,
   finalizeAddressQlRuntimeAttestation,
   prepareAddressQlRuntimeAttestation,
@@ -266,6 +275,24 @@ export function buildAddressValidationQualityFloorReport(
   );
   const publicPostal = buildSyntheticPublicPostalArtifacts();
   const reachability = buildSyntheticReachabilityEvidence();
+  const l5Payload = buildAddressQlL5CarrierAssertionPayload({
+    version: ADDRESSQL_L5_CARRIER_ASSERTION_VERSION,
+    assertionId: 'synthetic-l5-quality',
+    carrierId: 'synthetic-carrier',
+    keyId: 'synthetic-carrier-key',
+    countryCode: 'JP',
+    deliveryPointCommitment: sha256('synthetic-salted-delivery-point'),
+    serviceLevel: 'standard',
+    decision: 'reachable',
+    sourceVersion: 'synthetic-v1',
+    evidenceDigest: sha256('synthetic-l5-aggregate-evidence'),
+    assessedAt: '2026-07-26T00:00:00Z',
+    expiresAt: '2026-07-26T01:00:00Z',
+  });
+  const l5Conflict = mergeAddressQlCarrierDecisions([
+    'reachable',
+    'unreachable',
+  ]);
   const promotionSummary = summarizeAddressQlCountryDataPromotions(
     buildAddressQlCountryDataPromotionIndex(
       countryProfiles.map(profile => profile.countryCode),
@@ -578,38 +605,42 @@ export function buildAddressValidationQualityFloorReport(
     ]),
     dimension('delivery-reachability', 'Privacy-preserving delivery reachability', [
       criterion({
-        id: 'signed-evidence-contract',
-        passed: reachability.reports.every(report =>
-          report.publicProjection.evidenceClasses.includes('signed-report')),
-        evidence: 'Signed carrier evidence is represented by the bounded report contract.',
-        nextFix: 'Add signed operator evidence to reachability reports.',
+        id: 'signed-l5-assertion-contract',
+        passed: ADDRESSQL_L5_CARRIER_ASSERTION_VERSION
+          === 'addressql-l5-carrier-assertion-v1'
+          && l5Payload.includes('"deliveryPointCommitment"'),
+        evidence: 'Canonical L5 assertions bind Ed25519 carrier decisions to one delivery-point commitment.',
+        nextFix: 'Restore the canonical signed L5 carrier assertion contract.',
       }),
       criterion({
-        id: 'report-validation',
-        passed: reachability.reports.every(report =>
-          validateDeliveryReachabilityReport(report).valid),
-        evidence: 'Synthetic reachability reports pass structural and privacy validation.',
-        nextFix: 'Repair delivery reachability report validation.',
+        id: 'commitment-only-boundary',
+        passed: !/rawAddress|recipient|street|premise|coordinate/i.test(l5Payload),
+        evidence: 'The signed payload contains a commitment and decision metadata, not raw address fields.',
+        nextFix: 'Remove raw address or recipient fields from the L5 assertion payload.',
       }),
       criterion({
-        id: 'aggregate-feed',
-        passed: reachability.feed.length === 1
-          && reachability.feed[0]?.reportCount === 2,
-        evidence: 'Two independent synthetic reports aggregate into one coarse-area feed item.',
-        nextFix: 'Restore coarse-area reachability aggregation.',
+        id: 'carrier-conflict-stop',
+        passed: l5Conflict.status === 'conflict'
+          && l5Conflict.processingDirective === 'stop_conflict'
+          && l5Conflict.stopProcessing,
+        evidence: 'Any cross-carrier decision disagreement becomes conflict and stops processing.',
+        nextFix: 'Restore fail-closed cross-carrier conflict handling.',
       }),
       criterion({
-        id: 'bounded-ttl',
-        passed: reachability.feed.every(item => item.ttlSeconds > 0),
-        evidence: 'Every reachability item has an explicit positive TTL.',
-        nextFix: 'Require an expiry policy for every reachability report.',
+        id: 'l4-l5-contract-separation',
+        passed: ADDRESSQL_L5_DELIVERY_POINT_REQUEST_VERSION
+          === 'addressql-l5-delivery-point-request-v1'
+          && ADDRESSQL_L5_DELIVERY_POINT_DECISION_VERSION
+            === 'addressql-l5-delivery-point-decision-v1',
+        evidence: 'L5 request and decision contracts are separate from the L4 postal delivery-area path.',
+        nextFix: 'Restore distinct L4 area and L5 point contracts.',
       }),
       criterion({
-        id: 'live-carrier-provider',
-        passed: promotionSummary.enabledByLevel.L4 > 0
-          || promotionSummary.enabledByLevel.L5 > 0,
-        evidence: `enabledDeliveryArea=${promotionSummary.enabledByLevel.L4}; enabledDeliveryPoint=${promotionSummary.enabledByLevel.L5}`,
-        nextFix: 'Connect and independently attest a licensed carrier or public delivery-area provider.',
+        id: 'carrier-trust-and-expiry',
+        passed: typeof loadAddressQlDeliveryPointVerifier === 'function'
+          && ADDRESSQL_L5_MAX_ASSERTION_LIFETIME_MS === 24 * 60 * 60 * 1000,
+        evidence: 'Carrier keys are country-scoped and time-bounded; assertions expire within 24 hours.',
+        nextFix: 'Restore carrier trust-store verification and bounded assertion lifetime.',
       }),
     ]),
     dimension('freshness-correction-operations', 'Freshness and correction operations', [

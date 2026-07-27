@@ -32,6 +32,7 @@ npm run verify:addressql-multilingual-quality
 npm run verify:addressql-api
 npm run verify:addressql-runtime-config
 npm run verify:addressql-runtime-release
+npm run verify:addressql-delivery-point
 ```
 
 The `prepare:addressql-runtime-attestation` and
@@ -39,6 +40,9 @@ The `prepare:addressql-runtime-attestation` and
 independent-signature workflow documented in `docs/practical-api-v1.md`.
 Reviewer-key lifecycle, quorum releases, and rollback prevention are
 documented in `docs/runtime-release-security-v1.md`.
+Signed L5 carrier assertions, commitment-only requests, and fail-closed
+carrier conflicts are documented in
+`docs/signed-delivery-point-contract-v1.md`.
 
 The exported address-format profiles and postal country packs are bounded
 format metadata, source catalogs, and synthetic-test assets. They are not
@@ -64,6 +68,12 @@ The server optionally loads signed local postcode datasets through
 conformance fixture can be enabled explicitly with
 `ADDRESSQL_ALLOW_CONFORMANCE=1`; conformance decisions never become live
 postal-existence evidence.
+
+The optional L5 endpoint loads public carrier keys through
+`ADDRESSQL_L5_CARRIER_TRUST_STORE`. It accepts delivery-point commitments and
+signed decisions only. L4 postal or area coverage never promotes itself to an
+L5 result. The TypeScript client exposes the endpoint as
+`AddressQlApiClient.assessDeliveryPoint()`.
 
 Create the local JP official-plus-OSS runtime with:
 
