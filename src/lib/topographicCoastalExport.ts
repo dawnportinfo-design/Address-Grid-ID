@@ -2,8 +2,23 @@ import type {
   TopographicExportPlan,
   TopographicSourceRecord,
 } from './topographicExport';
-import { buildTopographicExportPlan } from './topographicExport';
-import type { CoastalSeamResult } from './topographicCoastalSeam';
+import {
+  AGID_SYNTHETIC_TOPO_SOURCE,
+  buildTopographicExportPlan,
+} from './topographicExport';
+import {
+  COASTAL_SURFACE_BREAKLINE,
+  COASTAL_SURFACE_LAND,
+  COASTAL_SURFACE_OCEAN,
+  createCoastalGridLattice,
+  hashCoastalGridLattice,
+  reconcileCoastalElevationGrids,
+  type CoastalSeamResult,
+} from './topographicCoastalSeam';
+import {
+  TOPOGRAPHIC_COASTLINE_LEGEND_PROMOTION_EVIDENCE_VERSION,
+  type CoastlineLegendPromotionEvidence,
+} from './topographicCoastlineLegendPromotionContract';
 import { vectorizeNormalizedElevationGrid } from './topographicElevationVectorizer';
 import { serializeTopographicExport } from './topographicExportSerializers';
 
@@ -11,6 +26,10 @@ export const TOPOGRAPHIC_COASTAL_MANIFEST_VERSION =
   'agid-topographic-coastal-manifest-v0.1';
 export const TOPOGRAPHIC_COASTAL_MANIFEST_MEDIA_TYPE =
   'application/vnd.agid.topographic-coastal-manifest+json';
+export const TOPOGRAPHIC_COASTAL_EVIDENCE_VERSION =
+  'agid-topographic-coastal-evidence-v0.1';
+export const TOPOGRAPHIC_COASTAL_EVIDENCE_MEDIA_TYPE =
+  'application/vnd.agid.topographic-coastal-evidence+json';
 
 export type SerializedCoastalSeamManifest = {
   mediaType: typeof TOPOGRAPHIC_COASTAL_MANIFEST_MEDIA_TYPE;
@@ -31,7 +50,36 @@ export type SerializedCoastalTerrainGltfBundle = {
   manifest: SerializedCoastalSeamManifest;
 };
 
+export type SerializedCoastalTerrainEvidenceSidecar = {
+  mediaType: typeof TOPOGRAPHIC_COASTAL_EVIDENCE_MEDIA_TYPE;
+  extension: '.coastal-evidence.json';
+  data: string;
+  byteLength: number;
+  contentSha256: `sha256:${string}`;
+};
+
+export type SerializedCoastalTerrainGltfEvidenceBundle =
+  SerializedCoastalTerrainGltfBundle & {
+    evidenceSidecar: SerializedCoastalTerrainEvidenceSidecar;
+  };
+
+export type SyntheticCoastalTerrainBundleRequest = {
+  bounds: CoastalSeamResult['grid']['bounds'];
+  countryCode?: string;
+  generatedAt: string;
+};
+
 type CoastalSourceRole = 'land' | 'bathymetry' | 'coastline';
+
+type PublishedCoastlineLegendPromotion = {
+  schemaVersion: typeof TOPOGRAPHIC_COASTLINE_LEGEND_PROMOTION_EVIDENCE_VERSION;
+  status: 'approved';
+  receiptSha256: `sha256:${string}`;
+  promotionDigest: `sha256:${string}`;
+  sequence: number;
+  verifiedSignatureCount: number;
+  minimumSignatures: number;
+};
 
 function requireSha256(field: string, value: string) {
   if (!/^sha256:[a-f0-9]{64}$/i.test(value)) {
@@ -59,6 +107,7 @@ function requireReadySource(
     version: string;
     termsUrl: string;
     correctionUrl: string;
+    snapshotSha256: `sha256:${string}`;
   },
 ) {
   if (gate.status !== 'ready') {
@@ -85,6 +134,13 @@ function requireReadySource(
   requireHttpsUrl(`${role} correction URL`, source.correctionUrl);
   if (source.reuseStatus !== 'approved') {
     throw new Error(`${role} source reuse must be approved.`);
+  }
+  if (
+    !source.snapshotEvidence ||
+    source.snapshotEvidence.contentSha256.toLowerCase() !==
+      expected.snapshotSha256.toLowerCase()
+  ) {
+    throw new Error(`${role} structured snapshot evidence does not match provenance.`);
   }
   return source;
 }
@@ -114,6 +170,83 @@ function publicSourceRecord(
     reuseStatus: source.reuseStatus,
     syntheticOnly: source.syntheticOnly === true,
     snapshotSha256,
+    adapterVersion: source.snapshotEvidence?.adapterVersion ?? null,
+    verifiedAt: source.snapshotEvidence?.verifiedAt ?? null,
+    horizontalCrs: source.snapshotEvidence?.horizontalCrs ?? null,
+    verticalDatum: source.snapshotEvidence?.verticalDatum ?? null,
+  };
+}
+
+function sourceBindsRelatedArtifactDigest(
+  source: TopographicSourceRecord,
+  digest: `sha256:${string}`,
+) {
+  return (
+    source.snapshotEvidence?.relatedArtifactSha256?.some(
+      value => value.toLowerCase() === digest.toLowerCase(),
+    ) === true
+  );
+}
+
+function publishCoastlineLegendPromotion(
+  source: TopographicSourceRecord,
+  snapshotSha256: `sha256:${string}`,
+  promotion: CoastlineLegendPromotionEvidence | null,
+): PublishedCoastlineLegendPromotion | null {
+  if (source.syntheticOnly === true) {
+    if (promotion !== null) {
+      throw new Error(
+        'Synthetic coastline output must not publish independent legend promotion evidence.',
+      );
+    }
+    return null;
+  }
+  if (!promotion) {
+    throw new Error(
+      'Source-backed coastline output requires independent legend promotion evidence.',
+    );
+  }
+  if (
+    promotion.schemaVersion
+      !== TOPOGRAPHIC_COASTLINE_LEGEND_PROMOTION_EVIDENCE_VERSION
+    || promotion.status !== 'approved'
+    || promotion.sourceId !== source.sourceId
+    || promotion.sourceVersion !== source.version
+    || promotion.classificationGeoTiffSha256.toLowerCase()
+      !== snapshotSha256.toLowerCase()
+  ) {
+    throw new Error(
+      'Coastline legend promotion evidence does not match the source-backed output.',
+    );
+  }
+  requireSha256('coastline legend receipt', promotion.receiptSha256);
+  requireSha256('coastline legend promotion', promotion.promotionDigest);
+  if (
+    !Number.isSafeInteger(promotion.sequence)
+    || promotion.sequence < 1
+    || !Number.isSafeInteger(promotion.minimumSignatures)
+    || promotion.minimumSignatures < 2
+    || !Number.isSafeInteger(promotion.verifiedSignatureCount)
+    || promotion.verifiedSignatureCount < promotion.minimumSignatures
+  ) {
+    throw new Error('Coastline legend promotion quorum evidence is invalid.');
+  }
+  if (
+    !sourceBindsRelatedArtifactDigest(source, promotion.receiptSha256)
+    || !sourceBindsRelatedArtifactDigest(source, promotion.promotionDigest)
+  ) {
+    throw new Error(
+      'Coastline source must bind receipt and promotion digests as related evidence.',
+    );
+  }
+  return {
+    schemaVersion: promotion.schemaVersion,
+    status: promotion.status,
+    receiptSha256: promotion.receiptSha256,
+    promotionDigest: promotion.promotionDigest,
+    sequence: promotion.sequence,
+    verifiedSignatureCount: promotion.verifiedSignatureCount,
+    minimumSignatures: promotion.minimumSignatures,
   };
 }
 
@@ -163,6 +296,7 @@ export async function serializeCoastalSeamManifest(
   requireSha256('bathymetry snapshot', provenance.bathymetrySnapshotSha256);
   requireSha256('coastline snapshot', provenance.coastlineSnapshotSha256);
   requireSha256('coastline classification', provenance.classificationSha256);
+  requireSha256('coastline coordinate lattice', provenance.coordinateLatticeSha256);
   if (
     provenance.sourceTermsUrls.length !== 3 ||
     provenance.sourceCorrectionUrls.length !== 3
@@ -203,6 +337,22 @@ export async function serializeCoastalSeamManifest(
     const source = requireReadySource(item.role, item.gate, item);
     return publicSourceRecord(item.role, source, item.snapshotSha256);
   });
+  const coastlineSource = result.sourceGates.coastline.selectedSources[0];
+  if (
+    !sourceBindsRelatedArtifactDigest(
+      coastlineSource,
+      provenance.coordinateLatticeSha256,
+    )
+  ) {
+    throw new Error(
+      'Coastline source must bind the coordinate lattice digest as related evidence.',
+    );
+  }
+  const coastlineLegendPromotion = publishCoastlineLegendPromotion(
+    coastlineSource,
+    provenance.coastlineSnapshotSha256,
+    provenance.coastlineLegendPromotion,
+  );
 
   const manifest = {
     manifestVersion: TOPOGRAPHIC_COASTAL_MANIFEST_VERSION,
@@ -218,12 +368,16 @@ export async function serializeCoastalSeamManifest(
       horizontalCrs: grid.horizontalCrs,
       verticalDatum: grid.verticalDatum,
       countryCode: grid.countryCode ?? null,
+      coordinateModel: grid.coordinateModel ?? 'rectilinear-axes',
     },
     sources,
     coastlineEvidence: {
       classificationSha256: provenance.classificationSha256,
+      coordinateLatticeSha256: provenance.coordinateLatticeSha256,
+      coordinateLatticeBinding: 'coastline-related-artifact',
       adapterVersion: provenance.coastlineAdapterVersion,
       shorelineEpoch: provenance.shorelineEpoch,
+      legendPromotion: coastlineLegendPromotion,
     },
     metrics: {
       gridCellCount: metrics.gridCellCount,
@@ -330,4 +484,271 @@ export async function serializeCoastalTerrainGltfBundle(
     },
     manifest,
   };
+}
+
+export async function serializeCoastalTerrainGltfEvidenceBundle(
+  result: CoastalSeamResult,
+): Promise<SerializedCoastalTerrainGltfEvidenceBundle> {
+  const bundle = await serializeCoastalTerrainGltfBundle(result);
+  const sources = [
+    result.sourceGates.land.selectedSources[0],
+    result.sourceGates.bathymetry.selectedSources[0],
+    result.sourceGates.coastline.selectedSources[0],
+  ];
+  const coordinateLatticeSha256 = await hashCoastalGridLattice(
+    createCoastalGridLattice({
+      ...result.grid,
+      sourceRecord: sources[0],
+    }),
+  );
+  if (
+    coordinateLatticeSha256.toLowerCase() !==
+    result.provenance.coordinateLatticeSha256.toLowerCase()
+  ) {
+    throw new Error(
+      'Coastal evidence sidecar coordinate lattice does not match seam provenance.',
+    );
+  }
+  if (
+    !sourceBindsRelatedArtifactDigest(
+      sources[2],
+      result.provenance.coordinateLatticeSha256,
+    )
+  ) {
+    throw new Error(
+      'Coastal evidence sidecar requires the coastline source to bind the coordinate lattice digest.',
+    );
+  }
+  const coastlineLegendPromotion = publishCoastlineLegendPromotion(
+    sources[2],
+    result.provenance.coastlineSnapshotSha256,
+    result.provenance.coastlineLegendPromotion,
+  );
+
+  const sourceSnapshots = [
+    {
+      role: 'land' as const,
+      source: sources[0],
+      snapshotSha256: result.provenance.landSnapshotSha256,
+    },
+    {
+      role: 'bathymetry' as const,
+      source: sources[1],
+      snapshotSha256: result.provenance.bathymetrySnapshotSha256,
+    },
+    {
+      role: 'coastline' as const,
+      source: sources[2],
+      snapshotSha256: result.provenance.coastlineSnapshotSha256,
+    },
+  ].map(({ role, source, snapshotSha256 }) => ({
+    role,
+    sourceId: source.sourceId,
+    version: source.version,
+    licenseId: source.licenseId,
+    reuseStatus: source.reuseStatus,
+    syntheticOnly: source.syntheticOnly === true,
+    snapshotSha256,
+  }));
+
+  const sidecar = {
+    evidenceVersion: TOPOGRAPHIC_COASTAL_EVIDENCE_VERSION,
+    provenanceModel: {
+      profile: 'W3C-PROV-DM-inspired-minimal',
+      conformance: 'not-a-W3C-PROV-serialization',
+    },
+    activity: {
+      id: `agid:coastal-seam:${result.seamVersion}`,
+      type: 'coastal-surface-reconciliation',
+      generatedAt: result.grid.generatedAt,
+      software: {
+        seamVersion: result.seamVersion,
+        manifestVersion: TOPOGRAPHIC_COASTAL_MANIFEST_VERSION,
+      },
+    },
+    entities: {
+      output: {
+        id: 'artifact:gltf',
+        mediaType: bundle.model.mediaType,
+        contentSha256: bundle.model.contentSha256,
+        byteLength: bundle.model.byteLength,
+      },
+      manifest: {
+        id: 'artifact:coastal-manifest',
+        mediaType: bundle.manifest.mediaType,
+        contentSha256: bundle.manifest.contentSha256,
+        byteLength: bundle.manifest.byteLength,
+      },
+      sourceSnapshots,
+    },
+    derivation: {
+      outputArtifactId: 'artifact:gltf',
+      usedArtifactId: 'artifact:coastal-manifest',
+      usedSourceRoles: sourceSnapshots.map(source => source.role),
+      coordinateLatticeSha256,
+      coordinateModel: result.grid.coordinateModel ?? 'rectilinear-axes',
+      classificationSha256: result.provenance.classificationSha256,
+      coastlineLegendPromotion,
+    },
+    sourceGateStatus: {
+      land: result.sourceGates.land.status,
+      bathymetry: result.sourceGates.bathymetry.status,
+      coastline: result.sourceGates.coastline.status,
+    },
+    nonClaims: [
+      'The sidecar is verifiable evidence metadata, not an independent signature.',
+      'The sidecar contains no raw elevation arrays, coordinate lattice, private delivery data, AOID material, or credentials.',
+      'The reconciled surface is non-navigational and does not establish delivery suitability.',
+    ],
+  };
+  const data = `${JSON.stringify(sidecar, null, 2)}\n`;
+  const bytes = new TextEncoder().encode(data);
+  return {
+    ...bundle,
+    evidenceSidecar: {
+      mediaType: TOPOGRAPHIC_COASTAL_EVIDENCE_MEDIA_TYPE,
+      extension: '.coastal-evidence.json',
+      data,
+      byteLength: bytes.byteLength,
+      contentSha256: await sha256(bytes),
+    },
+  };
+}
+
+export async function createSyntheticCoastalTerrainGltfBundle(
+  request: SyntheticCoastalTerrainBundleRequest,
+) {
+  const landElevations = [5, 1, 0, 6, 0.5, 0, 7, 1.5, 0];
+  const bathymetryElevations = [0, -1, -5, 0, -0.5, -6, 0, -1.5, -7];
+  const classes = Uint8Array.from([
+    COASTAL_SURFACE_LAND,
+    COASTAL_SURFACE_BREAKLINE,
+    COASTAL_SURFACE_OCEAN,
+    COASTAL_SURFACE_LAND,
+    COASTAL_SURFACE_BREAKLINE,
+    COASTAL_SURFACE_OCEAN,
+    COASTAL_SURFACE_LAND,
+    COASTAL_SURFACE_BREAKLINE,
+    COASTAL_SURFACE_OCEAN,
+  ]);
+  const encoder = new TextEncoder();
+  const landDigest = await sha256(
+    encoder.encode(JSON.stringify(landElevations)),
+  );
+  const bathymetryDigest = await sha256(
+    encoder.encode(JSON.stringify(bathymetryElevations)),
+  );
+  const coastlineDigest = await sha256(classes);
+  const source = (
+    sourceId: string,
+    product: string,
+    digest: `sha256:${string}`,
+    layerIds: TopographicSourceRecord['layerIds'],
+    relatedArtifactSha256: `sha256:${string}`[] = [],
+  ): TopographicSourceRecord => ({
+    ...AGID_SYNTHETIC_TOPO_SOURCE,
+    sourceId,
+    product,
+    layerIds,
+    snapshotEvidence: {
+      contentSha256: digest,
+      adapterVersion: 'agid-synthetic-coastal-adapter-v0.1',
+      verifiedAt: request.generatedAt,
+      horizontalCrs: 'EPSG:4326',
+      verticalDatum: layerIds.includes('terrain-mesh')
+        ? 'synthetic-mean-sea-level'
+        : 'not-applicable: coastline classification',
+      ...(relatedArtifactSha256.length === 0
+        ? {}
+        : { relatedArtifactSha256 }),
+    },
+    notes: [
+      ...(AGID_SYNTHETIC_TOPO_SOURCE.notes ?? []),
+      `Snapshot digest: ${digest}.`,
+    ],
+  });
+  const landSource = source(
+    'agid-synthetic-coastal-land-v0.1',
+    'AGID synthetic coastal land grid',
+    landDigest,
+    ['terrain-mesh'],
+  );
+  const bathymetrySource = source(
+    'agid-synthetic-coastal-bathymetry-v0.1',
+    'AGID synthetic coastal bathymetry grid',
+    bathymetryDigest,
+    ['terrain-mesh'],
+  );
+  const grid = (
+    gridId: string,
+    title: string,
+    elevationsMeters: number[],
+    sourceRecord: TopographicSourceRecord,
+  ) => ({
+    gridId,
+    title,
+    bounds: request.bounds,
+    width: 3,
+    height: 3,
+    elevationsMeters,
+    rowOrder: 'north-to-south' as const,
+    horizontalCrs: 'EPSG:4326' as const,
+    verticalDatum: 'synthetic-mean-sea-level',
+    sourceRecord,
+    generatedAt: request.generatedAt,
+    countryCode: request.countryCode,
+  });
+  const landGrid = grid(
+    'agid-synthetic-coastal-land',
+    'Synthetic coastal land',
+    landElevations,
+    landSource,
+  );
+  const bathymetryGrid = grid(
+    'agid-synthetic-coastal-bathymetry',
+    'Synthetic coastal bathymetry',
+    bathymetryElevations,
+    bathymetrySource,
+  );
+  const coordinateLattice = createCoastalGridLattice(landGrid);
+  const coordinateLatticeSha256 = await hashCoastalGridLattice(
+    coordinateLattice,
+  );
+  const coastlineSource = source(
+    'agid-synthetic-coastal-breakline-v0.1',
+    'AGID synthetic coastline breakline',
+    coastlineDigest,
+    ['waterways'],
+    [coordinateLatticeSha256],
+  );
+  const seam = await reconcileCoastalElevationGrids({
+    land: {
+      grid: landGrid,
+      sourceSnapshotSha256: landDigest,
+    },
+    bathymetry: {
+      grid: bathymetryGrid,
+      sourceSnapshotSha256: bathymetryDigest,
+    },
+    coastline: {
+      maskId: 'agid-synthetic-coastline-mask',
+      width: 3,
+      height: 3,
+      bounds: request.bounds,
+      rowOrder: 'north-to-south',
+      horizontalCrs: 'EPSG:4326',
+      coordinateLattice,
+      expectedCoordinateLatticeSha256: coordinateLatticeSha256,
+      classes,
+      sourceRecord: coastlineSource,
+      sourceSnapshotSha256: coastlineDigest,
+      expectedClassificationSha256: coastlineDigest,
+      adapterVersion: 'agid-synthetic-coastline-adapter-v0.1',
+      shorelineEpoch: request.generatedAt,
+    },
+    targetVerticalDatum: 'synthetic-mean-sea-level',
+    generatedAt: request.generatedAt,
+    maximumAdjustmentMeters: 2,
+  });
+  return serializeCoastalTerrainGltfBundle(seam);
 }

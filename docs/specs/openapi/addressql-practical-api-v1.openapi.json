@@ -1520,12 +1520,77 @@
           }
         }
       },
+      "AddressMorphismCompatibility": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "version",
+          "researchBasis",
+          "catalog",
+          "task",
+          "candidateSet",
+          "evidence",
+          "resolution",
+          "preservation",
+          "loss",
+          "disclosure",
+          "nonClaims"
+        ],
+        "properties": {
+          "version": {
+            "const": "addressql-address-morphism-compatibility-v0.1"
+          },
+          "researchBasis": {
+            "type": "object",
+            "description": "Research maturity and permitted compatibility use."
+          },
+          "catalog": {
+            "type": "object",
+            "description": "Versioned catalog receipt and compatibility evidence state."
+          },
+          "task": {
+            "type": "object",
+            "description": "Country, language, and public rendering purpose metadata."
+          },
+          "candidateSet": {
+            "type": "object",
+            "description": "Candidate identifiers, coverage state, and a non-identity policy gate."
+          },
+          "evidence": {
+            "type": "object",
+            "description": "Public source version, freshness, reuse, and correction-route metadata."
+          },
+          "resolution": {
+            "type": "object",
+            "description": "Name-resolution conclusion kept separate from delivery and identity decisions."
+          },
+          "preservation": {
+            "type": "object",
+            "description": "Authority, hierarchy, and temporal preservation states."
+          },
+          "loss": {
+            "type": "object",
+            "description": "Explicit deferral and transformation-loss reasons."
+          },
+          "disclosure": {
+            "type": "object",
+            "description": "Public metadata-only disclosure boundary."
+          },
+          "nonClaims": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "PlaceNameRankingResponse": {
         "type": "object",
         "additionalProperties": false,
         "required": [
           "version",
           "ranking",
+          "addressMorphism",
           "privacy"
         ],
         "properties": {
@@ -1620,6 +1685,9 @@
                 }
               }
             }
+          },
+          "addressMorphism": {
+            "$ref": "#/components/schemas/AddressMorphismCompatibility"
           },
           "privacy": {
             "type": "object",

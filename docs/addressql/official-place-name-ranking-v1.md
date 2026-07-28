@@ -52,6 +52,21 @@ Expired or invalid sources are excluded at evaluation time without restarting
 the API. `synthetic-conformance` and reference-only sources always require
 review and never become live evidence.
 
+## Address Morphism compatibility view
+
+The ranking response also includes an `addressMorphism` compatibility view.
+It makes the candidate, provenance, time-window, loss, and disclosure gates
+explicit without echoing the input token or carrying private delivery data.
+It distinguishes a ranked official name from a complete candidate-coverage
+claim: the current ranking catalog has no coverage certificate, so the view
+keeps the downstream decision at `manual-review` and never permits automatic
+use.
+
+This view uses the accompanying research only for schema and safety-boundary
+design. It is not a primary source for country-specific naming facts, postal
+rules, delivery reachability, or identity. It does not issue an AGID or handle
+an AOID.
+
 ## API
 
 ```text

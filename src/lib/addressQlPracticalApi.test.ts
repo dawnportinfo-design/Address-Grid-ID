@@ -548,6 +548,10 @@ test('P1 batch validation isolates item errors and OpenAPI publishes the same ro
   ]) {
     assert.ok(openApi.paths[path], `${path} missing from OpenAPI`);
   }
+  const placeNameResponse = openApi.components.schemas.PlaceNameRankingResponse as {
+    properties?: Record<string, unknown>;
+  };
+  assert.ok(placeNameResponse.properties?.addressMorphism);
   assert.doesNotMatch(JSON.stringify(openApi.components.schemas), /rawAddress|recipient|street|premise/);
 });
 
@@ -666,8 +670,11 @@ test('P3 place-name API ranks official aliases with administrative context', () 
       requestId: 'place.jp.1',
     },
   });
-  const ranking = ranked.body.ranking as Record<string, unknown>;
-  const candidates = ranking.candidates as Array<Record<string, unknown>>;
+    const ranking = ranked.body.ranking as Record<string, unknown>;
+    const candidates = ranking.candidates as Array<Record<string, unknown>>;
+    const addressMorphism = ranked.body.addressMorphism as Record<string, unknown>;
+    const morphologyCandidates = addressMorphism.candidateSet as Record<string, unknown>;
+    const morphologyResolution = addressMorphism.resolution as Record<string, unknown>;
 
   assert.equal(unavailable.statusCode, 503);
   assert.equal(
@@ -679,8 +686,14 @@ test('P3 place-name API ranks official aliases with administrative context', () 
   assert.equal(ranking.status, 'ranked');
   assert.equal(ranking.translationUsed, false);
   assert.equal(ranking.automaticUseAllowed, false);
-  assert.equal(candidates[0].displayName, 'Nihonbashi');
-  assert.equal(candidates[0].displayNameKind, 'official-romanization');
+    assert.equal(candidates[0].displayName, 'Nihonbashi');
+    assert.equal(candidates[0].displayNameKind, 'official-romanization');
+    assert.equal(addressMorphism.version, 'addressql-address-morphism-compatibility-v0.1');
+    assert.equal(morphologyCandidates.coverageState, 'not-established');
+    assert.equal(morphologyCandidates.candidateCount, 1);
+    assert.equal(morphologyResolution.translationPerformed, false);
+    assert.equal(morphologyResolution.automaticUseAllowed, false);
+    assert.doesNotMatch(JSON.stringify(addressMorphism), /日本橋|Nihonbashi/);
   assert.equal(
     (ranked.body.privacy as Record<string, unknown>).storesPlaceName,
     false,

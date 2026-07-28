@@ -40,6 +40,8 @@ function evidence(
       description: 'Verified synthetic test extent metadata; no bundled raw location fixture.',
     },
     licenseEvidenceUrl: 'https://docs.overturemaps.org/attribution/',
+    horizontalCrs: 'EPSG:4326',
+    verticalDatum: 'not-applicable: vector features',
     ...overrides,
   };
 }
@@ -93,7 +95,8 @@ test('verified immutable evidence promotes an open source into the export gate',
   assert.equal(promoted.version, '2026-07-22.0');
   assert.ok(promoted.layerIds.includes('buildings'));
   assert.ok(promoted.allowedFormats.includes('geojson'));
-  assert.match(promoted.notes?.join('\n') ?? '', /sha256:/);
+  assert.equal(promoted.snapshotEvidence?.contentSha256, `sha256:${'a'.repeat(64)}`);
+  assert.equal(promoted.snapshotEvidence?.horizontalCrs, 'EPSG:4326');
   assert.equal(promoted.freshUntil, '2026-09-09T00:00:00.000Z');
 });
 

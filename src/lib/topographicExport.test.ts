@@ -83,6 +83,7 @@ test('source-backed export requires approved, versioned, reusable, in-scope evid
 
   assert.equal(plan.status, 'blocked');
   assert.ok(plan.issues.some(issue => issue.code === 'source-reuse-pending'));
+  assert.ok(plan.issues.some(issue => issue.code === 'source-missing-snapshot-evidence'));
   assert.equal(plan.sourceByLayer.buildings, pendingSource.sourceId);
 });
 

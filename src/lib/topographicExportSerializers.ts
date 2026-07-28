@@ -10,6 +10,11 @@ import {
   type TopographicLayerId,
   type TopographicMesh,
 } from './topographicExport';
+import {
+  createTopographicEnuFrame,
+  geodeticToEnuPoint,
+  type TopographicEnuFrame,
+} from './topographicGeodesy';
 
 export type SerializedTopographicExport = {
   format: TopographicExportFormat;
@@ -23,6 +28,14 @@ export type SerializedTopographicExport = {
 };
 
 type LocalPoint = [number, number, number];
+type LocalVerticalMode = 'ellipsoidal-height' | 'source-height-local-up';
+
+export const TOPOGRAPHIC_GLTF_Z_UP_TO_Y_UP_MATRIX = [
+  1, 0, 0, 0,
+  0, 0, -1, 0,
+  0, 1, 0, 0,
+  0, 0, 0, 1,
+] as const;
 
 const textEncoder = new TextEncoder();
 const PROHIBITED_PROPERTY_KEY = /recipient|addressee|household|person_name|email|phone|private[_-]?key|proof[_-]?secret|credential|address[_-]?line|query[_-]?log/i;
@@ -89,16 +102,32 @@ function toCanvasPoint(
 
 function toLocalPoint(
   coordinate: [number, number, number?],
-  bounds: TopographicBounds,
+  frame: TopographicEnuFrame,
+  verticalMode: LocalVerticalMode,
 ): LocalPoint {
-  const midLatitude = (bounds.south + bounds.north) / 2;
-  const metresPerDegreeLatitude = 111_132;
-  const metresPerDegreeLongitude = 111_320 * Math.cos(midLatitude * Math.PI / 180);
-  return [
-    longitudeRatio(coordinate[0], bounds) * longitudeSpanDegrees(bounds) * metresPerDegreeLongitude,
-    (coordinate[1] - bounds.south) * metresPerDegreeLatitude,
-    coordinate[2] ?? 0,
-  ];
+  const height = coordinate[2] ?? 0;
+  const local = geodeticToEnuPoint(
+    coordinate[0],
+    coordinate[1],
+    verticalMode === 'ellipsoidal-height' ? height : 0,
+    frame,
+  );
+  if (verticalMode === 'source-height-local-up') local[2] += height;
+  return local;
+}
+
+function localVerticalMode(plan: TopographicExportPlan): LocalVerticalMode {
+  const verticalDatums = plan.selectedSources.flatMap(source => {
+    const value = source.snapshotEvidence?.verticalDatum.trim().toUpperCase();
+    return value ? [value] : [];
+  });
+  return verticalDatums.length > 0
+    && verticalDatums.every(value => (
+      value === 'EPSG:4979'
+      || value === 'WGS 84 ELLIPSOIDAL HEIGHT (EPSG:4979)'
+    ))
+    ? 'ellipsoidal-height'
+    : 'source-height-local-up';
 }
 
 function selectedDatasetParts(dataset: TopographicDataset, plan: TopographicExportPlan) {
@@ -200,10 +229,15 @@ function serializeDxf(
   dataset: TopographicDataset,
   features: TopographicFeature[],
   meshes: TopographicMesh[],
+  verticalMode: LocalVerticalMode,
 ) {
   const lines = ['0', 'SECTION', '2', 'HEADER', '9', '$ACADVER', '1', 'AC1027', '0', 'ENDSEC', '0', 'SECTION', '2', 'ENTITIES'];
+  const frame = createTopographicEnuFrame(
+    dataset.bounds.west,
+    dataset.bounds.south,
+  );
   for (const feature of features) {
-    const points = featureCoordinates(feature.geometry).map(point => toLocalPoint(point, dataset.bounds));
+    const points = featureCoordinates(feature.geometry).map(point => toLocalPoint(point, frame, verticalMode));
     const layer = feature.layerId.toUpperCase().replaceAll('-', '_').slice(0, 31);
     if (feature.geometry.type === 'Point') {
       const [x, y, z] = points[0];
@@ -217,7 +251,7 @@ function serializeDxf(
     lines.push('0', 'SEQEND', '8', layer);
   }
   for (const mesh of meshes) {
-    const vertices = mesh.vertices.map(point => toLocalPoint(point, dataset.bounds));
+    const vertices = mesh.vertices.map(point => toLocalPoint(point, frame, verticalMode));
     const layer = mesh.layerId.toUpperCase().replaceAll('-', '_').slice(0, 31);
     for (const triangle of mesh.triangles) {
       const points = triangle.map(index => vertices[index]);
@@ -293,7 +327,12 @@ function meshGeometry(
   dataset: TopographicDataset,
   features: TopographicFeature[],
   meshes: TopographicMesh[],
+  verticalMode: LocalVerticalMode,
 ) {
+  const frame = createTopographicEnuFrame(
+    dataset.bounds.west,
+    dataset.bounds.south,
+  );
   const vertices: LocalPoint[] = [];
   const triangles: Array<[number, number, number]> = [];
   const lines: Array<[number, number]> = [];
@@ -301,14 +340,14 @@ function meshGeometry(
 
   for (const mesh of meshes) {
     const offset = vertices.length;
-    vertices.push(...mesh.vertices.map(point => toLocalPoint(point, dataset.bounds)));
+    vertices.push(...mesh.vertices.map(point => toLocalPoint(point, frame, verticalMode)));
     triangles.push(...mesh.triangles.map(([a, b, c]) => [a + offset, b + offset, c + offset] as [number, number, number]));
   }
 
   for (const feature of features) {
     const coordinates = featureCoordinates(feature.geometry);
     const offset = vertices.length;
-    vertices.push(...coordinates.map(point => toLocalPoint(point, dataset.bounds)));
+    vertices.push(...coordinates.map(point => toLocalPoint(point, frame, verticalMode)));
     if (feature.geometry.type === 'Point') {
       points.push(offset);
     } else if (feature.geometry.type === 'LineString') {
@@ -329,8 +368,13 @@ function meshGeometry(
   return { vertices, triangles, lines, points };
 }
 
-function serializeObj(dataset: TopographicDataset, features: TopographicFeature[], meshes: TopographicMesh[]) {
-  const geometry = meshGeometry(dataset, features, meshes);
+function serializeObj(
+  dataset: TopographicDataset,
+  features: TopographicFeature[],
+  meshes: TopographicMesh[],
+  verticalMode: LocalVerticalMode,
+) {
+  const geometry = meshGeometry(dataset, features, meshes, verticalMode);
   const lines = [
     `# ${dataset.title}`,
     `# CRS ${dataset.crs}; synthetic=${dataset.synthetic}`,
@@ -357,8 +401,13 @@ function triangleNormal(a: LocalPoint, b: LocalPoint, c: LocalPoint): LocalPoint
   return [nx / length, ny / length, nz / length];
 }
 
-function serializeStl(dataset: TopographicDataset, features: TopographicFeature[], meshes: TopographicMesh[]) {
-  const geometry = meshGeometry(dataset, features, meshes);
+function serializeStl(
+  dataset: TopographicDataset,
+  features: TopographicFeature[],
+  meshes: TopographicMesh[],
+  verticalMode: LocalVerticalMode,
+) {
+  const geometry = meshGeometry(dataset, features, meshes, verticalMode);
   if (geometry.triangles.length === 0) throw new Error('stl-requires-triangle-geometry');
   const facets = geometry.triangles.map(([aIndex, bIndex, cIndex]) => {
     const a = geometry.vertices[aIndex];
@@ -398,8 +447,13 @@ function align4(value: number) {
   return (value + 3) & ~3;
 }
 
-function serializeGltf(dataset: TopographicDataset, features: TopographicFeature[], meshes: TopographicMesh[]) {
-  const geometry = meshGeometry(dataset, features, meshes);
+function serializeGltf(
+  dataset: TopographicDataset,
+  features: TopographicFeature[],
+  meshes: TopographicMesh[],
+  verticalMode: LocalVerticalMode,
+) {
+  const geometry = meshGeometry(dataset, features, meshes, verticalMode);
   if (geometry.vertices.length === 0) throw new Error('gltf-requires-geometry');
 
   const positionBytes = new Uint8Array(new Float32Array(geometry.vertices.flat()).buffer);
@@ -456,11 +510,29 @@ function serializeGltf(dataset: TopographicDataset, features: TopographicFeature
     asset: {
       version: '2.0',
       generator: 'AGID topographic export',
-      extras: { datasetId: dataset.datasetId, crs: dataset.crs, synthetic: dataset.synthetic },
+      extras: {
+        datasetId: dataset.datasetId,
+        crs: dataset.crs,
+        synthetic: dataset.synthetic,
+        localFrame: 'WGS84-ECEF-to-ENU',
+        sourceAxes: 'longitude-latitude-ellipsoidal-height',
+        meshAxes: 'x-east-y-north-z-up',
+        gltfAxes: 'x-east-y-up-z-south',
+        verticalMode,
+        origin: {
+          longitudeDegrees: dataset.bounds.west,
+          latitudeDegrees: dataset.bounds.south,
+          ellipsoidalHeightMeters: 0,
+        },
+      },
     },
     scene: 0,
     scenes: [{ nodes: [0] }],
-    nodes: [{ mesh: 0, name: 'AGID Topographic Export' }],
+    nodes: [{
+      mesh: 0,
+      matrix: [...TOPOGRAPHIC_GLTF_Z_UP_TO_Y_UP_MATRIX],
+      name: 'AGID Topographic Export',
+    }],
     meshes: [{ primitives }],
     buffers: [{
       byteLength: binary.byteLength,
@@ -471,8 +543,13 @@ function serializeGltf(dataset: TopographicDataset, features: TopographicFeature
   }, null, 2);
 }
 
-function serializeIfc(dataset: TopographicDataset, features: TopographicFeature[], meshes: TopographicMesh[]) {
-  const geometry = meshGeometry(dataset, features, meshes);
+function serializeIfc(
+  dataset: TopographicDataset,
+  features: TopographicFeature[],
+  meshes: TopographicMesh[],
+  verticalMode: LocalVerticalMode,
+) {
+  const geometry = meshGeometry(dataset, features, meshes, verticalMode);
   if (geometry.triangles.length === 0) throw new Error('ifc-requires-triangle-geometry');
   const points = geometry.vertices
     .map(([x, y, z]) => `(${x.toFixed(4)},${y.toFixed(4)},${z.toFixed(4)})`)
@@ -635,6 +712,7 @@ export function serializeTopographicExport(
   const definition = getTopographicFormatDefinition(plan.request.format);
   if (!definition) throw new Error(`unsupported-topographic-format:${plan.request.format}`);
   const { features, meshes, rasters } = selectedDatasetParts(dataset, plan);
+  const verticalMode = localVerticalMode(plan);
   let data: string | Uint8Array;
   const warnings: string[] = [];
 
@@ -646,22 +724,22 @@ export function serializeTopographicExport(
       data = serializeSvg(dataset, features);
       break;
     case 'dxf':
-      data = serializeDxf(dataset, features, meshes);
+      data = serializeDxf(dataset, features, meshes, verticalMode);
       break;
     case 'pdf':
       data = serializePdf(dataset, features);
       break;
     case 'obj':
-      data = serializeObj(dataset, features, meshes);
+      data = serializeObj(dataset, features, meshes, verticalMode);
       break;
     case 'stl':
-      data = serializeStl(dataset, features, meshes);
+      data = serializeStl(dataset, features, meshes, verticalMode);
       break;
     case 'gltf':
-      data = serializeGltf(dataset, features, meshes);
+      data = serializeGltf(dataset, features, meshes, verticalMode);
       break;
     case 'ifc':
-      data = serializeIfc(dataset, features, meshes);
+      data = serializeIfc(dataset, features, meshes, verticalMode);
       break;
     case 'txt':
       data = serializeRawText(dataset, features, meshes);

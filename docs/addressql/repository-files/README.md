@@ -76,6 +76,9 @@ and runtime evidence is approved.
 The official place-name ranker keeps source versions and alias-set digests,
 prefers official aliases and romanizations to generated forms, and safely
 defers same-script readings when administrative hierarchy context is missing.
+Its Address Morphism compatibility view exposes only public candidate and
+evidence metadata, keeps candidate coverage unestablished unless separately
+certified, and never issues an AGID or handles AOID/private delivery data.
 
 Start the P1 API on loopback with:
 

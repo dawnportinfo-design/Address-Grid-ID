@@ -71,6 +71,12 @@
       "verification": "npm run verify:addressql-place-names"
     },
     {
+      "name": "addressql-address-morphism-compatibility",
+      "path": "src/lib/addressQlAddressMorphismCompatibility.ts",
+      "readiness": "public-place-name-safety-projection-ready",
+      "verification": "npm run verify:addressql-place-names"
+    },
+    {
       "name": "addressql-practical-api",
       "path": "src/lib/addressQlPracticalApi.ts",
       "readiness": "p1-self-hosted-api-ready",

@@ -68,7 +68,10 @@ The place-name ranking endpoint accepts one bounded public place-name token,
 country, target language, and optional hierarchy context. It uses a configured
 versioned catalog, ranks official aliases and romanizations above generated
 transliteration, and returns `ambiguous` when a same-script name lacks enough
-administrative context. It does not accept or retain full addresses.
+administrative context. It does not accept or retain full addresses. The
+additive `addressMorphism` response view exposes only public candidate IDs and
+source metadata. It does not echo the submitted token, issue an AGID, handle an
+AOID, or turn a ranked name into a delivery or identity decision.
 
 ## Capability Semantics
 

@@ -778,6 +778,8 @@ export type GlobalTopographicSnapshotEvidence = {
   featureCount: number;
   coverage: TopographicCoverage;
   licenseEvidenceUrl: string;
+  horizontalCrs: string;
+  verticalDatum: string;
 };
 
 function requireIsoTimestamp(field: string, value: string) {
@@ -815,6 +817,14 @@ export function promoteGlobalTopographicSnapshot(
   if (!evidence.licenseEvidenceUrl.startsWith('https://')) {
     throw new Error(`${source.id} snapshot requires an HTTPS license evidence URL.`);
   }
+  if (!evidence.horizontalCrs.trim()) {
+    throw new Error(`${source.id} snapshot requires an explicit horizontal CRS.`);
+  }
+  if (!evidence.verticalDatum.trim()) {
+    throw new Error(
+      `${source.id} snapshot requires an explicit vertical datum or not-applicable marker.`,
+    );
+  }
 
   requireIsoTimestamp('publishedAt', evidence.publishedAt);
   requireIsoTimestamp('retrievedAt', evidence.retrievedAt);
@@ -844,6 +854,13 @@ export function promoteGlobalTopographicSnapshot(
     layerIds: [...source.exportLayerIds],
     allowedFormats,
     reuseStatus: 'approved',
+    snapshotEvidence: {
+      contentSha256: evidence.sha256,
+      adapterVersion: evidence.adapterVersion,
+      verifiedAt: evidence.verifiedAt,
+      horizontalCrs: evidence.horizontalCrs,
+      verticalDatum: evidence.verticalDatum,
+    },
     notes: [
       `Catalog stack: ${GLOBAL_TOPOGRAPHIC_OPEN_SOURCE_STACK_VERSION}.`,
       `Snapshot digest: ${evidence.sha256}.`,

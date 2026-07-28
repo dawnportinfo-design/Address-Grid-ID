@@ -8,3 +8,4 @@ export * as postalOperations from '../../../src/lib/addressQlPostalOperations';
 export * as globalCountryCoverage from '../../../src/lib/addressQlGlobalCountryCoverage';
 export * as multilingualQuality from '../../../src/lib/addressQlMultilingualQuality';
 export * as officialPlaceNames from '../../../src/lib/addressQlOfficialPlaceNames';
+export * as addressMorphismCompatibility from '../../../src/lib/addressQlAddressMorphismCompatibility';

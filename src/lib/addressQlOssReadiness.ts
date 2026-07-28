@@ -139,6 +139,8 @@ const REQUIRED_PUBLIC_ARTIFACTS = [
   'src/lib/addressQlMultilingualQuality.test.ts',
   'src/lib/addressQlOfficialPlaceNames.ts',
   'src/lib/addressQlOfficialPlaceNames.test.ts',
+  'src/lib/addressQlAddressMorphismCompatibility.ts',
+  'src/lib/addressQlAddressMorphismCompatibility.test.ts',
   'src/lib/countryGeographicMetadataEvaluationCatalog.ts',
   'src/lib/countryGeographicMetadataEvaluationIndex.ts',
   'src/lib/countryValidationQualityGate.ts',
@@ -355,6 +357,9 @@ export function buildAddressQlOssReadinessReport(root = process.cwd()): AddressQ
   }
   if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlOfficialPlaceNames.test.ts')) {
     addOnce(errors, 'addressql-full-verification-must-include-official-place-name-test');
+  }
+  if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlAddressMorphismCompatibility.test.ts')) {
+    addOnce(errors, 'addressql-full-verification-must-include-address-morphism-compatibility-test');
   }
   if (scripts['verify:addressql'] && !scripts['verify:addressql'].includes('addressQlPracticalApi.test.ts')) {
     addOnce(errors, 'addressql-full-verification-must-include-practical-api-test');

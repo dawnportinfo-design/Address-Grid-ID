@@ -41,6 +41,15 @@ export type TopographicCoverage =
   | { scope: 'country'; countryCodes: string[]; description: string }
   | { scope: 'bbox'; bounds: TopographicBounds; description: string };
 
+export type TopographicSnapshotEvidence = {
+  contentSha256: `sha256:${string}`;
+  adapterVersion: string;
+  verifiedAt: string;
+  horizontalCrs: string;
+  verticalDatum: string;
+  relatedArtifactSha256?: `sha256:${string}`[];
+};
+
 export type TopographicSourceRecord = {
   sourceId: string;
   publisher: string;
@@ -59,6 +68,7 @@ export type TopographicSourceRecord = {
   allowedFormats: TopographicExportFormat[];
   reuseStatus: 'approved' | 'pending' | 'prohibited';
   syntheticOnly?: boolean;
+  snapshotEvidence?: TopographicSnapshotEvidence;
   notes?: string[];
 };
 
@@ -378,8 +388,26 @@ function sourceCoversRequest(
   return source.coverage.countryCodes.includes(countryCode.toUpperCase());
 }
 
-function sourceMetadataIssues(source: TopographicSourceRecord, now: string): TopographicExportIssue[] {
+export function topographicSourceBindsDigest(
+  source: TopographicSourceRecord,
+  digest: string,
+) {
+  const evidence = source.snapshotEvidence;
+  if (!evidence) return false;
+  const normalized = digest.toLowerCase();
+  return evidence.contentSha256.toLowerCase() === normalized
+    || evidence.relatedArtifactSha256?.some(value => value.toLowerCase() === normalized) === true;
+}
+
+export function auditTopographicSourceRecord(
+  source: TopographicSourceRecord,
+  options: {
+    now: string;
+    requireSnapshotEvidence: boolean;
+  },
+): TopographicExportIssue[] {
   const issues: TopographicExportIssue[] = [];
+  const { now, requireSnapshotEvidence } = options;
   const required: Array<[string, string]> = [
     ['source-url', source.sourceUrl],
     ['terms-url', source.termsUrl],
@@ -418,6 +446,60 @@ function sourceMetadataIssues(source: TopographicSourceRecord, now: string): Top
       message: `${source.sourceId} passed its freshness deadline ${source.freshUntil}.`,
       sourceId: source.sourceId,
     });
+  }
+
+  if (requireSnapshotEvidence) {
+    const evidence = source.snapshotEvidence;
+    if (!evidence) {
+      issues.push({
+        code: 'source-missing-snapshot-evidence',
+        severity: 'error',
+        message: `${source.sourceId} has no structured snapshot evidence.`,
+        sourceId: source.sourceId,
+      });
+    } else {
+      const evidenceFields: Array<[string, string]> = [
+        ['adapter-version', evidence.adapterVersion],
+        ['horizontal-crs', evidence.horizontalCrs],
+        ['vertical-datum', evidence.verticalDatum],
+      ];
+      for (const [field, value] of evidenceFields) {
+        if (!value.trim()) {
+          issues.push({
+            code: `source-missing-${field}`,
+            severity: 'error',
+            message: `${source.sourceId} is missing snapshot ${field}.`,
+            sourceId: source.sourceId,
+          });
+        }
+      }
+      if (!/^sha256:[a-f0-9]{64}$/i.test(evidence.contentSha256)) {
+        issues.push({
+          code: 'source-invalid-snapshot-sha256',
+          severity: 'error',
+          message: `${source.sourceId} snapshot digest must be SHA-256.`,
+          sourceId: source.sourceId,
+        });
+      }
+      if (!Number.isFinite(Date.parse(evidence.verifiedAt))) {
+        issues.push({
+          code: 'source-invalid-verified-at',
+          severity: 'error',
+          message: `${source.sourceId} snapshot verification time is invalid.`,
+          sourceId: source.sourceId,
+        });
+      }
+      for (const digest of evidence.relatedArtifactSha256 ?? []) {
+        if (!/^sha256:[a-f0-9]{64}$/i.test(digest)) {
+          issues.push({
+            code: 'source-invalid-related-artifact-sha256',
+            severity: 'error',
+            message: `${source.sourceId} related artifact digest must be SHA-256.`,
+            sourceId: source.sourceId,
+          });
+        }
+      }
+    }
   }
 
   return issues;
@@ -524,7 +606,10 @@ export function buildTopographicExportPlan(request: TopographicExportRequest): T
 
   const selectedSources = request.sourceRecords.filter(source => selectedSourceIds.has(source.sourceId));
   for (const source of selectedSources) {
-    issues.push(...sourceMetadataIssues(source, now));
+    issues.push(...auditTopographicSourceRecord(source, {
+      now,
+      requireSnapshotEvidence: request.dataMode === 'source-backed',
+    }));
   }
 
   if (request.dataMode === 'synthetic') {

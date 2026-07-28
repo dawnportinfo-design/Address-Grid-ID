@@ -33,6 +33,8 @@ test('AddressQL OSS readiness manifest targets dawnportinfo-design/addressql', (
     pkg.name === 'addressql-postal-operations'));
   assert.ok(manifest.public_packages.some(pkg =>
     pkg.name === 'addressql-official-place-names'));
+  assert.ok(manifest.public_packages.some(pkg =>
+    pkg.name === 'addressql-address-morphism-compatibility'));
   assert.ok(manifest.required_documents.includes('docs/addressql/repository-files/LICENSE'));
   assert.ok(manifest.required_documents.includes('docs/addressql/repository-files/SECURITY.md'));
   assert.ok(manifest.required_documents.includes(POSTAL_VALIDATION_NEGATIVE_CLAIMS_FIXTURE));
@@ -55,6 +57,8 @@ test('AddressQL OSS readiness report passes all public release gates', () => {
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlMultilingualQuality.test.ts'));
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlOfficialPlaceNames.ts'));
   assert.ok(report.verifiedPaths.includes('src/lib/addressQlOfficialPlaceNames.test.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlAddressMorphismCompatibility.ts'));
+  assert.ok(report.verifiedPaths.includes('src/lib/addressQlAddressMorphismCompatibility.test.ts'));
   assert.ok(report.verifiedPaths.includes(
     'docs/specs/fixtures/addressql-official-place-name-conformance-v1.json'
   ));
@@ -161,6 +165,8 @@ test('AddressQL OSS export snapshot includes the executable country core', () =>
     'src/lib/addressQlMultilingualQuality.test.ts',
     'src/lib/addressQlOfficialPlaceNames.ts',
     'src/lib/addressQlOfficialPlaceNames.test.ts',
+    'src/lib/addressQlAddressMorphismCompatibility.ts',
+    'src/lib/addressQlAddressMorphismCompatibility.test.ts',
     'src/lib/addressQlPracticalApi.ts',
     'src/lib/addressQlPracticalApi.test.ts',
     'src/lib/addressQlRuntimeAttestationWorkflow.ts',

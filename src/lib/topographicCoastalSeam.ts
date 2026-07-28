@@ -1,5 +1,6 @@
 import {
   buildTopographicExportPlan,
+  topographicSourceBindsDigest,
   type TopographicBounds,
   type TopographicExportPlan,
   type TopographicSourceRecord,
@@ -8,9 +9,15 @@ import {
   MAX_ELEVATION_GRID_CELLS,
   type NormalizedElevationGrid,
 } from './topographicElevationVectorizer';
+import {
+  TOPOGRAPHIC_COASTLINE_LEGEND_PROMOTION_EVIDENCE_VERSION,
+  type CoastlineLegendPromotionEvidence,
+} from './topographicCoastlineLegendPromotionContract';
 
 export const TOPOGRAPHIC_COASTAL_SEAM_VERSION =
-  'agid-topographic-coastal-seam-v0.1';
+  'agid-topographic-coastal-seam-v0.2';
+export const TOPOGRAPHIC_COASTAL_LATTICE_SCHEMA =
+  'agid-coastal-grid-lattice-v0.1';
 export const COASTAL_SURFACE_OCEAN = 0;
 export const COASTAL_SURFACE_BREAKLINE = 1;
 export const COASTAL_SURFACE_LAND = 2;
@@ -21,6 +28,22 @@ export type CoastalElevationInput = {
   sourceSnapshotSha256: `sha256:${string}`;
 };
 
+export type CoastalGridLattice = {
+  schemaVersion: typeof TOPOGRAPHIC_COASTAL_LATTICE_SCHEMA;
+  width: number;
+  height: number;
+  bounds: TopographicBounds;
+  rowOrder: NormalizedElevationGrid['rowOrder'];
+  horizontalCrs: 'EPSG:4326';
+  coordinateModel: 'rectilinear-axes' | 'per-grid-node';
+  longitudeDegreesByColumn?: number[];
+  latitudeDegreesByRow?: number[];
+  longitudeLatitudeDegreesByCell?: Array<[number, number]>;
+  curvilinearSourceGrid?: NonNullable<
+    NormalizedElevationGrid['curvilinearSourceGrid']
+  >;
+};
+
 export type CoastlineClassificationInput = {
   maskId: string;
   width: number;
@@ -28,12 +51,15 @@ export type CoastlineClassificationInput = {
   bounds: TopographicBounds;
   rowOrder: NormalizedElevationGrid['rowOrder'];
   horizontalCrs: 'EPSG:4326';
+  coordinateLattice: CoastalGridLattice;
+  expectedCoordinateLatticeSha256: `sha256:${string}`;
   classes: Uint8Array;
   sourceRecord: TopographicSourceRecord;
   sourceSnapshotSha256: `sha256:${string}`;
   expectedClassificationSha256: `sha256:${string}`;
   adapterVersion: string;
   shorelineEpoch: string;
+  legendPromotion?: CoastlineLegendPromotionEvidence | null;
 };
 
 export type CoastalSeamRequest = {
@@ -85,8 +111,10 @@ export type CoastalSeamResult = {
     coastlineSourceVersion: string;
     coastlineSnapshotSha256: `sha256:${string}`;
     classificationSha256: `sha256:${string}`;
+    coordinateLatticeSha256: `sha256:${string}`;
     coastlineAdapterVersion: string;
     shorelineEpoch: string;
+    coastlineLegendPromotion: CoastlineLegendPromotionEvidence | null;
     targetVerticalDatum: string;
     sourceTermsUrls: string[];
     sourceCorrectionUrls: string[];
@@ -101,17 +129,6 @@ function requireIsoTimestamp(field: string, value: string) {
   }
 }
 
-function sourceRecordContainsDigest(
-  sourceRecord: TopographicSourceRecord,
-  digest: string,
-) {
-  return (
-    sourceRecord.notes?.some(note =>
-      note.toLowerCase().includes(digest.toLowerCase()),
-    ) ?? false
-  );
-}
-
 function equalBounds(left: TopographicBounds, right: TopographicBounds) {
   return (
     left.south === right.south &&
@@ -119,6 +136,225 @@ function equalBounds(left: TopographicBounds, right: TopographicBounds) {
     left.north === right.north &&
     left.east === right.east
   );
+}
+
+function cloneBounds(bounds: TopographicBounds): TopographicBounds {
+  return {
+    south: bounds.south,
+    west: bounds.west,
+    north: bounds.north,
+    east: bounds.east,
+  };
+}
+
+function validateCoastalGridLattice(lattice: CoastalGridLattice) {
+  if (lattice.schemaVersion !== TOPOGRAPHIC_COASTAL_LATTICE_SCHEMA) {
+    throw new Error('Coastline coordinate lattice schema version is unsupported.');
+  }
+  if (
+    !Number.isInteger(lattice.width) ||
+    !Number.isInteger(lattice.height) ||
+    lattice.width < 2 ||
+    lattice.height < 2
+  ) {
+    throw new Error('Coastline coordinate lattice dimensions must be integers of at least 2.');
+  }
+  if (lattice.rowOrder !== 'north-to-south' && lattice.rowOrder !== 'south-to-north') {
+    throw new Error('Coastline coordinate lattice rowOrder is unsupported.');
+  }
+  if (lattice.horizontalCrs !== 'EPSG:4326') {
+    throw new Error('Coastline coordinate lattice must use EPSG:4326.');
+  }
+  if (
+    !Number.isFinite(lattice.bounds.south) ||
+    !Number.isFinite(lattice.bounds.west) ||
+    !Number.isFinite(lattice.bounds.north) ||
+    !Number.isFinite(lattice.bounds.east) ||
+    lattice.bounds.south >= lattice.bounds.north ||
+    lattice.bounds.west >= lattice.bounds.east
+  ) {
+    throw new Error('Coastline coordinate lattice bounds must be increasing finite values.');
+  }
+
+  if (lattice.coordinateModel === 'rectilinear-axes') {
+    if (
+      lattice.longitudeLatitudeDegreesByCell !== undefined ||
+      lattice.curvilinearSourceGrid !== undefined
+    ) {
+      throw new Error('Rectilinear coastline lattices cannot contain curvilinear coordinates.');
+    }
+    if (lattice.longitudeDegreesByColumn !== undefined) {
+      if (lattice.longitudeDegreesByColumn.length !== lattice.width) {
+        throw new Error('Coastline longitude axis length does not match lattice width.');
+      }
+      for (let index = 0; index < lattice.longitudeDegreesByColumn.length; index += 1) {
+        const value = lattice.longitudeDegreesByColumn[index];
+        if (
+          !Number.isFinite(value) ||
+          value < lattice.bounds.west ||
+          value > lattice.bounds.east ||
+          (index > 0 && value <= lattice.longitudeDegreesByColumn[index - 1])
+        ) {
+          throw new Error(`Invalid coastline longitude axis value at ${index}.`);
+        }
+      }
+    }
+    if (lattice.latitudeDegreesByRow !== undefined) {
+      if (lattice.latitudeDegreesByRow.length !== lattice.height) {
+        throw new Error('Coastline latitude axis length does not match lattice height.');
+      }
+      for (let index = 0; index < lattice.latitudeDegreesByRow.length; index += 1) {
+        const value = lattice.latitudeDegreesByRow[index];
+        if (
+          !Number.isFinite(value) ||
+          value < lattice.bounds.south ||
+          value > lattice.bounds.north ||
+          (index > 0 &&
+            (lattice.rowOrder === 'north-to-south'
+              ? value >= lattice.latitudeDegreesByRow[index - 1]
+              : value <= lattice.latitudeDegreesByRow[index - 1]))
+        ) {
+          throw new Error(`Invalid coastline latitude axis value at ${index}.`);
+        }
+      }
+    }
+    return;
+  }
+
+  if (lattice.coordinateModel !== 'per-grid-node') {
+    throw new Error('Coastline coordinate lattice coordinateModel is unsupported.');
+  }
+  if (
+    lattice.longitudeDegreesByColumn !== undefined ||
+    lattice.latitudeDegreesByRow !== undefined ||
+    lattice.longitudeLatitudeDegreesByCell === undefined ||
+    lattice.curvilinearSourceGrid === undefined
+  ) {
+    throw new Error(
+      'Curvilinear coastline lattices require per-grid-node coordinates and source-frame evidence.',
+    );
+  }
+  if (
+    lattice.longitudeLatitudeDegreesByCell.length !==
+    lattice.width * lattice.height
+  ) {
+    throw new Error('Coastline per-grid-node coordinate count does not match lattice dimensions.');
+  }
+  for (let index = 0; index < lattice.longitudeLatitudeDegreesByCell.length; index += 1) {
+    const [longitude, latitude] = lattice.longitudeLatitudeDegreesByCell[index];
+    if (
+      !Number.isFinite(longitude) ||
+      !Number.isFinite(latitude) ||
+      longitude < lattice.bounds.west ||
+      longitude > lattice.bounds.east ||
+      latitude < lattice.bounds.south ||
+      latitude > lattice.bounds.north
+    ) {
+      throw new Error(`Invalid coastline per-grid-node coordinate at ${index}.`);
+    }
+  }
+  const { sourceCenterExtent } = lattice.curvilinearSourceGrid;
+  if (
+    lattice.curvilinearSourceGrid.library !== 'proj4js' ||
+    lattice.curvilinearSourceGrid.interpolation !==
+      'source-affine-linear-inverse-projection' ||
+    !lattice.curvilinearSourceGrid.sourceCrs.trim() ||
+    !Number.isFinite(sourceCenterExtent.minimumX) ||
+    !Number.isFinite(sourceCenterExtent.minimumY) ||
+    !Number.isFinite(sourceCenterExtent.maximumX) ||
+    !Number.isFinite(sourceCenterExtent.maximumY) ||
+    sourceCenterExtent.minimumX >= sourceCenterExtent.maximumX ||
+    sourceCenterExtent.minimumY >= sourceCenterExtent.maximumY
+  ) {
+    throw new Error('Curvilinear coastline lattice source-frame evidence is invalid.');
+  }
+}
+
+function canonicalizeCoastalGridLattice(
+  lattice: CoastalGridLattice,
+): CoastalGridLattice {
+  validateCoastalGridLattice(lattice);
+  const common = {
+    schemaVersion: TOPOGRAPHIC_COASTAL_LATTICE_SCHEMA as typeof TOPOGRAPHIC_COASTAL_LATTICE_SCHEMA,
+    width: lattice.width,
+    height: lattice.height,
+    bounds: cloneBounds(lattice.bounds),
+    rowOrder: lattice.rowOrder,
+    horizontalCrs: 'EPSG:4326' as const,
+    coordinateModel: lattice.coordinateModel,
+  };
+  if (lattice.coordinateModel === 'rectilinear-axes') {
+    return {
+      ...common,
+      coordinateModel: 'rectilinear-axes',
+      ...(lattice.longitudeDegreesByColumn === undefined
+        ? {}
+        : { longitudeDegreesByColumn: [...lattice.longitudeDegreesByColumn] }),
+      ...(lattice.latitudeDegreesByRow === undefined
+        ? {}
+        : { latitudeDegreesByRow: [...lattice.latitudeDegreesByRow] }),
+    };
+  }
+  return {
+    ...common,
+    coordinateModel: 'per-grid-node',
+    longitudeLatitudeDegreesByCell: lattice.longitudeLatitudeDegreesByCell!.map(
+      ([longitude, latitude]) => [longitude, latitude],
+    ),
+    curvilinearSourceGrid: {
+      sourceCrs: lattice.curvilinearSourceGrid!.sourceCrs,
+      sourceCenterExtent: {
+        ...lattice.curvilinearSourceGrid!.sourceCenterExtent,
+      },
+      library: 'proj4js',
+      interpolation: 'source-affine-linear-inverse-projection',
+    },
+  };
+}
+
+function canonicalCoastalGridLatticeJson(lattice: CoastalGridLattice) {
+  return JSON.stringify(canonicalizeCoastalGridLattice(lattice));
+}
+
+export function createCoastalGridLattice(
+  grid: NormalizedElevationGrid,
+): CoastalGridLattice {
+  return canonicalizeCoastalGridLattice({
+    schemaVersion: TOPOGRAPHIC_COASTAL_LATTICE_SCHEMA,
+    width: grid.width,
+    height: grid.height,
+    bounds: cloneBounds(grid.bounds),
+    rowOrder: grid.rowOrder,
+    horizontalCrs: grid.horizontalCrs,
+    coordinateModel: grid.coordinateModel ?? 'rectilinear-axes',
+    ...(grid.longitudeDegreesByColumn === undefined
+      ? {}
+      : { longitudeDegreesByColumn: [...grid.longitudeDegreesByColumn] }),
+    ...(grid.latitudeDegreesByRow === undefined
+      ? {}
+      : { latitudeDegreesByRow: [...grid.latitudeDegreesByRow] }),
+    ...(grid.longitudeLatitudeDegreesByCell === undefined
+      ? {}
+      : {
+          longitudeLatitudeDegreesByCell:
+            grid.longitudeLatitudeDegreesByCell.map(([longitude, latitude]) => [
+              longitude,
+              latitude,
+            ]),
+        }),
+    ...(grid.curvilinearSourceGrid === undefined
+      ? {}
+      : {
+          curvilinearSourceGrid: {
+            sourceCrs: grid.curvilinearSourceGrid.sourceCrs,
+            sourceCenterExtent: {
+              ...grid.curvilinearSourceGrid.sourceCenterExtent,
+            },
+            library: grid.curvilinearSourceGrid.library,
+            interpolation: grid.curvilinearSourceGrid.interpolation,
+          },
+        }),
+  });
 }
 
 function validateGridStructure(
@@ -153,11 +389,83 @@ function validateSourceDigest(
   if (!/^sha256:[a-f0-9]{64}$/i.test(digest)) {
     throw new Error(`${role} source snapshot requires a SHA-256 digest.`);
   }
-  if (!sourceRecordContainsDigest(sourceRecord, digest)) {
+  if (!topographicSourceBindsDigest(sourceRecord, digest)) {
     throw new Error(
       `${role} source snapshot digest is not bound to the promoted source record.`,
     );
   }
+}
+
+function sourceBindsRelatedArtifactDigest(
+  sourceRecord: TopographicSourceRecord,
+  digest: string,
+) {
+  return (
+    sourceRecord.snapshotEvidence?.relatedArtifactSha256?.some(
+      value => value.toLowerCase() === digest.toLowerCase(),
+    ) === true
+  );
+}
+
+function validateCoastlineLegendPromotion(
+  sourceRecord: TopographicSourceRecord,
+  sourceSnapshotSha256: `sha256:${string}`,
+  promotion: CoastlineLegendPromotionEvidence | null | undefined,
+) {
+  if (sourceRecord.syntheticOnly === true) {
+    if (promotion !== null && promotion !== undefined) {
+      throw new Error(
+        'Synthetic coastline classifications must not assert independent legend promotion evidence.',
+      );
+    }
+    return null;
+  }
+  if (!promotion) {
+    throw new Error(
+      'Source-backed coastline classification requires independent legend promotion evidence.',
+    );
+  }
+  if (
+    promotion.schemaVersion
+      !== TOPOGRAPHIC_COASTLINE_LEGEND_PROMOTION_EVIDENCE_VERSION
+    || promotion.status !== 'approved'
+    || promotion.sourceId !== sourceRecord.sourceId
+    || promotion.sourceVersion !== sourceRecord.version
+    || promotion.classificationGeoTiffSha256.toLowerCase()
+      !== sourceSnapshotSha256.toLowerCase()
+  ) {
+    throw new Error(
+      'Coastline legend promotion evidence does not match the source-backed classification.',
+    );
+  }
+  for (const [label, digest] of [
+    ['classification GeoTIFF', promotion.classificationGeoTiffSha256],
+    ['legend receipt', promotion.receiptSha256],
+    ['promotion', promotion.promotionDigest],
+  ] as const) {
+    if (!/^sha256:[a-f0-9]{64}$/i.test(digest)) {
+      throw new Error(`Coastline ${label} promotion evidence must be a SHA-256 digest.`);
+    }
+  }
+  if (
+    !Number.isSafeInteger(promotion.sequence)
+    || promotion.sequence < 1
+    || !Number.isSafeInteger(promotion.minimumSignatures)
+    || promotion.minimumSignatures < 2
+    || !Number.isSafeInteger(promotion.verifiedSignatureCount)
+    || promotion.verifiedSignatureCount < promotion.minimumSignatures
+  ) {
+    throw new Error('Coastline legend promotion quorum evidence is invalid.');
+  }
+  if (
+    !sourceBindsRelatedArtifactDigest(sourceRecord, promotion.receiptSha256)
+    || !sourceBindsRelatedArtifactDigest(sourceRecord, promotion.promotionDigest)
+  ) {
+    throw new Error(
+      'Source-backed coastline record must bind the receipt and promotion digests as related evidence.',
+    );
+  }
+  return promotion;
 }
 
 function buildSourceGate(
@@ -198,6 +506,45 @@ async function sha256Bytes(bytes: Uint8Array) {
     .join('')}` as const;
 }
 
+export async function hashCoastalGridLattice(
+  lattice: CoastalGridLattice,
+): Promise<`sha256:${string}`> {
+  return sha256Bytes(
+    new TextEncoder().encode(canonicalCoastalGridLatticeJson(lattice)),
+  );
+}
+
+function resultCoordinateFields(lattice: CoastalGridLattice) {
+  const canonical = canonicalizeCoastalGridLattice(lattice);
+  if (canonical.coordinateModel === 'per-grid-node') {
+    return {
+      coordinateModel: 'per-grid-node' as const,
+      longitudeLatitudeDegreesByCell:
+        canonical.longitudeLatitudeDegreesByCell!.map(([longitude, latitude]) => [
+          longitude,
+          latitude,
+        ] as [number, number]),
+      curvilinearSourceGrid: {
+        sourceCrs: canonical.curvilinearSourceGrid!.sourceCrs,
+        sourceCenterExtent: {
+          ...canonical.curvilinearSourceGrid!.sourceCenterExtent,
+        },
+        library: 'proj4js' as const,
+        interpolation: 'source-affine-linear-inverse-projection' as const,
+      },
+    };
+  }
+  return {
+    coordinateModel: 'rectilinear-axes' as const,
+    ...(canonical.longitudeDegreesByColumn === undefined
+      ? {}
+      : { longitudeDegreesByColumn: [...canonical.longitudeDegreesByColumn] }),
+    ...(canonical.latitudeDegreesByRow === undefined
+      ? {}
+      : { latitudeDegreesByRow: [...canonical.latitudeDegreesByRow] }),
+  };
+}
+
 function neighbors(
   index: number,
   width: number,
@@ -232,6 +579,35 @@ export async function reconcileCoastalElevationGrids(
   const { land, bathymetry, coastline } = request;
   validateGridStructure('land', land.grid);
   validateGridStructure('bathymetry', bathymetry.grid);
+  const landLattice = createCoastalGridLattice(land.grid);
+  const bathymetryLattice = createCoastalGridLattice(bathymetry.grid);
+  const coastlineLattice = canonicalizeCoastalGridLattice(
+    coastline.coordinateLattice,
+  );
+  const [landCoordinateLatticeSha256, bathymetryCoordinateLatticeSha256, coastlineCoordinateLatticeSha256] =
+    await Promise.all([
+      hashCoastalGridLattice(landLattice),
+      hashCoastalGridLattice(bathymetryLattice),
+      hashCoastalGridLattice(coastlineLattice),
+    ]);
+  if (landCoordinateLatticeSha256 !== bathymetryCoordinateLatticeSha256) {
+    throw new Error(
+      'Land and bathymetry grids must share an identical coordinate lattice.',
+    );
+  }
+  if (
+    coastlineCoordinateLatticeSha256.toLowerCase() !==
+    coastline.expectedCoordinateLatticeSha256.toLowerCase()
+  ) {
+    throw new Error(
+      'Coastline coordinate lattice SHA-256 does not match its declared lattice.',
+    );
+  }
+  if (coastlineCoordinateLatticeSha256 !== landCoordinateLatticeSha256) {
+    throw new Error(
+      'Coastline classification coordinate lattice does not match land and bathymetry grids.',
+    );
+  }
   requireIsoTimestamp('generatedAt', request.generatedAt);
   requireIsoTimestamp('shorelineEpoch', coastline.shorelineEpoch);
 
@@ -271,6 +647,17 @@ export async function reconcileCoastalElevationGrids(
       'Coastline classification must share the normalized elevation grid lattice.',
     );
   }
+  if (
+    coastlineLattice.width !== coastline.width ||
+    coastlineLattice.height !== coastline.height ||
+    !equalBounds(coastlineLattice.bounds, coastline.bounds) ||
+    coastlineLattice.rowOrder !== coastline.rowOrder ||
+    coastlineLattice.horizontalCrs !== coastline.horizontalCrs
+  ) {
+    throw new Error(
+      'Coastline coordinate lattice metadata must match the classification metadata.',
+    );
+  }
   if (coastline.classes.length !== coastline.width * coastline.height) {
     throw new Error('Coastline classification length does not match its grid.');
   }
@@ -293,6 +680,21 @@ export async function reconcileCoastalElevationGrids(
     coastline.sourceRecord,
     coastline.sourceSnapshotSha256,
   );
+  const coastlineLegendPromotion = validateCoastlineLegendPromotion(
+    coastline.sourceRecord,
+    coastline.sourceSnapshotSha256,
+    coastline.legendPromotion,
+  );
+  if (
+    !sourceBindsRelatedArtifactDigest(
+      coastline.sourceRecord,
+      coastline.expectedCoordinateLatticeSha256,
+    )
+  ) {
+    throw new Error(
+      'Coastline coordinate lattice digest is not bound to the promoted source record.',
+    );
+  }
   const classificationSha256 = await sha256Bytes(coastline.classes);
   if (
     classificationSha256.toLowerCase() !==
@@ -459,6 +861,7 @@ export async function reconcileCoastalElevationGrids(
       verticalDatum: request.targetVerticalDatum,
       generatedAt: request.generatedAt,
       countryCode,
+      ...resultCoordinateFields(landLattice),
       sourceIds: {
         land: land.grid.sourceRecord.sourceId,
         bathymetry: bathymetry.grid.sourceRecord.sourceId,
@@ -477,8 +880,10 @@ export async function reconcileCoastalElevationGrids(
       coastlineSourceVersion: coastline.sourceRecord.version,
       coastlineSnapshotSha256: coastline.sourceSnapshotSha256,
       classificationSha256,
+      coordinateLatticeSha256: landCoordinateLatticeSha256,
       coastlineAdapterVersion: coastline.adapterVersion,
       shorelineEpoch: coastline.shorelineEpoch,
+      coastlineLegendPromotion,
       targetVerticalDatum: request.targetVerticalDatum,
       sourceTermsUrls: [
         land.grid.sourceRecord.termsUrl,
@@ -502,6 +907,7 @@ export async function reconcileCoastalElevationGrids(
     warnings: [
       'The reconciled grid is non-navigational and does not replace a hydrographic chart.',
       'The result preserves three-source provenance and is not yet a directly exportable TopographicDataset.',
+      'Curvilinear coastline reconciliation is allowed only when the classified grid lattice exactly matches the land and bathymetry lattices and its digest is bound to the coastline source record.',
       'Terrain context does not prove an address, entrance, recipient, or delivery point.',
     ],
   };

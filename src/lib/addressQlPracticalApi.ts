@@ -43,6 +43,9 @@ import {
   type AddressQlOfficialPlaceNameCatalog,
   type AddressQlPlaceHierarchyLevel,
 } from './addressQlOfficialPlaceNames';
+import {
+  projectAddressQlPlaceNameRankingToMorphism,
+} from './addressQlAddressMorphismCompatibility';
 
 export const ADDRESSQL_PRACTICAL_API_VERSION = 'addressql-practical-api-v1';
 export const ADDRESSQL_PRACTICAL_API_LIMITS = {
@@ -1226,6 +1229,7 @@ export function createAddressQlPracticalApi(
       if (parsed.ok === false) {
         return buildAddressQlApiErrorResponse(400, parsed.code, parsed.message);
       }
+      const now = options.clock?.() ?? options.now;
       const ranking = rankAddressQlOfficialPlaceNameCandidates({
         catalog: options.placeNameCatalog,
         countryCode: parsed.request.countryCode,
@@ -1235,7 +1239,7 @@ export function createAddressQlPracticalApi(
         hierarchyLevel: parsed.request.hierarchyLevel,
         parentPlaceIds: parsed.request.parentPlaceIds,
         maxCandidates: parsed.request.maxCandidates,
-        now: options.clock?.() ?? options.now,
+        now,
       });
       if (ranking.status === 'rejected-evidence') {
         return buildAddressQlApiErrorResponse(
@@ -1251,6 +1255,11 @@ export function createAddressQlPracticalApi(
           ? { requestId: parsed.request.requestId }
           : {}),
         ranking,
+        addressMorphism: projectAddressQlPlaceNameRankingToMorphism({
+          catalog: options.placeNameCatalog,
+          ranking,
+          now,
+        }),
         privacy: {
           acceptsPublicPlaceName: true,
           acceptsRawAddress: false,

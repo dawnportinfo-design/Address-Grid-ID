@@ -198,6 +198,7 @@ test('snapshot promotion rejects unresolved versions, rights gaps, and invalid d
     },
     licenseEvidenceUrl: 'https://www.gsi.go.jp/ENGLISH/page_e30086.html',
     rightsDecision: 'approved' as const,
+    horizontalCrs: 'EPSG:4326',
     verticalDatum: 'Japanese geodetic vertical reference',
   };
 
@@ -240,6 +241,7 @@ test('approved GEBCO evidence can back the existing glTF terrain export gate', (
     licenseEvidenceUrl:
       'https://www.gebco.net/data-products/gridded-bathymetry/terms-of-use',
     rightsDecision: 'approved',
+    horizontalCrs: 'EPSG:4326',
     verticalDatum: 'GEBCO_2025 documented sea-level reference',
   });
   const exportPlan = buildTopographicExportPlan({
@@ -259,4 +261,5 @@ test('approved GEBCO evidence can back the existing glTF terrain export gate', (
     exportPlan.issues.map(issue => `${issue.code}: ${issue.message}`).join('\n'),
   );
   assert.equal(exportPlan.sourceByLayer['terrain-mesh'], 'gebco-2025');
+  assert.equal(sourceRecord.snapshotEvidence?.contentSha256, `sha256:${'b'.repeat(64)}`);
 });

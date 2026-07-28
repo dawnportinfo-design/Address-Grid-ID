@@ -1268,6 +1268,7 @@ export type RegionalTopographicSnapshotEvidence = {
   coverage: TopographicCoverage;
   licenseEvidenceUrl: string;
   rightsDecision: 'approved' | 'pending' | 'rejected';
+  horizontalCrs: string;
   verticalDatum: string;
 };
 
@@ -1306,6 +1307,9 @@ export function promoteRegionalTopographicSnapshot(
   if (!evidence.licenseEvidenceUrl.startsWith('https://')) {
     throw new Error(`${source.id} requires an HTTPS license evidence URL.`);
   }
+  if (!evidence.horizontalCrs.trim()) {
+    throw new Error(`${source.id} requires an explicit horizontal CRS.`);
+  }
   if (!evidence.verticalDatum.trim()) {
     throw new Error(`${source.id} requires an explicit vertical datum or not-applicable marker.`);
   }
@@ -1338,6 +1342,13 @@ export function promoteRegionalTopographicSnapshot(
     layerIds: [...source.exportLayerIds],
     allowedFormats,
     reuseStatus: 'approved',
+    snapshotEvidence: {
+      contentSha256: evidence.sha256,
+      adapterVersion: evidence.adapterVersion,
+      verifiedAt: evidence.verifiedAt,
+      horizontalCrs: evidence.horizontalCrs,
+      verticalDatum: evidence.verticalDatum,
+    },
     notes: [
       `Regional stack: ${REGIONAL_TOPOGRAPHIC_OPEN_SOURCE_STACK_VERSION}.`,
       `Snapshot digest: ${evidence.sha256}.`,

@@ -182,6 +182,8 @@ export const ADDRESSQL_EXPORT_ITEMS: ExportItem[] = [
   { from: 'src/lib/addressQlMultilingualQuality.test.ts', to: 'src/lib/addressQlMultilingualQuality.test.ts', required: true },
   { from: 'src/lib/addressQlOfficialPlaceNames.ts', to: 'src/lib/addressQlOfficialPlaceNames.ts', required: true },
   { from: 'src/lib/addressQlOfficialPlaceNames.test.ts', to: 'src/lib/addressQlOfficialPlaceNames.test.ts', required: true },
+  { from: 'src/lib/addressQlAddressMorphismCompatibility.ts', to: 'src/lib/addressQlAddressMorphismCompatibility.ts', required: true },
+  { from: 'src/lib/addressQlAddressMorphismCompatibility.test.ts', to: 'src/lib/addressQlAddressMorphismCompatibility.test.ts', required: true },
   { from: 'src/lib/countryGeographicMetadataEvaluationCatalog.ts', to: 'src/lib/countryGeographicMetadataEvaluationCatalog.ts', required: true },
   { from: 'src/lib/countryGeographicMetadataEvaluationIndex.ts', to: 'src/lib/countryGeographicMetadataEvaluationIndex.ts', required: true },
   { from: 'src/lib/countryValidationQualityGate.ts', to: 'src/lib/countryValidationQualityGate.ts', required: true },
