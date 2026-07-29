@@ -30,9 +30,13 @@ runtime dependencies.
 
 ## Compatibility Migration
 
-All six packages begin as private compatibility bridges. Existing root imports
-remain valid while package consumers adopt the new entrypoints. A legacy module
-may move into its owning workspace only after:
+All packages begin as private compatibility bridges. Existing root imports
+remain valid while package consumers adopt the new entrypoints. The first
+completed ownership move is `@agid/contracts`: its implementation now lives in
+`packages/contracts/src`, while the legacy root paths re-export package
+subpaths.
+
+A legacy module may move into its owning workspace only after:
 
 1. its public exports have contract or snapshot coverage;
 2. old root imports re-export the workspace implementation;
@@ -44,3 +48,27 @@ Country child repositories remain generated outputs rather than permanent npm
 workspaces. Heavy geometry and source snapshots remain external and are linked
 by version, digest, rights, scope, attribution, freshness, and correction
 metadata.
+
+## Repository Promotion Plan
+
+The workspace layout is also the future repository boundary, but a planned name
+is not a claim that a physical GitHub repository already exists.
+
+| Package | Suggested repository | Current state |
+| --- | --- | --- |
+| `@agid/contracts` | `agid-contracts` | Source-owned; release-gated until release evidence is complete |
+| `@agid/core` | `agid-core` | Compatibility bridge; defer until core source moves |
+| `@agid/country-data` | `agid-country-data` | Defer while source evidence and generated pack provenance are stabilized |
+| `@agid/addressql` | `addressql` | Defer until the SDK and API have standalone release contracts |
+| `@agid/topography` | `agid-topography` | Defer until export tooling and source-backed artifacts have stable package boundaries |
+| `@agid/studio` | `agid-studio` | Keep as the integration application until deployment contracts are independent |
+
+Each extraction needs a package manifest, passing contract tests, a no-raw-
+address gate, provenance and license metadata, and a stable version. The root
+repository continues to host compatibility facades until downstream import
+migration is complete. This avoids breaking existing imports or creating empty
+repositories merely to mirror the folder layout.
+
+`packages/contracts` now includes its staged `manifest.json`, `sources.json`,
+`quality-gates.json`, and license notice. These files describe a release-gated
+candidate; they do not authorize or represent a published standalone repository.

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "agid-contract-source-registry-v1",
+  "packageName": "@agid/contracts",
+  "sourcePolicy": "This package contains project-authored contracts only and does not embed postal, address, recipient, or geographic source records.",
+  "externalDataSources": [],
+  "sourceReview": {
+    "requiredBeforeRelease": true,
+    "licenseNotice": "MIT license inherited from the AGID root until physical extraction.",
+    "correctionPath": "Review changes through the repository issue and code-review process."
+  }
+}

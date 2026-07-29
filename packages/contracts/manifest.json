@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "agid-package-release-manifest-v1",
+  "packageName": "@agid/contracts",
+  "version": "0.1.0",
+  "releaseStatus": "release-gated",
+  "sourceOwnership": "workspace-owned",
+  "suggestedRepository": "agid-contracts",
+  "scope": [
+    "AGID public identifier constants and public security profile",
+    "Postal source evidence promotion contract"
+  ],
+  "excludes": [
+    "raw addresses",
+    "recipient data",
+    "AOID private payloads",
+    "credentials and private keys",
+    "production source snapshots"
+  ],
+  "compatibility": {
+    "legacyEntrypoints": [
+      "src/lib/agidContract.ts",
+      "src/address/postalSourcePromotionGate.ts"
+    ],
+    "packageEntrypoints": [
+      "@agid/contracts",
+      "@agid/contracts/agid-contract",
+      "@agid/contracts/postal-source-promotion-gate"
+    ]
+  },
+  "requiredEvidence": [
+    "passing contract and compatibility tests",
+    "no-raw-address release gate",
+    "source and license metadata review",
+    "stable version declaration"
+  ]
+}

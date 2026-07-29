@@ -28,7 +28,7 @@
     "organize:address-formats": "tsx scripts/organize-address-formats.ts",
     "generate:address-format-yaml": "tsx scripts/generate-address-format-yaml.ts",
     "generate:agid-sdks": "tsx scripts/generate-agid-sdks.ts",
-    "verify:workspace-split": "tsx --test src/address/workspaceSplitContract.test.ts",
+    "verify:workspace-split": "tsx --test src/address/workspaceSplitContract.test.ts src/address/repositoryWorkspaceBoundary.test.ts",
     "verify:contracts-workspace": "tsx --test src/address/postalSourcePromotionGate.test.ts",
     "verify:core-workspace": "tsx --test src/lib/agidGridNeighborhood.test.ts src/lib/agidAddressReference.test.ts",
     "verify:country-data-workspace": "tsx --test src/lib/countryValidationQualityGate.test.ts src/lib/countryValidationQualityAttestation.test.ts src/address/postalSourcePromotionGate.test.ts",
@@ -406,6 +406,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
+    "@agid/contracts": "0.1.0",
     "@aws-sdk/client-s3": "3.1090.0",
     "@aws-sdk/client-secrets-manager": "3.1090.0",
     "@aws-sdk/s3-request-presigner": "3.1090.0",

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "agid-package-quality-gates-v1",
+  "packageName": "@agid/contracts",
+  "releaseStatus": "release-gated",
+  "requiredCommands": [
+    {
+      "id": "contracts-tests",
+      "command": "npm run verify:contracts-workspace"
+    },
+    {
+      "id": "workspace-compatibility",
+      "command": "npm run verify:workspace-split"
+    },
+    {
+      "id": "no-raw-address",
+      "command": "npm run verify:no-raw-address"
+    },
+    {
+      "id": "typecheck",
+      "command": "npm run lint"
+    }
+  ],
+  "releaseAssertions": [
+    "Public contracts remain dependency-free.",
+    "Legacy root entrypoints re-export package subpaths.",
+    "No delivery or address existence claim is introduced by the postal source promotion gate.",
+    "Physical repository creation remains blocked until all listed commands pass and release metadata is reviewed."
+  ]
+}

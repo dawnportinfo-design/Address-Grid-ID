@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./agid-contract": "./src/agidContract.ts",
+    "./postal-source-promotion-gate": "./src/postalSourcePromotionGate.ts"
   },
   "types": "./src/index.ts",
   "scripts": {
@@ -12,7 +14,8 @@
   },
   "agidWorkspace": {
     "role": "versioned contracts, schemas, and conformance gates",
-    "migrationPhase": "compatibility-bridge",
+    "migrationPhase": "owned-source-with-legacy-facade",
+    "repositoryStatus": "source-owned-release-gated",
     "legacyEntrypoints": [
       "src/lib/agidContract.ts",
       "src/address/postalSourcePromotionGate.ts"
